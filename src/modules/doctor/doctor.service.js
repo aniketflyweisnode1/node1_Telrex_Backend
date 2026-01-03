@@ -1,5 +1,6 @@
 const Doctor = require('../../models/Doctor.model');
 const User = require('../../models/User.model');
+const mongoose = require('mongoose');
 const AppError = require('../../utils/AppError');
 const logger = require('../../utils/logger');
 
@@ -331,6 +332,10 @@ exports.getAllDoctors = async (query) => {
 
 // Get doctor by ID
 exports.getDoctorById = async (doctorId) => {
+  // Validate doctorId is a valid MongoDB ObjectId
+  if (!mongoose.Types.ObjectId.isValid(doctorId)) {
+    throw new AppError('Invalid doctor ID format', 400);
+  }
   try {
     const doctor = await Doctor.findById(doctorId)
       .populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt')
@@ -362,6 +367,12 @@ exports.getDoctorById = async (doctorId) => {
 
 // Update doctor
 exports.updateDoctor = async (doctorId, data) => {
+  // Validate doctorId is a valid MongoDB ObjectId
+  if (!mongoose.Types.ObjectId.isValid(doctorId)) {
+    logger.error('Invalid doctor ID format', { doctorId });
+    throw new AppError('Invalid doctor ID format', 400);
+  }
+
   const { 
     firstName, 
     lastName, 
@@ -374,15 +385,33 @@ exports.updateDoctor = async (doctorId, data) => {
     consultationFee, 
     status,
     profilePicture,
+    profileImage,
+    medicalLicense,
     bio,
     experience,
     education,
-    certifications
+    certifications,
+    languages,
+    availability,
+    address,
+    bankAccount
   } = data;
 
-  const doctor = await Doctor.findById(doctorId).populate('user');
+  // Convert to ObjectId for proper querying
+  const doctorObjectId = new mongoose.Types.ObjectId(doctorId);
+  
+  // Find doctor by ID and populate user
+  const doctor = await Doctor.findById(doctorObjectId).populate('user');
   if (!doctor) {
-    throw new AppError('Doctor not found', 404);
+    // Check if any doctor exists with this ID format (for debugging)
+    const allDoctors = await Doctor.find({}).limit(5).select('_id specialty');
+    logger.warn('Doctor update failed - Doctor not found', { 
+      doctorId,
+      doctorObjectId: doctorObjectId.toString(),
+      isValidObjectId: mongoose.Types.ObjectId.isValid(doctorId),
+      sampleDoctorIds: allDoctors.map(d => d._id.toString())
+    });
+    throw new AppError(`Doctor not found with ID: ${doctorId}`, 404);
   }
 
   // Update user data
@@ -429,11 +458,118 @@ exports.updateDoctor = async (doctorId, data) => {
     doctor.user.isActive = status === 'active';
     await doctor.user.save();
   }
+  // Update profile picture (legacy field)
   if (profilePicture !== undefined) doctor.profilePicture = profilePicture;
+  
+  // Update profile image (new structure)
+  if (profileImage !== undefined) {
+    if (profileImage.url !== undefined) {
+      doctor.profileImage = doctor.profileImage || {};
+      doctor.profileImage.url = profileImage.url;
+    }
+    if (profileImage.verified !== undefined) {
+      doctor.profileImage = doctor.profileImage || {};
+      doctor.profileImage.verified = profileImage.verified;
+    }
+    // Also update legacy profilePicture for backward compatibility
+    if (profileImage.url) {
+      doctor.profilePicture = profileImage.url;
+    }
+  }
+  
+  // Update medical license (new structure)
+  if (medicalLicense !== undefined) {
+    doctor.medicalLicense = doctor.medicalLicense || {};
+    if (medicalLicense.licenseNumber !== undefined) {
+      // Check if license number already exists for another doctor
+      if (medicalLicense.licenseNumber && medicalLicense.licenseNumber !== doctor.licenseNumber) {
+        const existingDoctor = await Doctor.findOne({ 
+          licenseNumber: medicalLicense.licenseNumber, 
+          _id: { $ne: doctorObjectId } 
+        });
+        if (existingDoctor) {
+          logger.warn('Doctor update failed - License number already exists', { 
+            doctorId, 
+            licenseNumber: medicalLicense.licenseNumber 
+          });
+          throw new AppError('License number already exists for another doctor', 409);
+        }
+        // Update both new structure and legacy field
+        doctor.licenseNumber = medicalLicense.licenseNumber;
+      }
+      doctor.medicalLicense.licenseNumber = medicalLicense.licenseNumber;
+    }
+    if (medicalLicense.documentUrl !== undefined) {
+      doctor.medicalLicense.documentUrl = medicalLicense.documentUrl;
+    }
+    if (medicalLicense.verified !== undefined) {
+      doctor.medicalLicense.verified = medicalLicense.verified;
+      // Also update legacy licenseVerified for backward compatibility
+      doctor.licenseVerified = medicalLicense.verified;
+      if (medicalLicense.verified && !doctor.licenseVerifiedAt) {
+        doctor.licenseVerifiedAt = new Date();
+        doctor.licenseVerifiedBy = data.verifiedBy || doctor.createdBy;
+      } else if (!medicalLicense.verified) {
+        doctor.licenseVerifiedAt = null;
+        doctor.licenseVerifiedBy = null;
+      }
+    }
+  }
+  
   if (bio !== undefined) doctor.bio = bio;
   if (experience !== undefined) doctor.experience = experience;
   if (education) doctor.education = education;
-  if (certifications) doctor.certifications = certifications;
+  if (certifications) {
+    // Handle both issuingOrganization and issuedBy
+    doctor.certifications = certifications.map(cert => ({
+      name: cert.name,
+      issuingOrganization: cert.issuingOrganization || cert.issuedBy,
+      issuedBy: cert.issuedBy || cert.issuingOrganization,
+      issueDate: cert.issueDate ? new Date(cert.issueDate) : undefined,
+      expiryDate: cert.expiryDate ? new Date(cert.expiryDate) : undefined,
+      year: cert.year
+    }));
+  }
+  if (languages) doctor.languages = languages;
+  if (availability) doctor.availability = availability;
+  if (address) doctor.address = address;
+  
+  // Update bank account details
+  if (bankAccount !== undefined) {
+    doctor.bankAccount = doctor.bankAccount || {};
+    if (bankAccount.accountHolderName !== undefined) {
+      doctor.bankAccount.accountHolderName = bankAccount.accountHolderName;
+    }
+    if (bankAccount.bankName !== undefined) {
+      doctor.bankAccount.bankName = bankAccount.bankName;
+    }
+    if (bankAccount.accountNumber !== undefined) {
+      doctor.bankAccount.accountNumber = bankAccount.accountNumber;
+    }
+    if (bankAccount.routingNumber !== undefined) {
+      doctor.bankAccount.routingNumber = bankAccount.routingNumber;
+    }
+    if (bankAccount.accountType !== undefined) {
+      doctor.bankAccount.accountType = bankAccount.accountType;
+    }
+    if (bankAccount.ifscCode !== undefined) {
+      doctor.bankAccount.ifscCode = bankAccount.ifscCode;
+    }
+    if (bankAccount.swiftCode !== undefined) {
+      doctor.bankAccount.swiftCode = bankAccount.swiftCode;
+    }
+    if (bankAccount.verified !== undefined) {
+      doctor.bankAccount.verified = bankAccount.verified;
+      if (bankAccount.verified && !doctor.bankAccount.verifiedAt) {
+        doctor.bankAccount.verifiedAt = new Date();
+        doctor.bankAccount.verifiedBy = data.verifiedBy || doctor.createdBy;
+      } else if (!bankAccount.verified) {
+        doctor.bankAccount.verifiedAt = null;
+        doctor.bankAccount.verifiedBy = null;
+      }
+    }
+  }
+  
   if (data.isActive !== undefined) {
     doctor.isActive = data.isActive;
     doctor.user.isActive = data.isActive;

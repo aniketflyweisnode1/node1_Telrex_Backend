@@ -8,6 +8,10 @@ const intakeFormSchema = new mongoose.Schema(
       required: true,
       unique: true
     },
+    doctor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Doctor'
+    },
     
     // ====================
     // BASIC INFORMATION

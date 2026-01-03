@@ -91,9 +91,9 @@ doctorPayoutSchema.pre('save', async function (next) {
 });
 
 // Indexes for faster queries
+// Note: payoutId already has index from unique: true
 doctorPayoutSchema.index({ doctor: 1, createdAt: -1 });
 doctorPayoutSchema.index({ status: 1 });
-doctorPayoutSchema.index({ payoutId: 1 });
 
 module.exports = mongoose.model('DoctorPayout', doctorPayoutSchema);
 

@@ -5,8 +5,7 @@ const loginHistorySchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
-      index: true
+      required: true
     },
     loginMethod: {
       type: String,
@@ -45,8 +44,7 @@ const loginHistorySchema = new mongoose.Schema(
     },
     loginAt: {
       type: Date,
-      default: Date.now,
-      index: true
+      default: Date.now
     }
   },
   { timestamps: true }
@@ -55,7 +53,6 @@ const loginHistorySchema = new mongoose.Schema(
 // Index for efficient queries
 loginHistorySchema.index({ user: 1, loginAt: -1 });
 loginHistorySchema.index({ ipAddress: 1 });
-loginHistorySchema.index({ loginAt: -1 });
 
 module.exports = mongoose.model('LoginHistory', loginHistorySchema);
 

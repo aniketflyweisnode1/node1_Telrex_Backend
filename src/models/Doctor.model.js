@@ -48,6 +48,20 @@ const doctorSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     },
+    // Medical License Document (new structure)
+    medicalLicense: {
+      licenseNumber: {
+        type: String,
+        trim: true
+      },
+      documentUrl: {
+        type: String
+      },
+      verified: {
+        type: Boolean,
+        default: false
+      }
+    },
     consultationFee: {
       type: Number,
       required: true,
@@ -72,6 +86,16 @@ const doctorSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String
+    },
+    // Profile Image (new structure)
+    profileImage: {
+      url: {
+        type: String
+      },
+      verified: {
+        type: Boolean,
+        default: false
+      }
     },
     bio: {
       type: String,
@@ -119,6 +143,48 @@ const doctorSchema = new mongoose.Schema(
       pincode: String,
       landmark: String
     },
+    bankAccount: {
+      accountHolderName: {
+        type: String,
+        trim: true
+      },
+      bankName: {
+        type: String,
+        trim: true
+      },
+      accountNumber: {
+        type: String,
+        trim: true
+      },
+      routingNumber: {
+        type: String,
+        trim: true
+      },
+      accountType: {
+        type: String,
+        enum: ['checking', 'savings', 'current'],
+        default: 'checking'
+      },
+      ifscCode: {
+        type: String,
+        trim: true
+      },
+      swiftCode: {
+        type: String,
+        trim: true
+      },
+      verified: {
+        type: Boolean,
+        default: false
+      },
+      verifiedAt: {
+        type: Date
+      },
+      verifiedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    },
     isActive: {
       type: Boolean,
       default: true
@@ -133,10 +199,9 @@ const doctorSchema = new mongoose.Schema(
 );
 
 // Indexes for faster queries
-doctorSchema.index({ user: 1 });
+// Note: user and licenseNumber already have indexes from unique: true
 doctorSchema.index({ specialty: 1 });
 doctorSchema.index({ status: 1 });
-doctorSchema.index({ licenseNumber: 1 });
 doctorSchema.index({ 'rating.average': -1 });
 doctorSchema.index({ isActive: 1 });
 

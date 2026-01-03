@@ -1,5 +1,6 @@
 const IntakeForm = require('../../models/IntakeForm.model');
 const Patient = require('../../models/Patient.model');
+const Doctor = require('../../models/Doctor.model');
 const AppError = require('../../utils/AppError');
 
 // Get patient from userId
@@ -12,7 +13,15 @@ const getPatient = async (userId) => {
 // Get intake form
 exports.getIntakeForm = async (userId) => {
   const patient = await getPatient(userId);
-  let intakeForm = await IntakeForm.findOne({ patient: patient._id });
+  let intakeForm = await IntakeForm.findOne({ patient: patient._id })
+    .populate({
+      path: 'doctor',
+      select: 'user specialty licenseNumber consultationFee status rating experience education certifications languages availability address',
+      populate: {
+        path: 'user',
+        select: 'firstName lastName email phoneNumber countryCode profilePicture'
+      }
+    });
   
   if (!intakeForm) {
     intakeForm = await IntakeForm.create({ patient: patient._id });
@@ -48,7 +57,16 @@ exports.saveBasicInformation = async (userId, data) => {
     await intakeForm.save();
   }
   
-  return intakeForm;
+  // Populate doctor before returning
+  return await IntakeForm.findById(intakeForm._id)
+    .populate({
+      path: 'doctor',
+      select: 'user specialty licenseNumber consultationFee status rating experience education certifications languages availability address',
+      populate: {
+        path: 'user',
+        select: 'firstName lastName email phoneNumber countryCode profilePicture'
+      }
+    });
 };
 
 // Save Emergency Contact
@@ -78,7 +96,16 @@ exports.saveEmergencyContact = async (userId, data) => {
     await intakeForm.save();
   }
   
-  return intakeForm;
+  // Populate doctor before returning
+  return await IntakeForm.findById(intakeForm._id)
+    .populate({
+      path: 'doctor',
+      select: 'user specialty licenseNumber consultationFee status rating experience education certifications languages availability address',
+      populate: {
+        path: 'user',
+        select: 'firstName lastName email phoneNumber countryCode profilePicture'
+      }
+    });
 };
 
 // Save Medical Questions
@@ -111,7 +138,82 @@ exports.saveMedicalQuestions = async (userId, data) => {
     await intakeForm.save();
   }
   
-  return intakeForm;
+  // Populate doctor before returning
+  return await IntakeForm.findById(intakeForm._id)
+    .populate({
+      path: 'doctor',
+      select: 'user specialty licenseNumber consultationFee status rating experience education certifications languages availability address',
+      populate: {
+        path: 'user',
+        select: 'firstName lastName email phoneNumber countryCode profilePicture'
+      }
+    });
+};
+
+// Submit consultation (book consultation)
+exports.submitConsultation = async (userId, doctorId) => {
+  const patient = await getPatient(userId);
+  const intakeForm = await IntakeForm.findOne({ patient: patient._id });
+  
+  if (!intakeForm) {
+    throw new AppError('Intake form not found. Please complete the intake form first.', 404);
+  }
+
+  // Validate doctor ID
+  if (!doctorId) {
+    throw new AppError('Doctor ID is required to submit consultation.', 400);
+  }
+
+  // Verify doctor exists and is active
+  const doctor = await Doctor.findById(doctorId);
+  if (!doctor) {
+    throw new AppError('Doctor not found.', 404);
+  }
+
+  if (!doctor.isActive || doctor.status !== 'active') {
+    throw new AppError('Selected doctor is not available for consultations.', 400);
+  }
+
+  // Check if all required sections are complete
+  const isComplete = 
+    intakeForm.basicInformation?.isBasicInfoComplete &&
+    intakeForm.emergencyContact?.isEmergencyContactComplete &&
+    intakeForm.medicalQuestions?.isMedicalQuestionsComplete;
+
+  if (!isComplete) {
+    throw new AppError('Please complete all sections of the intake form before submitting.', 400);
+  }
+
+  // Check if already submitted
+  if (intakeForm.status === 'submitted') {
+    throw new AppError('Consultation has already been submitted.', 400);
+  }
+
+  // Update status to submitted and assign doctor
+  intakeForm.status = 'submitted';
+  intakeForm.doctor = doctorId;
+  await intakeForm.save();
+
+  // Populate doctor information before returning
+  const populatedForm = await IntakeForm.findById(intakeForm._id)
+    .populate({
+      path: 'doctor',
+      select: 'user specialty licenseNumber consultationFee status rating experience education certifications languages availability address',
+      populate: {
+        path: 'user',
+        select: 'firstName lastName email phoneNumber countryCode profilePicture'
+      }
+    })
+    .populate({
+      path: 'patient',
+      select: 'user dateOfBirth gender',
+      populate: {
+        path: 'user',
+        select: 'firstName lastName email phoneNumber'
+      }
+    });
+
+  return populatedForm;
 };
 
 // Create/Update intake form (legacy - for backward compatibility)
@@ -129,6 +231,15 @@ exports.saveIntakeForm = async (userId, data) => {
     );
   }
   
-  return intakeForm;
+  // Populate doctor before returning
+  return await IntakeForm.findById(intakeForm._id)
+    .populate({
+      path: 'doctor',
+      select: 'user specialty licenseNumber consultationFee status rating experience education certifications languages availability address',
+      populate: {
+        path: 'user',
+        select: 'firstName lastName email phoneNumber countryCode profilePicture'
+      }
+    });
 };
 

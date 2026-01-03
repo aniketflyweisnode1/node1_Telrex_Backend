@@ -59,6 +59,32 @@ router.use('/admin', require('../modules/reports/reports.routes'));
 router.use('/admin', require('../modules/dashboard/dashboard.routes'));
 
 /* =======================
+   CONTACT FORM QUERY ROUTES
+   Public create route, Admin routes for management
+======================= */
+router.use('/admin', require('../modules/contact-form-query/contact-form-query.routes'));
+
+/* =======================
+   FOOTER MANAGEMENT ROUTES (Admin/Sub-Admin Only)
+======================= */
+router.use('/admin/footer', require('../modules/footer/footer.routes'));
+
+/* =======================
+   DOCTOR DASHBOARD ROUTES (Doctor Only)
+======================= */
+router.use('/doctor/dashboard', require('../modules/doctor-dashboard/doctor-dashboard.routes'));
+
+/* =======================
+   DOCTOR CONSULTATIONS ROUTES (Doctor Only)
+======================= */
+router.use('/doctor/consultations', require('../modules/doctor-consultations/doctor-consultations.routes'));
+
+/* =======================
+   DOCTOR EARNINGS ROUTES (Doctor Only)
+======================= */
+router.use('/doctor/earnings', require('../modules/doctor-earnings-doctor/doctor-earnings-doctor.routes'));
+
+/* =======================
    PATIENT ROUTES
 ======================= */
 router.use('/patient', require('../modules/patient/patient.routes'));

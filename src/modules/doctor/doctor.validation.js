@@ -251,6 +251,36 @@ exports.updateDoctorValidation = [
     .optional()
     .isString()
     .withMessage('Profile picture must be a string'),
+  body('profileImage')
+    .optional()
+    .isObject()
+    .withMessage('Profile image must be an object'),
+  body('profileImage.url')
+    .optional()
+    .isString()
+    .withMessage('Profile image URL must be a string'),
+  body('profileImage.verified')
+    .optional()
+    .isBoolean()
+    .withMessage('Profile image verified must be a boolean'),
+  body('medicalLicense')
+    .optional()
+    .isObject()
+    .withMessage('Medical license must be an object'),
+  body('medicalLicense.licenseNumber')
+    .optional()
+    .isString()
+    .trim()
+    .isLength({ min: 3, max: 50 })
+    .withMessage('Medical license number must be between 3 and 50 characters'),
+  body('medicalLicense.documentUrl')
+    .optional()
+    .isString()
+    .withMessage('Medical license document URL must be a string'),
+  body('medicalLicense.verified')
+    .optional()
+    .isBoolean()
+    .withMessage('Medical license verified must be a boolean'),
   body('bio')
     .optional()
     .isLength({ max: 1000 })
@@ -282,7 +312,55 @@ exports.updateDoctorValidation = [
   body('address')
     .optional()
     .isObject()
-    .withMessage('Address must be an object')
+    .withMessage('Address must be an object'),
+  body('bankAccount')
+    .optional()
+    .isObject()
+    .withMessage('Bank account must be an object'),
+  body('bankAccount.accountHolderName')
+    .optional()
+    .isString()
+    .trim()
+    .isLength({ min: 2, max: 100 })
+    .withMessage('Account holder name must be between 2 and 100 characters'),
+  body('bankAccount.bankName')
+    .optional()
+    .isString()
+    .trim()
+    .isLength({ min: 2, max: 100 })
+    .withMessage('Bank name must be between 2 and 100 characters'),
+  body('bankAccount.accountNumber')
+    .optional()
+    .isString()
+    .trim()
+    .isLength({ min: 8, max: 20 })
+    .withMessage('Account number must be between 8 and 20 characters'),
+  body('bankAccount.routingNumber')
+    .optional()
+    .isString()
+    .trim()
+    .matches(/^[0-9]{9}$|^[A-Z]{4}[0-9]{7}$/)
+    .withMessage('Routing number must be 9 digits (US) or IFSC format (India)'),
+  body('bankAccount.accountType')
+    .optional()
+    .isIn(['checking', 'savings', 'current'])
+    .withMessage('Account type must be checking, savings, or current'),
+  body('bankAccount.ifscCode')
+    .optional()
+    .isString()
+    .trim()
+    .matches(/^[A-Z]{4}0[A-Z0-9]{6}$/)
+    .withMessage('IFSC code must be in format: AAAA0XXXXXX'),
+  body('bankAccount.swiftCode')
+    .optional()
+    .isString()
+    .trim()
+    .isLength({ min: 8, max: 11 })
+    .withMessage('SWIFT code must be between 8 and 11 characters'),
+  body('bankAccount.verified')
+    .optional()
+    .isBoolean()
+    .withMessage('Bank account verified must be a boolean')
 ];
 
 // Reset password validation

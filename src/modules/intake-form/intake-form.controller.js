@@ -44,6 +44,19 @@ exports.saveMedicalQuestions = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
+// Submit consultation (book consultation)
+exports.submitConsultation = async (req, res, next) => {
+  try {
+    const { doctorId } = req.body;
+    const form = await intakeFormService.submitConsultation(req.user.id, doctorId);
+    res.status(200).json({ 
+      success: true, 
+      message: 'Consultation submitted successfully. Your consultation request has been sent to the doctor.', 
+      data: form 
+    });
+  } catch (err) { next(err); }
+};
+
 // Legacy endpoints (for backward compatibility)
 exports.createIntakeForm = async (req, res, next) => {
   try {

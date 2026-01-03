@@ -49,3 +49,12 @@ exports.medicalQuestionsValidation = [
   body('howDidYouHearAboutUs').optional().isString().withMessage('How did you hear about us must be a string')
 ];
 
+// Submit Consultation Validation
+exports.submitConsultationValidation = [
+  body('doctorId')
+    .notEmpty()
+    .withMessage('Doctor ID is required')
+    .isMongoId()
+    .withMessage('Doctor ID must be a valid MongoDB ID')
+];
+

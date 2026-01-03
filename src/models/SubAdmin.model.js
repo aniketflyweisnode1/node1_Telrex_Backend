@@ -55,7 +55,7 @@ const subAdminSchema = new mongoose.Schema(
 );
 
 // Index for faster queries
-subAdminSchema.index({ user: 1 });
+// Note: user already has index from unique: true
 subAdminSchema.index({ isActive: 1 });
 subAdminSchema.index({ designation: 1 });
 

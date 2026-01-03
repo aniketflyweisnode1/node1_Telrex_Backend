@@ -7,6 +7,448 @@ All APIs are prefixed with `/api/v1`
 
 ## Admin APIs
 
+### Footer Management APIs (Admin/Sub-Admin Only)
+
+Comprehensive footer management APIs for admins to manage all footer sections including logo, links, contact information, address, and social media.
+
+#### Get All Footer Sections
+**GET** `/api/v1/admin/footer?status=published&sortBy=order&sortOrder=asc`
+
+Get list of all footer sections with optional filtering and sorting.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Query Parameters:**
+- `status` (optional) - Filter by status: `draft` or `published`
+- `sortBy` (optional) - Sort field: `order`, `title`, `section`, `createdAt`, `updatedAt` (default: `order`)
+- `sortOrder` (optional) - Sort order: `asc` or `desc` (default: `asc`)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Footer sections retrieved successfully",
+  "data": [
+    {
+      "_id": "footer_id_1",
+      "section": "logo",
+      "title": "Logo",
+      "logo": {
+        "url": "https://example.com/logo.png",
+        "alt": "Company Logo"
+      },
+      "companyDescription": "Experience personalized medical care from the comfort of your home.",
+      "status": "published",
+      "order": 0,
+      "lastEditedBy": {
+        "_id": "admin_id",
+        "firstName": "Admin",
+        "lastName": "User",
+        "email": "admin@example.com"
+      },
+      "createdAt": "2025-01-01T10:00:00.000Z",
+      "updatedAt": "2025-01-03T12:30:00.000Z"
+    },
+    {
+      "_id": "footer_id_2",
+      "section": "about-us",
+      "title": "About Us",
+      "content": "We are a leading telemedicine platform...",
+      "url": "/about-us",
+      "status": "published",
+      "order": 1,
+      "lastEditedBy": {
+        "_id": "admin_id",
+        "firstName": "Admin",
+        "lastName": "User"
+      },
+      "createdAt": "2025-01-01T10:00:00.000Z",
+      "updatedAt": "2025-01-03T12:30:00.000Z"
+    }
+  ]
+}
+```
+
+**Available Sections:**
+- `logo` - Company logo and description
+- `about-us` - About Us page
+- `how-works` - How It Works page
+- `leadership` - Leadership team
+- `faq` - Frequently Asked Questions
+- `careers` - Careers page
+- `support` - Support page
+- `blogs` - Blog section
+- `shipping-returns` - Shipping & Returns policy
+- `privacy-policy` - Privacy Policy
+- `terms-conditions` - Terms & Conditions
+- `consent-telehealth` - Consent to Telehealth
+- `contact` - Contact information
+- `address` - Physical address
+- `social-media` - Social media links
+
+---
+
+#### Get Footer Section by Section Name
+**GET** `/api/v1/admin/footer/section/:section`
+
+Get a specific footer section by its section name (e.g., `logo`, `about-us`, `contact`).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `section` (path) - Section name (must be one of the available sections)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section retrieved successfully",
+  "data": {
+    "_id": "footer_id",
+    "section": "logo",
+    "title": "Logo",
+    "logo": {
+      "url": "https://example.com/logo.png",
+      "alt": "Company Logo"
+    },
+    "companyDescription": "Experience personalized medical care from the comfort of your home.",
+    "status": "published",
+    "order": 0,
+    "lastEditedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+---
+
+#### Get Footer Section by ID
+**GET** `/api/v1/admin/footer/:id`
+
+Get a specific footer section by its ID.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Footer section ID
+
+**Response:** Same as above
+
+---
+
+#### Create Footer Section
+**POST** `/api/v1/admin/footer`
+
+Create a new footer section.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Request Body Examples:**
+
+**Logo Section:**
+```json
+{
+  "section": "logo",
+  "title": "Logo",
+  "logo": {
+    "url": "https://example.com/logo.png",
+    "alt": "Company Logo"
+  },
+  "companyDescription": "Experience personalized medical care from the comfort of your home.",
+  "status": "draft",
+  "order": 0
+}
+```
+
+**Rich Text Content Section (About Us, How Works, Leadership, Careers, Support, etc.):**
+```json
+{
+  "section": "about-us",
+  "title": "About Us",
+  "content": "<h2>Who We Are</h2><p>(Company Name) is a modern, technology-enabled telehealth and online pharmacy service dedicated to making prescription medications accessible, affordable, and hassle-free.</p>",
+  "media": [
+    {
+      "type": "image",
+      "url": "https://example.com/about-image.jpg",
+      "alt": "Our Team",
+      "caption": "Our leadership team"
+    }
+  ],
+  "status": "draft",
+  "order": 1
+}
+```
+
+**FAQ Section (Multiple FAQs):**
+```json
+{
+  "section": "faq",
+  "title": "FAQs",
+  "faqs": [
+    {
+      "question": "How does the service work?",
+      "answer": "Our service allows you to consult with licensed doctors online and receive prescriptions delivered to your door.",
+      "order": 0
+    },
+    {
+      "question": "What are the shipping options?",
+      "answer": "We offer next-day shipping for most orders. Shipping times may vary based on your location.",
+      "order": 1
+    }
+  ],
+  "status": "draft",
+  "order": 2
+}
+```
+
+**Contact Section:**
+```json
+{
+  "section": "contact",
+  "title": "Contact",
+  "contact": {
+    "primaryMobile": "987654321",
+    "primaryMobileCountryCode": "+91",
+    "secondaryMobile": "9876123456",
+    "secondaryMobileCountryCode": "+91",
+    "email": "xyz@mail.com",
+    "supportHours": "Mon-Fri 9AM-5PM EST"
+  },
+  "status": "draft",
+  "order": 2
+}
+```
+
+**Address Section:**
+```json
+{
+  "section": "address",
+  "title": "Address",
+  "address": {
+    "location": "24761 US Hwy 19 N | Clearwater, Florida 33763"
+  },
+  "status": "draft",
+  "order": 3
+}
+```
+
+**OR Structured Address:**
+```json
+{
+  "section": "address",
+  "title": "Address",
+  "address": {
+    "location": "24761 US Hwy 19 N | Clearwater, Florida 33763",
+    "street": "24761 US Hwy 19 N",
+    "city": "Clearwater",
+    "state": "Florida",
+    "zipCode": "33763",
+    "country": "United States"
+  },
+  "status": "draft",
+  "order": 3
+}
+```
+
+**Social Media Section:**
+```json
+{
+  "section": "social-media",
+  "title": "Social Media",
+  "socialMedia": {
+    "facebook": "www.facebook-link.com",
+    "instagram": "www.instagram-link.com",
+    "linkedin": "www.linkedin-link.com",
+    "youtube": "www.youtube-link.com"
+  },
+  "status": "draft",
+  "order": 4
+}
+```
+
+**Blog Section (Footer Links):**
+```json
+{
+  "section": "blogs",
+  "title": "Blogs",
+  "blogLinks": [
+    {
+      "title": "Blog Post 1",
+      "url": "/blog/post-1",
+      "category": "Health",
+      "tags": ["wellness", "health"]
+    }
+  ],
+  "status": "draft",
+  "order": 5
+}
+```
+
+**Required Fields:**
+- `section` - Section name (must be one of the available sections)
+- `title` - Section title (2-100 characters)
+
+**Optional Fields:**
+- `logo` - Logo object with `url` and `alt`
+- `companyDescription` - Company description (max 500 characters)
+- `content` - Section content (max 5000 characters)
+- `url` - Link URL (for link sections)
+- `contact` - Contact object with `email`, `phone`, `phoneCountryCode`, `supportHours`
+- `address` - Address object with `street`, `city`, `state`, `zipCode`, `country`
+- `socialMedia` - Social media object with platform URLs
+- `status` - Status: `draft` or `published` (default: `draft`)
+- `order` - Display order (default: 0)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section created successfully",
+  "data": {
+    "_id": "footer_id",
+    "section": "logo",
+    "title": "Logo",
+    "logo": {
+      "url": "https://example.com/logo.png",
+      "alt": "Company Logo"
+    },
+    "companyDescription": "Experience personalized medical care from the comfort of your home.",
+    "status": "draft",
+    "order": 0,
+    "lastEditedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "createdAt": "2025-01-03T12:30:00.000Z",
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed
+- `409` - Footer section already exists
+- `401` - Unauthorized
+- `403` - Forbidden (not admin/sub-admin)
+
+---
+
+#### Update Footer Section
+**PUT** `/api/v1/admin/footer/:id`
+
+Update an existing footer section by ID.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Request Body:** (All fields optional, same structure as create)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section updated successfully",
+  "data": {
+    /* Updated footer section */
+  }
+}
+```
+
+---
+
+#### Update Footer Section by Section Name
+**PUT** `/api/v1/admin/footer/section/:section`
+
+Update an existing footer section by section name (e.g., `logo`, `contact`).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `section` (path) - Section name
+
+**Request Body:** (All fields optional except cannot change `section` field)
+
+**Response:** Same as update by ID
+
+---
+
+#### Publish Footer Section
+**PUT** `/api/v1/admin/footer/:id/publish`
+
+Publish a footer section (change status to `published`).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section published successfully",
+  "data": {
+    /* Footer section with status: "published" */
+  }
+}
+```
+
+---
+
+#### Save as Draft
+**PUT** `/api/v1/admin/footer/:id/draft`
+
+Save a footer section as draft (change status to `draft`).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section saved as draft successfully",
+  "data": {
+    /* Footer section with status: "draft" */
+  }
+}
+```
+
+---
+
+#### Delete Footer Section
+**DELETE** `/api/v1/admin/footer/:id`
+
+Delete a footer section.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section deleted successfully",
+  "data": {
+    "message": "Footer section deleted successfully"
+  }
+}
+```
+
+**Error Responses:**
+- `404` - Footer section not found
+- `401` - Unauthorized
+- `403` - Forbidden
+
+**Notes:**
+- **Last Edited By**: Automatically tracks which admin last edited each section
+- **Status Management**: Use `publish` and `draft` endpoints or update `status` field directly
+- **Order Field**: Use `order` field to control display order of footer sections
+- **Section Uniqueness**: Each section name can only exist once
+- **Partial Updates**: Only provided fields are updated (partial updates supported)
+
+---
+
 ### Admin Registration
 **POST** `/admin/register`
 
@@ -852,8 +1294,54 @@ Create a new doctor/provider account.
     "pincode": "462001"
   },
   "bio": "Experienced general practitioner",
-  "profilePicture": "https://example.com/profile.jpg"
+  "profilePicture": "https://example.com/profile.jpg",
+  "profileImage": {
+    "url": "https://example.com/profile.jpg",
+    "verified": false
+  },
+  "medicalLicense": {
+    "licenseNumber": "#MD-849201",
+    "documentUrl": "https://example.com/license.pdf",
+    "verified": true
+  },
+  "bankAccount": {
+    "accountHolderName": "Sarah Jenkins",
+    "bankName": "Chase Bank",
+    "accountNumber": "1234567890",
+    "routingNumber": "123456789",
+    "accountType": "checking",
+    "ifscCode": "CHAS0US1234",
+    "swiftCode": "CHASUS33",
+    "verified": false
+  }
 }
+```
+
+**Required Fields:**
+- `firstName` - First name (2-50 characters)
+- `lastName` - Last name (2-50 characters)
+- `email` - Valid email address (must be unique)
+- `phoneNumber` - Valid phone number (must be unique)
+- `specialty` - Medical specialty (from predefined list)
+- `licenseNumber` - Medical license number (3-50 characters, must be unique)
+- `consultationFee` - Consultation fee (positive number)
+
+**Optional Fields:**
+- `countryCode` - Country code (default: "+91")
+- `password` - Password (default: "Doctor@123" if not provided)
+- `licenseVerified` - License verification status (default: false)
+- `status` - Doctor status: `active`, `pending`, or `suspended` (default: "pending")
+- `experience` - Years of experience
+- `education` - Array of education objects
+- `certifications` - Array of certification objects
+- `languages` - Array of languages
+- `availability` - Availability object with days and time slots
+- `address` - Address/clinic information
+- `bio` - Professional biography (max 1000 characters)
+- `profilePicture` - Profile picture URL (legacy field)
+- `profileImage` - Profile image object with `url` and `verified`
+- `medicalLicense` - Medical license object with `licenseNumber`, `documentUrl`, and `verified`
+- `bankAccount` - Bank account details for payouts (see Update Doctor section for field details)
 ```
 
 **Required Fields:**
@@ -1090,19 +1578,60 @@ Update doctor information.
   "lastName": "Smith",
   "email": "sarah.smith@mediprime.com",
   "phoneNumber": "9876543211",
+  "countryCode": "+91",
   "specialty": "Cardiology",
   "licenseNumber": "#MD-849202",
   "licenseVerified": true,
   "consultationFee": 200.00,
   "status": "active",
   "experience": 7,
-  "education": [...],
-  "certifications": [...],
+  "education": [
+    { "degree": "MSC", "institution": "AIIMS Delhi", "year": 2018 },
+    { "degree": "MD (General Medicine)", "institution": "AIIMS Delhi", "year": 2021 }
+  ],
+  "certifications": [
+    {
+      "name": "Advanced Cardiac Life Support (ACLS)",
+      "issuedBy": "American Heart Association",
+      "year": 2022
+    }
+  ],
   "languages": ["English", "Hindi", "Spanish"],
-  "availability": {...},
-  "address": {...},
+  "availability": {
+    "days": ["Monday", "Tuesday", "Wednesday", "Friday"],
+    "timeSlots": [
+      { "from": "10:00", "to": "13:00" },
+      { "from": "17:00", "to": "20:00" }
+    ]
+  },
+  "address": {
+    "clinicName": "MediPrime Clinic",
+    "city": "Bhopal",
+    "state": "Madhya Pradesh",
+    "country": "India",
+    "pincode": "462001"
+  },
   "bio": "Updated bio",
   "profilePicture": "https://example.com/new-profile.jpg",
+  "profileImage": {
+    "url": "https://example.com/profile.jpg",
+    "verified": true
+  },
+  "medicalLicense": {
+    "licenseNumber": "#MD-849205",
+    "documentUrl": "https://example.com/license.pdf",
+    "verified": true
+  },
+  "bankAccount": {
+    "accountHolderName": "John Smith",
+    "bankName": "Chase Bank",
+    "accountNumber": "1234567890",
+    "routingNumber": "123456789",
+    "accountType": "checking",
+    "ifscCode": "CHAS0US1234",
+    "swiftCode": "CHASUS33",
+    "verified": false
+  },
   "isActive": true
 }
 ```
@@ -1118,11 +1647,139 @@ Update doctor information.
 }
 ```
 
+**Optional Fields:**
+
+**Basic Information:**
+- `firstName` - First name (2-50 characters)
+- `lastName` - Last name (2-50 characters)
+- `email` - Email address (must be valid email)
+- `phoneNumber` - Phone number (must be valid mobile number)
+- `countryCode` - Country code (default: "+91")
+
+**Professional Information:**
+- `specialty` - Medical specialty (must be from predefined list)
+- `licenseNumber` - Medical license number (3-50 characters, must be unique)
+- `licenseVerified` - License verification status (boolean)
+- `consultationFee` - Consultation fee (positive number)
+- `status` - Doctor status: `active`, `pending`, or `suspended`
+- `experience` - Years of experience (non-negative integer)
+- `bio` - Professional biography (max 1000 characters)
+
+**Profile & License:**
+- `profilePicture` - Profile picture URL (legacy field, string)
+- `profileImage` - Profile image object:
+  - `url` (string) - Profile image URL
+  - `verified` (boolean) - Verification status
+- `medicalLicense` - Medical license object:
+  - `licenseNumber` (string, 3-50 chars) - License number
+  - `documentUrl` (string) - License document URL
+  - `verified` (boolean) - Verification status
+
+**Education & Certifications:**
+- `education` - Array of education objects:
+  - `degree` (string) - Degree name
+  - `institution` (string) - Institution name
+  - `year` (integer, 1900-2100) - Graduation year
+- `certifications` - Array of certification objects:
+  - `name` (string) - Certification name
+  - `issuedBy` or `issuingOrganization` (string) - Issuing organization
+  - `year` (integer, 1900-2100) - Year obtained
+
+**Availability & Location:**
+- `languages` - Array of languages (strings)
+- `availability` - Availability object:
+  - `days` (array) - Days of week: Monday, Tuesday, etc.
+  - `timeSlots` (array) - Time slots:
+    - `from` (string) - Start time (HH:MM format)
+    - `to` (string) - End time (HH:MM format)
+- `address` - Address object:
+  - `clinicName` (string) - Clinic name
+  - `city` (string) - City
+  - `state` (string) - State
+  - `country` (string) - Country (default: "India")
+  - `pincode` (string) - Pincode/Postal code
+
+**Bank Account Details:**
+- `bankAccount` - Bank account object for payouts:
+  - `accountHolderName` (string, 2-100 chars) - Full name as on bank account
+  - `bankName` (string, 2-100 chars) - Bank name
+  - `accountNumber` (string, 8-20 chars) - Bank account number
+  - `routingNumber` (string) - Routing number (9 digits for US or IFSC format)
+  - `accountType` (enum) - Account type: `checking`, `savings`, or `current`
+  - `ifscCode` (string) - IFSC code for Indian banks (format: AAAA0XXXXXX)
+  - `swiftCode` (string, 8-11 chars) - SWIFT code for international transfers
+  - `verified` (boolean) - Bank account verification status
+
+**Account Status:**
+- `isActive` - Active status (boolean)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Doctor updated successfully",
+  "data": {
+    "_id": "doctor_id",
+    "user": {
+      "firstName": "Sarah",
+      "lastName": "Smith",
+      "email": "sarah.smith@mediprime.com",
+      "phoneNumber": "9876543211"
+    },
+    "specialty": "Cardiology",
+    "licenseNumber": "#MD-849202",
+    "licenseVerified": true,
+    "consultationFee": 200.00,
+    "status": "active",
+    "profileImage": {
+      "url": "https://example.com/profile.jpg",
+      "verified": true
+    },
+    "medicalLicense": {
+      "licenseNumber": "#MD-849205",
+      "documentUrl": "https://example.com/license.pdf",
+      "verified": true
+    },
+    "bankAccount": {
+      "accountHolderName": "John Smith",
+      "bankName": "Chase Bank",
+      "accountNumber": "1234567890",
+      "routingNumber": "123456789",
+      "accountType": "checking",
+      "ifscCode": "CHAS0US1234",
+      "swiftCode": "CHASUS33",
+      "verified": false,
+      "verifiedAt": null,
+      "verifiedBy": null
+    },
+    "experience": 7,
+    "education": [...],
+    "certifications": [...],
+    "languages": ["English", "Hindi", "Spanish"],
+    "availability": {...},
+    "address": {...},
+    "bio": "Updated bio",
+    "createdAt": "2024-01-15T10:30:00.000Z",
+    "updatedAt": "2025-01-03T20:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed (invalid field format or value)
+- `404` - Doctor not found
+- `409` - License number already exists for another doctor
+
 **Notes:**
-- Only provided fields are updated
-- License verification automatically sets `licenseVerifiedAt` and `licenseVerifiedBy` when set to true
+- Only provided fields are updated (partial updates supported)
+- License verification automatically sets `licenseVerifiedAt` and `licenseVerifiedBy` when `licenseVerified` or `medicalLicense.verified` is set to true
+- Bank account verification automatically sets `bankAccount.verifiedAt` and `bankAccount.verifiedBy` when `bankAccount.verified` is set to true
 - Status change to `active` automatically activates the user account
 - Status change to `suspended` deactivates the user account
+- Profile image URL automatically updates legacy `profilePicture` field for backward compatibility
+- Medical license number automatically updates legacy `licenseNumber` field for backward compatibility
+- Routing number supports both US format (9 digits) and IFSC format (for Indian banks)
+- Bank account details are required for doctor payouts
 
 ### Reset Doctor Password
 **PUT** `/admin/doctors/:id/reset-password`
@@ -2979,6 +3636,757 @@ This information is stored in the database and can be used for:
 
 ---
 
+## Doctor APIs
+
+All doctor APIs require authentication: `Authorization: Bearer <doctor_token>`
+
+Only users with `role: 'doctor'` can access these endpoints.
+
+### Doctor Dashboard
+
+#### Get Dashboard Overview
+**GET** `/api/v1/doctor/dashboard/overview?period=last_30_days`
+
+Get dashboard metrics including total consultations, prescriptions issued, and patient rating with percentage changes.
+
+**Headers:** `Authorization: Bearer <doctor_token>`
+
+**Query Parameters:**
+- `period` (optional) - Time period for filtering metrics. Must be one of:
+  - `all` - All time (default)
+  - `today` - Today only
+  - `last_7_days` - Last 7 days
+  - `last_30_days` - Last 30 days
+  - `this_month` - Current month
+  - `last_month` - Previous month
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Dashboard data retrieved successfully",
+  "data": {
+    "metrics": {
+      "totalConsultations": {
+        "value": 248,
+        "change": "+12.0%",
+        "trend": "up"
+      },
+      "prescriptionsIssued": {
+        "value": 189,
+        "change": "+12.0%",
+        "trend": "up"
+      },
+      "patientRating": {
+        "value": 4.8,
+        "totalRatings": 156
+      }
+    }
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed (invalid period parameter)
+- `401` - Unauthorized (missing or invalid token)
+- `403` - Forbidden (user is not a doctor)
+- `404` - Doctor profile not found
+
+**Notes:**
+- Total Consultations counts all prescriptions created by the doctor
+- Prescriptions Issued is the same as Total Consultations
+- Patient Rating is retrieved from the doctor's profile rating
+- Percentage change compares current period with the previous equivalent period
+- Trend indicates whether the metric is increasing (`up`) or decreasing (`down`)
+
+---
+
+#### Get Recent Consultations
+**GET** `/api/v1/doctor/dashboard/recent-consultations?page=1&limit=10`
+
+Get list of recent consultations with patient information, consultation reasons, times, and status.
+
+**Headers:** `Authorization: Bearer <doctor_token>`
+
+**Query Parameters:**
+- `page` (optional) - Page number (default: 1, minimum: 1)
+- `limit` (optional) - Items per page (default: 10, maximum: 100)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Recent consultations retrieved successfully",
+  "data": {
+    "consultations": [
+      {
+        "id": "prescription_id_1",
+        "patientName": "Michael Chen",
+        "reason": "Chest pain, shortness of breath",
+        "time": "10:30 AM",
+        "date": "Jan 15, 2024",
+        "status": "Urgent",
+        "statusType": "error",
+        "prescriptionNumber": "PRES202401151234567890"
+      },
+      {
+        "id": "prescription_id_2",
+        "patientName": "Michael Chen",
+        "reason": "Skin Allergy",
+        "time": "11:00 AM",
+        "date": "Jan 15, 2024",
+        "status": "Completed",
+        "statusType": "success",
+        "prescriptionNumber": "PRES202401151234567891"
+      },
+      {
+        "id": "prescription_id_3",
+        "patientName": "Sarah Johnson",
+        "reason": "Follow-up consultation",
+        "time": "2:30 PM",
+        "date": "Jan 14, 2024",
+        "status": "Active",
+        "statusType": "info",
+        "prescriptionNumber": "PRES202401141234567890"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 10,
+      "total": 248
+    }
+  }
+}
+```
+
+**Status Types:**
+- `error` - Urgent consultations (red indicator)
+- `success` - Completed consultations (green indicator)
+- `info` - Active consultations (blue indicator)
+
+**Error Responses:**
+- `400` - Validation failed (invalid page or limit)
+- `401` - Unauthorized (missing or invalid token)
+- `403` - Forbidden (user is not a doctor)
+- `404` - Doctor profile not found
+
+**Notes:**
+- Consultations are sorted by creation date (most recent first)
+- Status is determined based on prescription status and diagnosis keywords
+- Urgent status is automatically assigned if diagnosis contains keywords like "urgent", "emergency", "chest pain", or "shortness of breath"
+- Patient names are retrieved from linked user profiles
+
+---
+
+#### Get Today's Schedule
+**GET** `/api/v1/doctor/dashboard/todays-schedule`
+
+Get today's scheduled appointments and consultations, including follow-up appointments and new consultations.
+
+**Headers:** `Authorization: Bearer <doctor_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Today's schedule retrieved successfully",
+  "data": {
+    "schedule": [
+      {
+        "id": "prescription_id_1",
+        "patientName": "Robert Williams",
+        "reason": "Follow-up",
+        "consultationType": "Follow-up",
+        "time": "3:00 PM",
+        "prescriptionNumber": "PRES202401151234567890"
+      },
+      {
+        "id": "prescription_id_2",
+        "patientName": "Lisa Anderson",
+        "reason": "New Consultation",
+        "consultationType": "New Consultation",
+        "time": "4:30 PM",
+        "prescriptionNumber": "PRES202401151234567891"
+      },
+      {
+        "id": "prescription_id_3",
+        "patientName": "David Martinez",
+        "reason": "Routine checkup",
+        "consultationType": "Consultation",
+        "time": "5:00 PM",
+        "prescriptionNumber": "PRES202401151234567892"
+      }
+    ],
+    "date": "Monday, January 15, 2024"
+  }
+}
+```
+
+**Consultation Types:**
+- `Follow-up` - Prescription with a follow-up date scheduled for today
+- `New Consultation` - New consultation created today
+- `Consultation` - General consultation
+
+**Error Responses:**
+- `401` - Unauthorized (missing or invalid token)
+- `403` - Forbidden (user is not a doctor)
+- `404` - Doctor profile not found
+
+**Notes:**
+- Includes prescriptions with `followUpDate` set to today
+- Also includes prescriptions created today (as new consultations)
+- Schedule items are sorted by time (earliest first)
+- Duplicate prescriptions are automatically removed
+- Only includes non-cancelled prescriptions
+
+---
+
+### Patient Consultations
+
+#### Get All Consultations
+**GET** `/api/v1/doctor/consultations?page=1&limit=10&status=pending&search=Sarah`
+
+Get list of patient consultations (intake forms) that were submitted to the logged-in doctor. Only consultations where patients have specifically selected and submitted the form to this doctor will be shown.
+
+**Headers:** `Authorization: Bearer <doctor_token>`
+
+**Important Notes:**
+- **Doctor Identification**: Doctor is automatically identified from the authentication token
+- **Filtered by Doctor**: Only consultations assigned to the logged-in doctor are returned
+- **Relation**: Each consultation must have `doctor` field set to the logged-in doctor's ID (set when patient submits consultation with `doctorId`)
+- **Patient Selection**: Patients select a doctor when submitting the intake form, and only that doctor can see those consultations
+
+**Query Parameters:**
+- `page` (optional) - Page number (default: 1, minimum: 1)
+- `limit` (optional) - Items per page (default: 10, maximum: 100)
+- `status` (optional) - Filter by status. Must be one of:
+  - `pending` - Submitted but not reviewed (default) - Shows consultations with status `submitted`
+  - `submitted` - Submitted consultations
+  - `reviewed` - Reviewed consultations
+  - `draft` - Draft consultations
+- `search` (optional) - Search by patient name, email, or condition/symptoms (searches only within this doctor's consultations)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Consultations retrieved successfully",
+  "data": {
+    "consultations": [
+      {
+        "id": "intake_form_id_1",
+        "patient": {
+          "id": "patient_id_1",
+          "name": "Sarah Johnson",
+          "age": 34,
+          "gender": "female",
+          "email": "sarah.johnson@example.com",
+          "phone": "9876543210",
+          "countryCode": "+91",
+          "profilePicture": "https://example.com/profile.jpg"
+        },
+        "condition": "Respiratory Issues, Chronic cough",
+        "symptoms": "Persistent cough, shortness of breath",
+        "status": "pending",
+        "submittedAt": "2025-12-08 09:30 AM",
+        "submittedDate": "2025-12-08T09:30:00.000Z",
+        "intakeForm": {
+          "basicInfoComplete": true,
+          "emergencyContactComplete": true,
+          "medicalQuestionsComplete": true
+        }
+      },
+      {
+        "id": "intake_form_id_2",
+        "patient": {
+          "id": "patient_id_2",
+          "name": "Michael Chen",
+          "age": 28,
+          "gender": "male",
+          "email": "michael.chen@example.com",
+          "phone": "9876543211",
+          "countryCode": "+91",
+          "profilePicture": null
+        },
+        "condition": "Skin Allergy",
+        "symptoms": "Rash, Itching",
+        "status": "pending",
+        "submittedAt": "2025-12-08 10:15 AM",
+        "submittedDate": "2025-12-08T10:15:00.000Z",
+        "intakeForm": {
+          "basicInfoComplete": true,
+          "emergencyContactComplete": false,
+          "medicalQuestionsComplete": true
+        }
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 10,
+      "total": 25,
+      "pages": 3
+    }
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed (invalid query parameters)
+- `401` - Unauthorized (missing or invalid token)
+- `403` - Forbidden (user is not a doctor)
+- `404` - Doctor profile not found
+
+**Notes:**
+- **Doctor-Specific**: Only consultations assigned to the logged-in doctor are returned
+- **Relation**: The `doctor` field in IntakeForm must match the logged-in doctor's ID
+- **Patient Submission**: When a patient submits a consultation (`POST /patient/intake-form/submit`), they must provide `doctorId`, which creates the relation
+- Default status filter is `pending` (submitted but not reviewed)
+- Search works across patient name, email, and medical conditions/symptoms (only within this doctor's consultations)
+- Age is automatically calculated from patient's date of birth
+- Condition and symptoms are extracted from medical questions in the intake form
+- Patient information is populated from both User and Patient models
+- Doctor information is also populated in the response
+- Consultations are sorted by creation date (most recent first)
+
+**How Consultation Assignment Works:**
+1. Patient fills intake form sections
+2. Patient selects a doctor and submits: `POST /patient/intake-form/submit` with `{ "doctorId": "doctor_id" }`
+3. IntakeForm's `doctor` field is set to the selected doctor's ID
+4. Only that specific doctor can see this consultation in their list
+5. Other doctors will not see consultations assigned to different doctors
+
+---
+
+#### Get Consultation by ID
+**GET** `/api/v1/doctor/consultations/:id`
+
+Get detailed consultation (intake form) information including complete patient details, basic information, emergency contact, and medical questions.
+
+**Headers:** `Authorization: Bearer <doctor_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Consultation retrieved successfully",
+  "data": {
+    "id": "intake_form_id",
+    "patient": {
+      "id": "patient_id",
+      "name": "Sarah Johnson",
+      "firstName": "Sarah",
+      "lastName": "Johnson",
+      "age": 34,
+      "gender": "female",
+      "dateOfBirth": "1990-05-15T00:00:00.000Z",
+      "email": "sarah.johnson@example.com",
+      "phone": "9876543210",
+      "countryCode": "+91",
+      "profilePicture": "https://example.com/profile.jpg",
+      "bloodGroup": "O+",
+      "height": 165,
+      "weight": 60,
+      "medicalHistory": ["Hypertension", "Diabetes"],
+      "allergies": ["Penicillin"],
+      "emergencyContact": {
+        "name": "John Johnson",
+        "phoneNumber": "9876543211",
+        "relationship": "Spouse"
+      }
+    },
+    "basicInformation": {
+      "firstName": "Sarah",
+      "middleName": "Marie",
+      "lastName": "Johnson",
+      "sex": "female",
+      "dateOfBirth": "1990-05-15T00:00:00.000Z",
+      "email": "sarah.johnson@example.com",
+      "phone": "9876543210",
+      "address": "123 Main Street",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "zip": "400001",
+      "maritalStatus": "married",
+      "govtIssuedCertificate": "aadhaar",
+      "certificateUpload": "https://example.com/certificate.pdf",
+      "isBasicInfoComplete": true
+    },
+    "emergencyContact": {
+      "relationship": "Spouse",
+      "firstName": "John",
+      "lastName": "Johnson",
+      "email": "john.johnson@example.com",
+      "phone": "9876543211",
+      "primaryPhone": "9876543211",
+      "address": "123 Main Street",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "zip": "400001",
+      "isEmergencyContactComplete": true
+    },
+    "medicalQuestions": {
+      "pastMedicalHistory": ["Respiratory Issues", "Chronic cough"],
+      "currentMedications": ["Inhaler", "Antibiotics"],
+      "medicationAllergies": ["Penicillin"],
+      "preferredPharmacies": [
+        {
+          "pharmacyName": "City Pharmacy",
+          "address": "456 Market Street",
+          "city": "Mumbai",
+          "state": "Maharashtra",
+          "zip": "400002"
+        }
+      ],
+      "howDidYouHearAboutUs": "Online search",
+      "isMedicalQuestionsComplete": true
+    },
+    "status": "pending",
+    "submittedAt": "2025-12-08 09:30 AM",
+    "submittedDate": "2025-12-08T09:30:00.000Z",
+    "updatedAt": "2025-12-08T09:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed (invalid consultation ID)
+- `401` - Unauthorized (missing or invalid token)
+- `403` - Forbidden (user is not a doctor)
+- `404` - Consultation not found or Doctor profile not found
+
+**Notes:**
+- Returns complete intake form with all sections populated
+- Patient information is merged from Patient model and User model
+- Includes all medical history, allergies, and emergency contact details
+- Age is calculated from date of birth
+- All form completion statuses are included
+
+---
+
+#### Update Consultation Status
+**PUT** `/api/v1/doctor/consultations/:id/status`
+
+Update the status of a consultation (intake form). Used to mark consultations as reviewed.
+
+**Headers:** `Authorization: Bearer <doctor_token>`
+
+**Request Body:**
+```json
+{
+  "status": "reviewed"
+}
+```
+
+**Required Fields:**
+- `status` - Must be one of: `draft`, `submitted`, `reviewed`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Consultation status updated successfully",
+  "data": {
+    "id": "intake_form_id",
+    "status": "reviewed",
+    "updatedAt": "2025-12-08T10:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed (invalid status or consultation ID)
+- `401` - Unauthorized (missing or invalid token)
+- `403` - Forbidden (user is not a doctor)
+- `404` - Consultation not found or Doctor profile not found
+
+**Status Values:**
+- `draft` - Consultation is still in draft (not submitted)
+- `submitted` - Consultation has been submitted by patient (appears as "pending" in list)
+- `reviewed` - Consultation has been reviewed by doctor
+
+**Notes:**
+- Status `submitted` appears as `pending` in the consultations list
+- Use this endpoint to mark consultations as reviewed after doctor review
+- Status update is tracked with `updatedAt` timestamp
+
+---
+
+### Doctor Earnings & Payouts
+
+#### Get Earnings Summary
+**GET** `/api/v1/doctor/earnings/summary?period=last_30_days`
+
+Get earnings summary for the logged-in doctor including total earnings, available earnings, paid out amount, and pending payouts.
+
+**Headers:** `Authorization: Bearer <doctor_token>`
+
+**Query Parameters:**
+- `period` (optional) - Time period for earnings calculation. Must be one of:
+  - `today` - Today's earnings
+  - `last_7_days` - Last 7 days
+  - `last_30_days` - Last 30 days (default)
+  - `this_month` - Current month
+  - `last_month` - Previous month
+  - `all` - All time earnings
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Earnings summary retrieved successfully",
+  "data": {
+    "summary": {
+      "totalEarnings": {
+        "value": 15000,
+        "change": "+12.5%",
+        "trend": "up"
+      },
+      "availableEarnings": {
+        "value": 8500
+      },
+      "paidOut": {
+        "value": 5000,
+        "count": 3
+      },
+      "pendingPayouts": {
+        "value": 1500,
+        "count": 1
+      },
+      "consultations": {
+        "count": 100
+      },
+      "consultationFee": 150
+    },
+    "period": "last_30_days",
+    "doctor": {
+      "id": "doctor_id",
+      "name": "Dr. Sarah Jenkins",
+      "specialty": "General Practice",
+      "bankAccount": {
+        "accountHolderName": "Sarah Jenkins",
+        "bankName": "Chase Bank",
+        "accountNumber": "1234567890",
+        "routingNumber": "123456789",
+        "accountType": "checking",
+        "verified": true
+      }
+    }
+  }
+}
+```
+
+**Notes:**
+- **Total Earnings**: Calculated as (consultations count × consultation fee)
+- **Available Earnings**: Total earnings - paid out - pending payouts
+- **Percentage Change**: Compares current period with previous period
+- **Bank Account**: Shows doctor's bank account details if set
+- Earnings are calculated based on completed consultations (prescriptions with status not 'cancelled')
+
+---
+
+#### Get Payout Requests
+**GET** `/api/v1/doctor/earnings/payouts?page=1&limit=10&status=pending`
+
+Get list of payout requests for the logged-in doctor.
+
+**Headers:** `Authorization: Bearer <doctor_token>`
+
+**Query Parameters:**
+- `page` (optional) - Page number (default: 1, minimum: 1)
+- `limit` (optional) - Items per page (default: 10, maximum: 100)
+- `status` (optional) - Filter by status. Must be one of:
+  - `pending` - Pending payout requests
+  - `processing` - Processing payout requests
+  - `completed` - Completed payouts
+  - `failed` - Failed payouts
+  - `cancelled` - Cancelled payouts
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Payout requests retrieved successfully",
+  "data": {
+    "payouts": [
+      {
+        "id": "payout_id_1",
+        "amount": 1500,
+        "currency": "USD",
+        "status": "pending",
+        "payoutMethod": "bank_transfer",
+        "bankAccount": {
+          "accountHolderName": "Sarah Jenkins",
+          "bankName": "Chase Bank",
+          "accountNumber": "****7890",
+          "routingNumber": "****6789",
+          "accountType": "checking"
+        },
+        "transactionId": null,
+        "notes": "Monthly payout request",
+        "failureReason": null,
+        "processedBy": null,
+        "requestedAt": "2025-01-03T10:30:00.000Z",
+        "processedAt": null,
+        "failedAt": null
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 10,
+      "total": 5,
+      "pages": 1
+    }
+  }
+}
+```
+
+---
+
+#### Get Payout Request by ID
+**GET** `/api/v1/doctor/earnings/payouts/:id`
+
+Get detailed information about a specific payout request.
+
+**Headers:** `Authorization: Bearer <doctor_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Payout request retrieved successfully",
+  "data": {
+    "id": "payout_id",
+    "amount": 1500,
+    "currency": "USD",
+    "status": "pending",
+    "payoutMethod": "bank_transfer",
+    "bankAccount": {
+      "accountHolder": "Sarah Jenkins",
+      "bankName": "Chase Bank",
+      "accountNumber": "1234567890",
+      "routingNumber": "123456789",
+      "accountType": "checking"
+    },
+    "transactionId": null,
+    "notes": "Monthly payout request",
+    "failureReason": null,
+    "processedBy": null,
+    "requestedAt": "2025-01-03T10:30:00.000Z"
+  }
+}
+```
+
+---
+
+#### Create Payout Request
+**POST** `/api/v1/doctor/earnings/payouts`
+
+Create a new payout request. The amount must not exceed available earnings.
+
+**Headers:** `Authorization: Bearer <doctor_token>`
+
+**Request Body:**
+```json
+{
+  "amount": 1500,
+  "notes": "Monthly payout request"
+}
+```
+
+**Required Fields:**
+- `amount` - Payout amount (must be greater than 0, cannot exceed available earnings)
+
+**Optional Fields:**
+- `notes` - Additional notes (max 500 characters)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Payout request created successfully",
+  "data": {
+    "_id": "payout_id",
+    "payoutId": "POUT-1704286800000-1234",
+    "doctor": "doctor_id",
+    "amount": 1500,
+    "currency": "USD",
+    "status": "pending",
+    "payoutMethod": "bank_transfer",
+    "bankAccount": {
+      "accountHolder": "Sarah Jenkins",
+      "bankName": "Chase Bank",
+      "accountNumber": "1234567890",
+      "routingNumber": "123456789",
+      "accountType": "checking"
+    },
+    "notes": "Monthly payout request",
+    "createdAt": "2025-01-03T10:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed or insufficient earnings or bank account not set
+- `401` - Unauthorized (missing or invalid token)
+- `403` - Forbidden (user is not a doctor)
+
+**Notes:**
+- **Bank Account Required**: Doctor must have bank account details set in profile before requesting payout
+- **Available Earnings Check**: Amount cannot exceed available earnings
+- Bank account details are automatically taken from doctor's profile
+
+---
+
+#### Get Reports & Analytics
+**GET** `/api/v1/doctor/earnings/reports?period=last_30_days`
+
+Get comprehensive reports and analytics for the logged-in doctor.
+
+**Headers:** `Authorization: Bearer <doctor_token>`
+
+**Query Parameters:**
+- `period` (optional) - Time period for reports. Must be one of:
+  - `today`, `last_7_days`, `last_30_days` (default), `this_month`, `last_month`, `this_year`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Reports and analytics retrieved successfully",
+  "data": {
+    "period": "last_30_days",
+    "summary": {
+      "totalConsultations": 100,
+      "totalRequests": 120,
+      "totalEarnings": 15000,
+      "averageEarningsPerConsultation": 150
+    },
+    "consultations": {
+      "byStatus": {
+        "active": 45,
+        "completed": 50,
+        "cancelled": 5
+      },
+      "byDate": [
+        { "date": "2025-01-01", "count": 5 }
+      ]
+    },
+    "insights": {
+      "topDiagnoses": [
+        { "diagnosis": "Hypertension", "count": 25 }
+      ],
+      "patientDemographics": {
+        "gender": { "male": 55, "female": 45 },
+        "ageGroups": { "0-18": 10, "19-35": 30 }
+      }
+    },
+    "recentConsultations": []
+  }
+}
+```
+
+---
+
 ## Patient APIs
 
 All patient APIs require authentication: `Authorization: Bearer <token>`
@@ -3237,6 +4645,87 @@ The intake form is divided into three sections that can be saved independently. 
 - The form status can be `draft`, `submitted`, or `reviewed`
 - All endpoints require authentication
 - File uploads for certificates should be handled separately and the URL/path should be provided in `certificateUpload` field
+
+---
+
+#### Submit Consultation (Book Consultation)
+**POST** `/api/v1/patient/intake-form/submit`
+
+Submit the completed intake form to book a consultation with a specific doctor. This changes the form status from `draft` to `submitted` and assigns it to the selected doctor, making it visible to that doctor as a pending consultation.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Request Body:**
+```json
+{
+  "doctorId": "doctor_id_here"
+}
+```
+
+**Required Fields:**
+- `doctorId` - MongoDB ObjectId of the doctor to book consultation with
+
+**Prerequisites:**
+- All three sections must be completed:
+  - Basic Information (`isBasicInfoComplete: true`)
+  - Emergency Contact (`isEmergencyContactComplete: true`)
+  - Medical Questions (`isMedicalQuestionsComplete: true`)
+- Doctor must exist and be active
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Consultation submitted successfully. Your consultation request has been sent to the doctor.",
+  "data": {
+    "_id": "intake_form_id",
+    "patient": "patient_id",
+    "basicInformation": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "isBasicInfoComplete": true
+    },
+    "emergencyContact": {
+      "isEmergencyContactComplete": true
+    },
+    "medicalQuestions": {
+      "isMedicalQuestionsComplete": true
+    },
+    "status": "submitted",
+    "doctor": "doctor_id",
+    "createdAt": "2025-12-30T10:46:43.794Z",
+    "updatedAt": "2026-01-03T11:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed:
+  - `"Doctor ID is required to submit consultation."` - doctorId is missing
+  - `"Please complete all sections of the intake form before submitting."` - One or more sections are incomplete
+  - `"Consultation has already been submitted."` - Form is already submitted
+  - `"Selected doctor is not available for consultations."` - Doctor is inactive or suspended
+- `401` - Unauthorized (missing or invalid token)
+- `404` - Intake form not found or Doctor not found
+
+**Notes:**
+- Once submitted, the consultation appears in the selected doctor's consultation list with status `pending`
+- Status changes from `draft` to `submitted`
+- Doctor is assigned to the consultation when submitted
+- Cannot submit if any section is incomplete
+- Cannot submit the same form twice (will return error if already submitted)
+- Doctor must be active and available (status: `active`, `isActive: true`)
+- After submission, only the assigned doctor can view and review the consultation
+- Patient can still view their submitted form but cannot edit it (status is `submitted`)
+
+**Consultation Booking Flow:**
+1. Patient fills Basic Information → `POST /patient/intake-form/basic-information`
+2. Patient fills Emergency Contact → `POST /patient/intake-form/emergency-contact`
+3. Patient fills Medical Questions → `POST /patient/intake-form/medical-questions`
+4. Patient submits consultation → `POST /patient/intake-form/submit`
+5. Consultation appears in doctor's list → `GET /doctor/consultations?status=pending`
+
+---
 
 ### My Past Medications
 
@@ -6890,6 +8379,275 @@ Get a paginated list of all push notification campaigns.
 
 ---
 
+## Contact Form Query APIs
+
+### Create Contact Form Query (Public)
+**POST** `/api/v1/contact-form-queries`
+
+Submit a new contact form query. This endpoint is public and does not require authentication. However, if a user is logged in and provides an authentication token, their user information will be saved with the query.
+
+**Headers (Optional):**
+- `Authorization: Bearer <token>` - If provided, the logged-in user's information will be saved with the query
+
+**Request Body:**
+```json
+{
+  "name": "Brandon",
+  "email": "brandon@email.com",
+  "phoneNumber": "(406) 555-0120",
+  "services": "Craving Change",
+  "message": "I need a refill for my prescription medication."
+}
+```
+
+**Required Fields:**
+- `name` - Name (2-100 characters)
+- `email` - Valid email address
+- `phoneNumber` - Phone number (supports various formats)
+- `services` - Service name (2-100 characters)
+- `message` - Message (10-2000 characters)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Contact form query submitted successfully",
+  "data": {
+    "_id": "query_id",
+    "name": "Brandon",
+    "email": "brandon@email.com",
+    "phoneNumber": "(406) 555-0120",
+    "services": "Craving Change",
+    "message": "I need a refill for my prescription medication.",
+    "status": "pending",
+    "submittedBy": {
+      "_id": "user_id",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john@example.com",
+      "phoneNumber": "1234567890"
+    },
+    "createdAt": "2025-12-20T10:30:00.000Z",
+    "updatedAt": "2025-12-20T10:30:00.000Z"
+  }
+}
+```
+
+**Note:** If the user is not logged in, `submittedBy` will be `null`.
+
+**Error Responses:**
+- `400` - Validation failed
+
+---
+
+### Get Contact Form Query Statistics (Admin/Sub-Admin Only)
+**GET** `/api/v1/admin/contact-form-queries/statistics`
+
+Get statistics about contact form queries.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "total": 150,
+    "pending": 45,
+    "inProgress": 12,
+    "resolved": 88,
+    "archived": 5,
+    "last7Days": 25,
+    "last30Days": 95
+  }
+}
+```
+
+---
+
+### Get All Contact Form Queries (Admin/Sub-Admin Only)
+**GET** `/api/v1/admin/contact-form-queries`
+
+Get a paginated list of all contact form queries with search, filter, and sort capabilities.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Query Parameters:**
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 10, max: 100)
+- `search` (optional) - Search in name, email, phone number, or message
+- `status` (optional) - Filter by status: `pending`, `in_progress`, `resolved`, `archived`
+- `services` (optional) - Filter by services (partial match)
+- `sortBy` (optional) - Sort field: `createdAt`, `name`, `email`, `status` (default: `createdAt`)
+- `sortOrder` (optional) - Sort order: `asc` or `desc` (default: `desc`)
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "query_id",
+      "name": "Brandon",
+      "email": "brandon@email.com",
+      "phoneNumber": "(406) 555-0120",
+      "services": "Craving Change",
+      "message": "I need a refill for my prescription medication.",
+      "status": "pending",
+      "submittedBy": {
+        "_id": "user_id",
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john@example.com",
+        "phoneNumber": "1234567890"
+      },
+      "createdAt": "2025-12-20T10:30:00.000Z",
+      "updatedAt": "2025-12-20T10:30:00.000Z"
+    },
+    {
+      "_id": "query_id_2",
+      "name": "Harold",
+      "email": "harold@email.com",
+      "phoneNumber": "(671) 555-0110",
+      "services": "Meals on Wheels",
+      "message": "I would like to consult a doctor about my health concerns.",
+      "status": "in_progress",
+      "submittedBy": null,
+      "respondedAt": "2025-12-19T14:20:00.000Z",
+      "respondedBy": {
+        "_id": "admin_id",
+        "firstName": "Admin",
+        "lastName": "User",
+        "email": "admin@example.com"
+      },
+      "createdAt": "2025-12-18T09:15:00.000Z",
+      "updatedAt": "2025-12-19T14:20:00.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 150,
+    "pages": 15
+  }
+}
+```
+
+---
+
+### Get Contact Form Query by ID (Admin/Sub-Admin Only)
+**GET** `/api/v1/admin/contact-form-queries/:id`
+
+Get a specific contact form query by ID.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "query_id",
+    "name": "Brandon",
+    "email": "brandon@email.com",
+    "phoneNumber": "(406) 555-0120",
+    "services": "Craving Change",
+    "message": "I need a refill for my prescription medication.",
+    "status": "pending",
+    "submittedBy": {
+      "_id": "user_id",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john@example.com",
+      "phoneNumber": "1234567890"
+    },
+    "createdAt": "2025-12-20T10:30:00.000Z",
+    "updatedAt": "2025-12-20T10:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `404` - Contact form query not found
+
+---
+
+### Update Contact Form Query (Admin/Sub-Admin Only)
+**PUT** `/api/v1/admin/contact-form-queries/:id`
+
+Update a contact form query. When status is updated to `resolved`, `respondedAt` and `respondedBy` are automatically set.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Request Body:**
+```json
+{
+  "status": "resolved",
+  "response": "Thank you for contacting us. We have processed your request."
+}
+```
+
+**Optional Fields:**
+- `name` - Name (2-100 characters)
+- `email` - Valid email address
+- `phoneNumber` - Phone number
+- `services` - Service name (2-100 characters)
+- `message` - Message (10-2000 characters)
+- `status` - Status: `pending`, `in_progress`, `resolved`, `archived`
+- `response` - Admin response message (max 2000 characters)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Contact form query updated successfully",
+  "data": {
+    "_id": "query_id",
+    "name": "Brandon",
+    "email": "brandon@email.com",
+    "phoneNumber": "(406) 555-0120",
+    "services": "Craving Change",
+    "message": "I need a refill for my prescription medication.",
+    "status": "resolved",
+    "response": "Thank you for contacting us. We have processed your request.",
+    "respondedAt": "2025-12-20T11:00:00.000Z",
+    "respondedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "createdAt": "2025-12-20T10:30:00.000Z",
+    "updatedAt": "2025-12-20T11:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed
+- `404` - Contact form query not found
+
+---
+
+### Delete Contact Form Query (Admin/Sub-Admin Only)
+**DELETE** `/api/v1/admin/contact-form-queries/:id`
+
+Delete a contact form query.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Contact form query deleted successfully"
+}
+```
+
+**Error Responses:**
+- `404` - Contact form query not found
+
+---
 
 ## Notes
 
