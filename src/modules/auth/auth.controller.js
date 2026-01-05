@@ -9,10 +9,16 @@ exports.register = async (req, res, next) => {
     const finalPassword = password || phoneNumber.slice(-6);
 
     const user = await authService.register({ firstName, lastName, phoneNumber, countryCode, email, agreeConfirmation, password: finalPassword });
+    const otp = await otpService.sendOtp(phoneNumber, countryCode);
 
-    await otpService.sendOtp(phoneNumber, countryCode);
-
-    res.status(201).json({ success: true, message: 'Registered successfully. OTP sent.', data: { userId: user._id } });
+    res.status(201).json({ 
+      success: true, 
+      message: 'Registered successfully. OTP sent.', 
+      data: { 
+        userId: user._id,
+        otp: otp
+      } 
+    });
   } catch (err) { next(err); }
 };
 
@@ -39,7 +45,11 @@ exports.resendOtp = async (req, res, next) => {
   try {
     const { phoneNumber, countryCode } = req.body;
     const otp = await otpService.resendOtp(phoneNumber, countryCode);
-    res.status(200).json({ success: true, message: 'OTP resent successfully', otp });
+    res.status(200).json({ 
+      success: true, 
+      message: 'OTP resent successfully', 
+      data: { otp } 
+    });
   } catch (err) { next(err); }
 };
 
@@ -75,7 +85,7 @@ exports.loginWithOtp = async (req, res, next) => {
 
     // Step 1: If OTP not provided, send OTP
     if (!otp) {
-      await otpService.sendLoginOtp(identifier, countryCode || '+91');
+      const otpCode = await otpService.sendLoginOtp(identifier, countryCode || '+91');
       const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
       const message = isEmail 
         ? `OTP sent to ${identifier}` 
@@ -83,7 +93,11 @@ exports.loginWithOtp = async (req, res, next) => {
       return res.status(200).json({ 
         success: true, 
         message,
-        data: { identifier, method: isEmail ? 'email' : 'phone' }
+        data: { 
+          identifier, 
+          method: isEmail ? 'email' : 'phone',
+          otp: otpCode
+        }
       });
     }
 
