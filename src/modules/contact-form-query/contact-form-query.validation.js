@@ -1,7 +1,26 @@
 const { body, query } = require('express-validator');
 
-// Create contact form query validation
+// Create contact form query validation (simple help desk form - firstName and email only)
 exports.createContactFormQueryValidation = [
+  body('firstName')
+    .notEmpty()
+    .withMessage('First name is required')
+    .isString()
+    .withMessage('First name must be a string')
+    .trim()
+    .isLength({ min: 2, max: 100 })
+    .withMessage('First name must be between 2 and 100 characters'),
+  
+  body('email')
+    .notEmpty()
+    .withMessage('Email is required')
+    .isEmail()
+    .withMessage('Please provide a valid email address')
+    .normalizeEmail()
+];
+
+// Create contact form query validation (full form with all fields)
+exports.createFullContactFormQueryValidation = [
   body('name')
     .notEmpty()
     .withMessage('Name is required')

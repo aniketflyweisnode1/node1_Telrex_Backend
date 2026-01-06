@@ -7,6 +7,766 @@ All APIs are prefixed with `/api/v1`
 
 ## Admin APIs
 
+### Blog Category Management APIs (Admin/Sub-Admin Only)
+
+APIs for managing blog categories before creating blogs.
+
+#### Get All Blog Categories
+**GET** `/api/v1/admin/blog-categories?search=health&isActive=true&page=1&limit=10&sortBy=order&sortOrder=asc`
+
+Get list of all blog categories with search, filter, and pagination.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Query Parameters:**
+- `search` (optional) - Search by name, slug, or description
+- `isActive` (optional) - Filter by active status: `true` or `false`
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 10, max: 100)
+- `sortBy` (optional) - Sort field: `name`, `slug`, `order`, `createdAt`, `updatedAt` (default: `order`)
+- `sortOrder` (optional) - Sort order: `asc` or `desc` (default: `asc`)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Blog categories retrieved successfully",
+  "data": [
+    {
+      "_id": "category_id",
+      "name": "Health & Wellness",
+      "slug": "health-wellness",
+      "description": "Articles about health and wellness",
+      "isActive": true,
+      "order": 0,
+      "createdBy": {
+        "_id": "admin_id",
+        "firstName": "Admin",
+        "lastName": "User",
+        "email": "admin@example.com"
+      },
+      "updatedBy": {
+        "_id": "admin_id",
+        "firstName": "Admin",
+        "lastName": "User"
+      },
+      "createdAt": "2025-01-01T10:00:00.000Z",
+      "updatedAt": "2025-01-03T12:30:00.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 15,
+    "pages": 2
+  }
+}
+```
+
+---
+
+#### Get Blog Category by ID
+**GET** `/api/v1/admin/blog-categories/:id`
+
+Get a specific blog category by its ID.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Blog category ID
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Blog category retrieved successfully",
+  "data": {
+    "_id": "category_id",
+    "name": "Health & Wellness",
+    "slug": "health-wellness",
+    "description": "Articles about health and wellness",
+    "isActive": true,
+    "order": 0,
+    "createdBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "updatedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+---
+
+#### Get Blog Category by Slug
+**GET** `/api/v1/admin/blog-categories/slug/:slug`
+
+Get a specific blog category by its slug.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `slug` (path) - Blog category slug (e.g., `health-wellness`)
+
+**Response:** Same as Get by ID
+
+---
+
+#### Create Blog Category
+**POST** `/api/v1/admin/blog-categories`
+
+Create a new blog category.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Request Body:**
+```json
+{
+  "name": "Health & Wellness",
+  "slug": "health-wellness",
+  "description": "Articles about health and wellness topics",
+  "order": 0,
+  "isActive": true
+}
+```
+
+**Required Fields:**
+- `name` - Category name (2-100 characters)
+
+**Optional Fields:**
+- `slug` - URL-friendly slug (auto-generated from name if not provided)
+- `description` - Category description (max 500 characters)
+- `order` - Display order (default: 0)
+- `isActive` - Active status (default: true)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Blog category created successfully",
+  "data": {
+    "_id": "category_id",
+    "name": "Health & Wellness",
+    "slug": "health-wellness",
+    "description": "Articles about health and wellness topics",
+    "isActive": true,
+    "order": 0,
+    "createdBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-01T10:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed
+- `409` - Blog category with this name or slug already exists
+
+---
+
+#### Update Blog Category
+**PUT** `/api/v1/admin/blog-categories/:id`
+
+Update an existing blog category.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Request Body:** (All fields optional)
+```json
+{
+  "name": "Health & Wellness Updated",
+  "slug": "health-wellness-updated",
+  "description": "Updated description",
+  "order": 1,
+  "isActive": true
+}
+```
+
+**Response:** Same as Get by ID
+
+**Error Responses:**
+- `400` - Validation failed
+- `404` - Blog category not found
+- `409` - Blog category with this name or slug already exists
+
+---
+
+#### Activate Blog Category
+**PUT** `/api/v1/admin/blog-categories/:id/activate`
+
+Activate a blog category (set `isActive: true`).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:** Same as Get by ID
+
+---
+
+#### Deactivate Blog Category
+**PUT** `/api/v1/admin/blog-categories/:id/deactivate`
+
+Deactivate a blog category (set `isActive: false`).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Blog category deactivated successfully",
+  "data": {
+    "_id": "category_id",
+    "name": "Health & Wellness",
+    "slug": "health-wellness",
+    "isActive": false,
+    "updatedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `404` - Blog category not found
+
+---
+
+#### Delete Blog Category
+**DELETE** `/api/v1/admin/blog-categories/:id`
+
+Delete (deactivate) a blog category. This performs a soft delete - the category is deactivated but not permanently removed.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Blog category deleted successfully",
+  "data": {
+    "message": "Blog category deleted successfully"
+  }
+}
+```
+
+**Error Responses:**
+- `404` - Blog category not found
+
+**Notes:**
+- **Soft Delete**: Category is not permanently deleted, only deactivated
+- **Slug Auto-generation**: If slug is not provided, it's automatically generated from the name
+- **Unique Constraints**: Name and slug must be unique across all categories
+- **Order Field**: Use `order` field to control display order of categories
+
+---
+
+### Blog Management APIs
+
+APIs for managing blog posts with category relation and proper population.
+
+**Access Control:**
+- **Public (Authenticated)**: View published blogs
+- **Admin/Sub-Admin**: Full CRUD operations
+
+#### Get All Blogs
+**GET** `/api/v1/admin/blogs?search=health&categoryId=xxx&categorySlug=health-wellness&status=published&isFeatured=true&page=1&limit=10&sortBy=createdAt&sortOrder=desc`
+
+Get list of all blogs with search, filter, and pagination.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Query Parameters:**
+- `search` (optional) - Search by title, excerpt, content, or tags
+- `categoryId` (optional) - Filter by category ID
+- `categorySlug` (optional) - Filter by category slug
+- `authorId` (optional) - Filter by author ID
+- `status` (optional) - Filter by status: `draft`, `published`, or `archived` (default: `published` for non-admin users)
+- `isFeatured` (optional) - Filter by featured status: `true` or `false`
+- `tags` (optional) - Filter by tags (comma-separated or array)
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 10, max: 100)
+- `sortBy` (optional) - Sort field: `createdAt`, `updatedAt`, `publishedAt`, `title`, `views` (default: `createdAt`)
+- `sortOrder` (optional) - Sort order: `asc` or `desc` (default: `desc`)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Blogs retrieved successfully",
+  "data": [
+    {
+      "_id": "blog_id",
+      "title": "10 Tips for Better Health",
+      "slug": "10-tips-for-better-health",
+      "category": {
+        "_id": "category_id",
+        "name": "Health & Wellness",
+        "slug": "health-wellness",
+        "description": "Articles about health and wellness",
+        "isActive": true
+      },
+      "author": {
+        "_id": "user_id",
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john@example.com"
+      },
+      "featuredImage": {
+        "url": "https://example.com/images/blog-featured.jpg",
+        "alt": "Health Tips"
+      },
+      "excerpt": "Discover 10 simple tips to improve your health...",
+      "content": "Full blog content here...",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://example.com/images/blog-1.jpg",
+          "alt": "Image 1",
+          "caption": "Caption here"
+        }
+      ],
+      "tags": ["health", "wellness", "tips"],
+      "metaTitle": "10 Tips for Better Health",
+      "metaDescription": "Discover 10 simple tips to improve your health and wellness",
+      "status": "published",
+      "publishedAt": "2025-01-03T10:00:00.000Z",
+      "views": 150,
+      "isFeatured": true,
+      "seoKeywords": ["health", "wellness", "tips"],
+      "readingTime": 5,
+      "createdAt": "2025-01-01T10:00:00.000Z",
+      "updatedAt": "2025-01-03T12:30:00.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 25,
+    "pages": 3
+  }
+}
+```
+
+**Notes:**
+- Non-admin users can only see published blogs
+- Category and author are automatically populated
+
+---
+
+#### Get Blog by ID
+**GET** `/api/v1/admin/blogs/:id?incrementViews=true`
+
+Get a specific blog by its ID.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Query Parameters:**
+- `incrementViews` (optional) - Increment view count: `true` or `false` (default: `false`)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Blog retrieved successfully",
+  "data": {
+    "_id": "blog_id",
+    "title": "10 Tips for Better Health",
+    "slug": "10-tips-for-better-health",
+    "category": {
+      "_id": "category_id",
+      "name": "Health & Wellness",
+      "slug": "health-wellness",
+      "description": "Articles about health and wellness",
+      "isActive": true
+    },
+    "author": {
+      "_id": "user_id",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john@example.com"
+    },
+    "featuredImage": {
+      "url": "https://example.com/images/blog-featured.jpg",
+      "alt": "Health Tips"
+    },
+    "excerpt": "Discover 10 simple tips to improve your health...",
+    "content": "Full blog content here...",
+    "media": [],
+    "tags": ["health", "wellness", "tips"],
+    "metaTitle": "10 Tips for Better Health",
+    "metaDescription": "Discover 10 simple tips to improve your health and wellness",
+    "status": "published",
+    "publishedAt": "2025-01-03T10:00:00.000Z",
+    "views": 151,
+    "isFeatured": true,
+    "seoKeywords": ["health", "wellness", "tips"],
+    "readingTime": 5,
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid blog ID
+- `404` - Blog not found
+
+---
+
+#### Get Blog by Slug
+**GET** `/api/v1/admin/blogs/slug/:slug?incrementViews=true`
+
+Get a specific blog by its slug (for public URLs).
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Query Parameters:**
+- `incrementViews` (optional) - Increment view count: `true` or `false` (default: `false`)
+
+**Response:** Same as Get Blog by ID
+
+**Error Responses:**
+- `404` - Blog not found (only published blogs are accessible via slug)
+
+---
+
+#### Create Blog (Admin/Sub-Admin Only)
+**POST** `/api/v1/admin/blogs`
+
+Create a new blog post.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Content-Type:** `multipart/form-data` (for file uploads) or `application/json`
+
+**Request Body:**
+```json
+{
+  "title": "10 Tips for Better Health",
+  "categoryId": "category_id",
+  "excerpt": "Discover 10 simple tips to improve your health and wellness",
+  "content": "Full blog content here... (minimum 100 characters)",
+  "featuredImage": "{\"url\": \"https://example.com/images/blog-featured.jpg\", \"alt\": \"Health Tips\"}",
+  "media": "[{\"type\": \"image\", \"url\": \"https://example.com/images/blog-1.jpg\", \"alt\": \"Image 1\"}]",
+  "tags": "[\"health\", \"wellness\", \"tips\"]",
+  "metaTitle": "10 Tips for Better Health",
+  "metaDescription": "Discover 10 simple tips to improve your health and wellness",
+  "status": "draft",
+  "isFeatured": false,
+  "seoKeywords": "[\"health\", \"wellness\", \"tips\"]"
+}
+```
+
+**File Uploads (multipart/form-data):**
+- `images` - Multiple image files (max 10)
+- First image or image with `featuredImage` fieldname will be used as featured image
+- Other images will be added to media array
+
+**Required Fields:**
+- `title` - Blog title (5-200 characters)
+- `categoryId` - Valid MongoDB ObjectId of blog category
+- `content` - Blog content (minimum 100 characters)
+
+**Optional Fields:**
+- `excerpt` - Short excerpt (max 500 characters)
+- `featuredImage` - JSON object with `url` and `alt` properties
+- `media` - Array of media objects
+- `tags` - Array of tags or comma-separated string
+- `metaTitle` - SEO meta title (max 60 characters, defaults to title)
+- `metaDescription` - SEO meta description (max 160 characters, defaults to excerpt)
+- `status` - `draft`, `published`, or `archived` (default: `draft`)
+- `isFeatured` - Boolean (default: `false`)
+- `seoKeywords` - Array of keywords or comma-separated string
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Blog created successfully",
+  "data": {
+    "_id": "blog_id",
+    "title": "10 Tips for Better Health",
+    "slug": "10-tips-for-better-health",
+    "category": {
+      "_id": "category_id",
+      "name": "Health & Wellness",
+      "slug": "health-wellness",
+      "description": "Articles about health and wellness",
+      "isActive": true
+    },
+    "author": {
+      "_id": "user_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "featuredImage": {
+      "url": "https://example.com/images/blog-featured.jpg",
+      "alt": "Health Tips"
+    },
+    "excerpt": "Discover 10 simple tips to improve your health...",
+    "content": "Full blog content here...",
+    "media": [],
+    "tags": ["health", "wellness", "tips"],
+    "metaTitle": "10 Tips for Better Health",
+    "metaDescription": "Discover 10 simple tips to improve your health and wellness",
+    "status": "draft",
+    "publishedAt": null,
+    "views": 0,
+    "isFeatured": false,
+    "seoKeywords": ["health", "wellness", "tips"],
+    "readingTime": 5,
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-01T10:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed or category not found/inactive
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+
+**Notes:**
+- Category is automatically validated and must be active
+- Author is automatically set to the logged-in user
+- Slug is automatically generated from title
+- Reading time is automatically calculated (200 words per minute)
+- `publishedAt` is automatically set when status changes to `published`
+
+---
+
+#### Update Blog (Admin/Sub-Admin Only)
+**PUT** `/api/v1/admin/blogs/:id`
+
+Update an existing blog post.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Content-Type:** `multipart/form-data` (for file uploads) or `application/json`
+
+**Request Body:** Same as Create Blog (all fields optional)
+
+**Response:** Same as Create Blog
+
+**Error Responses:**
+- `400` - Validation failed or category not found/inactive
+- `404` - Blog not found
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+
+---
+
+#### Publish Blog (Admin/Sub-Admin Only)
+**PUT** `/api/v1/admin/blogs/:id/publish`
+
+Publish a blog (change status to `published`).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Blog published successfully",
+  "data": {
+    /* Blog object with status: "published" and publishedAt set */
+  }
+}
+```
+
+**Error Responses:**
+- `404` - Blog not found
+
+---
+
+#### Unpublish Blog (Admin/Sub-Admin Only)
+**PUT** `/api/v1/admin/blogs/:id/unpublish`
+
+Unpublish a blog (change status to `draft`).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Blog unpublished successfully",
+  "data": {
+    /* Blog object with status: "draft" */
+  }
+}
+```
+
+**Error Responses:**
+- `404` - Blog not found
+
+---
+
+#### Save Blog as Draft (Admin/Sub-Admin Only)
+**PUT** `/api/v1/admin/blogs/:id/draft`
+
+Save a blog as draft. This explicitly sets the blog status to `draft` and clears the `publishedAt` date if it exists.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Blog saved as draft successfully",
+  "data": {
+    "_id": "blog_id",
+    "title": "Blog Title",
+    "status": "draft",
+    "publishedAt": null,
+    "category": {
+      "_id": "category_id",
+      "name": "Health & Wellness",
+      "slug": "health-wellness"
+    },
+    "author": {
+      "_id": "user_id",
+      "firstName": "John",
+      "lastName": "Doe"
+    },
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid blog ID
+- `404` - Blog not found
+
+**Notes:**
+- Sets blog status to `draft`
+- Clears `publishedAt` date if it exists
+- Blog will not be visible to public users (only published blogs are visible)
+- Useful for saving work in progress or temporarily hiding a published blog
+
+---
+
+#### Delete Blog (Soft Delete - Admin/Sub-Admin Only)
+**DELETE** `/api/v1/admin/blogs/:id`
+
+Delete (archive) a blog. This performs a soft delete - the blog is archived but not permanently removed.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Blog archived successfully"
+}
+```
+
+**Error Responses:**
+- `400` - Invalid blog ID
+- `404` - Blog not found
+
+**Notes:**
+- **Soft Delete**: Blog is not permanently deleted, only archived (status set to `archived`)
+- Blog can be restored by changing status back to `draft` or `published`
+
+---
+
+#### Permanently Delete Blog (Hard Delete - Admin/Sub-Admin Only)
+**DELETE** `/api/v1/admin/blogs/:id/permanent`
+
+Permanently delete a blog from the database. This action cannot be undone.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Blog permanently deleted successfully"
+}
+```
+
+**Error Responses:**
+- `400` - Invalid blog ID
+- `404` - Blog not found
+
+**Notes:**
+- **Hard Delete**: Blog is permanently removed from the database
+- **⚠️ Warning**: This action cannot be undone. Use with caution.
+- All blog data including content, images, and metadata will be permanently deleted
+- Consider using soft delete (`DELETE /api/v1/admin/blogs/:id`) instead for safer deletion
+
+---
+
+#### Get Related Blogs
+**GET** `/api/v1/admin/blogs/:id/related?limit=5`
+
+Get related blogs from the same category (excluding current blog).
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Query Parameters:**
+- `limit` (optional) - Number of related blogs to return (default: 5, max: 20)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Related blogs retrieved successfully",
+  "data": [
+    {
+      "_id": "related_blog_id",
+      "title": "Related Blog Title",
+      "slug": "related-blog-title",
+      "category": {
+        "_id": "category_id",
+        "name": "Health & Wellness",
+        "slug": "health-wellness"
+      },
+      "author": {
+        "_id": "user_id",
+        "firstName": "John",
+        "lastName": "Doe"
+      },
+      "featuredImage": {
+        "url": "https://example.com/images/related-blog.jpg",
+        "alt": "Related Blog"
+      },
+      "excerpt": "Related blog excerpt...",
+      "status": "published",
+      "views": 50,
+      "createdAt": "2025-01-02T10:00:00.000Z"
+    }
+  ]
+}
+```
+
+**Error Responses:**
+- `404` - Blog not found
+
+**Notes:**
+- Only returns published blogs from the same category
+- Excludes the current blog
+- Sorted by creation date (newest first)
+
+---
+
 ### Footer Management APIs (Admin/Sub-Admin Only)
 
 Comprehensive footer management APIs for admins to manage all footer sections including logo, links, contact information, address, and social media.
@@ -97,6 +857,668 @@ Get a specific footer section by its section name (e.g., `logo`, `about-us`, `co
 
 **Parameters:**
 - `section` (path) - Section name (must be one of the available sections)
+
+**Alternative Direct Routes (Full CRUD):**
+You can also use direct routes for each section with full CRUD operations:
+
+**Logo Section:**
+- `GET /api/v1/admin/footer/logo` - Get logo section
+- `PUT /api/v1/admin/footer/logo` - Update logo section
+- `PUT /api/v1/admin/footer/logo/publish` - Publish logo section
+- `PUT /api/v1/admin/footer/logo/draft` - Save logo section as draft
+- `DELETE /api/v1/admin/footer/logo` - Delete logo section
+
+**About Us Section:**
+- `GET /api/v1/admin/footer/about` - Get about-us section
+- `PUT /api/v1/admin/footer/about` - Update about-us section
+- `PUT /api/v1/admin/footer/about/publish` - Publish about-us section
+- `PUT /api/v1/admin/footer/about/draft` - Save about-us section as draft
+- `DELETE /api/v1/admin/footer/about` - Delete about-us section
+
+**How Works Section:**
+- `GET /api/v1/admin/footer/how-works` - Get how-works section
+- `PUT /api/v1/admin/footer/how-works` - Update how-works section
+- `PUT /api/v1/admin/footer/how-works/publish` - Publish how-works section
+- `PUT /api/v1/admin/footer/how-works/draft` - Save how-works section as draft
+- `DELETE /api/v1/admin/footer/how-works` - Delete how-works section
+
+**Leadership Section:**
+- `GET /api/v1/admin/footer/leadership` - Get leadership section
+- `PUT /api/v1/admin/footer/leadership` - Update leadership section
+- `PUT /api/v1/admin/footer/leadership/publish` - Publish leadership section
+- `PUT /api/v1/admin/footer/leadership/draft` - Save leadership section as draft
+- `DELETE /api/v1/admin/footer/leadership` - Delete leadership section
+
+**FAQ Section:**
+- `GET /api/v1/admin/footer/faq` - Get FAQ section
+- `PUT /api/v1/admin/footer/faq` - Update FAQ section
+- `PUT /api/v1/admin/footer/faq/publish` - Publish FAQ section
+- `PUT /api/v1/admin/footer/faq/draft` - Save FAQ section as draft
+- `DELETE /api/v1/admin/footer/faq` - Delete FAQ section
+
+**Careers Section:**
+- `GET /api/v1/admin/footer/careers` - Get careers section
+- `PUT /api/v1/admin/footer/careers` - Update careers section
+- `PUT /api/v1/admin/footer/careers/publish` - Publish careers section
+- `PUT /api/v1/admin/footer/careers/draft` - Save careers section as draft
+- `DELETE /api/v1/admin/footer/careers` - Delete careers section
+
+**Support Section:**
+- `GET /api/v1/admin/footer/support` - Get support section
+- `PUT /api/v1/admin/footer/support` - Update support section
+- `PUT /api/v1/admin/footer/support/publish` - Publish support section
+- `PUT /api/v1/admin/footer/support/draft` - Save support section as draft
+- `DELETE /api/v1/admin/footer/support` - Delete support section
+
+**Blogs Section:**
+- `GET /api/v1/admin/footer/blogs` - Get blogs section
+- `PUT /api/v1/admin/footer/blogs` - Update blogs section
+- `PUT /api/v1/admin/footer/blogs/publish` - Publish blogs section
+- `PUT /api/v1/admin/footer/blogs/draft` - Save blogs section as draft
+- `DELETE /api/v1/admin/footer/blogs` - Delete blogs section
+
+**Shipping & Returns Section:**
+- `GET /api/v1/admin/footer/shipping-returns` - Get shipping-returns section
+- `PUT /api/v1/admin/footer/shipping-returns` - Update shipping-returns section
+- `PUT /api/v1/admin/footer/shipping-returns/publish` - Publish shipping-returns section
+- `PUT /api/v1/admin/footer/shipping-returns/draft` - Save shipping-returns section as draft
+- `DELETE /api/v1/admin/footer/shipping-returns` - Delete shipping-returns section
+
+**Privacy Policy Section:**
+- `GET /api/v1/admin/footer/privacy-policy` - Get privacy-policy section
+- `PUT /api/v1/admin/footer/privacy-policy` - Update privacy-policy section
+- `PUT /api/v1/admin/footer/privacy-policy/publish` - Publish privacy-policy section
+- `PUT /api/v1/admin/footer/privacy-policy/draft` - Save privacy-policy section as draft
+- `DELETE /api/v1/admin/footer/privacy-policy` - Delete privacy-policy section
+
+**Terms & Conditions Section:**
+- `GET /api/v1/admin/footer/terms-conditions` - Get terms-conditions section
+- `PUT /api/v1/admin/footer/terms-conditions` - Update terms-conditions section
+- `PUT /api/v1/admin/footer/terms-conditions/publish` - Publish terms-conditions section
+- `PUT /api/v1/admin/footer/terms-conditions/draft` - Save terms-conditions section as draft
+- `DELETE /api/v1/admin/footer/terms-conditions` - Delete terms-conditions section
+
+**Consent to Telehealth Section:**
+- `GET /api/v1/admin/footer/consent-telehealth` - Get consent-telehealth section
+- `PUT /api/v1/admin/footer/consent-telehealth` - Update consent-telehealth section
+- `PUT /api/v1/admin/footer/consent-telehealth/publish` - Publish consent-telehealth section
+- `PUT /api/v1/admin/footer/consent-telehealth/draft` - Save consent-telehealth section as draft
+- `DELETE /api/v1/admin/footer/consent-telehealth` - Delete consent-telehealth section
+
+**Contact Section:**
+- `GET /api/v1/admin/footer/contact` - Get contact section
+- `POST /api/v1/admin/footer/contact` - Create contact section
+- `PUT /api/v1/admin/footer/contact` - Update contact section
+- `PUT /api/v1/admin/footer/contact/publish` - Publish contact section
+- `PUT /api/v1/admin/footer/contact/draft` - Save contact section as draft
+- `DELETE /api/v1/admin/footer/contact` - Delete contact section
+
+**Contact Section JSON Examples:**
+
+**GET Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section retrieved successfully",
+  "data": {
+    "_id": "footer_contact_id",
+    "section": "contact",
+    "title": "Contact Us",
+    "contact": {
+      "primaryMobile": "9876543210",
+      "primaryMobileCountryCode": "+91",
+      "secondaryMobile": "9876123456",
+      "secondaryMobileCountryCode": "+91",
+      "email": "support@example.com",
+      "supportHours": "Mon-Fri 9AM-5PM EST"
+    },
+    "status": "published",
+    "order": 2,
+    "lastEditedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**POST/PUT Request Body:**
+```json
+{
+  "title": "Contact Us",
+  "contact": {
+    "primaryMobile": "9876543210",
+    "primaryMobileCountryCode": "+91",
+    "secondaryMobile": "9876123456",
+    "secondaryMobileCountryCode": "+91",
+    "email": "support@example.com",
+    "supportHours": "Mon-Fri 9AM-5PM EST"
+  },
+  "status": "draft",
+  "order": 2
+}
+```
+
+**PUT Response (Update):**
+```json
+{
+  "success": true,
+  "message": "Footer section updated successfully",
+  "data": {
+    "_id": "footer_contact_id",
+    "section": "contact",
+    "title": "Contact Us",
+    "contact": {
+      "primaryMobile": "9876543210",
+      "primaryMobileCountryCode": "+91",
+      "secondaryMobile": "9876123456",
+      "secondaryMobileCountryCode": "+91",
+      "email": "support@example.com",
+      "supportHours": "Mon-Fri 9AM-5PM EST"
+    },
+    "status": "draft",
+    "order": 2,
+    "lastEditedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**PUT /publish Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section published successfully",
+  "data": {
+    "_id": "footer_contact_id",
+    "section": "contact",
+    "title": "Contact Us",
+    "contact": {
+      "primaryMobile": "9876543210",
+      "primaryMobileCountryCode": "+91",
+      "secondaryMobile": "9876123456",
+      "secondaryMobileCountryCode": "+91",
+      "email": "support@example.com",
+      "supportHours": "Mon-Fri 9AM-5PM EST"
+    },
+    "status": "published",
+    "order": 2,
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**PUT /draft Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section saved as draft successfully",
+  "data": {
+    "_id": "footer_contact_id",
+    "section": "contact",
+    "title": "Contact Us",
+    "contact": {
+      "primaryMobile": "9876543210",
+      "primaryMobileCountryCode": "+91",
+      "secondaryMobile": "9876123456",
+      "secondaryMobileCountryCode": "+91",
+      "email": "support@example.com",
+      "supportHours": "Mon-Fri 9AM-5PM EST"
+    },
+    "status": "draft",
+    "order": 2,
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**DELETE Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section deleted successfully",
+  "data": {
+    "message": "Footer section deleted successfully"
+  }
+}
+```
+
+**Field Descriptions:**
+- `title` - Section title (required)
+- `contact.primaryMobile` - Primary phone number (optional)
+- `contact.primaryMobileCountryCode` - Primary phone country code (default: "+91")
+- `contact.secondaryMobile` - Secondary phone number (optional)
+- `contact.secondaryMobileCountryCode` - Secondary phone country code (optional, default: "+91")
+- `contact.email` - Contact email address (optional)
+- `contact.supportHours` - Support hours text (optional, e.g., "Mon-Fri 9AM-5PM EST")
+- `status` - Section status: "draft" or "published" (optional, default: "draft")
+- `order` - Display order (optional, default: 0)
+
+---
+
+**Address Section:**
+- `GET /api/v1/admin/footer/address` - Get address section
+- `POST /api/v1/admin/footer/address` - Create address section
+- `PUT /api/v1/admin/footer/address` - Update address section
+- `PUT /api/v1/admin/footer/address/publish` - Publish address section
+- `PUT /api/v1/admin/footer/address/draft` - Save address section as draft
+- `DELETE /api/v1/admin/footer/address` - Delete address section
+
+**Address Section JSON Examples:**
+
+**GET Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section retrieved successfully",
+  "data": {
+    "_id": "footer_address_id",
+    "section": "address",
+    "title": "Our Address",
+    "address": {
+      "location": "24761 US Hwy 19 N | Clearwater, Florida 33763",
+      "street": "24761 US Hwy 19 N",
+      "city": "Clearwater",
+      "state": "Florida",
+      "zipCode": "33763",
+      "country": "United States"
+    },
+    "status": "published",
+    "order": 3,
+    "lastEditedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**POST/PUT Request Body (Simple Format):**
+```json
+{
+  "title": "Our Address",
+  "address": {
+    "location": "24761 US Hwy 19 N | Clearwater, Florida 33763"
+  },
+  "status": "draft",
+  "order": 3
+}
+```
+
+**POST/PUT Request Body (Structured Format):**
+```json
+{
+  "title": "Our Address",
+  "address": {
+    "location": "24761 US Hwy 19 N | Clearwater, Florida 33763",
+    "street": "24761 US Hwy 19 N",
+    "city": "Clearwater",
+    "state": "Florida",
+    "zipCode": "33763",
+    "country": "United States"
+  },
+  "status": "draft",
+  "order": 3
+}
+```
+
+**POST Response (Create):**
+```json
+{
+  "success": true,
+  "message": "Footer section created successfully",
+  "data": {
+    "_id": "footer_address_id",
+    "section": "address",
+    "title": "Our Address",
+    "address": {
+      "location": "24761 US Hwy 19 N | Clearwater, Florida 33763",
+      "street": "24761 US Hwy 19 N",
+      "city": "Clearwater",
+      "state": "Florida",
+      "zipCode": "33763",
+      "country": "United States"
+    },
+    "status": "draft",
+    "order": 3,
+    "lastEditedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-01T10:00:00.000Z"
+  }
+}
+```
+
+**PUT Response (Update):**
+```json
+{
+  "success": true,
+  "message": "Footer section updated successfully",
+  "data": {
+    "_id": "footer_address_id",
+    "section": "address",
+    "title": "Our Address",
+    "address": {
+      "location": "24761 US Hwy 19 N | Clearwater, Florida 33763",
+      "street": "24761 US Hwy 19 N",
+      "city": "Clearwater",
+      "state": "Florida",
+      "zipCode": "33763",
+      "country": "United States"
+    },
+    "status": "draft",
+    "order": 3,
+    "lastEditedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**PUT /publish Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section published successfully",
+  "data": {
+    "_id": "footer_address_id",
+    "section": "address",
+    "title": "Our Address",
+    "address": {
+      "location": "24761 US Hwy 19 N | Clearwater, Florida 33763",
+      "street": "24761 US Hwy 19 N",
+      "city": "Clearwater",
+      "state": "Florida",
+      "zipCode": "33763",
+      "country": "United States"
+    },
+    "status": "published",
+    "order": 3,
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**PUT /draft Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section saved as draft successfully",
+  "data": {
+    "_id": "footer_address_id",
+    "section": "address",
+    "title": "Our Address",
+    "address": {
+      "location": "24761 US Hwy 19 N | Clearwater, Florida 33763",
+      "street": "24761 US Hwy 19 N",
+      "city": "Clearwater",
+      "state": "Florida",
+      "zipCode": "33763",
+      "country": "United States"
+    },
+    "status": "draft",
+    "order": 3,
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**DELETE Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section deleted successfully",
+  "data": {
+    "message": "Footer section deleted successfully"
+  }
+}
+```
+
+**Field Descriptions:**
+- `title` - Section title (required)
+- `address.location` - Full address string (optional, e.g., "24761 US Hwy 19 N | Clearwater, Florida 33763")
+- `address.street` - Street address (optional)
+- `address.city` - City name (optional)
+- `address.state` - State/Province (optional)
+- `address.zipCode` - ZIP/Postal code (optional)
+- `address.country` - Country name (optional, default: "United States")
+- `status` - Section status: "draft" or "published" (optional, default: "draft")
+- `order` - Display order (optional, default: 0)
+
+**Validation Messages:**
+- `title` is required
+- `title` must be a string
+- `address.location` must be a string (if provided)
+- `address.street` must be a string (if provided)
+- `address.city` must be a string (if provided)
+- `address.state` must be a string (if provided)
+- `address.zipCode` must be a string (if provided)
+- `address.country` must be a string (if provided)
+- `status` must be either "draft" or "published"
+- `order` must be a number
+
+---
+
+**Social Media Section:**
+- `GET /api/v1/admin/footer/social-media` - Get social-media section
+- `POST /api/v1/admin/footer/social-media` - Create social-media section
+- `PUT /api/v1/admin/footer/social-media` - Update social-media section
+- `PUT /api/v1/admin/footer/social-media/publish` - Publish social-media section
+- `PUT /api/v1/admin/footer/social-media/draft` - Save social-media section as draft
+- `DELETE /api/v1/admin/footer/social-media` - Delete social-media section
+
+**Social Media Section JSON Examples:**
+
+**GET Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section retrieved successfully",
+  "data": {
+    "_id": "footer_social_media_id",
+    "section": "social-media",
+    "title": "Follow Us",
+    "socialMedia": {
+      "facebook": "https://www.facebook.com/yourpage",
+      "instagram": "https://www.instagram.com/yourpage",
+      "linkedin": "https://www.linkedin.com/company/yourcompany",
+      "youtube": "https://www.youtube.com/@yourchannel",
+      "twitter": "https://www.twitter.com/yourhandle",
+      "tiktok": "https://www.tiktok.com/@yourhandle"
+    },
+    "status": "published",
+    "order": 4,
+    "lastEditedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**POST/PUT Request Body:**
+```json
+{
+  "title": "Follow Us",
+  "socialMedia": {
+    "facebook": "https://www.facebook.com/yourpage",
+    "instagram": "https://www.instagram.com/yourpage",
+    "linkedin": "https://www.linkedin.com/company/yourcompany",
+    "youtube": "https://www.youtube.com/@yourchannel",
+    "twitter": "https://www.twitter.com/yourhandle",
+    "tiktok": "https://www.tiktok.com/@yourhandle"
+  },
+  "status": "draft",
+  "order": 4
+}
+```
+
+**POST Response (Create):**
+```json
+{
+  "success": true,
+  "message": "Footer section created successfully",
+  "data": {
+    "_id": "footer_social_media_id",
+    "section": "social-media",
+    "title": "Follow Us",
+    "socialMedia": {
+      "facebook": "https://www.facebook.com/yourpage",
+      "instagram": "https://www.instagram.com/yourpage",
+      "linkedin": "https://www.linkedin.com/company/yourcompany",
+      "youtube": "https://www.youtube.com/@yourchannel",
+      "twitter": "https://www.twitter.com/yourhandle",
+      "tiktok": "https://www.tiktok.com/@yourhandle"
+    },
+    "status": "draft",
+    "order": 4,
+    "lastEditedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-01T10:00:00.000Z"
+  }
+}
+```
+
+**PUT Response (Update):**
+```json
+{
+  "success": true,
+  "message": "Footer section updated successfully",
+  "data": {
+    "_id": "footer_social_media_id",
+    "section": "social-media",
+    "title": "Follow Us",
+    "socialMedia": {
+      "facebook": "https://www.facebook.com/yourpage",
+      "instagram": "https://www.instagram.com/yourpage",
+      "linkedin": "https://www.linkedin.com/company/yourcompany",
+      "youtube": "https://www.youtube.com/@yourchannel",
+      "twitter": "https://www.twitter.com/yourhandle",
+      "tiktok": "https://www.tiktok.com/@yourhandle"
+    },
+    "status": "draft",
+    "order": 4,
+    "lastEditedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**PUT /publish Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section published successfully",
+  "data": {
+    "_id": "footer_social_media_id",
+    "section": "social-media",
+    "title": "Follow Us",
+    "socialMedia": {
+      "facebook": "https://www.facebook.com/yourpage",
+      "instagram": "https://www.instagram.com/yourpage",
+      "linkedin": "https://www.linkedin.com/company/yourcompany",
+      "youtube": "https://www.youtube.com/@yourchannel",
+      "twitter": "https://www.twitter.com/yourhandle",
+      "tiktok": "https://www.tiktok.com/@yourhandle"
+    },
+    "status": "published",
+    "order": 4,
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**PUT /draft Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section saved as draft successfully",
+  "data": {
+    "_id": "footer_social_media_id",
+    "section": "social-media",
+    "title": "Follow Us",
+    "socialMedia": {
+      "facebook": "https://www.facebook.com/yourpage",
+      "instagram": "https://www.instagram.com/yourpage",
+      "linkedin": "https://www.linkedin.com/company/yourcompany",
+      "youtube": "https://www.youtube.com/@yourchannel",
+      "twitter": "https://www.twitter.com/yourhandle",
+      "tiktok": "https://www.tiktok.com/@yourhandle"
+    },
+    "status": "draft",
+    "order": 4,
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**DELETE Response:**
+```json
+{
+  "success": true,
+  "message": "Footer section deleted successfully",
+  "data": {
+    "message": "Footer section deleted successfully"
+  }
+}
+```
+
+**Field Descriptions:**
+- `title` - Section title (required)
+- `socialMedia.facebook` - Facebook page URL (optional)
+- `socialMedia.instagram` - Instagram profile URL (optional)
+- `socialMedia.linkedin` - LinkedIn company/profile URL (optional)
+- `socialMedia.youtube` - YouTube channel URL (optional)
+- `socialMedia.twitter` - Twitter/X profile URL (optional)
+- `socialMedia.tiktok` - TikTok profile URL (optional)
+- `status` - Section status: "draft" or "published" (optional, default: "draft")
+- `order` - Display order (optional, default: 0)
+
+**Validation Messages:**
+- `title` is required
+- `title` must be a string
+- `socialMedia.facebook` must be a valid URL string (if provided)
+- `socialMedia.instagram` must be a valid URL string (if provided)
+- `socialMedia.linkedin` must be a valid URL string (if provided)
+- `socialMedia.youtube` must be a valid URL string (if provided)
+- `socialMedia.twitter` must be a valid URL string (if provided)
+- `socialMedia.tiktok` must be a valid URL string (if provided)
+- `status` must be either "draft" or "published"
+- `order` must be a number
+
+**Error Responses:**
+- `400` - Validation failed (check validation messages above)
+- `401` - Unauthorized (missing or invalid token)
+- `403` - Forbidden (admin/sub-admin access required)
+- `404` - Footer section not found (for GET, PUT, DELETE operations)
+- `409` - Footer section already exists (for POST operation)
 
 **Response:**
 ```json
@@ -370,6 +1792,8 @@ Update an existing footer section by section name (e.g., `logo`, `contact`).
 
 **Parameters:**
 - `section` (path) - Section name
+
+**Note:** All direct section routes support full CRUD operations. See the "Get Footer Section by Section Name" section above for the complete list of available routes for each section.
 
 **Request Body:** (All fields optional except cannot change `section` field)
 
@@ -6784,6 +8208,17 @@ howItWorks: "Amoxicillin works by inhibiting the synthesis of bacterial cell wal
 category: "Antibiotics"
 stock: 450
 
+// Health Category and Type (Optional - for health module integration)
+// IMPORTANT: If healthTypeSlug is provided, healthCategory MUST be provided
+// healthTypeSlug must be one of the types within the selected healthCategory
+healthCategory: "health_category_id" (MongoDB ObjectId - Select ONE health category)
+healthTypeSlug: "asthma" (Select ONE type from the selected category's types, e.g., 'asthma', 'dry-eye', 'copd')
+
+// Admin Flags (Optional)
+isTrendy: true (mark as trendy product)
+isBestOffer: true (mark as best offer product)
+discountPercentage: 25.5 (set discount percentage for best offer, 0-100, optional)
+
 // Usage (JSON array string)
 usage: [{"title": "For Bacterial Infections", "description": "Take as prescribed by your doctor"}, {"title": "Dosage Instructions", "description": "Usually taken 2-3 times daily"}]
 
@@ -6826,6 +8261,10 @@ status: "in_stock"
   "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
   "category": "Antibiotics",
   "stock": 450,
+  "healthCategory": "health_category_id",
+  "healthTypeSlug": "asthma",
+  "isTrendy": true,
+  "isBestOffer": false,
   "usage": [
     {
       "title": "For Bacterial Infections",
@@ -6916,6 +8355,27 @@ status: "in_stock"
     "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness.",
     "indications": "Used for treating bacterial infections, respiratory tract infections, and urinary tract infections.",
     "category": "Antibiotics",
+    "healthCategory": {
+      "_id": "health_category_id",
+      "name": "Respiratory Health",
+      "slug": "respiratory-health",
+      "description": "Medications for respiratory conditions",
+      "icon": "https://example.com/icons/respiratory.svg",
+      "types": [
+        {
+          "name": "Asthma",
+          "slug": "asthma",
+          "description": "Medications for asthma management",
+          "icon": "https://example.com/icons/asthma.svg",
+          "order": 0,
+          "isActive": true
+        }
+      ]
+    },
+    "healthTypeSlug": "asthma",
+    "isTrendy": true,
+    "isBestOffer": false,
+    "views": 0,
     "stock": 450,
     "status": "in_stock",
     "visibility": true,
@@ -6925,6 +8385,21 @@ status: "in_stock"
   }
 }
 ```
+
+**Notes:**
+- **Health Category Selection:**
+  - `healthCategory` (optional) - Select ONE health category (e.g., "Respiratory Health", "Eye Care")
+  - `healthTypeSlug` (optional) - Select ONE type from the selected category's types (e.g., "asthma", "dry-eye")
+  - **IMPORTANT:** If `healthTypeSlug` is provided, `healthCategory` MUST be provided
+  - `healthTypeSlug` must exist in the selected `healthCategory`'s types
+  - Example: If you select "Respiratory Health" category, you can only select types like "asthma", "copd" that belong to that category
+- **Admin Flags:**
+  - `isTrendy` (optional) - Mark medicine as trendy (will appear in trendy medications API)
+  - `isBestOffer` (optional) - Mark medicine as best offer (will appear in best offers API)
+- **Relationship Flow:**
+  1. First, select a health category (only 1 category)
+  2. Then, select a type from that category's available types (only 1 type)
+  3. The type must belong to the selected category
 
 **Error Responses:**
 - `400` - Validation failed
@@ -6949,21 +8424,62 @@ status: "in_stock"
 ### Get All Medicines
 **GET** `/api/v1/admin/medicines`
 
-Get a paginated list of all medicines with optional filtering.
+Get a paginated list of all medicines with optional filtering, availability switch, and price sorting.
 
-**Headers:** `Authorization: Bearer <admin_token>`
+**Headers:** No authentication required (Public API)
 
 **Query Parameters:**
 - `page` (optional) - Page number (default: 1)
 - `limit` (optional) - Items per page (default: 10)
-- `search` (optional) - Search by product name or brand
+- `search` (optional) - Search by product name, brand, category, or generics
 - `category` (optional) - Filter by category
-- `status` (optional) - Filter by status (`in_stock`, `low_stock`, `out_of_stock`)
+- `status` (optional) - Filter by status (`in_stock`, `low_stock`, `out_of_stock`, `discontinued`)
+- `availability` (optional) - Filter by availability switch:
+  - `in_stock` - Only in-stock items
+  - `out_of_stock` - Only out-of-stock items
+  - `low_stock` - Only low-stock items
+  - `available` - Available items (in_stock or low_stock)
+- `inStock` (optional) - Boolean filter for in-stock items only (true/false). If true, returns items with status `in_stock` or `low_stock`
 - `visibility` (optional) - Filter by visibility (true/false)
+- `sortBy` (optional) - Sort field (default: `createdAt`):
+  - `createdAt` - Sort by creation date
+  - `productName` or `name` - Sort by product name
+  - `salePrice` or `price` - Sort by sale price
+  - `originalPrice` - Sort by original price
+  - `price_low` or `price_asc` - Sort by price low to high
+  - `price_high` or `price_desc` - Sort by price high to low
+- `sortOrder` (optional) - Sort order: `asc` or `desc` (default: `desc`)
 
-**Example:**
+**Example Requests:**
+
+1. **Basic request:**
 ```
-GET /api/v1/admin/medicines?page=1&limit=10&search=amoxicillin&category=Antibiotics&status=in_stock
+GET /api/v1/admin/medicines?page=1&limit=10
+```
+
+2. **With availability filter (in-stock only):**
+```
+GET /api/v1/admin/medicines?availability=in_stock&page=1&limit=10
+```
+
+3. **Price sorting (low to high):**
+```
+GET /api/v1/admin/medicines?sortBy=price_low&sortOrder=asc
+```
+
+4. **Price sorting (high to low):**
+```
+GET /api/v1/admin/medicines?sortBy=price_high&sortOrder=desc
+```
+
+5. **With search and filters:**
+```
+GET /api/v1/admin/medicines?page=1&limit=10&search=amoxicillin&category=Antibiotics&availability=available&sortBy=salePrice&sortOrder=asc
+```
+
+6. **Using inStock filter:**
+```
+GET /api/v1/admin/medicines?inStock=true&sortBy=price_low
 ```
 
 **Response:**
@@ -7036,8 +8552,12 @@ Get detailed information about a specific medicine.
 
 **Error Responses:**
 - `404` - Medicine not found
-- `401` - Unauthorized
-- `403` - Forbidden
+- `500` - Server error
+
+**Notes:**
+- This is a public API (no authentication required)
+- Only returns active and visible medicines
+- Returns medicine with populated healthCategory data if available
 
 ---
 
@@ -7075,6 +8595,98 @@ Update an existing medicine. All fields are optional. You can add new images by 
 - Only provided fields will be updated
 - New images will be added to existing images (not replaced)
 - Stock updates automatically adjust status if not explicitly provided
+
+---
+
+### Update Medicine Stock and Status
+
+**PUT** `/api/v1/admin/medicines/:id/stock-status`
+
+Update medicine stock quantity and/or status. This is a dedicated endpoint for quick stock management.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Medicine ID (MongoDB ObjectId)
+
+**Request Body:**
+```json
+{
+  "stock": 450,
+  "status": "in_stock"
+}
+```
+
+**Fields:**
+- `stock` (optional) - Stock quantity (non-negative integer). If provided, status will be auto-updated based on stock:
+  - `stock = 0` → `status = "out_of_stock"`
+  - `stock < 20` → `status = "low_stock"`
+  - `stock >= 20` → `status = "in_stock"`
+- `status` (optional) - Medicine status. Must be one of:
+  - `"in_stock"` - Available in stock
+  - `"low_stock"` - Low stock (less than 20)
+  - `"out_of_stock"` - Out of stock
+  - `"discontinued"` - Product discontinued
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Medicine stock and status updated successfully",
+  "data": {
+    "_id": "medicine_id",
+    "productName": "Amoxicillin",
+    "brand": "Cetaphill",
+    "stock": 450,
+    "status": "in_stock",
+    "originalPrice": 100,
+    "salePrice": 30,
+    "healthCategory": {
+      "_id": "health_category_id",
+      "name": "Respiratory Health",
+      "slug": "respiratory-health"
+    },
+    "updatedAt": "2026-01-05T20:00:00.000Z"
+  }
+}
+```
+
+**Example Requests:**
+
+1. **Update stock only (status auto-updated):**
+```json
+{
+  "stock": 450
+}
+```
+
+2. **Update status only:**
+```json
+{
+  "status": "out_of_stock"
+}
+```
+
+3. **Update both stock and status:**
+```json
+{
+  "stock": 15,
+  "status": "low_stock"
+}
+```
+
+**Error Responses:**
+- `400` - Invalid medicine ID, invalid stock value, or invalid status
+- `404` - Medicine not found
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `500` - Server error
+
+**Notes:**
+- If only `stock` is provided, `status` will be automatically updated based on stock quantity
+- If only `status` is provided, stock remains unchanged
+- Both fields are optional, but at least one must be provided
+- This endpoint is optimized for quick stock management without requiring full medicine update
 
 ---
 
@@ -8379,6 +9991,195 @@ Get a paginated list of all push notification campaigns.
 
 ---
 
+## Newsletter Subscription APIs (Public)
+
+APIs for newsletter email subscriptions. Users can subscribe and unsubscribe from the newsletter without authentication.
+
+### Subscribe to Newsletter
+
+**POST** `/api/v1/newsletter/subscribe`
+
+Subscribe to the newsletter. This endpoint is public and does not require authentication.
+
+**Headers:** No authentication required (Public API)
+
+**Request Body:**
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Successfully subscribed to newsletter",
+  "data": {
+    "_id": "newsletter_id",
+    "email": "user@example.com",
+    "status": "subscribed",
+    "subscribedAt": "2026-01-05T20:00:00.000Z",
+    "source": "website",
+    "createdAt": "2026-01-05T20:00:00.000Z",
+    "updatedAt": "2026-01-05T20:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid email address
+- `500` - Server error
+
+**Notes:**
+- If email is already subscribed, returns existing subscription
+- If email was previously unsubscribed, it will be resubscribed
+- Email is automatically converted to lowercase
+- IP address and user agent are automatically captured
+
+---
+
+### Unsubscribe from Newsletter
+
+**POST** `/api/v1/newsletter/unsubscribe`
+
+Unsubscribe from the newsletter. This endpoint is public and does not require authentication.
+
+**Headers:** No authentication required (Public API)
+
+**Request Body:**
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Successfully unsubscribed from newsletter",
+  "data": {
+    "_id": "newsletter_id",
+    "email": "user@example.com",
+    "status": "unsubscribed",
+    "subscribedAt": "2026-01-05T20:00:00.000Z",
+    "unsubscribedAt": "2026-01-05T20:30:00.000Z",
+    "createdAt": "2026-01-05T20:00:00.000Z",
+    "updatedAt": "2026-01-05T20:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid email address
+- `404` - Email not found in newsletter subscriptions
+- `500` - Server error
+
+---
+
+### Get Newsletter Statistics (Admin Only)
+
+**GET** `/api/v1/newsletter/statistics`
+
+Get newsletter subscription statistics. Requires admin authentication.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "total": 1250,
+    "subscribed": 1100,
+    "unsubscribed": 140,
+    "pending": 10,
+    "recentSubscriptions": 45
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+
+---
+
+### Get All Newsletter Subscriptions (Admin Only)
+
+**GET** `/api/v1/newsletter?page=1&limit=20&search=example&status=subscribed&sortBy=subscribedAt&sortOrder=desc`
+
+Get a paginated list of all newsletter subscriptions with search, filter, and sort capabilities.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Query Parameters:**
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 20, max: 100)
+- `search` (optional) - Search by email
+- `status` (optional) - Filter by status: `subscribed`, `unsubscribed`, `pending`
+- `sortBy` (optional) - Sort field: `subscribedAt`, `email`, `status` (default: `subscribedAt`)
+- `sortOrder` (optional) - Sort order: `asc` or `desc` (default: `desc`)
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "newsletter_id",
+      "email": "user@example.com",
+      "status": "subscribed",
+      "subscribedAt": "2026-01-05T20:00:00.000Z",
+      "source": "website",
+      "ipAddress": "192.168.1.1",
+      "createdAt": "2026-01-05T20:00:00.000Z",
+      "updatedAt": "2026-01-05T20:00:00.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 1250,
+    "pages": 63
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+
+---
+
+### Delete Newsletter Subscription (Admin Only)
+
+**DELETE** `/api/v1/newsletter/:id`
+
+Delete a newsletter subscription. Requires admin authentication.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Newsletter subscription ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Newsletter subscription deleted successfully"
+}
+```
+
+**Error Responses:**
+- `400` - Invalid newsletter subscription ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Newsletter subscription not found
+
+---
+
 ## Contact Form Query APIs
 
 ### Create Contact Form Query (Public)
@@ -8646,6 +10447,1561 @@ Delete a contact form query.
 
 **Error Responses:**
 - `404` - Contact form query not found
+
+---
+
+## Patient Refill APIs
+
+APIs for patients to manage prescription refills.
+
+### Get All Refills
+**GET** `/api/v1/patient/refills?status=pending&prescriptionId=prescription_id&page=1&limit=10`
+
+Get list of all refills for the logged-in patient.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Query Parameters:**
+- `status` (optional) - Filter by status: `pending`, `approved`, `rejected`, `completed`, `cancelled`
+- `prescriptionId` (optional) - Filter by prescription ID
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 10, max: 100)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Refills retrieved successfully",
+  "data": [
+    {
+      "_id": "refill_id",
+      "prescription": {
+        "_id": "prescription_id",
+        "prescriptionNumber": "PRES1234567890",
+        "diagnosis": "Hypertension",
+        "medications": [
+          {
+            "name": "Amlodipine",
+            "dosage": "5mg",
+            "frequency": "Once daily",
+            "quantity": 30
+          }
+        ],
+        "status": "active"
+      },
+      "doctor": {
+        "_id": "doctor_id",
+        "user": {
+          "_id": "user_id",
+          "firstName": "Dr. John",
+          "lastName": "Smith",
+          "email": "john.smith@example.com"
+        },
+        "specialty": "Cardiology"
+      },
+      "refillNumber": "REF1234567890",
+      "status": "pending",
+      "requestedDate": "2025-01-15T10:00:00.000Z",
+      "medications": [
+        {
+          "medicationName": "Amlodipine",
+          "dosage": "5mg",
+          "frequency": "Once daily",
+          "quantity": 30,
+          "instructions": "Take with food"
+        }
+      ],
+      "refillCount": 1,
+      "maxRefills": 3,
+      "notes": "Need refill for next month",
+      "order": null,
+      "createdAt": "2025-01-15T10:00:00.000Z",
+      "updatedAt": "2025-01-15T10:00:00.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 5,
+    "pages": 1
+  }
+}
+```
+
+---
+
+### Get Refill by ID
+**GET** `/api/v1/patient/refills/:id`
+
+Get details of a specific refill.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Refill ID
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Refill retrieved successfully",
+  "data": {
+    "_id": "refill_id",
+    "prescription": {
+      "_id": "prescription_id",
+      "prescriptionNumber": "PRES1234567890",
+      "diagnosis": "Hypertension",
+      "medications": [
+        {
+          "name": "Amlodipine",
+          "dosage": "5mg",
+          "frequency": "Once daily",
+          "quantity": 30
+        }
+      ],
+      "status": "active",
+      "createdAt": "2025-01-01T10:00:00.000Z"
+    },
+    "doctor": {
+      "_id": "doctor_id",
+      "user": {
+        "_id": "user_id",
+        "firstName": "Dr. John",
+        "lastName": "Smith",
+        "email": "john.smith@example.com",
+        "phoneNumber": "1234567890"
+      },
+      "specialty": "Cardiology",
+      "licenseNumber": "#MD-123456"
+    },
+    "refillNumber": "REF1234567890",
+    "status": "pending",
+    "requestedDate": "2025-01-15T10:00:00.000Z",
+    "medications": [
+      {
+        "medicationName": "Amlodipine",
+        "dosage": "5mg",
+        "frequency": "Once daily",
+        "quantity": 30,
+        "instructions": "Take with food"
+      }
+    ],
+    "refillCount": 1,
+    "maxRefills": 3,
+    "notes": "Need refill for next month",
+    "order": null,
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2025-01-15T10:00:00.000Z"
+  }
+}
+```
+
+---
+
+### Request Refill (Refill Now)
+**POST** `/api/v1/patient/refills`
+
+Request a refill for a prescription.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Request Body:**
+```json
+{
+  "prescriptionId": "prescription_id",
+  "medications": [
+    {
+      "medicationName": "Amlodipine",
+      "dosage": "5mg",
+      "frequency": "Once daily",
+      "quantity": 30,
+      "instructions": "Take with food"
+    }
+  ],
+  "maxRefills": 3,
+  "notes": "Need refill for next month"
+}
+```
+
+**Required Fields:**
+- `prescriptionId` - Prescription ID (MongoDB ObjectId)
+
+**Optional Fields:**
+- `medications` - Array of specific medications to refill (if not provided, all medications from prescription will be used)
+  - `medicationName` - Name of medication
+  - `dosage` - Dosage
+  - `frequency` - Frequency
+  - `quantity` - Quantity (positive integer)
+  - `instructions` - Instructions
+- `maxRefills` - Maximum refills allowed (default: 3, max: 10)
+- `notes` - Additional notes (max 500 characters)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Refill request submitted successfully",
+  "data": {
+    "_id": "refill_id",
+    "prescription": {
+      "_id": "prescription_id",
+      "prescriptionNumber": "PRES1234567890",
+      "diagnosis": "Hypertension",
+      "medications": [
+        {
+          "name": "Amlodipine",
+          "dosage": "5mg",
+          "frequency": "Once daily",
+          "quantity": 30
+        }
+      ],
+      "status": "active"
+    },
+    "doctor": {
+      "_id": "doctor_id",
+      "user": {
+        "_id": "user_id",
+        "firstName": "Dr. John",
+        "lastName": "Smith",
+        "email": "john.smith@example.com"
+      },
+      "specialty": "Cardiology"
+    },
+    "refillNumber": "REF1234567890",
+    "status": "pending",
+    "requestedDate": "2025-01-15T10:00:00.000Z",
+    "medications": [
+      {
+        "medicationName": "Amlodipine",
+        "dosage": "5mg",
+        "frequency": "Once daily",
+        "quantity": 30,
+        "instructions": "Take with food"
+      }
+    ],
+    "refillCount": 1,
+    "maxRefills": 3,
+    "notes": "Need refill for next month",
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2025-01-15T10:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed or maximum refills reached
+- `404` - Prescription not found or not active
+- `409` - A pending refill already exists for this prescription
+
+---
+
+### Cancel Refill
+**PUT** `/api/v1/patient/refills/:id/cancel`
+
+Cancel a pending refill request.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Refill ID
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Refill cancelled successfully",
+  "data": {
+    "_id": "refill_id",
+    "status": "cancelled",
+    "updatedAt": "2025-01-15T11:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Cannot cancel refill (not in pending status)
+- `404` - Refill not found
+
+**Notes:**
+- Only refills with status `pending` can be cancelled
+- Once approved or rejected, refills cannot be cancelled by patient
+
+---
+
+## Health APIs (Public)
+
+APIs for managing health categories, chronic conditions (types), medications with filters, trendy medications, and best offers.
+
+### Get All Health Categories
+
+**GET** `/api/v1/health/categories?search=respiratory&isActive=true&page=1&limit=10&sortBy=order&sortOrder=asc`
+
+Get list of all health categories with search, filter, and pagination.
+
+**Headers:** No authentication required (Public API)
+
+**Query Parameters:**
+- `search` (optional) - Search by name, slug, or description
+- `isActive` (optional) - Filter by active status: `true` or `false` (default: `true`)
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 100, max: 100)
+- `sortBy` (optional) - Sort field: `name`, `order`, `createdAt`, `updatedAt` (default: `order`)
+- `sortOrder` (optional) - Sort order: `asc` or `desc` (default: `asc`)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Health categories retrieved successfully",
+  "data": [
+    {
+      "_id": "health_category_id",
+      "name": "Respiratory Health",
+      "slug": "respiratory-health",
+      "description": "Medications and treatments for respiratory conditions",
+      "icon": "https://example.com/icons/respiratory.svg",
+      "types": [
+        {
+          "name": "Asthma",
+          "slug": "asthma",
+          "description": "Medications for asthma management",
+          "icon": "https://example.com/icons/asthma.svg",
+          "order": 0,
+          "isActive": true
+        },
+        {
+          "name": "COPD",
+          "slug": "copd",
+          "description": "Medications for chronic obstructive pulmonary disease",
+          "icon": "https://example.com/icons/copd.svg",
+          "order": 1,
+          "isActive": true
+        }
+      ],
+      "order": 0,
+      "isActive": true,
+      "createdBy": {
+        "_id": "admin_id",
+        "firstName": "Admin",
+        "lastName": "User",
+        "email": "admin@example.com"
+      },
+      "updatedBy": {
+        "_id": "admin_id",
+        "firstName": "Admin",
+        "lastName": "User"
+      },
+      "createdAt": "2025-01-01T10:00:00.000Z",
+      "updatedAt": "2025-01-03T12:30:00.000Z"
+    },
+    {
+      "_id": "health_category_id_2",
+      "name": "Eye Care",
+      "slug": "eye-care",
+      "description": "Medications and treatments for eye conditions",
+      "icon": "https://example.com/icons/eye-care.svg",
+      "types": [
+        {
+          "name": "Dry Eye",
+          "slug": "dry-eye",
+          "description": "Medications for dry eye syndrome",
+          "icon": "https://example.com/icons/dry-eye.svg",
+          "order": 0,
+          "isActive": true
+        }
+      ],
+      "order": 1,
+      "isActive": true,
+      "createdAt": "2025-01-01T10:00:00.000Z",
+      "updatedAt": "2025-01-03T12:30:00.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 15,
+    "pages": 2
+  }
+}
+```
+
+**Notes:**
+- Only active categories and types are returned by default
+- Types are automatically filtered to show only active ones
+
+---
+
+### Get Health Category by ID
+
+**GET** `/api/v1/health/categories/:id`
+
+Get a specific health category by its ID.
+
+**Headers:** No authentication required (Public API)
+
+**Parameters:**
+- `id` (path) - Health category ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Health category retrieved successfully",
+  "data": {
+    "_id": "health_category_id",
+    "name": "Respiratory Health",
+    "slug": "respiratory-health",
+    "description": "Medications and treatments for respiratory conditions",
+    "icon": "https://example.com/icons/respiratory.svg",
+    "types": [
+      {
+        "name": "Asthma",
+        "slug": "asthma",
+        "description": "Medications for asthma management",
+        "icon": "https://example.com/icons/asthma.svg",
+        "order": 0,
+        "isActive": true
+      },
+      {
+        "name": "COPD",
+        "slug": "copd",
+        "description": "Medications for chronic obstructive pulmonary disease",
+        "icon": "https://example.com/icons/copd.svg",
+        "order": 1,
+        "isActive": true
+      }
+    ],
+    "order": 0,
+    "isActive": true,
+    "createdBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "updatedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid health category ID
+- `404` - Health category not found
+
+---
+
+### Get Health Category by Slug
+
+**GET** `/api/v1/health/categories/slug/:slug`
+
+Get a specific health category by its slug.
+
+**Headers:** No authentication required (Public API)
+
+**Parameters:**
+- `slug` (path) - Health category slug (e.g., `respiratory-health`)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Health category retrieved successfully",
+  "data": {
+    "_id": "health_category_id",
+    "name": "Respiratory Health",
+    "slug": "respiratory-health",
+    "description": "Medications and treatments for respiratory conditions",
+    "icon": "https://example.com/icons/respiratory.svg",
+    "types": [
+      {
+        "name": "Asthma",
+        "slug": "asthma",
+        "description": "Medications for asthma management",
+        "icon": "https://example.com/icons/asthma.svg",
+        "order": 0,
+        "isActive": true
+      }
+    ],
+    "order": 0,
+    "isActive": true,
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `404` - Health category not found
+
+---
+
+### Get Category Types (Chronic Conditions)
+
+**GET** `/api/v1/health/categories/:categoryId/types`
+
+Get all types (chronic conditions) for a specific health category.
+
+**Headers:** No authentication required (Public API)
+
+**Parameters:**
+- `categoryId` (path) - Health category ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Category types retrieved successfully",
+  "data": {
+    "category": {
+      "_id": "health_category_id",
+      "name": "Respiratory Health",
+      "slug": "respiratory-health"
+    },
+    "types": [
+      {
+        "name": "Asthma",
+        "slug": "asthma",
+        "description": "Medications for asthma management",
+        "icon": "https://example.com/icons/asthma.svg",
+        "order": 0,
+        "isActive": true
+      },
+      {
+        "name": "COPD",
+        "slug": "copd",
+        "description": "Medications for chronic obstructive pulmonary disease",
+        "icon": "https://example.com/icons/copd.svg",
+        "order": 1,
+        "isActive": true
+      },
+      {
+        "name": "Bronchitis",
+        "slug": "bronchitis",
+        "description": "Medications for bronchitis treatment",
+        "icon": "https://example.com/icons/bronchitis.svg",
+        "order": 2,
+        "isActive": true
+      }
+    ]
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid health category ID
+- `404` - Health category not found
+
+**Notes:**
+- Only active types are returned
+- Types are sorted by order field
+
+---
+
+### Get Medications by Health Category ID
+
+**GET** `/api/v1/health/categories/:categoryId/medications?search=inhaler&healthTypeSlug=asthma&minPrice=100&maxPrice=500&status=in_stock&inStock=true&sortBy=salePrice&sortOrder=asc&page=1&limit=20`
+
+Get all medications for a specific health category with optional filters.
+
+**Headers:** No authentication required (Public API)
+
+**Parameters:**
+- `categoryId` (path) - Health category ID (MongoDB ObjectId)
+
+**Query Parameters:**
+- `search` (optional) - Search by product name, brand, category, or generics
+- `healthTypeSlug` (optional) - Filter by health type slug (chronic condition, e.g., 'asthma', 'dry-eye')
+- `minPrice` (optional) - Minimum price filter (number)
+- `maxPrice` (optional) - Maximum price filter (number)
+- `status` (optional) - Filter by status: `in_stock`, `low_stock`, `out_of_stock`, `discontinued`
+- `inStock` (optional) - Filter for in-stock items only (boolean: `true`/`false`)
+- `sortBy` (optional) - Sort field: `createdAt`, `productName`, `salePrice`, `views` (default: `createdAt`)
+- `sortOrder` (optional) - Sort order: `asc` or `desc` (default: `desc`)
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 20, max: 100)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Medications retrieved successfully",
+  "data": {
+    "category": {
+      "_id": "695bf39bdad7abe7762c1b0f",
+      "name": "Respiratory Health",
+      "slug": "respiratory-health",
+      "description": "Medications and treatments for respiratory conditions",
+      "icon": "https://example.com/icons/respiratory.svg"
+    },
+    "medications": [
+      {
+        "_id": "medicine_id",
+        "productName": "Albuterol Inhaler",
+        "brand": "ProAir",
+        "originalPrice": 45.99,
+        "salePrice": 29.99,
+        "images": {
+          "thumbnail": "https://example.com/images/albuterol-thumb.jpg",
+          "gallery": [
+            "https://example.com/images/albuterol-1.jpg",
+            "https://example.com/images/albuterol-2.jpg"
+          ]
+        },
+        "description": "Bronchodilator for asthma relief",
+        "category": "Respiratory",
+        "healthCategory": {
+          "_id": "695bf39bdad7abe7762c1b0f",
+          "name": "Respiratory Health",
+          "slug": "respiratory-health",
+          "description": "Medications and treatments for respiratory conditions",
+          "icon": "https://example.com/icons/respiratory.svg"
+        },
+        "healthTypeSlug": "asthma",
+        "stock": 150,
+        "status": "in_stock",
+        "views": 250,
+        "isTrendy": true,
+        "isBestOffer": false,
+        "createdAt": "2025-01-01T10:00:00.000Z",
+        "updatedAt": "2025-01-05T12:30:00.000Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 20,
+      "total": 45,
+      "pages": 3
+    }
+  }
+}
+```
+
+**Example Requests:**
+
+1. **Get all medications for a category:**
+```
+GET /api/v1/health/categories/695bf39bdad7abe7762c1b0f/medications
+```
+
+2. **Get medications with filters:**
+```
+GET /api/v1/health/categories/695bf39bdad7abe7762c1b0f/medications?healthTypeSlug=asthma&status=in_stock&sortBy=salePrice&sortOrder=asc
+```
+
+3. **Search within category:**
+```
+GET /api/v1/health/categories/695bf39bdad7abe7762c1b0f/medications?search=inhaler&minPrice=20&maxPrice=50
+```
+
+**Error Responses:**
+- `400` - Invalid health category ID or invalid query parameters
+- `404` - Health category not found
+- `500` - Server error
+
+**Notes:**
+- This endpoint automatically filters medications by the specified health category
+- Only returns active and visible medicines
+- Health category information is included in the response
+- Supports pagination and advanced filtering
+
+**Alternative Endpoint:**
+You can also use the shorter path:
+```
+GET /api/v1/health/medicines/:categoryId
+```
+This is equivalent to `/categories/:categoryId/medications` and returns the same response.
+
+---
+
+### Get Medications with Filters
+
+**GET** `/api/v1/health/medications?search=inhaler&category=Respiratory&healthTypeSlug=asthma&minPrice=100&maxPrice=500&status=in_stock&inStock=true&sortBy=salePrice&sortOrder=asc&page=1&limit=20`
+
+Get medications with advanced filtering options.
+
+**Headers:** No authentication required (Public API)
+
+**Query Parameters:**
+- `search` (optional) - Search by product name, brand, category, or generics
+- `category` (optional) - Filter by medicine category (string, case-insensitive)
+- `healthCategoryId` (optional) - Filter by health category ID (MongoDB ObjectId)
+- `healthTypeSlug` (optional) - Filter by chronic condition slug (e.g., `asthma`, `dry-eye`)
+- `minPrice` (optional) - Minimum price filter (number)
+- `maxPrice` (optional) - Maximum price filter (number)
+- `status` (optional) - Filter by stock status: `in_stock`, `low_stock`, `out_of_stock`
+- `inStock` (optional) - Filter for in-stock items only: `true` or `false`
+- `sortBy` (optional) - Sort field: `productName`, `brand`, `salePrice`, `originalPrice`, `createdAt`, `updatedAt` (default: `createdAt`)
+- `sortOrder` (optional) - Sort order: `asc` or `desc` (default: `desc`)
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 20, max: 100)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Medications retrieved successfully",
+  "data": [
+    {
+      "_id": "medicine_id",
+      "productName": "Albuterol Inhaler",
+      "brand": "ProAir",
+      "originalPrice": 45.99,
+      "salePrice": 39.99,
+      "images": {
+        "thumbnail": "https://example.com/images/albuterol-thumb.jpg",
+        "gallery": [
+          "https://example.com/images/albuterol-1.jpg",
+          "https://example.com/images/albuterol-2.jpg"
+        ]
+      },
+      "description": "Fast-acting bronchodilator for asthma relief",
+      "howItWorks": "Relaxes muscles in airways to improve breathing",
+      "category": "Respiratory",
+      "generics": ["Albuterol Sulfate", "Salbutamol"],
+      "dosageOptions": [
+        {
+          "name": "90mcg - 200 Doses",
+          "priceAdjustment": 0,
+          "_id": "dosage_id_1"
+        },
+        {
+          "name": "180mcg - 200 Doses",
+          "priceAdjustment": 5.00,
+          "_id": "dosage_id_2"
+        }
+      ],
+      "quantityOptions": [
+        {
+          "name": "1 Inhaler",
+          "priceAdjustment": 0,
+          "_id": "quantity_id_1"
+        },
+        {
+          "name": "2 Inhalers",
+          "priceAdjustment": -5.00,
+          "_id": "quantity_id_2"
+        }
+      ],
+      "usage": [
+        {
+          "title": "For Asthma Attacks",
+          "description": "Use 1-2 puffs as needed for immediate relief"
+        },
+        {
+          "title": "Preventive Use",
+          "description": "Use 15-30 minutes before exercise"
+        }
+      ],
+      "precautions": "Do not exceed recommended dosage. Consult doctor if symptoms worsen.",
+      "sideEffects": "May cause nervousness, dizziness, or rapid heartbeat",
+      "drugInteractions": "May interact with beta-blockers. Consult doctor before use.",
+      "indications": "Used for treating and preventing asthma attacks and exercise-induced bronchospasm",
+      "stock": 150,
+      "status": "in_stock",
+      "visibility": true,
+      "isActive": true,
+      "createdAt": "2025-01-01T10:00:00.000Z",
+      "updatedAt": "2025-01-03T12:30:00.000Z"
+    },
+    {
+      "_id": "medicine_id_2",
+      "productName": "Salmeterol Inhaler",
+      "brand": "Serevent",
+      "originalPrice": 55.99,
+      "salePrice": 49.99,
+      "images": {
+        "thumbnail": "https://example.com/images/salmeterol-thumb.jpg",
+        "gallery": []
+      },
+      "description": "Long-acting bronchodilator for asthma control",
+      "category": "Respiratory",
+      "generics": ["Salmeterol Xinafoate"],
+      "stock": 75,
+      "status": "in_stock",
+      "visibility": true,
+      "isActive": true,
+      "createdAt": "2025-01-02T10:00:00.000Z",
+      "updatedAt": "2025-01-03T12:30:00.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 45,
+    "pages": 3
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid query parameters
+
+**Notes:**
+- Only active and visible medications are returned
+- `healthTypeSlug` filters medications by chronic condition (e.g., `asthma`, `dry-eye`)
+- Price filters work on `salePrice` field
+- `inStock=true` returns medications with status `in_stock` or `low_stock`
+
+---
+
+### Get Trendy Medications
+
+**GET** `/api/v1/health/medications/trendy?limit=10&category=Respiratory`
+
+Get trendy/popular medications (newest first by default).
+
+**Headers:** No authentication required (Public API)
+
+**Query Parameters:**
+- `limit` (optional) - Number of medications to return (default: 10, max: 50)
+- `category` (optional) - Filter by medicine category (string, case-insensitive)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Trendy medications retrieved successfully",
+  "data": [
+    {
+      "_id": "medicine_id",
+      "productName": "Albuterol Inhaler",
+      "brand": "ProAir",
+      "originalPrice": 45.99,
+      "salePrice": 39.99,
+      "images": {
+        "thumbnail": "https://example.com/images/albuterol-thumb.jpg",
+        "gallery": []
+      },
+      "description": "Fast-acting bronchodilator for asthma relief",
+      "category": "Respiratory",
+      "stock": 150,
+      "status": "in_stock",
+      "visibility": true,
+      "isActive": true,
+      "createdAt": "2025-01-05T10:00:00.000Z",
+      "updatedAt": "2025-01-05T10:00:00.000Z"
+    },
+    {
+      "_id": "medicine_id_2",
+      "productName": "Artificial Tears",
+      "brand": "Systane",
+      "originalPrice": 12.99,
+      "salePrice": 9.99,
+      "images": {
+        "thumbnail": "https://example.com/images/tears-thumb.jpg",
+        "gallery": []
+      },
+      "description": "Lubricating eye drops for dry eye relief",
+      "category": "Eye Care",
+      "stock": 200,
+      "status": "in_stock",
+      "visibility": true,
+      "isActive": true,
+      "createdAt": "2025-01-04T10:00:00.000Z",
+      "updatedAt": "2025-01-04T10:00:00.000Z"
+    }
+  ]
+}
+```
+
+**Notes:**
+- Returns newest medications first (sorted by `createdAt` desc)
+- Only returns in-stock or low-stock medications
+- Only active and visible medications are returned
+
+---
+
+### Get Best Offers
+
+**GET** `/api/v1/health/medications/best-offers?limit=10&category=Respiratory`
+
+Get medications with highest discount percentage (best offers).
+
+**Headers:** No authentication required (Public API)
+
+**Query Parameters:**
+- `limit` (optional) - Number of medications to return (default: 10, max: 50)
+- `category` (optional) - Filter by medicine category (string, case-insensitive)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Best offers retrieved successfully",
+  "data": [
+    {
+      "_id": "medicine_id",
+      "productName": "Albuterol Inhaler",
+      "brand": "ProAir",
+      "originalPrice": 45.99,
+      "salePrice": 29.99,
+      "discount": 34.79,
+      "images": {
+        "thumbnail": "https://example.com/images/albuterol-thumb.jpg",
+        "gallery": []
+      },
+      "description": "Fast-acting bronchodilator for asthma relief",
+      "category": "Respiratory",
+      "stock": 150,
+      "status": "in_stock",
+      "visibility": true,
+      "isActive": true,
+      "createdAt": "2025-01-01T10:00:00.000Z",
+      "updatedAt": "2025-01-03T12:30:00.000Z"
+    },
+    {
+      "_id": "medicine_id_2",
+      "productName": "Artificial Tears",
+      "brand": "Systane",
+      "originalPrice": 12.99,
+      "salePrice": 9.99,
+      "discount": 23.09,
+      "images": {
+        "thumbnail": "https://example.com/images/tears-thumb.jpg",
+        "gallery": []
+      },
+      "description": "Lubricating eye drops for dry eye relief",
+      "category": "Eye Care",
+      "stock": 200,
+      "status": "in_stock",
+      "visibility": true,
+      "isActive": true,
+      "createdAt": "2025-01-02T10:00:00.000Z",
+      "updatedAt": "2025-01-02T10:00:00.000Z"
+    },
+    {
+      "_id": "medicine_id_3",
+      "productName": "Fluticasone Nasal Spray",
+      "brand": "Flonase",
+      "originalPrice": 25.99,
+      "salePrice": 21.99,
+      "discount": 15.39,
+      "images": {
+        "thumbnail": "https://example.com/images/flonase-thumb.jpg",
+        "gallery": []
+      },
+      "description": "Nasal corticosteroid for allergy relief",
+      "category": "Respiratory",
+      "stock": 100,
+      "status": "in_stock",
+      "visibility": true,
+      "isActive": true,
+      "createdAt": "2025-01-03T10:00:00.000Z",
+      "updatedAt": "2025-01-03T10:00:00.000Z"
+    }
+  ]
+}
+```
+
+**Notes:**
+- Medications are sorted by discount percentage (highest first)
+- Discount is calculated as: `((originalPrice - salePrice) / originalPrice) * 100`
+- Only returns in-stock or low-stock medications
+- Only active and visible medications are returned
+- Each medication includes a `discount` field showing the discount percentage
+
+---
+
+## Health Category Management APIs (Admin/Sub-Admin Only)
+
+APIs for managing health categories and their types (chronic conditions). These endpoints require admin or sub-admin authentication.
+
+### Create Health Category
+
+**POST** `/api/v1/health/categories`
+
+Create a new health category with optional types (chronic conditions).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Request Body:**
+```json
+{
+  "name": "Respiratory Health",
+  "slug": "respiratory-health",
+  "description": "Medications and treatments for respiratory conditions",
+  "icon": "https://example.com/icons/respiratory.svg",
+  "types": [
+    {
+      "name": "Asthma",
+      "slug": "asthma",
+      "description": "Medications for asthma management",
+      "icon": "https://example.com/icons/asthma.svg",
+      "order": 0,
+      "isActive": true
+    },
+    {
+      "name": "COPD",
+      "slug": "copd",
+      "description": "Medications for chronic obstructive pulmonary disease",
+      "icon": "https://example.com/icons/copd.svg",
+      "order": 1,
+      "isActive": true
+    },
+    {
+      "name": "Dry Eye",
+      "slug": "dry-eye",
+      "description": "Medications for dry eye syndrome",
+      "icon": "https://example.com/icons/dry-eye.svg",
+      "order": 0,
+      "isActive": true
+    }
+  ],
+  "order": 0,
+  "isActive": true
+}
+```
+
+**Required Fields:**
+- `name` - Category name (2-100 characters)
+
+**Optional Fields:**
+- `slug` - Category slug (auto-generated from name if not provided)
+- `description` - Category description (max 500 characters)
+- `icon` - Icon URL or icon name
+- `types` - Array of type objects (chronic conditions)
+  - `name` - Type name (required if types array provided, 2-100 characters)
+  - `slug` - Type slug (auto-generated from name if not provided)
+  - `description` - Type description (max 500 characters)
+  - `icon` - Type icon URL
+  - `order` - Display order (default: 0)
+  - `isActive` - Active status (default: true)
+- `order` - Display order (default: 0)
+- `isActive` - Active status (default: true)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Health category created successfully",
+  "data": {
+    "_id": "health_category_id",
+    "name": "Respiratory Health",
+    "slug": "respiratory-health",
+    "description": "Medications and treatments for respiratory conditions",
+    "icon": "https://example.com/icons/respiratory.svg",
+    "types": [
+      {
+        "name": "Asthma",
+        "slug": "asthma",
+        "description": "Medications for asthma management",
+        "icon": "https://example.com/icons/asthma.svg",
+        "order": 0,
+        "isActive": true
+      },
+      {
+        "name": "COPD",
+        "slug": "copd",
+        "description": "Medications for chronic obstructive pulmonary disease",
+        "icon": "https://example.com/icons/copd.svg",
+        "order": 1,
+        "isActive": true
+      }
+    ],
+    "order": 0,
+    "isActive": true,
+    "createdBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "updatedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "createdAt": "2025-01-05T10:00:00.000Z",
+    "updatedAt": "2025-01-05T10:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `409` - Category with this name or slug already exists
+
+---
+
+### Update Health Category
+
+**PUT** `/api/v1/health/categories/:id`
+
+Update an existing health category.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Health category ID (MongoDB ObjectId)
+
+**Request Body:**
+```json
+{
+  "name": "Respiratory Health Updated",
+  "description": "Updated description for respiratory health",
+  "icon": "https://example.com/icons/respiratory-new.svg",
+  "types": [
+    {
+      "name": "Asthma",
+      "slug": "asthma",
+      "description": "Updated asthma description",
+      "icon": "https://example.com/icons/asthma-new.svg",
+      "order": 0,
+      "isActive": true
+    },
+    {
+      "name": "Bronchitis",
+      "slug": "bronchitis",
+      "description": "Medications for bronchitis",
+      "icon": "https://example.com/icons/bronchitis.svg",
+      "order": 2,
+      "isActive": true
+    }
+  ],
+  "order": 1,
+  "isActive": true
+}
+```
+
+**All Fields are Optional:**
+- `name` - Category name (2-100 characters)
+- `slug` - Category slug (lowercase alphanumeric with hyphens)
+- `description` - Category description (max 500 characters)
+- `icon` - Icon URL
+- `types` - Array of type objects (replaces existing types)
+- `order` - Display order
+- `isActive` - Active status
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Health category updated successfully",
+  "data": {
+    "_id": "health_category_id",
+    "name": "Respiratory Health Updated",
+    "slug": "respiratory-health",
+    "description": "Updated description for respiratory health",
+    "icon": "https://example.com/icons/respiratory-new.svg",
+    "types": [
+      {
+        "name": "Asthma",
+        "slug": "asthma",
+        "description": "Updated asthma description",
+        "icon": "https://example.com/icons/asthma-new.svg",
+        "order": 0,
+        "isActive": true
+      },
+      {
+        "name": "Bronchitis",
+        "slug": "bronchitis",
+        "description": "Medications for bronchitis",
+        "icon": "https://example.com/icons/bronchitis.svg",
+        "order": 2,
+        "isActive": true
+      }
+    ],
+    "order": 1,
+    "isActive": true,
+    "createdBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "updatedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-05T12:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid health category ID or validation failed
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Health category not found
+- `409` - Category with this name or slug already exists
+
+**Notes:**
+- Updating `types` array will replace all existing types
+- Slug is auto-generated from name if name is updated and slug is not provided
+- Type slugs are auto-generated from type names if not provided
+
+---
+
+### Activate Health Category
+
+**PUT** `/api/v1/health/categories/:id/activate`
+
+Activate a health category (set `isActive` to `true`).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Health category ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Health category activated successfully",
+  "data": {
+    "_id": "health_category_id",
+    "name": "Respiratory Health",
+    "slug": "respiratory-health",
+    "isActive": true,
+    "updatedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "updatedAt": "2025-01-05T12:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid health category ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Health category not found
+
+---
+
+### Deactivate Health Category
+
+**PUT** `/api/v1/health/categories/:id/deactivate`
+
+Deactivate a health category (set `isActive` to `false`).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Health category ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Health category deactivated successfully",
+  "data": {
+    "_id": "health_category_id",
+    "name": "Respiratory Health",
+    "slug": "respiratory-health",
+    "isActive": false,
+    "updatedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User"
+    },
+    "updatedAt": "2025-01-05T12:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid health category ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Health category not found
+
+---
+
+### Delete Health Category
+
+**DELETE** `/api/v1/health/categories/:id`
+
+Delete a health category (soft delete - sets `isActive` to `false`).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Health category ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Health category deleted successfully",
+  "data": {
+    "message": "Health category deleted successfully"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid health category ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Health category not found
+
+**Notes:**
+- This is a soft delete operation (sets `isActive` to `false`)
+- Deleted categories will not appear in public GET requests
+- Category can be reactivated using the activate endpoint
+
+---
+
+## Medicine Management APIs (Admin/Sub-Admin Only)
+
+APIs for managing medicine relationships with health categories and marking medicines as trendy or best offers.
+
+### Mark Medicine as Trendy
+
+**PUT** `/api/v1/health/medications/:id/mark-trendy`
+
+Mark a medicine as trendy (will appear in trendy medications API).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Medicine ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Medicine marked as trendy successfully",
+  "data": {
+    "_id": "medicine_id",
+    "productName": "Albuterol Inhaler",
+    "brand": "ProAir",
+    "isTrendy": true,
+    "healthCategory": {
+      "_id": "health_category_id",
+      "name": "Respiratory Health",
+      "slug": "respiratory-health",
+      "description": "Medications for respiratory conditions",
+      "icon": "https://example.com/icons/respiratory.svg"
+    },
+    "healthTypeSlug": "asthma",
+    "views": 150,
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-05T12:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid medicine ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Medicine not found
+
+---
+
+### Unmark Medicine as Trendy
+
+**PUT** `/api/v1/health/medications/:id/unmark-trendy`
+
+Unmark a medicine as trendy.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Medicine ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Medicine unmarked as trendy successfully",
+  "data": {
+    "_id": "medicine_id",
+    "productName": "Albuterol Inhaler",
+    "brand": "ProAir",
+    "isTrendy": false,
+    "healthCategory": {
+      "_id": "health_category_id",
+      "name": "Respiratory Health",
+      "slug": "respiratory-health"
+    },
+    "updatedAt": "2025-01-05T12:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid medicine ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Medicine not found
+
+---
+
+### Mark Medicine as Best Offer
+
+**PUT** `/api/v1/health/medications/:id/mark-best-offer`
+
+Mark a medicine as best offer (will appear in best offers API). You can optionally set a discount percentage.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Medicine ID (MongoDB ObjectId)
+
+**Request Body (Optional):**
+```json
+{
+  "discountPercentage": 25.5
+}
+```
+
+**Fields:**
+- `discountPercentage` (optional) - Discount percentage (0-100). If not provided, discount is calculated from `originalPrice` and `salePrice`.
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Medicine marked as best offer successfully",
+  "data": {
+    "_id": "medicine_id",
+    "productName": "Albuterol Inhaler",
+    "brand": "ProAir",
+    "originalPrice": 45.99,
+    "salePrice": 29.99,
+    "isBestOffer": true,
+    "discountPercentage": 25.5,
+    "healthCategory": {
+      "_id": "health_category_id",
+      "name": "Respiratory Health",
+      "slug": "respiratory-health"
+    },
+    "healthTypeSlug": "asthma",
+    "views": 150,
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-05T12:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid medicine ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Medicine not found
+
+---
+
+### Unmark Medicine as Best Offer
+
+**PUT** `/api/v1/health/medications/:id/unmark-best-offer`
+
+Unmark a medicine as best offer.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Medicine ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Medicine unmarked as best offer successfully",
+  "data": {
+    "_id": "medicine_id",
+    "productName": "Albuterol Inhaler",
+    "brand": "ProAir",
+    "isBestOffer": false,
+    "healthCategory": {
+      "_id": "health_category_id",
+      "name": "Respiratory Health",
+      "slug": "respiratory-health"
+    },
+    "updatedAt": "2025-01-05T12:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid medicine ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Medicine not found
+
+---
+
+### Update Medicine Health Category and Type
+
+**PUT** `/api/v1/health/medications/:id/health-relation`
+
+Update a medicine's relationship with health category and type (chronic condition).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Medicine ID (MongoDB ObjectId)
+
+**Request Body:**
+```json
+{
+  "healthCategory": "health_category_id",
+  "healthTypeSlug": "asthma"
+}
+```
+
+**Fields:**
+- `healthCategory` (optional) - Health category ID (MongoDB ObjectId)
+- `healthTypeSlug` (optional) - Health type slug (e.g., 'asthma', 'dry-eye')
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Medicine health relation updated successfully",
+  "data": {
+    "_id": "medicine_id",
+    "productName": "Albuterol Inhaler",
+    "brand": "ProAir",
+    "healthCategory": {
+      "_id": "health_category_id",
+      "name": "Respiratory Health",
+      "slug": "respiratory-health",
+      "description": "Medications for respiratory conditions",
+      "icon": "https://example.com/icons/respiratory.svg",
+      "types": [
+        {
+          "name": "Asthma",
+          "slug": "asthma",
+          "description": "Medications for asthma management",
+          "icon": "https://example.com/icons/asthma.svg",
+          "order": 0,
+          "isActive": true
+        }
+      ]
+    },
+    "healthTypeSlug": "asthma",
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-05T12:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid medicine ID or health category ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Medicine not found, health category not found, or health type not found in category
+
+**Notes:**
+- If `healthTypeSlug` is provided, it must exist in the selected `healthCategory`
+- Both fields are optional - you can update just one or both
+- The health type slug is validated against the health category's types
 
 ---
 

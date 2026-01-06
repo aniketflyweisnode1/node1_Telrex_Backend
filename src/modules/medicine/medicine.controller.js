@@ -59,6 +59,20 @@ exports.updateMedicine = async (req, res, next) => {
   }
 };
 
+// Update medicine stock and status
+exports.updateMedicineStockStatus = async (req, res, next) => {
+  try {
+    const medicine = await medicineService.updateMedicineStockStatus(req.params.id, req.body);
+    res.status(200).json({
+      success: true,
+      message: 'Medicine stock and status updated successfully',
+      data: medicine
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Delete medicine
 exports.deleteMedicine = async (req, res, next) => {
   try {

@@ -3,11 +3,16 @@ const AppError = require('../../utils/AppError');
 const logger = require('../../utils/logger');
 
 // Get all footer sections
-exports.getAllFooterSections = async (query = {}) => {
+exports.getAllFooterSections = async (query = {}, isPublic = false) => {
   const { status, sortBy = 'order', sortOrder = 'asc' } = query;
 
   const filter = {};
-  if (status) {
+  
+  // For public access, only return published sections
+  if (isPublic) {
+    filter.status = 'published';
+  } else if (status) {
+    // For admin, allow filtering by status
     filter.status = status;
   }
 
@@ -26,8 +31,15 @@ exports.getAllFooterSections = async (query = {}) => {
 };
 
 // Get footer section by section name
-exports.getFooterSectionBySection = async (sectionName) => {
-  const section = await Footer.findOne({ section: sectionName })
+exports.getFooterSectionBySection = async (sectionName, isPublic = false) => {
+  const filter = { section: sectionName };
+  
+  // For public access, only return published sections
+  if (isPublic) {
+    filter.status = 'published';
+  }
+
+  const section = await Footer.findOne(filter)
     .populate({
       path: 'lastEditedBy',
       select: 'firstName lastName email'
@@ -35,6 +47,13 @@ exports.getFooterSectionBySection = async (sectionName) => {
     .lean();
 
   if (!section) {
+    // Check if section exists but is in draft status (for public access)
+    if (isPublic) {
+      const draftSection = await Footer.findOne({ section: sectionName, status: 'draft' });
+      if (draftSection) {
+        throw new AppError('Footer section is not published yet', 404);
+      }
+    }
     throw new AppError('Footer section not found', 404);
   }
 
@@ -42,8 +61,15 @@ exports.getFooterSectionBySection = async (sectionName) => {
 };
 
 // Get footer section by ID
-exports.getFooterSectionById = async (sectionId) => {
-  const section = await Footer.findById(sectionId)
+exports.getFooterSectionById = async (sectionId, isPublic = false) => {
+  const query = Footer.findById(sectionId);
+  
+  // For public access, only return published sections
+  if (isPublic) {
+    query.where('status').equals('published');
+  }
+
+  const section = await query
     .populate({
       path: 'lastEditedBy',
       select: 'firstName lastName email'

@@ -152,6 +152,69 @@ exports.addMedicineValidation = [
   body('visibility')
     .optional()
     .isBoolean()
-    .withMessage('Visibility must be a boolean')
+    .withMessage('Visibility must be a boolean'),
+  
+  // Health Category and Type relationships
+  // Note: If healthTypeSlug is provided, healthCategory MUST be provided
+  // healthTypeSlug must be one of the types within the selected healthCategory
+  body('healthCategory')
+    .optional()
+    .isMongoId()
+    .withMessage('Health category ID must be a valid MongoDB ID'),
+  
+  body('healthTypeSlug')
+    .optional()
+    .trim()
+    .matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+    .withMessage('Health type slug must be lowercase alphanumeric with hyphens')
+    .custom((value, { req }) => {
+      // If healthTypeSlug is provided, healthCategory must also be provided
+      if (value && !req.body.healthCategory) {
+        throw new Error('Health category is required when health type slug is provided');
+      }
+      return true;
+    }),
+  
+  // Admin managed flags
+  body('isTrendy')
+    .optional()
+    .custom((value) => {
+      if (typeof value === 'boolean') return true;
+      if (typeof value === 'string' && (value === 'true' || value === 'false')) return true;
+      throw new Error('isTrendy must be a boolean or string "true"/"false"');
+    })
+    .withMessage('isTrendy must be a boolean'),
+  
+  body('isBestOffer')
+    .optional()
+    .custom((value) => {
+      if (typeof value === 'boolean') return true;
+      if (typeof value === 'string' && (value === 'true' || value === 'false')) return true;
+      throw new Error('isBestOffer must be a boolean or string "true"/"false"');
+    })
+    .withMessage('isBestOffer must be a boolean'),
+  
+  body('discountPercentage')
+    .optional()
+    .isFloat({ min: 0, max: 100 })
+    .withMessage('Discount percentage must be between 0 and 100')
+];
+
+// Medicine ID validation (for route params)
+exports.medicineIdValidation = [
+  // This is handled by route param validation, but we can add custom validation if needed
+];
+
+// Update stock and status validation
+exports.updateStockStatusValidation = [
+  body('stock')
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage('Stock must be a non-negative integer'),
+  
+  body('status')
+    .optional()
+    .isIn(['in_stock', 'low_stock', 'out_of_stock', 'discontinued'])
+    .withMessage('Status must be one of: in_stock, low_stock, out_of_stock, discontinued')
 ];
 

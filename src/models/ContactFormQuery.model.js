@@ -15,18 +15,21 @@ const contactFormQuerySchema = new mongoose.Schema(
     },
     phoneNumber: {
       type: String,
-      required: true,
-      trim: true
+      required: false,
+      trim: true,
+      default: ''
     },
     services: {
       type: String,
-      required: true,
-      trim: true
+      required: false,
+      trim: true,
+      default: 'Help Desk Inquiry'
     },
     message: {
       type: String,
-      required: true,
-      trim: true
+      required: false,
+      trim: true,
+      default: 'Contact request from help desk form'
     },
     status: {
       type: String,

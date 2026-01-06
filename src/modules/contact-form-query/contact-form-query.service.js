@@ -3,6 +3,22 @@ const AppError = require('../../utils/AppError');
 
 // Create a new contact form query
 exports.createContactFormQuery = async (data, userId = null) => {
+  // Handle simple help desk form (firstName + email only)
+  if (data.firstName && !data.name) {
+    data.name = data.firstName;
+  }
+  
+  // Set default values for optional fields if not provided
+  if (!data.phoneNumber) {
+    data.phoneNumber = '';
+  }
+  if (!data.services) {
+    data.services = 'Help Desk Inquiry';
+  }
+  if (!data.message) {
+    data.message = 'Contact request from help desk form';
+  }
+  
   if (userId) {
     data.submittedBy = userId;
   }

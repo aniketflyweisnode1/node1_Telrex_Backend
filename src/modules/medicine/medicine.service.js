@@ -1,23 +1,11 @@
 const Medicine = require('../../models/Medicine.model');
+const HealthCategory = require('../../models/HealthCategory.model');
 const AppError = require('../../utils/AppError');
+const mongoose = require('mongoose');
+const logger = require('../../utils/logger');
 
 // Add new medicine
 exports.addMedicine = async (data, files = [], req = null) => {
-  // Prepare product images from uploaded files
-  const productImages = files.map(file => {
-    // Generate proper URL for the file
-    const fileUrl = req 
-      ? `${req.protocol}://${req.get('host')}/uploads/${file.filename}`
-      : `/uploads/${file.filename}`;
-    
-    return {
-      fileName: file.filename,
-      fileUrl: fileUrl,
-      fileType: file.mimetype,
-      uploadedAt: new Date()
-    };
-  });
-
   // Helper function to parse JSON strings from form data
   const parseIfString = (value) => {
     if (typeof value === 'string') {
@@ -30,13 +18,89 @@ exports.addMedicine = async (data, files = [], req = null) => {
     return value;
   };
 
+  // Handle images - from JSON body or file uploads
+  let imagesData = {
+    thumbnail: '',
+    gallery: []
+  };
+
+  // If images provided in JSON body
+  if (data.images) {
+    const imagesInput = parseIfString(data.images);
+    if (typeof imagesInput === 'object' && imagesInput !== null) {
+      imagesData = {
+        thumbnail: imagesInput.thumbnail || '',
+        gallery: Array.isArray(imagesInput.gallery) ? imagesInput.gallery : []
+      };
+    }
+  }
+
+  // If files uploaded, handle thumbnail and gallery separately
+  if (files && files.length > 0) {
+    // Check if there's a specific thumbnail file (fieldname='thumbnail' or filename contains 'thumbnail')
+    const thumbnailFile = files.find(file => 
+      file.fieldname === 'thumbnail' || 
+      file.originalname.toLowerCase().includes('thumbnail')
+    ) || files[0];
+    
+    // All other files go to gallery (excluding thumbnail if it was found separately)
+    const galleryFiles = files.filter(file => file !== thumbnailFile);
+    
+    const thumbnailUrl = req 
+      ? `${req.protocol}://${req.get('host')}/uploads/${thumbnailFile.filename}`
+      : `/uploads/${thumbnailFile.filename}`;
+    
+    const galleryUrls = galleryFiles.map(file => {
+      return req 
+        ? `${req.protocol}://${req.get('host')}/uploads/${file.filename}`
+        : `/uploads/${file.filename}`;
+    });
+    
+    // If JSON body already provided thumbnail, keep it; otherwise use uploaded thumbnail
+    if (!imagesData.thumbnail) {
+      imagesData.thumbnail = thumbnailUrl;
+    }
+    
+    // Add gallery images (merge with existing if any, avoid duplicates)
+    const existingGallery = imagesData.gallery || [];
+    imagesData.gallery = [...existingGallery, ...galleryUrls];
+  }
+
+  // Validate healthCategory and healthTypeSlug relationship
+  // If healthTypeSlug is provided, healthCategory MUST be provided
+  if (data.healthTypeSlug && !data.healthCategory) {
+    throw new AppError('Health category is required when health type slug is provided', 400);
+  }
+
+  // Validate healthCategory if provided
+  if (data.healthCategory) {
+    if (!mongoose.Types.ObjectId.isValid(data.healthCategory)) {
+      throw new AppError('Invalid health category ID', 400);
+    }
+
+    const healthCategory = await HealthCategory.findById(data.healthCategory);
+    if (!healthCategory || !healthCategory.isActive) {
+      throw new AppError('Health category not found or inactive', 404);
+    }
+
+    // Validate healthTypeSlug if provided - must exist in the selected category's types
+    if (data.healthTypeSlug) {
+      const typeExists = healthCategory.types.some(
+        type => type.slug === data.healthTypeSlug && type.isActive
+      );
+      if (!typeExists) {
+        throw new AppError(`Health type "${data.healthTypeSlug}" not found in the selected category "${healthCategory.name}". Available types: ${healthCategory.types.filter(t => t.isActive).map(t => t.slug).join(', ')}`, 404);
+      }
+    }
+  }
+
   // Create medicine object
   const medicineData = {
     productName: data.productName,
     brand: data.brand,
     originalPrice: parseFloat(data.originalPrice),
     salePrice: parseFloat(data.salePrice),
-    productImages: productImages,
+    images: imagesData,
     usage: parseIfString(data.usage) || [],
     description: data.description || '',
     howItWorks: data.howItWorks || '',
@@ -48,6 +112,11 @@ exports.addMedicine = async (data, files = [], req = null) => {
     drugInteractions: data.drugInteractions || '',
     indications: data.indications || '',
     category: data.category || '',
+    healthCategory: data.healthCategory || undefined,
+    healthTypeSlug: data.healthTypeSlug || undefined,
+    isTrendy: data.isTrendy !== undefined ? (data.isTrendy === 'true' || data.isTrendy === true) : false,
+    isBestOffer: data.isBestOffer !== undefined ? (data.isBestOffer === 'true' || data.isBestOffer === true) : false,
+    discountPercentage: data.discountPercentage !== undefined ? parseFloat(data.discountPercentage) : undefined,
     stock: data.stock ? parseInt(data.stock) : 0,
     status: data.status || 'in_stock',
     visibility: data.visibility !== undefined ? data.visibility === 'true' || data.visibility === true : true
@@ -65,6 +134,15 @@ exports.addMedicine = async (data, files = [], req = null) => {
   }
 
   const medicine = await Medicine.create(medicineData);
+  
+  // Populate healthCategory if it exists
+  if (medicine.healthCategory) {
+    await medicine.populate({
+      path: 'healthCategory',
+      select: 'name slug description icon types'
+    });
+  }
+  
   return medicine;
 };
 
@@ -76,7 +154,11 @@ exports.getAllMedicines = async (query = {}) => {
     search,
     category,
     status,
-    visibility
+    visibility,
+    availability, // Filter by availability: 'in_stock', 'out_of_stock', 'all'
+    inStock, // Boolean: true for in-stock items only
+    sortBy = 'createdAt', // Sort field: createdAt, productName, salePrice, originalPrice
+    sortOrder = 'desc' // Sort order: asc, desc
   } = query;
 
   const filter = { isActive: true };
@@ -85,7 +167,9 @@ exports.getAllMedicines = async (query = {}) => {
   if (search) {
     filter.$or = [
       { productName: { $regex: search, $options: 'i' } },
-      { brand: { $regex: search, $options: 'i' } }
+      { brand: { $regex: search, $options: 'i' } },
+      { category: { $regex: search, $options: 'i' } },
+      { generics: { $in: [new RegExp(search, 'i')] } }
     ];
   }
 
@@ -94,8 +178,23 @@ exports.getAllMedicines = async (query = {}) => {
     filter.category = category;
   }
 
-  // Status filter
-  if (status) {
+  // Availability filter (priority: availability > inStock > status)
+  if (availability) {
+    if (availability === 'in_stock') {
+      filter.status = 'in_stock';
+    } else if (availability === 'out_of_stock') {
+      filter.status = 'out_of_stock';
+    } else if (availability === 'low_stock') {
+      filter.status = 'low_stock';
+    } else if (availability === 'available') {
+      // Available = in_stock or low_stock
+      filter.status = { $in: ['in_stock', 'low_stock'] };
+    }
+  } else if (inStock === 'true' || inStock === true) {
+    // Filter for in-stock items only
+    filter.status = { $in: ['in_stock', 'low_stock'] };
+  } else if (status) {
+    // Status filter (if availability and inStock not provided)
     filter.status = status;
   }
 
@@ -104,9 +203,36 @@ exports.getAllMedicines = async (query = {}) => {
     filter.visibility = visibility === 'true' || visibility === true;
   }
 
+  // For public access, only show visible medicines
+  if (visibility === undefined) {
+    filter.visibility = true;
+  }
+
+  // Sorting
+  const sort = {};
+  if (sortBy === 'price_low' || sortBy === 'price_asc') {
+    sort.salePrice = 1; // Low to high
+  } else if (sortBy === 'price_high' || sortBy === 'price_desc') {
+    sort.salePrice = -1; // High to low
+  } else if (sortBy === 'name' || sortBy === 'productName') {
+    sort.productName = sortOrder === 'desc' ? -1 : 1;
+  } else if (sortBy === 'price' || sortBy === 'salePrice') {
+    sort.salePrice = sortOrder === 'desc' ? -1 : 1;
+  } else if (sortBy === 'originalPrice') {
+    sort.originalPrice = sortOrder === 'desc' ? -1 : 1;
+  } else {
+    // Default sorting
+    sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
+  }
+
   const skip = (parseInt(page) - 1) * parseInt(limit);
   const medicines = await Medicine.find(filter)
-    .sort({ createdAt: -1 })
+    .populate({
+      path: 'healthCategory',
+      select: 'name slug description icon types',
+      match: { isActive: true }
+    })
+    .sort(sort)
     .skip(skip)
     .limit(parseInt(limit))
     .lean();
@@ -126,9 +252,20 @@ exports.getAllMedicines = async (query = {}) => {
 
 // Get medicine by ID
 exports.getMedicineById = async (medicineId) => {
-  const medicine = await Medicine.findOne({ _id: medicineId, isActive: true });
+  const medicine = await Medicine.findOne({ _id: medicineId, isActive: true })
+    .populate({
+      path: 'healthCategory',
+      select: 'name slug description icon types',
+      match: { isActive: true }
+    })
+    .lean();
   
   if (!medicine) {
+    throw new AppError('Medicine not found', 404);
+  }
+  
+  // For public access, only return if visible
+  if (medicine.visibility === false) {
     throw new AppError('Medicine not found', 404);
   }
   
@@ -156,7 +293,7 @@ exports.updateMedicine = async (medicineId, data, files = [], req = null) => {
   if (data.visibility !== undefined) {
     medicine.visibility = data.visibility === 'true' || data.visibility === true;
   }
-
+  
   // Helper function to parse JSON strings from form data
   const parseIfString = (value) => {
     if (typeof value === 'string') {
@@ -168,6 +305,17 @@ exports.updateMedicine = async (medicineId, data, files = [], req = null) => {
     }
     return value;
   };
+
+  // Update images from JSON body (if provided)
+  if (data.images !== undefined) {
+    const imagesInput = parseIfString(data.images);
+    if (typeof imagesInput === 'object' && imagesInput !== null) {
+      medicine.images = {
+        thumbnail: imagesInput.thumbnail || '',
+        gallery: Array.isArray(imagesInput.gallery) ? imagesInput.gallery : []
+      };
+    }
+  }
 
   // Update arrays
   if (data.usage !== undefined) medicine.usage = parseIfString(data.usage);
@@ -181,22 +329,96 @@ exports.updateMedicine = async (medicineId, data, files = [], req = null) => {
   if (data.drugInteractions !== undefined) medicine.drugInteractions = data.drugInteractions;
   if (data.indications !== undefined) medicine.indications = data.indications;
 
-  // Add new images if provided
+  // Validate and update healthCategory and healthTypeSlug relationship
+  // If healthTypeSlug is provided, healthCategory MUST be provided
+  if (data.healthTypeSlug !== undefined && !data.healthCategory && !medicine.healthCategory) {
+    throw new AppError('Health category is required when health type slug is provided', 400);
+  }
+
+  // Validate healthCategory if provided or if healthTypeSlug is provided
+  const healthCategoryToValidate = data.healthCategory || (data.healthTypeSlug ? medicine.healthCategory : null);
+  
+  if (healthCategoryToValidate) {
+    if (!mongoose.Types.ObjectId.isValid(healthCategoryToValidate)) {
+      throw new AppError('Invalid health category ID', 400);
+    }
+
+    const healthCategory = await HealthCategory.findById(healthCategoryToValidate);
+    if (!healthCategory || !healthCategory.isActive) {
+      throw new AppError('Health category not found or inactive', 404);
+    }
+
+    // Validate healthTypeSlug if provided - must exist in the selected category's types
+    const healthTypeSlugToValidate = data.healthTypeSlug !== undefined ? data.healthTypeSlug : medicine.healthTypeSlug;
+    if (healthTypeSlugToValidate) {
+      const typeExists = healthCategory.types.some(
+        type => type.slug === healthTypeSlugToValidate && type.isActive
+      );
+      if (!typeExists) {
+        throw new AppError(`Health type "${healthTypeSlugToValidate}" not found in the selected category "${healthCategory.name}". Available types: ${healthCategory.types.filter(t => t.isActive).map(t => t.slug).join(', ')}`, 404);
+      }
+    }
+  }
+
+  // Update healthCategory and healthTypeSlug
+  if (data.healthCategory !== undefined) {
+    medicine.healthCategory = data.healthCategory || undefined;
+  }
+  if (data.healthTypeSlug !== undefined) {
+    medicine.healthTypeSlug = data.healthTypeSlug || undefined;
+  }
+  
+  // Update admin flags
+  if (data.isTrendy !== undefined) {
+    medicine.isTrendy = data.isTrendy === 'true' || data.isTrendy === true;
+  }
+  if (data.isBestOffer !== undefined) {
+    medicine.isBestOffer = data.isBestOffer === 'true' || data.isBestOffer === true;
+  }
+  if (data.discountPercentage !== undefined) {
+    if (data.discountPercentage < 0 || data.discountPercentage > 100) {
+      throw new AppError('Discount percentage must be between 0 and 100', 400);
+    }
+    medicine.discountPercentage = parseFloat(data.discountPercentage);
+  }
+
+  // Update images from file uploads (if provided)
   if (files && files.length > 0) {
-    const newImages = files.map(file => {
-      // Generate proper URL for the file
-      const fileUrl = req 
+    // Check if there's a specific thumbnail file (fieldname='thumbnail' or filename contains 'thumbnail')
+    const thumbnailFile = files.find(file => 
+      file.fieldname === 'thumbnail' || 
+      file.originalname.toLowerCase().includes('thumbnail')
+    ) || files[0];
+    
+    // All other files go to gallery (excluding thumbnail if it was found separately)
+    const galleryFiles = files.filter(file => file !== thumbnailFile);
+    
+    const thumbnailUrl = req 
+      ? `${req.protocol}://${req.get('host')}/uploads/${thumbnailFile.filename}`
+      : `/uploads/${thumbnailFile.filename}`;
+    
+    const galleryUrls = galleryFiles.map(file => {
+      return req 
         ? `${req.protocol}://${req.get('host')}/uploads/${file.filename}`
         : `/uploads/${file.filename}`;
-      
-      return {
-        fileName: file.filename,
-        fileUrl: fileUrl,
-        fileType: file.mimetype,
-        uploadedAt: new Date()
-      };
     });
-    medicine.productImages.push(...newImages);
+    
+    // Initialize images object if it doesn't exist
+    if (!medicine.images) {
+      medicine.images = {
+        thumbnail: '',
+        gallery: []
+      };
+    }
+    
+    // Update thumbnail only if not already set from JSON body
+    if (!medicine.images.thumbnail || data.images === undefined) {
+      medicine.images.thumbnail = thumbnailUrl;
+    }
+    
+    // Add gallery images (merge with existing, avoid duplicates)
+    const existingGallery = medicine.images.gallery || [];
+    medicine.images.gallery = [...existingGallery, ...galleryUrls];
   }
 
   // Update status based on stock if stock was updated
@@ -211,6 +433,72 @@ exports.updateMedicine = async (medicineId, data, files = [], req = null) => {
   }
 
   await medicine.save();
+  
+  // Populate healthCategory if it exists
+  if (medicine.healthCategory) {
+    await medicine.populate({
+      path: 'healthCategory',
+      select: 'name slug description icon types'
+    });
+  }
+  
+  return medicine;
+};
+
+// Update medicine stock and status
+exports.updateMedicineStockStatus = async (medicineId, data) => {
+  if (!mongoose.Types.ObjectId.isValid(medicineId)) {
+    throw new AppError('Invalid medicine ID', 400);
+  }
+
+  const medicine = await Medicine.findById(medicineId);
+  
+  if (!medicine) {
+    throw new AppError('Medicine not found', 404);
+  }
+
+  // Update stock if provided
+  if (data.stock !== undefined) {
+    medicine.stock = parseInt(data.stock);
+    
+    // Auto-update status based on stock if status is not explicitly provided
+    if (data.status === undefined) {
+      if (medicine.stock === 0) {
+        medicine.status = 'out_of_stock';
+      } else if (medicine.stock < 20) {
+        medicine.status = 'low_stock';
+      } else {
+        medicine.status = 'in_stock';
+      }
+    }
+  }
+
+  // Update status if explicitly provided
+  if (data.status !== undefined) {
+    const validStatuses = ['in_stock', 'low_stock', 'out_of_stock', 'discontinued'];
+    if (!validStatuses.includes(data.status)) {
+      throw new AppError(`Invalid status. Must be one of: ${validStatuses.join(', ')}`, 400);
+    }
+    medicine.status = data.status;
+  }
+
+  await medicine.save();
+
+  logger.info('Medicine stock and status updated', {
+    medicineId: medicine._id,
+    productName: medicine.productName,
+    stock: medicine.stock,
+    status: medicine.status
+  });
+
+  // Populate healthCategory if it exists
+  if (medicine.healthCategory) {
+    await medicine.populate({
+      path: 'healthCategory',
+      select: 'name slug description icon types'
+    });
+  }
+
   return medicine;
 };
 

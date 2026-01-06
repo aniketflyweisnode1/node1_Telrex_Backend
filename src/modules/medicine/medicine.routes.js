@@ -7,7 +7,16 @@ const { isAdminOrSubAdmin } = require('../../middlewares/admin.middleware');
 const { uploadMultipleImages } = require('../../middlewares/upload.middleware');
 const validate = require('../../middlewares/validate.middleware');
 
-// All routes require authentication and admin/sub-admin access
+// ==================== PUBLIC GET ROUTES (No Authentication Required) ====================
+
+// Get all medicines
+router.get('/medicines', medicineController.getAllMedicines);
+
+// Get medicine by ID
+router.get('/medicines/:id', medicineController.getMedicineById);
+
+// ==================== PROTECTED ROUTES (Admin/Sub-Admin Only) ====================
+// All POST, PUT, DELETE routes require authentication and admin/sub-admin access
 router.use(authMiddleware);
 router.use(isAdminOrSubAdmin);
 
@@ -20,11 +29,13 @@ router.post(
   medicineController.addMedicine
 );
 
-// Get all medicines
-router.get('/medicines', medicineController.getAllMedicines);
-
-// Get medicine by ID
-router.get('/medicines/:id', medicineController.getMedicineById);
+// Update medicine stock and status (dedicated endpoint) - MUST come before /medicines/:id
+router.put(
+  '/medicines/:id/stock-status',
+  medicineValidation.updateStockStatusValidation,
+  validate,
+  medicineController.updateMedicineStockStatus
+);
 
 // Update medicine (with optional image uploads)
 router.put(

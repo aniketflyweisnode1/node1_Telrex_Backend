@@ -7,6 +7,53 @@ const router = express.Router();
 router.use('/auth', require('../modules/auth/auth.routes'));
 
 /* =======================
+   HEALTH ROUTES (Public)
+   Health categories, types (chronic conditions), medications, trendy, best offers
+======================= */
+router.use('/health', require('../modules/health/health.routes'));
+
+/* =======================
+   NEWSLETTER ROUTES (Public)
+   Newsletter subscription and unsubscription
+======================= */
+router.use('/newsletter', require('../modules/newsletter/newsletter.routes'));
+
+/* =======================
+   FOOTER MANAGEMENT ROUTES (Must come before /admin to avoid route conflicts)
+   Public: GET routes (view published sections)
+   Admin/Sub-Admin: POST, PUT, DELETE routes (full CRUD)
+======================= */
+router.use('/admin/footer', require('../modules/footer/footer.routes'));
+
+/* =======================
+   BLOG CATEGORY MANAGEMENT ROUTES (Must come before /admin to avoid route conflicts)
+   Public: GET routes (view active categories)
+   Admin/Sub-Admin: POST, PUT, DELETE routes (full CRUD)
+======================= */
+router.use('/admin/blog-categories', require('../modules/blog-category/blog-category.routes'));
+
+/* =======================
+   BLOG MANAGEMENT ROUTES (Must come before /admin to avoid route conflicts)
+   Public: GET routes (view published blogs)
+   Admin/Sub-Admin: POST, PUT, DELETE routes (full CRUD)
+======================= */
+router.use('/admin/blogs', require('../modules/blog/blog.routes'));
+
+/* =======================
+   CONTACT FORM QUERY ROUTES (Must come before /admin to avoid route conflicts)
+   Public: POST route (submit contact form query)
+   Admin/Sub-Admin: GET, PUT, DELETE routes (full CRUD)
+======================= */
+router.use('/admin/contact-form-queries', require('../modules/contact-form-query/contact-form-query.routes'));
+
+/* =======================
+   MEDICINE ROUTES (Must come before /admin to avoid route conflicts)
+   Public: GET routes (view medicines)
+   Admin/Sub-Admin: POST, PUT, DELETE routes (full CRUD)
+======================= */
+router.use('/admin', require('../modules/medicine/medicine.routes'));
+
+/* =======================
    ADMIN ROUTES
 ======================= */
 router.use('/admin', require('../modules/admin/admin.routes'));
@@ -21,11 +68,6 @@ router.use('/admin', require('../modules/doctor-earnings/doctor-earnings.routes'
    DOCTOR ROUTES (Admin Only)
 ======================= */
 router.use('/admin/doctors', require('../modules/doctor/doctor.routes'));
-
-/* =======================
-   MEDICINE ROUTES (Admin/Sub-Admin Only)
-======================= */
-router.use('/admin', require('../modules/medicine/medicine.routes'));
 
 /* =======================
    INTAKE FORM FIELD ROUTES (Admin/Sub-Admin Only)
@@ -59,17 +101,6 @@ router.use('/admin', require('../modules/reports/reports.routes'));
 router.use('/admin', require('../modules/dashboard/dashboard.routes'));
 
 /* =======================
-   CONTACT FORM QUERY ROUTES
-   Public create route, Admin routes for management
-======================= */
-router.use('/admin', require('../modules/contact-form-query/contact-form-query.routes'));
-
-/* =======================
-   FOOTER MANAGEMENT ROUTES (Admin/Sub-Admin Only)
-======================= */
-router.use('/admin/footer', require('../modules/footer/footer.routes'));
-
-/* =======================
    DOCTOR DASHBOARD ROUTES (Doctor Only)
 ======================= */
 router.use('/doctor/dashboard', require('../modules/doctor-dashboard/doctor-dashboard.routes'));
@@ -90,6 +121,7 @@ router.use('/doctor/earnings', require('../modules/doctor-earnings-doctor/doctor
 router.use('/patient', require('../modules/patient/patient.routes'));
 router.use('/patient', require('../modules/intake-form/intake-form.routes'));
 router.use('/patient', require('../modules/prescription/prescription.routes'));
+router.use('/patient', require('../modules/refill/refill.routes'));
 router.use('/patient', require('../modules/address/address.routes'));
 router.use('/patient', require('../modules/notification/notification.routes'));
 router.use('/patient', require('../modules/chat/chat.routes'));

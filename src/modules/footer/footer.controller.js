@@ -4,7 +4,9 @@ const logger = require('../../utils/logger');
 // Get all footer sections
 exports.getAllFooterSections = async (req, res, next) => {
   try {
-    const sections = await footerService.getAllFooterSections(req.query);
+    // Check if user is authenticated (admin/sub-admin can see all, public can only see published)
+    const isPublic = !req.user || (req.user.role !== 'admin' && req.user.role !== 'sub-admin');
+    const sections = await footerService.getAllFooterSections(req.query, isPublic);
     res.status(200).json({
       success: true,
       message: 'Footer sections retrieved successfully',
@@ -18,7 +20,9 @@ exports.getAllFooterSections = async (req, res, next) => {
 // Get footer section by section name
 exports.getFooterSectionBySection = async (req, res, next) => {
   try {
-    const section = await footerService.getFooterSectionBySection(req.params.section);
+    // Check if user is authenticated (admin/sub-admin can see all, public can only see published)
+    const isPublic = !req.user || (req.user.role !== 'admin' && req.user.role !== 'sub-admin');
+    const section = await footerService.getFooterSectionBySection(req.params.section, isPublic);
     res.status(200).json({
       success: true,
       message: 'Footer section retrieved successfully',
@@ -32,7 +36,9 @@ exports.getFooterSectionBySection = async (req, res, next) => {
 // Get footer section by ID
 exports.getFooterSectionById = async (req, res, next) => {
   try {
-    const section = await footerService.getFooterSectionById(req.params.id);
+    // Check if user is authenticated (admin/sub-admin can see all, public can only see published)
+    const isPublic = !req.user || (req.user.role !== 'admin' && req.user.role !== 'sub-admin');
+    const section = await footerService.getFooterSectionById(req.params.id, isPublic);
     res.status(200).json({
       success: true,
       message: 'Footer section retrieved successfully',
@@ -46,7 +52,12 @@ exports.getFooterSectionById = async (req, res, next) => {
 // Create footer section
 exports.createFooterSection = async (req, res, next) => {
   try {
-    const section = await footerService.createFooterSection(req.body, req.user.id);
+    // If section is set via middleware (from route params), use it
+    const body = req.params.section 
+      ? { ...req.body, section: req.params.section }
+      : req.body;
+    
+    const section = await footerService.createFooterSection(body, req.user.id);
     res.status(201).json({
       success: true,
       message: 'Footer section created successfully',

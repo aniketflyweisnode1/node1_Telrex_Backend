@@ -54,24 +54,17 @@ const medicineSchema = new mongoose.Schema(
       min: 0
     },
     
-    // Product Images - Multiple images support
-    productImages: [{
-      fileName: {
+    // Images structure (thumbnail and gallery)
+    images: {
+      thumbnail: {
         type: String,
-        required: true
+        trim: true
       },
-      fileUrl: {
+      gallery: [{
         type: String,
-        required: true
-      },
-      fileType: {
-        type: String
-      },
-      uploadedAt: {
-        type: Date,
-        default: Date.now
-      }
-    }],
+        trim: true
+      }]
+    },
     
     // Usage and Description - Array of objects
     usage: [{
@@ -130,6 +123,41 @@ const medicineSchema = new mongoose.Schema(
       type: String,
       trim: true
     },
+    // Health Category and Type relationships
+    healthCategory: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'HealthCategory',
+      index: true
+    },
+    healthTypeSlug: {
+      type: String,
+      trim: true,
+      index: true
+    },
+    // Admin managed flags
+    isTrendy: {
+      type: Boolean,
+      default: false,
+      index: true
+    },
+    isBestOffer: {
+      type: Boolean,
+      default: false,
+      index: true
+    },
+    // Discount percentage for best offers (optional - if not set, calculated from prices)
+    discountPercentage: {
+      type: Number,
+      min: 0,
+      max: 100,
+      default: null
+    },
+    // Popularity tracking
+    views: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
     stock: {
       type: Number,
       default: 0,
@@ -155,8 +183,13 @@ const medicineSchema = new mongoose.Schema(
 // Indexes for better query performance
 medicineSchema.index({ productName: 'text', brand: 'text' });
 medicineSchema.index({ category: 1 });
+medicineSchema.index({ healthCategory: 1 });
+medicineSchema.index({ healthTypeSlug: 1 });
+medicineSchema.index({ isTrendy: 1 });
+medicineSchema.index({ isBestOffer: 1 });
 medicineSchema.index({ status: 1 });
 medicineSchema.index({ isActive: 1 });
+medicineSchema.index({ views: -1 });
 
 module.exports = mongoose.model('Medicine', medicineSchema);
 
