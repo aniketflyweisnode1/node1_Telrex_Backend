@@ -35,8 +35,7 @@ const medicineSchema = new mongoose.Schema(
     productName: {
       type: String,
       required: true,
-      trim: true,
-      index: true
+      trim: true
     },
     brand: {
       type: String,
@@ -126,24 +125,20 @@ const medicineSchema = new mongoose.Schema(
     // Health Category and Type relationships
     healthCategory: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'HealthCategory',
-      index: true
+      ref: 'HealthCategory'
     },
     healthTypeSlug: {
       type: String,
-      trim: true,
-      index: true
+      trim: true
     },
     // Admin managed flags
     isTrendy: {
       type: Boolean,
-      default: false,
-      index: true
+      default: false
     },
     isBestOffer: {
       type: Boolean,
-      default: false,
-      index: true
+      default: false
     },
     // Discount percentage for best offers (optional - if not set, calculated from prices)
     discountPercentage: {

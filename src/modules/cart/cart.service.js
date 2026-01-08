@@ -141,6 +141,26 @@ exports.saveForLater = async (userId, itemId) => {
   return cart;
 };
 
+// Unsave item (move back to active cart)
+exports.unsaveItem = async (userId, itemId) => {
+  const patient = await getPatient(userId);
+  const cart = await Cart.findOne({ patient: patient._id });
+  
+  if (!cart) throw new AppError('Cart not found', 404);
+  
+  const item = cart.items.id(itemId);
+  if (!item) throw new AppError('Item not found in cart', 404);
+  
+  if (!item.isSaved) {
+    throw new AppError('Item is not saved for later', 400);
+  }
+  
+  item.isSaved = false;
+  await cart.save();
+  
+  return cart;
+};
+
 // Apply coupon
 exports.applyCoupon = async (userId, couponCode) => {
   const patient = await getPatient(userId);

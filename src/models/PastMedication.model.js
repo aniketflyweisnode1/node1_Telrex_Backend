@@ -5,8 +5,7 @@ const pastMedicationSchema = new mongoose.Schema(
     patient: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Patient',
-      required: true,
-      index: true
+      required: true
     },
     doctor: {
       type: String,
@@ -14,8 +13,7 @@ const pastMedicationSchema = new mongoose.Schema(
     },
     issueDate: {
       type: Date,
-      required: true,
-      index: true
+      required: true
     },
     prescribedMedications: [{
       type: String,

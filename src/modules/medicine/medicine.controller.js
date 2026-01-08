@@ -44,6 +44,21 @@ exports.getMedicineById = async (req, res, next) => {
   }
 };
 
+// Find similar medicines
+exports.findSimilarMedicines = async (req, res, next) => {
+  try {
+    const result = await medicineService.findSimilarMedicines(req.params.id, req.query);
+    res.status(200).json({
+      success: true,
+      message: 'Similar medicines retrieved successfully',
+      data: result.medicines,
+      pagination: result.pagination
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Update medicine
 exports.updateMedicine = async (req, res, next) => {
   try {

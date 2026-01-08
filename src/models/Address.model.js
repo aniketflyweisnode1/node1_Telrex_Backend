@@ -12,7 +12,10 @@ const addressSchema = new mongoose.Schema(
       enum: ['home', 'work', 'other'],
       default: 'home'
     },
-    fullName: { type: String, required: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, required: true },
+    fullName: { type: String, required: true }, // Keep for backward compatibility
     phoneNumber: { type: String, required: true },
     countryCode: { type: String, required: true },
     addressLine1: { type: String, required: true },

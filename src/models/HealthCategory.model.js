@@ -6,14 +6,12 @@ const healthCategorySchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      unique: true,
-      index: true
+      unique: true
     },
     slug: {
       type: String,
       required: true,
-      unique: true,
-      index: true
+      unique: true
     },
     description: {
       type: String,

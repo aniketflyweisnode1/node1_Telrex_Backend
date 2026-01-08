@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth Login Test - Google & Facebook - Get Token for Postman</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        button {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #357ae8;
+        }
+        .token-display {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #2196f3;
+        }
+        .success {
+            background: #e8f5e9;
+            border-left-color: #4caf50;
+        }
+        .error {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+        .copy-btn {
+            background: #4caf50;
+            margin-top: 10px;
+        }
+        .copy-btn:hover {
+            background: #45a049;
+        }
+        .facebook-btn {
+            background: #1877f2;
+            margin-top: 10px;
+        }
+        .facebook-btn:hover {
+            background: #166fe5;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .button-group button {
+            flex: 1;
+            min-width: 200px;
+        }
+        #signInBtn, #facebookSignInBtn {
+            width: auto !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 OAuth Login Test</h1>
+        <p style="text-align: center; color: #666;">Get Google & Facebook Tokens for Postman Testing</p>
+        
+        <div class="info">
+            <strong>📋 Step-by-Step Instructions:</strong>
+            <ol>
+                <li><strong>Step 1:</strong> Neeche "Sign in with Google" ya "Sign in with Facebook" button par click karein</li>
+                <li><strong>Step 2:</strong> Apna account select karein</li>
+                <li><strong>Step 3:</strong> Sign-in complete hone ke baad, Token automatically display hoga</li>
+                <li><strong>Step 4:</strong> "Copy Token" button par click karke token copy karein</li>
+                <li><strong>Step 5:</strong> Postman mein ye token use karein</li>
+            </ol>
+            <p style="margin-top: 10px; color: #d32f2f;">
+                <strong>⚠️ Important:</strong> Agar error aaye "Access blocked" ya "Cannot continue with Google", to:
+            </p>
+            <ul style="margin-left: 20px; color: #d32f2f;">
+                <li>Google Cloud Console → OAuth consent screen → Test Users → Apna email add karein</li>
+                <li>Browser cache clear karein</li>
+                <li>Incognito/Private window try karein</li>
+                <li>OAuth consent screen "Testing" mode mein hona chahiye</li>
+            </ul>
+            <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 5px;">
+                <strong>💡 Alternative:</strong> Agar Google OAuth se continue nahi kar pa rahe, to <code>POSTMAN_TESTING_GUIDE.md</code> file check karein for alternative methods.
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button id="signInBtn">Sign in with Google</button>
+            <button id="facebookSignInBtn" class="facebook-btn">Sign in with Facebook</button>
+        </div>
+        
+        <div id="tokenContainer" style="display: none;">
+            <div class="info success">
+                <strong>✅ Success! Token received:</strong>
+            </div>
+            <div class="token-display" id="tokenDisplay"></div>
+            <button class="copy-btn" id="copyTokenBtn">📋 Copy Token</button>
+            
+            <div class="info" style="margin-top: 20px;">
+                <strong>📝 Postman Request (Token automatically update hoga):</strong>
+                <ul>
+                    <li><strong>Method:</strong> POST</li>
+                    <li><strong>URL (Google):</strong> http://localhost:5000/api/v1/auth/login-google</li>
+                    <li><strong>URL (Facebook):</strong> http://localhost:5000/api/v1/auth/login-facebook</li>
+                    <li><strong>Headers:</strong> Content-Type: application/json</li>
+                    <li><strong>Body (JSON):</strong> Token automatically yahan update hoga ⬇️</li>
+                </ul>
+                <pre id="postmanBody" style="background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; min-height: 60px;">
+{
+  "googleToken": "Token yahan automatically aayega...",
+  "rememberMe": true
+}</pre>
+                <div id="facebookPostmanBody" style="display: none; margin-top: 15px;">
+                    <strong>Facebook Postman Request:</strong>
+                    <pre id="facebookPostmanBodyContent" style="background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; min-height: 60px;">
+{
+  "facebookToken": "Token yahan automatically aayega...",
+  "rememberMe": true
+}</pre>
+                </div>
+                <button class="copy-btn" id="copyPostmanBodyBtn" style="margin-top: 10px;">📋 Copy Postman Body (Dynamic)</button>
+                <button class="copy-btn" id="copyFacebookPostmanBodyBtn" style="margin-top: 10px; display: none;">📋 Copy Facebook Postman Body</button>
+                <button class="copy-btn" id="refreshTokenBtn" style="margin-top: 10px; background: #ff9800;">🔄 Refresh Token Display</button>
+            </div>
+        </div>
+
+        <div id="errorContainer" style="display: none;">
+            <div class="info error">
+                <strong>❌ Error:</strong>
+                <div id="errorMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Sign-In API -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <!-- Facebook SDK -->
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+    <script>
+        // Your Google Client ID
+        const GOOGLE_CLIENT_ID = 'your_google_client_id_here';
+        
+        // Facebook App ID
+        const FACEBOOK_APP_ID = '1799026984127896';
+
+        // Wait for Google API to fully load
+        function waitForGoogleAPI(callback, maxAttempts = 30) {
+            let attempts = 0;
+            const checkInterval = setInterval(() => {
+                attempts++;
+                if (typeof google !== 'undefined' && 
+                    google.accounts && 
+                    google.accounts.id && 
+                    typeof google.accounts.id.initialize === 'function') {
+                    clearInterval(checkInterval);
+                    console.log('✅ Google API loaded successfully after', attempts, 'attempts');
+                    callback();
+                } else if (attempts >= maxAttempts) {
+                    clearInterval(checkInterval);
+                    console.error('❌ Google API failed to load after', maxAttempts, 'attempts');
+                    showError('Google Sign-In API load nahi ho rahi. Please check your internet connection and try again.');
+                }
+            }, 300);
+        }
+
+        // Initialize Google Sign-In and Facebook SDK
+        window.onload = function() {
+            console.log('🔄 Waiting for Google API to load...');
+            waitForGoogleAPI(initializeGoogleSignIn);
+            
+            // Initialize Facebook SDK
+            initializeFacebookSDK();
+            
+            // Also setup Facebook button when DOM is ready (fallback)
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(setupFacebookButton, 1000);
+            });
+        };
+        
+        // Initialize Facebook SDK
+        function initializeFacebookSDK() {
+            // Check if Facebook SDK is already loaded
+            if (typeof FB !== 'undefined') {
+                initFacebook();
+            } else {
+                // Wait for Facebook SDK to load
+                window.fbAsyncInit = function() {
+                    initFacebook();
+                };
+            }
+        }
+        
+        function initFacebook() {
+            try {
+                FB.init({
+                    appId: FACEBOOK_APP_ID,
+                    cookie: true,
+                    xfbml: true,
+                    version: 'v18.0'
+                });
+                
+                console.log('✅ Facebook SDK initialized');
+                
+                // Add click event listener for Facebook button
+                setupFacebookButton();
+            } catch (error) {
+                console.error('❌ Error initializing Facebook SDK:', error);
+            }
+        }
+        
+        function setupFacebookButton() {
+            const facebookBtn = document.getElementById('facebookSignInBtn');
+            if (facebookBtn) {
+                // Remove existing listeners to avoid duplicates
+                const newBtn = facebookBtn.cloneNode(true);
+                facebookBtn.parentNode.replaceChild(newBtn, facebookBtn);
+                
+                // Add click event listener
+                newBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('🖱️ Facebook button clicked');
+                    
+                    if (typeof FB !== 'undefined' && FB.login) {
+                        loginWithFacebook();
+                    } else {
+                        console.error('❌ Facebook SDK not loaded');
+                        showError('Facebook SDK load nahi ho rahi. Please refresh the page.');
+                    }
+                });
+                
+                console.log('✅ Facebook button event listener attached');
+            } else {
+                console.error('❌ Facebook button element not found');
+                // Retry after a delay
+                setTimeout(setupFacebookButton, 500);
+            }
+        }
+        
+        // Facebook Login Function
+        function loginWithFacebook() {
+            FB.login(function(response) {
+                if (response.authResponse) {
+                    // User logged in successfully
+                    const accessToken = response.authResponse.accessToken;
+                    console.log('✅ Facebook access token received');
+                    
+                    // Display token
+                    document.getElementById('tokenDisplay').textContent = accessToken;
+                    document.getElementById('tokenContainer').style.display = 'block';
+                    document.getElementById('errorContainer').style.display = 'none';
+                    
+                    // Update Postman body for Facebook
+                    const postmanBody = {
+                        facebookToken: accessToken,
+                        rememberMe: true
+                    };
+                    
+                    // Update Google Postman body (hide it)
+                    const postmanBodyElement = document.getElementById('postmanBody');
+                    if (postmanBodyElement) {
+                        postmanBodyElement.style.display = 'none';
+                    }
+                    
+                    // Show Facebook Postman body
+                    const facebookPostmanBody = document.getElementById('facebookPostmanBody');
+                    const facebookPostmanBodyContent = document.getElementById('facebookPostmanBodyContent');
+                    const copyFacebookBtn = document.getElementById('copyFacebookPostmanBodyBtn');
+                    
+                    if (facebookPostmanBody) {
+                        facebookPostmanBody.style.display = 'block';
+                    }
+                    if (facebookPostmanBodyContent) {
+                        facebookPostmanBodyContent.textContent = JSON.stringify(postmanBody, null, 2);
+                    }
+                    if (copyFacebookBtn) {
+                        copyFacebookBtn.style.display = 'block';
+                    }
+                    
+                    // Store token in hidden input
+                    if (!document.getElementById('hiddenToken')) {
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.id = 'hiddenToken';
+                        hiddenInput.value = accessToken;
+                        document.body.appendChild(hiddenInput);
+                    } else {
+                        document.getElementById('hiddenToken').value = accessToken;
+                    }
+                    
+                    console.log('✅ Facebook Access Token received:', accessToken.substring(0, 50) + '...');
+                } else {
+                    showError('Facebook login cancelled or failed');
+                }
+            }, {
+                scope: 'email,public_profile'
+            });
+        }
+
+        function initializeGoogleSignIn() {
+            try {
+                console.log('🔄 Initializing Google Sign-In...');
+                
+                // Initialize Google Sign-In
+                google.accounts.id.initialize({
+                    client_id: GOOGLE_CLIENT_ID,
+                    callback: handleCredentialResponse,
+                    auto_select: false,
+                    cancel_on_tap_outside: true
+                });
+                
+                console.log('✅ Google Sign-In initialized');
+                
+                // Wait a bit more before rendering button to ensure everything is ready
+                setTimeout(() => {
+                    const buttonElement = document.getElementById('signInBtn');
+                    if (buttonElement) {
+                        try {
+                            // Get button container width for proper sizing
+                            const buttonWidth = buttonElement.parentElement ? 
+                                Math.min(buttonElement.parentElement.offsetWidth - 20, 400) : 300;
+                            
+                            google.accounts.id.renderButton(
+                                buttonElement,
+                                { 
+                                    theme: 'filled_blue',
+                                    size: 'large',
+                                    width: buttonWidth, // Use calculated width
+                                    text: 'signin_with',
+                                    shape: 'rectangular'
+                                }
+                            );
+                            console.log('✅ Google Sign-In button rendered');
+                        } catch (renderError) {
+                            console.error('❌ Error rendering button:', renderError);
+                            showError('Button render nahi ho raha: ' + renderError.message);
+                        }
+                    } else {
+                        console.error('❌ Sign-in button element not found');
+                    }
+                }, 500);
+                
+            } catch (error) {
+                console.error('❌ Error initializing Google Sign-In:', error);
+                showError('Google Sign-In initialize nahi ho raha: ' + error.message);
+            }
+        }
+
+        function signIn() {
+            // Use One Tap or button click
+            google.accounts.id.prompt((notification) => {
+                if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                    // If One Tap doesn't work, trigger button click
+                    document.getElementById('signInBtn').click();
+                }
+            });
+        }
+
+        function handleCredentialResponse(response) {
+            if (response.credential) {
+                // This is the ID token - YAHI TOKEN POSTMAN MEIN USE KARNA HAI
+                const token = response.credential;
+                
+                // Display token
+                document.getElementById('tokenDisplay').textContent = token;
+                document.getElementById('tokenContainer').style.display = 'block';
+                document.getElementById('errorContainer').style.display = 'none';
+                
+                // Dynamically update Postman body with actual token (Google)
+                const postmanBody = {
+                    googleToken: token,
+                    rememberMe: true
+                };
+                const postmanBodyElement = document.getElementById('postmanBody');
+                if (postmanBodyElement) {
+                    postmanBodyElement.textContent = JSON.stringify(postmanBody, null, 2);
+                    postmanBodyElement.style.display = 'block';
+                }
+                
+                // Hide Facebook Postman body
+                const facebookPostmanBody = document.getElementById('facebookPostmanBody');
+                const copyFacebookBtn = document.getElementById('copyFacebookPostmanBodyBtn');
+                if (facebookPostmanBody) {
+                    facebookPostmanBody.style.display = 'none';
+                }
+                if (copyFacebookBtn) {
+                    copyFacebookBtn.style.display = 'none';
+                }
+                
+                // Also update the hidden input for easy access
+                if (!document.getElementById('hiddenToken')) {
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.id = 'hiddenToken';
+                    hiddenInput.value = token;
+                    document.body.appendChild(hiddenInput);
+                } else {
+                    document.getElementById('hiddenToken').value = token;
+                }
+                
+                console.log('✅ Google ID Token received:', token.substring(0, 50) + '...');
+            } else {
+                showError('No credential received from Google');
+            }
+        }
+
+        function copyToken() {
+            const token = document.getElementById('tokenDisplay').textContent;
+            navigator.clipboard.writeText(token).then(() => {
+                alert('✅ Token copied to clipboard! Ab Postman mein use karein.');
+            }).catch(err => {
+                showError('Failed to copy: ' + err.message);
+            });
+        }
+
+        function copyPostmanBody() {
+            // Get current token dynamically
+            const token = document.getElementById('tokenDisplay')?.textContent || 
+                         document.getElementById('hiddenToken')?.value || '';
+            
+            if (!token) {
+                alert('❌ Token nahi mila. Pehle sign-in karein.');
+                return;
+            }
+            
+            // Check if it's Google or Facebook token
+            const facebookPostmanBody = document.getElementById('facebookPostmanBody');
+            const isFacebook = facebookPostmanBody && facebookPostmanBody.style.display !== 'none';
+            
+            let postmanBody;
+            if (isFacebook) {
+                postmanBody = {
+                    facebookToken: token,
+                    rememberMe: true
+                };
+            } else {
+                postmanBody = {
+                    googleToken: token,
+                    rememberMe: true
+                };
+            }
+            
+            const bodyText = JSON.stringify(postmanBody, null, 2);
+            
+            // Update display
+            if (isFacebook) {
+                const facebookPostmanBodyContent = document.getElementById('facebookPostmanBodyContent');
+                if (facebookPostmanBodyContent) {
+                    facebookPostmanBodyContent.textContent = bodyText;
+                }
+            } else {
+                const postmanBodyElement = document.getElementById('postmanBody');
+                if (postmanBodyElement) {
+                    postmanBodyElement.textContent = bodyText;
+                }
+            }
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(bodyText).then(() => {
+                alert('✅ Postman Body copied! Ab Postman mein paste karein.');
+            }).catch(err => {
+                showError('Failed to copy: ' + err.message);
+            });
+        }
+        
+        function copyFacebookPostmanBody() {
+            const token = document.getElementById('tokenDisplay')?.textContent || 
+                         document.getElementById('hiddenToken')?.value || '';
+            
+            if (!token) {
+                alert('❌ Token nahi mila. Pehle Facebook se sign-in karein.');
+                return;
+            }
+            
+            const postmanBody = {
+                facebookToken: token,
+                rememberMe: true
+            };
+            
+            const bodyText = JSON.stringify(postmanBody, null, 2);
+            
+            // Update display
+            const facebookPostmanBodyContent = document.getElementById('facebookPostmanBodyContent');
+            if (facebookPostmanBodyContent) {
+                facebookPostmanBodyContent.textContent = bodyText;
+            }
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(bodyText).then(() => {
+                alert('✅ Facebook Postman Body copied! Ab Postman mein paste karein.');
+            }).catch(err => {
+                showError('Failed to copy: ' + err.message);
+            });
+        }
+        
+        // Function to refresh token display
+        function refreshTokenDisplay() {
+            const token = document.getElementById('hiddenToken')?.value || 
+                         document.getElementById('tokenDisplay')?.textContent;
+            
+            if (token) {
+                document.getElementById('tokenDisplay').textContent = token;
+                const postmanBody = {
+                    googleToken: token,
+                    rememberMe: true
+                };
+                const postmanBodyElement = document.getElementById('postmanBody');
+                if (postmanBodyElement) {
+                    postmanBodyElement.textContent = JSON.stringify(postmanBody, null, 2);
+                }
+            }
+        }
+
+        // Add event listeners when DOM is ready (instead of inline onclick)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Copy Token button
+            const copyTokenBtn = document.getElementById('copyTokenBtn');
+            if (copyTokenBtn) {
+                copyTokenBtn.addEventListener('click', copyToken);
+            }
+
+            // Copy Postman Body button
+            const copyPostmanBodyBtn = document.getElementById('copyPostmanBodyBtn');
+            if (copyPostmanBodyBtn) {
+                copyPostmanBodyBtn.addEventListener('click', copyPostmanBody);
+            }
+
+            // Refresh Token Display button
+            const refreshTokenBtn = document.getElementById('refreshTokenBtn');
+            if (refreshTokenBtn) {
+                refreshTokenBtn.addEventListener('click', refreshTokenDisplay);
+            }
+            
+            // Copy Facebook Postman Body button
+            const copyFacebookPostmanBodyBtn = document.getElementById('copyFacebookPostmanBodyBtn');
+            if (copyFacebookPostmanBodyBtn) {
+                copyFacebookPostmanBodyBtn.addEventListener('click', copyFacebookPostmanBody);
+            }
+        });
+
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorContainer').style.display = 'block';
+            document.getElementById('tokenContainer').style.display = 'none';
+        }
+
+    </script>
+</body>
+</html>
+

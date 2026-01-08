@@ -7,8 +7,7 @@ const newsletterSchema = new mongoose.Schema(
       required: true,
       unique: true,
       lowercase: true,
-      trim: true,
-      index: true
+      trim: true
     },
     status: {
       type: String,
@@ -37,7 +36,7 @@ const newsletterSchema = new mongoose.Schema(
 );
 
 // Indexes for efficient queries
-newsletterSchema.index({ email: 1 });
+// email already has index from unique: true, so no need for separate index
 newsletterSchema.index({ status: 1 });
 newsletterSchema.index({ subscribedAt: -1 });
 

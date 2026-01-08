@@ -69,6 +69,18 @@ exports.saveForLater = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
+// Unsave item (move back to active cart)
+exports.unsaveItem = async (req, res, next) => {
+  try {
+    const cart = await cartService.unsaveItem(req.user.id, req.params.itemId);
+    res.status(200).json({ 
+      success: true, 
+      message: 'Item moved back to cart', 
+      data: cart 
+    });
+  } catch (err) { next(err); }
+};
+
 // Apply coupon
 exports.applyCoupon = async (req, res, next) => {
   try {

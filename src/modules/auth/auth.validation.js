@@ -63,3 +63,27 @@ exports.changePasswordValidation = [
 exports.sendOtpValidation = [
   body('phoneNumber').notEmpty().withMessage('Phone number is required')
 ];
+
+exports.googleLoginValidation = [
+  body('googleToken')
+    .notEmpty()
+    .withMessage('Google token is required')
+    .isString()
+    .withMessage('Google token must be a string'),
+  body('rememberMe')
+    .optional()
+    .isBoolean()
+    .withMessage('Remember me must be a boolean')
+];
+
+exports.facebookLoginValidation = [
+  body('facebookToken')
+    .notEmpty()
+    .withMessage('Facebook token is required')
+    .isString()
+    .withMessage('Facebook token must be a string'),
+  body('rememberMe')
+    .optional()
+    .isBoolean()
+    .withMessage('Remember me must be a boolean')
+];

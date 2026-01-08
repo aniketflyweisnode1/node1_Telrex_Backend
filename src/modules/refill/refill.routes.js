@@ -8,37 +8,84 @@ const validate = require('../../middlewares/validate.middleware');
 // All routes require authentication
 router.use(authMiddleware);
 
-// Get all refills for patient
+// Create refill
+router.post(
+  '/refills',
+  refillValidation.createRefillValidation,
+  validate,
+  refillController.createRefill
+);
+
+// Get all refills
 router.get(
-  '/',
+  '/refills',
   refillValidation.getRefillsValidation,
   validate,
   refillController.getRefills
 );
 
-// Get refill by ID
-router.get(
-  '/:id',
-  refillValidation.refillIdValidation,
-  validate,
-  refillController.getRefillById
-);
-
-// Request refill (refill now)
+// Create order from approved refills (checkout) - supports multiple selected refills (must come before /refills/:id)
 router.post(
-  '/',
-  refillValidation.requestRefillValidation,
+  '/refills/checkout',
+  refillValidation.createOrderFromRefillValidation,
   validate,
-  refillController.requestRefill
+  refillController.createOrderFromRefill
 );
 
-// Cancel refill
+// Get all refill orders (orders created from refills) - must come before /refills/:id
+router.get(
+  '/refills/orders',
+  refillValidation.getRefillOrdersValidation,
+  validate,
+  refillController.getRefillOrders
+);
+
+// Get refill order by ID - must come before /refills/:id
+router.get(
+  '/refills/orders/:id',
+  refillValidation.refillOrderIdValidation,
+  validate,
+  refillController.getRefillOrderById
+);
+
+// Cancel refill (must come before /refills/:id to avoid route conflict)
 router.put(
-  '/:id/cancel',
+  '/refills/:id/cancel',
   refillValidation.refillIdValidation,
   validate,
   refillController.cancelRefill
 );
 
-module.exports = router;
+// Skip refill (skip this month) (must come before /refills/:id to avoid route conflict)
+router.put(
+  '/refills/:id/skip',
+  refillValidation.skipRefillValidation,
+  validate,
+  refillController.skipRefill
+);
 
+// Get refill by ID (must come last to avoid route conflicts)
+router.get(
+  '/refills/:id',
+  refillValidation.refillIdValidation,
+  validate,
+  refillController.getRefillById
+);
+
+// Update refill
+router.put(
+  '/refills/:id',
+  refillValidation.updateRefillValidation,
+  validate,
+  refillController.updateRefill
+);
+
+// Delete refill
+router.delete(
+  '/refills/:id',
+  refillValidation.refillIdValidation,
+  validate,
+  refillController.deleteRefill
+);
+
+module.exports = router;

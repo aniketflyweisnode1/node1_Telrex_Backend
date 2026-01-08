@@ -22,8 +22,7 @@ const footerSchema = new mongoose.Schema(
         'contact',
         'address',
         'social-media'
-      ],
-      index: true
+      ]
     },
     title: {
       type: String,

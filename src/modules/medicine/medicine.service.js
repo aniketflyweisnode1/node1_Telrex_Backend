@@ -272,6 +272,168 @@ exports.getMedicineById = async (medicineId) => {
   return medicine;
 };
 
+// Find similar medicines
+exports.findSimilarMedicines = async (medicineId, options = {}) => {
+  const limit = parseInt(options.limit) || 10;
+  
+  // Get the original medicine
+  const originalMedicine = await Medicine.findOne({ 
+    _id: medicineId, 
+    isActive: true,
+    visibility: true 
+  }).lean();
+  
+  if (!originalMedicine) {
+    throw new AppError('Medicine not found', 404);
+  }
+  
+  // Build similarity criteria
+  const similarityCriteria = [];
+  
+  // 1. Same health category (highest priority)
+  if (originalMedicine.healthCategory) {
+    similarityCriteria.push({
+      healthCategory: originalMedicine.healthCategory,
+      _id: { $ne: medicineId }
+    });
+  }
+  
+  // 2. Same health type slug
+  if (originalMedicine.healthTypeSlug) {
+    similarityCriteria.push({
+      healthTypeSlug: originalMedicine.healthTypeSlug,
+      _id: { $ne: medicineId }
+    });
+  }
+  
+  // 3. Same category
+  if (originalMedicine.category) {
+    similarityCriteria.push({
+      category: originalMedicine.category,
+      _id: { $ne: medicineId }
+    });
+  }
+  
+  // 4. Similar generics (if any generics exist)
+  if (originalMedicine.generics && originalMedicine.generics.length > 0) {
+    similarityCriteria.push({
+      generics: { $in: originalMedicine.generics },
+      _id: { $ne: medicineId }
+    });
+  }
+  
+  // 5. Same brand (lower priority, but still relevant)
+  if (originalMedicine.brand) {
+    similarityCriteria.push({
+      brand: originalMedicine.brand,
+      _id: { $ne: medicineId }
+    });
+  }
+  
+  // If no criteria found, return empty
+  if (similarityCriteria.length === 0) {
+    return {
+      medicines: [],
+      pagination: {
+        page: 1,
+        limit,
+        total: 0,
+        pages: 0
+      }
+    };
+  }
+  
+  // Build base filter
+  const baseFilter = {
+    _id: { $ne: medicineId },
+    isActive: true,
+    visibility: true,
+    status: { $in: ['in_stock', 'low_stock'] }
+  };
+  
+  // Use $or to find medicines matching any similarity criteria
+  // Prioritize by: healthCategory + healthTypeSlug > healthCategory > category > generics > brand
+  const filter = {
+    ...baseFilter,
+    $or: similarityCriteria
+  };
+  
+  // Find similar medicines with priority scoring
+  const medicines = await Medicine.find(filter)
+    .populate({
+      path: 'healthCategory',
+      select: 'name slug description icon types',
+      match: { isActive: true }
+    })
+    .lean();
+  
+  // Score and sort medicines by similarity
+  const scoredMedicines = medicines.map(medicine => {
+    let score = 0;
+    
+    // Health category match (highest priority)
+    if (medicine.healthCategory && originalMedicine.healthCategory) {
+      if (medicine.healthCategory.toString() === originalMedicine.healthCategory.toString()) {
+        score += 100;
+      }
+    }
+    
+    // Health type slug match
+    if (medicine.healthTypeSlug === originalMedicine.healthTypeSlug) {
+      score += 50;
+    }
+    
+    // Category match
+    if (medicine.category === originalMedicine.category) {
+      score += 30;
+    }
+    
+    // Generics match
+    if (medicine.generics && originalMedicine.generics) {
+      const commonGenerics = medicine.generics.filter(g => 
+        originalMedicine.generics.includes(g)
+      );
+      score += commonGenerics.length * 10;
+    }
+    
+    // Brand match
+    if (medicine.brand === originalMedicine.brand) {
+      score += 20;
+    }
+    
+    // Price similarity (closer price = higher score)
+    const priceDiff = Math.abs(medicine.salePrice - originalMedicine.salePrice);
+    const priceSimilarity = Math.max(0, 10 - (priceDiff / originalMedicine.salePrice) * 10);
+    score += priceSimilarity;
+    
+    return { ...medicine, similarityScore: score };
+  });
+  
+  // Sort by similarity score (descending) and then by price
+  scoredMedicines.sort((a, b) => {
+    if (b.similarityScore !== a.similarityScore) {
+      return b.similarityScore - a.similarityScore;
+    }
+    return a.salePrice - b.salePrice;
+  });
+  
+  // Limit results
+  const limitedMedicines = scoredMedicines.slice(0, limit);
+  
+  // Remove similarityScore from response
+  const finalMedicines = limitedMedicines.map(({ similarityScore, ...medicine }) => medicine);
+  
+  return {
+    medicines: finalMedicines,
+    pagination: {
+      page: 1,
+      limit,
+      total: finalMedicines.length,
+      pages: 1
+    }
+  };
+};
+
 // Update medicine
 exports.updateMedicine = async (medicineId, data, files = [], req = null) => {
   const medicine = await Medicine.findById(medicineId);

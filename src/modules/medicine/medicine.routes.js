@@ -12,6 +12,9 @@ const validate = require('../../middlewares/validate.middleware');
 // Get all medicines
 router.get('/medicines', medicineController.getAllMedicines);
 
+// Find similar medicines (Public) - MUST come before /medicines/:id to avoid route conflicts
+router.get('/medicines/:id/similar', medicineController.findSimilarMedicines);
+
 // Get medicine by ID
 router.get('/medicines/:id', medicineController.getMedicineById);
 

@@ -4853,7 +4853,158 @@ Login using email/phone and password.
 - User's `isActive` status is set to `true` on successful login
 - Login attempt is tracked in login history
 
-### 3. Login with OTP
+### 3. Login with Google OAuth
+
+**POST** `/api/v1/auth/login-google`
+
+Login or register using Google OAuth. This endpoint accepts a Google ID token from the client and verifies it with Google's servers. If the user doesn't exist, a new account will be created automatically.
+
+**Headers:** No authentication required (Public API)
+
+**Request Body:**
+```json
+{
+  "googleToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjE2MzQ1Njc4OTAiLCJ0eXAiOiJKV1QifQ...",
+  "rememberMe": true
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Google login successful",
+  "data": {
+    "user": {
+      "_id": "user_id",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@gmail.com",
+      "googleId": "123456789012345678901",
+      "authProvider": "google",
+      "role": "patient",
+      "isVerified": true,
+      "isActive": true,
+      "lastLoginAt": "2026-01-05T20:00:00.000Z",
+      "createdAt": "2026-01-05T20:00:00.000Z",
+      "updatedAt": "2026-01-05T20:00:00.000Z"
+    },
+    "tokens": {
+      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    }
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Google token is required or invalid
+- `401` - Invalid Google token or authentication failed
+- `409` - Email already associated with another Google account
+- `500` - Server error
+
+**Notes:**
+- The `googleToken` should be obtained from Google Sign-In on the client side
+- If a user with the same email exists but uses a different auth provider, the Google account will be linked
+- New users are automatically verified and activated
+- Phone number is not required for Google OAuth users
+- Password is not required for Google OAuth users
+- Login attempt is tracked in login history
+
+**Environment Variables Required:**
+```env
+GOOGLE_CLIENT_ID=your_google_client_id_here
+GOOGLE_CLIENT_SECRET=your_google_client_secret_here
+GOOGLE_REDIRECT_URI=http://localhost:5000
+GOOGLE_REDIRECT_URI_PRODUCTION=https://node1-telrex-backend.onrender.com
+```
+
+**Note:** The credentials are already configured in the `.env` file. The API is ready to use.
+
+**Authorized JavaScript Origins:**
+- `http://localhost:5000`
+- `https://node1-telrex-backend.onrender.com`
+
+**Authorized Redirect URIs:**
+- `http://localhost:5000`
+- `https://node1-telrex-backend.onrender.com`
+
+---
+
+### 4. Login with Facebook OAuth
+
+**POST** `/api/v1/auth/login-facebook`
+
+Login or register using Facebook OAuth. This endpoint accepts a Facebook access token from the client and verifies it with Facebook's Graph API. If the user doesn't exist, a new account will be created automatically.
+
+**Headers:** No authentication required (Public API)
+
+**Request Body:**
+```json
+{
+  "facebookToken": "EAAxxxxxxxxxxxxx",
+  "rememberMe": true
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Facebook login successful",
+  "data": {
+    "user": {
+      "_id": "user_id",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@facebook.com",
+      "facebookId": "12345678901234567",
+      "authProvider": "facebook",
+      "role": "patient",
+      "isVerified": true,
+      "isActive": true,
+      "lastLoginAt": "2026-01-06T20:00:00.000Z",
+      "createdAt": "2026-01-06T20:00:00.000Z",
+      "updatedAt": "2026-01-06T20:00:00.000Z"
+    },
+    "tokens": {
+      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    }
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Facebook token is required or invalid
+- `401` - Invalid Facebook token or authentication failed
+- `409` - Email already associated with another Facebook account
+- `500` - Server error
+
+**Notes:**
+- The `facebookToken` should be obtained from Facebook Login SDK on the client side
+- If a user with the same email exists but uses a different auth provider, the Facebook account will be linked
+- New users are automatically verified and activated
+- Phone number is not required for Facebook OAuth users
+- Password is not required for Facebook OAuth users
+- Login attempt is tracked in login history
+
+**Environment Variables Required:**
+```env
+FACEBOOK_APP_ID=your-facebook-app-id
+FACEBOOK_APP_SECRET=your-facebook-app-secret
+```
+
+**How to Get Facebook App ID and Secret:**
+1. Go to [Facebook Developers](https://developers.facebook.com/)
+2. Create a new app or select an existing one
+3. Go to "Settings" → "Basic"
+4. Copy the App ID and App Secret
+5. Add them to your `.env` file
+
+---
+
+### 5. Login with OTP
 **POST** `/auth/login-otp`
 
 Login using email or phone number with OTP. This is a two-step process:
@@ -4929,7 +5080,7 @@ Send identifier with OTP to complete login.
 - OTP expires after 10 minutes (configurable)
 - User's `isActive` status is set to `true` on successful login
 
-### 4. Send OTP
+### 5. Send OTP
 **POST** `/auth/send-otp`
 
 Send OTP to phone number.
@@ -5837,6 +5988,1886 @@ All patient APIs require authentication: `Authorization: Bearer <token>`
 }
 ```
 
+### Saved Medicines
+
+APIs for patients to save and manage their favorite medicines for quick access later.
+
+#### Get All Saved Medicines
+**GET** `/api/v1/patient/saved-medicines?page=1&limit=20`
+
+Get list of all medicines saved by the logged-in patient.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Query Parameters:**
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 20, max: 100)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Saved medicines retrieved successfully",
+  "data": [
+    {
+      "_id": "saved_medicine_id",
+      "patient": "patient_id",
+      "medicine": {
+        "_id": "medicine_id",
+        "productName": "Amoxicillin",
+        "brand": "Cetaphill",
+        "originalPrice": 20.99,
+        "salePrice": 15.99,
+        "images": {
+          "thumbnail": "https://example.com/images/amoxicillin-thumb.jpg",
+          "gallery": ["https://example.com/images/amoxicillin-1.jpg"]
+        },
+        "description": "Antibiotic medication used to treat various bacterial infections",
+        "category": "Antibiotics",
+        "healthCategory": {
+          "_id": "health_category_id",
+          "name": "Respiratory Health",
+          "slug": "respiratory-health",
+          "description": "Medications and treatments for respiratory conditions",
+          "icon": "https://example.com/icons/respiratory.svg",
+          "types": [
+            {
+              "name": "Asthma",
+              "slug": "asthma",
+              "description": "Medications for asthma management",
+              "icon": "https://example.com/icons/asthma.svg",
+              "order": 0,
+              "isActive": true
+            }
+          ]
+        },
+        "healthTypeSlug": "asthma",
+        "generics": ["Amoxicillin Trihydrate", "Amoxicillin Sodium"],
+        "dosageOptions": [
+          {
+            "name": "Capsule - 500mg",
+            "priceAdjustment": 0
+          }
+        ],
+        "quantityOptions": [
+          {
+            "name": "20 Tablets",
+            "priceAdjustment": 0
+          }
+        ],
+        "stock": 450,
+        "status": "in_stock",
+        "visibility": true,
+        "isActive": true,
+        "isTrendy": true,
+        "isBestOffer": false,
+        "discountPercentage": 0,
+        "views": 0
+      },
+      "createdAt": "2025-01-15T10:00:00.000Z",
+      "updatedAt": "2025-01-15T10:00:00.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 5,
+    "pages": 1
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `404` - Patient profile not found
+
+**Notes:**
+- Only returns active and visible medicines
+- Results are sorted by saved date (most recent first)
+- Medicines that are deleted or made inactive are automatically filtered out
+
+---
+
+#### Check if Medicine is Saved
+**GET** `/api/v1/patient/saved-medicines/:medicineId/check`
+
+Check if a specific medicine is saved by the logged-in patient.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `medicineId` (path) - Medicine ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "isSaved": true
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid medicine ID
+- `401` - Unauthorized
+- `404` - Patient profile not found
+
+---
+
+#### Save Medicine
+**POST** `/api/v1/patient/saved-medicines/:medicineId`
+
+Save a medicine to the patient's saved list for quick access later.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `medicineId` (path) - Medicine ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Medicine saved successfully",
+  "data": {
+    "_id": "saved_medicine_id",
+    "patient": "patient_id",
+    "medicine": {
+      "_id": "medicine_id",
+      "productName": "Amoxicillin",
+      "brand": "Cetaphill",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "https://example.com/images/amoxicillin-thumb.jpg",
+        "gallery": ["https://example.com/images/amoxicillin-1.jpg"]
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "category": "Antibiotics",
+      "healthCategory": {
+        "_id": "health_category_id",
+        "name": "Respiratory Health",
+        "slug": "respiratory-health",
+        "description": "Medications and treatments for respiratory conditions",
+        "icon": "https://example.com/icons/respiratory.svg",
+        "types": [
+          {
+            "name": "Asthma",
+            "slug": "asthma",
+            "description": "Medications for asthma management",
+            "icon": "https://example.com/icons/asthma.svg",
+            "order": 0,
+            "isActive": true
+          }
+        ]
+      },
+      "healthTypeSlug": "asthma",
+      "generics": ["Amoxicillin Trihydrate", "Amoxicillin Sodium"],
+      "dosageOptions": [
+        {
+          "name": "Capsule - 500mg",
+          "priceAdjustment": 0
+        }
+      ],
+      "quantityOptions": [
+        {
+          "name": "20 Tablets",
+          "priceAdjustment": 0
+        }
+      ],
+      "stock": 450,
+      "status": "in_stock",
+      "visibility": true,
+      "isActive": true,
+      "isTrendy": true,
+      "isBestOffer": false,
+      "discountPercentage": 0,
+      "views": 0
+    },
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2025-01-15T10:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid medicine ID
+- `401` - Unauthorized
+- `404` - Medicine not found or not available / Patient profile not found
+- `409` - Medicine is already saved
+
+**Notes:**
+- Medicine must be active and visible to be saved
+- A patient cannot save the same medicine twice (duplicate prevention)
+- Saved medicine includes full medicine details with populated health category
+
+---
+
+#### Unsave Medicine
+**DELETE** `/api/v1/patient/saved-medicines/:medicineId`
+
+Remove a medicine from the patient's saved list.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `medicineId` (path) - Medicine ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Medicine removed from saved list successfully"
+}
+```
+
+**Error Responses:**
+- `400` - Invalid medicine ID
+- `401` - Unauthorized
+- `404` - Saved medicine not found / Patient profile not found
+
+**Notes:**
+- If the medicine is not in the saved list, returns 404
+- Operation is idempotent (safe to call multiple times)
+
+---
+
+### Refill Medications APIs
+
+APIs for patients to manage medication refills. Patients can refill medicines they have previously purchased.
+
+#### Get Previously Purchased Medicines
+**GET** `/api/v1/patient/refills/previously-purchased-medicines?startDate=2025-01-01&endDate=2025-01-31&page=1&limit=20`
+
+Get list of all medicines previously purchased by the patient from delivered/shipped orders. This helps patients identify medicines they can request for refill.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Query Parameters:**
+- `startDate` (optional) - Filter orders from this date (ISO 8601 format, e.g., `2025-01-01`)
+- `endDate` (optional) - Filter orders until this date (ISO 8601 format, e.g., `2025-01-31`)
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 20, max: 100)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Previously purchased medicines retrieved successfully",
+  "data": [
+    {
+      "productId": "65a1b2c3d4e5f6789012345h",
+      "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+      "brand": "Cetaphil",
+      "images": {
+        "thumbnail": "https://example.com/images/cetaphil-thumb.jpg",
+        "gallery": []
+      },
+      "totalQuantity": 2,
+      "totalOrders": 1,
+      "lastPurchasedDate": "2025-01-15T10:00:00.000Z",
+      "lastOrderNumber": "ORD-1737123456789-1234",
+      "lastOrderId": "65a1b2c3d4e5f6789012345e",
+      "lastUnitPrice": 78.99,
+      "lastQuantity": 1,
+      "orders": [
+        {
+          "orderId": "65a1b2c3d4e5f6789012345e",
+          "orderNumber": "ORD-1737123456789-1234",
+          "quantity": 1,
+          "unitPrice": 78.99,
+          "totalPrice": 78.99,
+          "purchasedDate": "2025-01-15T10:00:00.000Z",
+          "status": "delivered"
+        }
+      ],
+      "product": {
+        "_id": "65a1b2c3d4e5f6789012345h",
+        "productName": "Cetaphil Gentle Skin Cleanser 250ml",
+        "brand": "Cetaphil",
+        "originalPrice": 150.00,
+        "salePrice": 122.89,
+        "images": {
+          "thumbnail": "https://example.com/images/cetaphil-thumb.jpg",
+          "gallery": []
+        },
+        "description": "Gentle skin cleanser for sensitive skin",
+        "generics": ["Cetaphil"],
+        "dosageOptions": [
+          {
+            "name": "250ml",
+            "priceAdjustment": 0
+          }
+        ],
+        "quantityOptions": [
+          {
+            "name": "1 Bottle",
+            "priceAdjustment": 0
+          }
+        ],
+        "category": "Skincare",
+        "stock": 100,
+        "status": "in_stock",
+        "visibility": true,
+        "isActive": true,
+        "healthCategory": {
+          "_id": "health_category_id",
+          "name": "Eye Care",
+          "slug": "eye-care"
+        },
+        "healthTypeSlug": "dry-eye"
+      }
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 5,
+    "pages": 1
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `404` - Patient profile not found
+
+**Notes:**
+- Only considers orders with status `delivered` or `shipped` and payment status `paid`
+- Only includes items with `productType: 'medication'`
+- Medicines are grouped by productId
+- Results are sorted by `lastPurchasedDate` (most recent first)
+- Each medicine entry includes complete product details and order history
+
+---
+
+#### Create Refill Request
+**POST** `/api/v1/patient/refills`
+
+Create a refill request for one or multiple previously purchased medicines. Supports both single medicine and bulk refill requests.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Option 1: Single Medicine Refill**
+
+**Request Body:**
+```json
+{
+  "medicineId": "65a1b2c3d4e5f6789012345h",
+  "quantity": 1,
+  "dosage": "250ml",
+  "frequency": "Twice daily",
+  "instructions": "Apply as needed",
+  "maxRefills": 3,
+  "notes": "Need refill for next month",
+  "autoRefill": true,
+  "autoRefillFrequency": "monthly"
+}
+```
+
+**Option 2: Multiple Medicines Refill (Bulk)**
+
+**Request Body:**
+```json
+{
+  "refillType": "medicine",
+  "medicines": [
+    {
+      "medicineId": "695c0c2c18b23580c989fbe8",
+      "productName": "Paracetamol",
+      "brand": "Cipla",
+      "dosageOption": {
+        "name": "500mg",
+        "priceAdjustment": 0
+      },
+      "quantityOption": {
+        "name": "Strip of 10",
+        "priceAdjustment": 0
+      },
+      "quantity": 2,
+      "unitPrice": 25,
+      "totalPrice": 50,
+      "instructions": "Take after meals",
+      "frequency": "Twice daily"
+    },
+    {
+      "medicineId": "695c0c2c18b23580c989fbe9",
+      "productName": "Cetirizine",
+      "brand": "Sun Pharma",
+      "dosageOption": {
+        "name": "10mg",
+        "priceAdjustment": 5
+      },
+      "quantityOption": {
+        "name": "Strip of 15",
+        "priceAdjustment": 10
+      },
+      "quantity": 1,
+      "unitPrice": 40,
+      "totalPrice": 40,
+      "instructions": "Take before sleep",
+      "frequency": "Once daily"
+    }
+  ],
+  "notes": "Monthly medicine refill",
+  "maxRefills": 3,
+  "autoRefill": true,
+  "autoRefillFrequency": "monthly"
+}
+```
+
+**Required Fields (Single Medicine):**
+- `medicineId` - **Medicine ID from Medicine collection** (MongoDB ObjectId, NOT Order ID). 
+  - This is the ID of the medicine/product itself (e.g., `"695d4976ef76b57ece8fb8e1"`)
+  - Medicine must be active, visible, and in stock
+  - Patient must have previously ordered this medicine (system automatically checks order history)
+  - Example: If you ordered medicine with ID `"695d4976ef76b57ece8fb8e1"`, use that same ID here
+
+**Required Fields (Multiple Medicines):**
+- `medicines` - Array of medicine objects. Each medicine object must have:
+  - `medicineId` - **Medicine ID from Medicine collection** (MongoDB ObjectId, required, NOT Order ID)
+    - This is the ID of the medicine/product itself
+    - Must match the `productId` from a previous order's items
+  - `quantity` - Quantity to refill (required, positive integer)
+  - `unitPrice` - Unit price (optional, will use current medicine price if not provided)
+  - `totalPrice` - Total price (optional, will be calculated if not provided)
+
+**Optional Fields (Single Medicine):**
+- `quantity` - Quantity to refill (default: uses last order quantity, or 1)
+- `dosage` - Dosage information (default: uses last order dosage, or medicine's first dosage option)
+- `frequency` - Frequency of use (optional)
+- `instructions` - Usage instructions (default: uses last order instructions, or medicine description)
+- `maxRefills` - Maximum refills allowed (default: 3, max: 10)
+- `notes` - Additional notes (max 500 characters)
+- `autoRefill` - Enable automatic refills (default: false)
+- `autoRefillFrequency` - Auto refill frequency: `monthly`, `quarterly`, `biannual`, `annual` (default: `monthly`)
+
+**Optional Fields (Multiple Medicines - per medicine):**
+- `productName` - Product name (optional, will use medicine's productName if not provided)
+- `brand` - Brand name (optional, will use medicine's brand if not provided)
+- `dosageOption` - Dosage option object with `name` and `priceAdjustment` (optional)
+- `quantityOption` - Quantity option object with `name` and `priceAdjustment` (optional)
+- `instructions` - Usage instructions (optional)
+- `frequency` - Frequency of use (optional)
+
+**Optional Fields (Multiple Medicines - common):**
+- `refillType` - Set to `"medicine"` (optional)
+- `notes` - Common notes for all refills (max 500 characters)
+- `maxRefills` - Maximum refills allowed for all medicines (default: 3, max: 10)
+- `autoRefill` - Enable automatic refills for all medicines (default: false)
+- `autoRefillFrequency` - Auto refill frequency for all medicines: `monthly`, `quarterly`, `biannual`, `annual` (default: `monthly`)
+
+**Response (Single Medicine):**
+```json
+{
+  "success": true,
+  "message": "Refill request created successfully",
+  "data": {
+    "_id": "refill_id",
+    "refillNumber": "REF-1737123456789-0001",
+    "patient": "patient_id",
+    "medicine": {
+      "_id": "65a1b2c3d4e5f6789012345h",
+      "productName": "Cetaphil Gentle Skin Cleanser 250ml",
+      "brand": "Cetaphil",
+      "originalPrice": 150.00,
+      "salePrice": 122.89,
+      "images": {
+        "thumbnail": "https://example.com/images/cetaphil-thumb.jpg",
+        "gallery": []
+      },
+      "description": "Gentle skin cleanser for sensitive skin",
+      "generics": ["Cetaphil"],
+      "dosageOptions": [
+        {
+          "name": "250ml",
+          "priceAdjustment": 0
+        }
+      ],
+      "quantityOptions": [
+        {
+          "name": "1 Bottle",
+          "priceAdjustment": 0
+        }
+      ],
+      "category": "Skincare",
+      "stock": 100,
+      "status": "in_stock",
+      "visibility": true,
+      "isActive": true,
+      "healthCategory": {
+        "_id": "health_category_id",
+        "name": "Eye Care",
+        "slug": "eye-care"
+      },
+      "healthTypeSlug": "dry-eye"
+    },
+    "status": "pending",
+    "requestedDate": "2025-01-15T10:00:00.000Z",
+    "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+    "quantity": 1,
+    "dosage": "250ml",
+    "frequency": "Twice daily",
+    "instructions": "Apply as needed",
+    "unitPrice": 122.89,
+    "totalPrice": 122.89,
+    "refillCount": 1,
+    "maxRefills": 3,
+    "notes": "Need refill for next month",
+    "autoRefill": true,
+    "autoRefillFrequency": "monthly",
+    "order": null,
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2025-01-15T10:00:00.000Z"
+  }
+}
+```
+
+**Response (Multiple Medicines):**
+```json
+{
+  "success": true,
+  "message": "Successfully created 2 refill(s)",
+  "data": [
+    {
+      "_id": "refill_id_1",
+      "refillNumber": "REF-1737123456789-0001",
+      "patient": "patient_id",
+      "medicine": {
+        "_id": "695c0c2c18b23580c989fbe8",
+        "productName": "Paracetamol",
+        "brand": "Cipla",
+        "salePrice": 25
+      },
+      "status": "pending",
+      "medicationName": "Paracetamol",
+      "quantity": 2,
+      "dosage": "500mg",
+      "frequency": "Twice daily",
+      "instructions": "Take after meals",
+      "unitPrice": 25,
+      "totalPrice": 50,
+      "createdAt": "2025-01-15T10:00:00.000Z"
+    },
+    {
+      "_id": "refill_id_2",
+      "refillNumber": "REF-1737123456789-0002",
+      "patient": "patient_id",
+      "medicine": {
+        "_id": "695c0c2c18b23580c989fbe9",
+        "productName": "Cetirizine",
+        "brand": "Sun Pharma",
+        "salePrice": 40
+      },
+      "status": "pending",
+      "medicationName": "Cetirizine",
+      "quantity": 1,
+      "dosage": "10mg",
+      "frequency": "Once daily",
+      "instructions": "Take before sleep",
+      "unitPrice": 40,
+      "totalPrice": 40,
+      "createdAt": "2025-01-15T10:00:00.000Z"
+    }
+  ],
+  "errors": null
+}
+```
+
+**Response (Partial Success - Some Failed):**
+```json
+{
+  "success": false,
+  "message": "Created 1 refill(s) successfully. 1 error(s) occurred.",
+  "data": [
+    {
+      "_id": "refill_id_1",
+      "refillNumber": "REF-1737123456789-0001",
+      "medicine": {
+        "_id": "695c0c2c18b23580c989fbe8",
+        "productName": "Paracetamol"
+      },
+      "status": "pending",
+      "quantity": 2,
+      "totalPrice": 50
+    }
+  ],
+  "errors": [
+    "Failed to create refill for medicine 695c0c2c18b23580c989fbe9: This medicine cannot be refilled. You must have previously ordered this medicine to request a refill."
+  ]
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed, maximum refills reached, medicine not previously ordered, or medicine not available
+- `401` - Unauthorized
+- `404` - Medicine not found or not active
+- `409` - A pending refill already exists for this medicine
+
+**Notes:**
+- **IMPORTANT**: `medicineId` is the **Medicine collection ID**, NOT the Order ID
+  - Use the medicine's `_id` from the Medicine collection (e.g., `"695d4976ef76b57ece8fb8e1"`)
+  - This is the same ID that appears as `productId` in order items
+  - The system automatically checks if the patient has previously ordered this medicine by searching order history
+- **Single Medicine**: Use `medicineId` field for backward compatibility
+- **Multiple Medicines**: Use `medicines` array to create multiple refills in one request
+- Cannot use both `medicineId` and `medicines` array in the same request
+- Each medicine in the array must have been previously ordered by the patient (delivered/shipped and paid)
+- Each medicine must be `active`, `visible`, and have status `in_stock` or `low_stock`
+- Cannot create a new refill if a pending refill already exists for the same medicine
+- Refill count is tracked per medicine
+- For multiple medicines, if some fail, the successful ones are still created (partial success)
+- Common fields (`notes`, `maxRefills`, `autoRefill`, `autoRefillFrequency`) apply to all medicines in the array
+- Medicine-specific fields (`quantity`, `dosage`, `frequency`, `instructions`, `unitPrice`, `totalPrice`) can be specified per medicine
+
+**How to find the correct Medicine ID:**
+1. Check your previous orders - look at the `items` array, each item has a `productId` field
+2. Use the `productId` value (this is the Medicine ID)
+3. Or use the `/api/v1/patient/refills/previously-purchased-medicines` API to get a list of medicines you can refill with their IDs
+
+---
+
+#### Get All Refills (Fresh/Active Only)
+**GET** `/api/v1/patient/refills?status=pending&medicineId=medicine_id&page=1&limit=10`
+
+Get list of all fresh/active refills for the logged-in patient. Only shows `pending` and `approved` refills by default.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Query Parameters:**
+- `status` (optional) - Filter by status: `pending`, `approved`, `rejected`, `completed`, `cancelled`, `skipped`, `all` (default: shows only `pending` and `approved`)
+- `medicineId` (optional) - Filter by medicine ID (MongoDB ObjectId)
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 10, max: 100)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Refills retrieved successfully",
+  "data": [
+    {
+      "_id": "refill_id",
+      "refillNumber": "REF-1737123456789-0001",
+      "patient": "patient_id",
+      "medicine": {
+        "_id": "65a1b2c3d4e5f6789012345h",
+        "productName": "Cetaphil Gentle Skin Cleanser 250ml",
+        "brand": "Cetaphil",
+        "originalPrice": 150.00,
+        "salePrice": 122.89,
+        "images": {
+          "thumbnail": "https://example.com/images/cetaphil-thumb.jpg",
+          "gallery": []
+        },
+        "description": "Gentle skin cleanser for sensitive skin",
+        "generics": ["Cetaphil"],
+        "dosageOptions": [
+          {
+            "name": "250ml",
+            "priceAdjustment": 0
+          }
+        ],
+        "quantityOptions": [
+          {
+            "name": "1 Bottle",
+            "priceAdjustment": 0
+          }
+        ],
+        "category": "Skincare",
+        "stock": 100,
+        "status": "in_stock",
+        "visibility": true,
+        "isActive": true
+      },
+      "status": "pending",
+      "requestedDate": "2025-01-15T10:00:00.000Z",
+      "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+      "quantity": 1,
+      "dosage": "250ml",
+      "frequency": "Twice daily",
+      "instructions": "Apply as needed",
+      "unitPrice": 122.89,
+      "totalPrice": 122.89,
+      "refillCount": 1,
+      "maxRefills": 3,
+      "notes": "Need refill for next month",
+      "autoRefill": true,
+      "autoRefillFrequency": "monthly",
+      "order": null,
+      "createdAt": "2025-01-15T10:00:00.000Z",
+      "updatedAt": "2025-01-15T10:00:00.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 5,
+    "pages": 1
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `404` - Patient profile not found
+
+**Notes:**
+- By default, only shows fresh/active refills with status `pending` or `approved`
+- Use `status=all` to see all refills including completed, cancelled, rejected, and skipped
+- Results are sorted by creation date (most recent first)
+
+---
+
+#### Get Refill by ID
+**GET** `/api/v1/patient/refills/:id`
+
+Get complete details of a specific refill.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Refill ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Refill retrieved successfully",
+  "data": {
+    "_id": "refill_id",
+    "refillNumber": "REF-1737123456789-0001",
+    "patient": "patient_id",
+    "medicine": {
+      "_id": "65a1b2c3d4e5f6789012345h",
+      "productName": "Cetaphil Gentle Skin Cleanser 250ml",
+      "brand": "Cetaphil",
+      "originalPrice": 150.00,
+      "salePrice": 122.89,
+      "images": {
+        "thumbnail": "https://example.com/images/cetaphil-thumb.jpg",
+        "gallery": []
+      },
+      "description": "Gentle skin cleanser for sensitive skin",
+      "generics": ["Cetaphil"],
+      "dosageOptions": [
+        {
+          "name": "250ml",
+          "priceAdjustment": 0
+        }
+      ],
+      "quantityOptions": [
+        {
+          "name": "1 Bottle",
+          "priceAdjustment": 0
+        }
+      ],
+      "category": "Skincare",
+      "stock": 100,
+      "status": "in_stock",
+      "visibility": true,
+      "isActive": true
+    },
+    "status": "pending",
+    "requestedDate": "2025-01-15T10:00:00.000Z",
+    "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+    "quantity": 1,
+    "dosage": "250ml",
+    "frequency": "Twice daily",
+    "instructions": "Apply as needed",
+    "unitPrice": 122.89,
+    "totalPrice": 122.89,
+    "refillCount": 1,
+    "maxRefills": 3,
+    "notes": "Need refill for next month",
+    "autoRefill": true,
+    "autoRefillFrequency": "monthly",
+    "order": null,
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2025-01-15T10:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid refill ID
+- `401` - Unauthorized
+- `404` - Refill not found
+
+---
+
+#### Update Refill
+**PUT** `/api/v1/patient/refills/:id`
+
+Update a pending refill request (quantity, dosage, frequency, instructions, etc.).
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Refill ID (MongoDB ObjectId)
+
+**Request Body:**
+```json
+{
+  "quantity": 2,
+  "dosage": "500ml",
+  "frequency": "Once daily",
+  "instructions": "Take with food",
+  "notes": "Updated refill request",
+  "autoRefill": false,
+  "autoRefillFrequency": "quarterly"
+}
+```
+
+**Optional Fields:**
+- `quantity` - Quantity to refill (must be positive integer)
+- `dosage` - Dosage information (max 255 characters)
+- `frequency` - Frequency of use (max 255 characters)
+- `instructions` - Usage instructions (max 500 characters)
+- `notes` - Additional notes (max 500 characters)
+- `autoRefill` - Enable/disable automatic refills (boolean)
+- `autoRefillFrequency` - Auto refill frequency: `monthly`, `quarterly`, `biannual`, `annual`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Refill updated successfully",
+  "data": {
+    "_id": "refill_id",
+    "refillNumber": "REF-1737123456789-0001",
+    "status": "pending",
+    "quantity": 2,
+    "dosage": "500ml",
+    "frequency": "Once daily",
+    "instructions": "Take with food",
+    "unitPrice": 122.89,
+    "totalPrice": 245.78,
+    "notes": "Updated refill request",
+    "autoRefill": false,
+    "autoRefillFrequency": "quarterly",
+    "medicine": {
+      "_id": "65a1b2c3d4e5f6789012345h",
+      "productName": "Cetaphil Gentle Skin Cleanser 250ml",
+      "brand": "Cetaphil",
+      "salePrice": 122.89
+    },
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2025-01-15T11:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed or refill not in pending status
+- `401` - Unauthorized
+- `404` - Refill not found
+
+**Notes:**
+- Only pending refills can be updated
+- When quantity is updated, total price is automatically recalculated
+- Unit price is locked at the time of refill creation
+
+---
+
+#### Skip Refill
+**PUT** `/api/v1/patient/refills/:id/skip`
+
+Skip a pending refill request. This marks the refill as skipped and records the skip reason.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Refill ID (MongoDB ObjectId)
+
+**Request Body (optional):**
+```json
+{
+  "skipReason": "Not needed at this time",
+  "notes": "Will request later if needed"
+}
+```
+
+**Optional Fields:**
+- `skipReason` - Reason for skipping the refill (max 500 characters)
+- `notes` - Additional notes about skipping (max 500 characters)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Refill skipped successfully",
+  "data": {
+    "_id": "refill_id",
+    "refillNumber": "REF-1737123456789-0001",
+    "status": "skipped",
+    "skippedDate": "2025-01-15T11:00:00.000Z",
+    "skipReason": "Not needed at this time",
+    "medicine": {
+      "_id": "65a1b2c3d4e5f6789012345h",
+      "productName": "Cetaphil Gentle Skin Cleanser 250ml",
+      "brand": "Cetaphil",
+      "salePrice": 122.89
+    },
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2025-01-15T11:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Cannot skip refill (not in pending status)
+- `401` - Unauthorized
+- `404` - Refill not found
+
+**Notes:**
+- Only refills with status `pending` can be skipped
+- Skipped refills are marked with status `skipped` and `skippedDate` is automatically set
+- Once a refill is skipped, it cannot be reactivated - patient must create a new refill request if needed
+
+---
+
+#### Cancel Refill
+**PUT** `/api/v1/patient/refills/:id/cancel`
+
+Cancel a pending refill request. Only pending refills can be cancelled.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Refill ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Refill cancelled successfully",
+  "data": {
+    "_id": "refill_id",
+    "refillNumber": "REF-1737123456789-0001",
+    "status": "cancelled",
+    "cancelledDate": "2025-01-15T11:00:00.000Z",
+    "medicine": {
+      "_id": "65a1b2c3d4e5f6789012345h",
+      "productName": "Cetaphil Gentle Skin Cleanser 250ml",
+      "brand": "Cetaphil",
+      "salePrice": 122.89
+    },
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2025-01-15T11:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Cannot cancel refill (not in pending status)
+- `401` - Unauthorized
+- `404` - Refill not found
+
+**Notes:**
+- Only refills with status `pending` can be cancelled
+- Once approved, rejected, completed, or skipped, refills cannot be cancelled by patient
+- `cancelledDate` is automatically set when refill is cancelled
+
+---
+
+#### Create Order from Refills (Checkout)
+**POST** `/api/v1/patient/refills/checkout`
+
+Create an order from multiple approved refill requests. This is the checkout process for refills. Only approved refills can be converted to orders. Frontend can show checkboxes for multiple approved refills, and only checked/selected refills will be ordered.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Request Body (Frontend JSON - According to Address Form):**
+```json
+{
+  "selectedRefillIds": [
+    "65a1b2c3d4e5f6789012345a",
+    "65a1b2c3d4e5f6789012345b",
+    "65a1b2c3d4e5f6789012345c"
+  ],
+  "shippingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "username@gmail.com",
+    "emailAddress": "username@gmail.com",
+    "streetAddress1": "123 Main Street",
+    "streetAddress2": "Apt 4B",
+    "state": "California",
+    "stateProvince": "California",
+    "city": "San Diego",
+    "zipCode": "22434",
+    "postalCode": "22434",
+    "phone": "+ 123 987654321",
+    "phoneNumber": "+123987654321",
+    "countryCode": "+1",
+    "country": "USA"
+  },
+  "billingAddressSameAsShipping": true,
+  "shippingCharges": 10.00,
+  "tax": 0.98,
+  "discount": 0,
+  "notes": "Please deliver before 5 PM",
+  "orderComment": "Type here...",
+  "createAccount": false
+}
+```
+
+**Required Fields:**
+- `selectedRefillIds` - Array of refill IDs (MongoDB ObjectIds) that are checked/selected by user (required, at least one)
+  - These are the refill IDs from approved refills that user has checked/selected via checkboxes
+  - Example: `["65a1b2c3d4e5f6789012345a", "65a1b2c3d4e5f6789012345b"]`
+- `shippingAddress` - Shipping address object (required)
+  - `firstName` - First Name (required)
+  - `lastName` - Last Name (required)
+  - `city` - City (required)
+  - `email` or `emailAddress` - Email Address (optional)
+  - `phone` or `phoneNumber` - Phone Number (optional)
+  - `streetAddress1` or `addressLine1` - Street Address Line 1 (optional)
+  - `streetAddress2` or `addressLine2` - Street Address Line 2 (optional)
+  - `state` or `stateProvince` - State/Province (optional)
+  - `zipCode` or `postalCode` or `zip` - Zip/Postal Code (optional)
+  - `countryCode` - Country Code (optional, auto-extracted from phone if starts with +)
+  - `country` - Country (optional, default: "USA")
+
+**Optional Fields:**
+- `billingAddressSameAsShipping` - Boolean (default: true) - "My billing and shipping address are the same" checkbox
+  - If `true` (checked): Billing address is automatically set to shipping address internally
+  - If `false` (unchecked): Billing address is still set to shipping address (only shipping address is accepted in request)
+- `shippingCharges` - Shipping charges (default: 10.00)
+- `tax` - Tax amount (default: 2% of subtotal)
+- `discount` - Discount amount (default: 0)
+- `notes` or `orderComment` - Order notes/comment (optional)
+- `createAccount` - Boolean (default: false) - "Create an account for later use" checkbox
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Order created from refill successfully",
+  "data": {
+    "_id": "order_id",
+    "orderNumber": "ORD-1737123456789-1234",
+    "patient": "patient_id",
+    "items": [
+      {
+        "_id": "item_id",
+        "productId": "65a1b2c3d4e5f6789012345h",
+        "productType": "medication",
+        "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+        "brand": "Cetaphil",
+        "originalPrice": 150.00,
+        "salePrice": 122.89,
+        "images": {
+          "thumbnail": "https://example.com/images/cetaphil-thumb.jpg",
+          "gallery": []
+        },
+        "description": "Gentle skin cleanser for sensitive skin",
+        "dosage": "250ml",
+        "quantity": 1,
+        "unitPrice": 122.89,
+        "totalPrice": 122.89,
+        "status": "ordered",
+        "isSaved": false,
+        "product": {
+          "_id": "65a1b2c3d4e5f6789012345h",
+          "productName": "Cetaphil Gentle Skin Cleanser 250ml",
+          "brand": "Cetaphil",
+          "salePrice": 122.89,
+          "stock": 100,
+          "status": "in_stock"
+        }
+      }
+    ],
+    "shippingAddress": {
+      "_id": "address_id",
+      "firstName": "Alex",
+      "lastName": "Driver",
+      "email": "username@gmail.com",
+      "phoneNumber": "+123 987654321",
+      "addressLine1": "123 Main Street",
+      "addressLine2": "Apt 4B",
+      "city": "San Diego",
+      "state": "California",
+      "postalCode": "22434",
+      "country": "USA"
+    },
+    "billingAddress": {
+      "firstName": "Alex",
+      "lastName": "Driver",
+      "email": "username@gmail.com",
+      "phoneNumber": "+123 987654321",
+      "streetAddress": "123 Main Street",
+      "city": "San Diego",
+      "state": "California",
+      "zipCode": "22434"
+    },
+    "billingAddressSameAsShipping": true,
+    "subtotal": 122.89,
+    "shippingCharges": 10.00,
+    "tax": 2.45,
+    "discount": 0,
+    "totalAmount": 135.34,
+    "status": "pending",
+    "paymentStatus": "pending",
+    "notes": "Refill order for multiple medications. Please deliver before 5 PM",
+    "refills": [
+      {
+        "refillNumber": "REF-1737123456789-0001",
+        "refillId": "65a1b2c3d4e5f6789012345a",
+        "medicationName": "Cetaphil Gentle Skin Cleanser 250ml"
+      },
+      {
+        "refillNumber": "REF-1737123456789-0002",
+        "refillId": "65a1b2c3d4e5f6789012345b",
+        "medicationName": "Paracetamol 500mg"
+      }
+    ],
+    "createdAt": "2025-01-15T12:00:00.000Z",
+    "updatedAt": "2025-01-15T12:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed, no refills selected, refill not approved, or medicine no longer available
+- `401` - Unauthorized
+- `404` - No approved refills found
+
+**Notes:**
+- **Multiple Selected Refills**: Frontend shows checkboxes for all approved refills. User selects which refills to order. Only checked refill IDs should be sent in `selectedRefillIds` array.
+- **Only approved refills** can be converted to orders (refill status must be `approved`)
+- All selected refills must belong to the logged-in patient
+- Medicine must still be available (active, visible, in stock) for all selected refills
+- Order is created with current medicine prices (not refill prices)
+- All selected refill statuses are automatically updated to `completed` and linked to the order
+- **Only Shipping Address Required**: Only `shippingAddress` is required in the request. Billing address is handled internally.
+- **Billing Address Checkbox**: 
+  - `billingAddressSameAsShipping: true` (default) - "My billing and shipping address are the same" checkbox checked
+  - If checked, billing address is automatically set to shipping address internally
+  - If unchecked, billing address is still set to shipping address (only shipping address is accepted)
+- **Address Form Fields**: API accepts exact field names from the address form:
+  - `firstName`, `lastName` (required)
+  - `email` or `emailAddress`
+  - `streetAddress1` or `addressLine1` (for street address line 1)
+  - `streetAddress2` or `addressLine2` (for street address line 2)
+  - `state` or `stateProvince` (for State/Province dropdown)
+  - `city` (required)
+  - `zipCode` or `postalCode` or `zip`
+  - `phone` or `phoneNumber`
+- **Checkbox Fields**:
+  - `billingAddressSameAsShipping: true` - "My billing and shipping address are the same" (default: true, checked)
+  - `createAccount: false` - "Create an account for later use" (default: false, unchecked)
+- Phone number is automatically cleaned (spaces removed)
+- Country code is auto-extracted from phone if it starts with +
+- Tax is calculated as 2% of subtotal by default
+- Shipping charges default to $10.00
+- **Frontend Flow**:
+  1. Get all approved refills for patient: `GET /api/v1/patient/refills?status=approved`
+  2. Show checkboxes for each approved refill
+  3. User selects which refills to order (checks checkboxes)
+  4. Send selected refill IDs in `selectedRefillIds` array along with shipping address and checkbox values
+
+---
+
+#### Get All Refill Orders
+**GET** `/api/v1/patient/refills/orders?status=delivered&paymentStatus=paid&page=1&limit=10&startDate=2025-01-01&endDate=2025-01-31`
+
+Get all orders that were created from refills. Only returns orders that have refills linked to them.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Query Parameters:**
+- `status` (optional) - Filter by order status: `pending`, `confirmed`, `processing`, `shipped`, `delivered`, `cancelled`, `returned`
+- `paymentStatus` (optional) - Filter by payment status: `pending`, `paid`, `failed`, `refunded`
+- `startDate` (optional) - Filter orders from this date (ISO 8601 format: `YYYY-MM-DD`)
+- `endDate` (optional) - Filter orders until this date (ISO 8601 format: `YYYY-MM-DD`)
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 10, max: 100)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Refill orders retrieved successfully",
+  "data": [
+    {
+      "_id": "order_id",
+      "orderNumber": "ORD-1737123456789-1234",
+      "patient": "patient_id",
+      "items": [
+        {
+          "_id": "item_id",
+          "productId": "65a1b2c3d4e5f6789012345h",
+          "productType": "medication",
+          "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+          "brand": "Cetaphil",
+          "originalPrice": 150.00,
+          "salePrice": 122.89,
+          "images": {
+            "thumbnail": "https://example.com/images/cetaphil-thumb.jpg",
+            "gallery": []
+          },
+          "description": "Gentle skin cleanser for sensitive skin",
+          "quantity": 1,
+          "unitPrice": 122.89,
+          "totalPrice": 122.89,
+          "status": "ordered",
+          "isSaved": false,
+          "product": {
+            "_id": "65a1b2c3d4e5f6789012345h",
+            "productName": "Cetaphil Gentle Skin Cleanser 250ml",
+            "brand": "Cetaphil",
+            "salePrice": 122.89,
+            "stock": 100,
+            "status": "in_stock"
+          }
+        }
+      ],
+      "shippingAddress": {
+        "_id": "address_id",
+        "firstName": "Alex",
+        "lastName": "Driver",
+        "email": "username@gmail.com",
+        "phoneNumber": "+123 987654321",
+        "addressLine1": "123 Main Street",
+        "addressLine2": "Apt 4B",
+        "city": "San Diego",
+        "state": "California",
+        "postalCode": "22434",
+        "country": "USA"
+      },
+      "billingAddress": {
+        "firstName": "Alex",
+        "lastName": "Driver",
+        "email": "username@gmail.com",
+        "phoneNumber": "+123 987654321",
+        "streetAddress": "123 Main Street",
+        "city": "San Diego",
+        "state": "California",
+        "zipCode": "22434"
+      },
+      "billingAddressSameAsShipping": true,
+      "subtotal": 122.89,
+      "shippingCharges": 10.00,
+      "tax": 2.45,
+      "discount": 0,
+      "totalAmount": 135.34,
+      "status": "delivered",
+      "paymentStatus": "paid",
+      "notes": "Refill order for multiple medications",
+      "refills": [
+        {
+          "_id": "refill_id_1",
+          "refillNumber": "REF-1737123456789-0001",
+          "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+          "quantity": 1,
+          "dosage": "250ml",
+          "frequency": "Once daily",
+          "instructions": "Apply to face and rinse",
+          "status": "completed",
+          "requestedDate": "2025-01-10T10:00:00.000Z",
+          "completedDate": "2025-01-15T12:00:00.000Z",
+          "medicine": {
+            "_id": "65a1b2c3d4e5f6789012345h",
+            "productName": "Cetaphil Gentle Skin Cleanser 250ml",
+            "brand": "Cetaphil",
+            "salePrice": 122.89,
+            "stock": 100,
+            "status": "in_stock"
+          }
+        },
+        {
+          "_id": "refill_id_2",
+          "refillNumber": "REF-1737123456789-0002",
+          "medicationName": "Paracetamol 500mg",
+          "quantity": 2,
+          "dosage": "500mg",
+          "frequency": "Twice daily",
+          "instructions": "Take with water",
+          "status": "completed",
+          "requestedDate": "2025-01-10T10:00:00.000Z",
+          "completedDate": "2025-01-15T12:00:00.000Z",
+          "medicine": {
+            "_id": "65a1b2c3d4e5f6789012345i",
+            "productName": "Paracetamol 500mg",
+            "brand": "Generic",
+            "salePrice": 25.00,
+            "stock": 200,
+            "status": "in_stock"
+          }
+        }
+      ],
+      "createdAt": "2025-01-15T12:00:00.000Z",
+      "updatedAt": "2025-01-20T14:30:00.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 5,
+    "pages": 1
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+
+**Notes:**
+- Only returns orders that have refills linked to them (orders created from refills)
+- Each order includes all linked refills with full details
+- Order items are populated with current product details
+- Supports filtering by order status, payment status, and date range
+- Supports pagination
+
+---
+
+#### Get Refill Order by ID
+**GET** `/api/v1/patient/refills/orders/:id`
+
+Get a specific refill order by its ID. Only returns orders that have refills linked to them.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Order ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Refill order retrieved successfully",
+  "data": {
+    "_id": "order_id",
+    "orderNumber": "ORD-1737123456789-1234",
+    "patient": "patient_id",
+    "items": [
+      {
+        "_id": "item_id",
+        "productId": "65a1b2c3d4e5f6789012345h",
+        "productType": "medication",
+        "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+        "brand": "Cetaphil",
+        "originalPrice": 150.00,
+        "salePrice": 122.89,
+        "images": {
+          "thumbnail": "https://example.com/images/cetaphil-thumb.jpg",
+          "gallery": []
+        },
+        "description": "Gentle skin cleanser for sensitive skin",
+        "quantity": 1,
+        "unitPrice": 122.89,
+        "totalPrice": 122.89,
+        "status": "ordered",
+        "isSaved": false,
+        "product": {
+          "_id": "65a1b2c3d4e5f6789012345h",
+          "productName": "Cetaphil Gentle Skin Cleanser 250ml",
+          "brand": "Cetaphil",
+          "salePrice": 122.89,
+          "stock": 100,
+          "status": "in_stock"
+        }
+      }
+    ],
+    "shippingAddress": {
+      "_id": "address_id",
+      "firstName": "Alex",
+      "lastName": "Driver",
+      "email": "username@gmail.com",
+      "phoneNumber": "+123 987654321",
+      "addressLine1": "123 Main Street",
+      "addressLine2": "Apt 4B",
+      "city": "San Diego",
+      "state": "California",
+      "postalCode": "22434",
+      "country": "USA"
+    },
+    "billingAddress": {
+      "firstName": "Alex",
+      "lastName": "Driver",
+      "email": "username@gmail.com",
+      "phoneNumber": "+123 987654321",
+      "streetAddress": "123 Main Street",
+      "city": "San Diego",
+      "state": "California",
+      "zipCode": "22434"
+    },
+    "billingAddressSameAsShipping": true,
+    "subtotal": 122.89,
+    "shippingCharges": 10.00,
+    "tax": 2.45,
+    "discount": 0,
+    "totalAmount": 135.34,
+    "status": "delivered",
+    "paymentStatus": "paid",
+    "notes": "Refill order for multiple medications",
+    "refills": [
+      {
+        "_id": "refill_id_1",
+        "refillNumber": "REF-1737123456789-0001",
+        "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+        "quantity": 1,
+        "dosage": "250ml",
+        "frequency": "Once daily",
+        "instructions": "Apply to face and rinse",
+        "status": "completed",
+        "requestedDate": "2025-01-10T10:00:00.000Z",
+        "approvedDate": "2025-01-12T10:00:00.000Z",
+        "completedDate": "2025-01-15T12:00:00.000Z",
+        "notes": "Monthly refill",
+        "autoRefill": true,
+        "autoRefillFrequency": "monthly",
+        "medicine": {
+          "_id": "65a1b2c3d4e5f6789012345h",
+          "productName": "Cetaphil Gentle Skin Cleanser 250ml",
+          "brand": "Cetaphil",
+          "salePrice": 122.89,
+          "stock": 100,
+          "status": "in_stock",
+          "healthCategory": {
+            "_id": "category_id",
+            "name": "Skincare",
+            "slug": "skincare"
+          },
+          "healthTypeSlug": "sensitive-skin"
+        }
+      }
+    ],
+    "createdAt": "2025-01-15T12:00:00.000Z",
+    "updatedAt": "2025-01-20T14:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `404` - Order not found or order is not a refill order
+
+**Notes:**
+- Only returns orders that have refills linked to them
+- Returns 404 if the order exists but has no linked refills (not a refill order)
+- Includes all refill details with full medicine information
+- Order items are populated with current product details
+
+---
+
+### Support System (Patient)
+
+Support system with Firebase integration for real-time messaging between patients and support team.
+
+#### Create Support Query
+**POST** `/api/v1/patient/support-queries`
+
+Create a new support query. This will create a MongoDB record and a Firebase chat for real-time messaging.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Request Body:**
+```json
+{
+  "message": "I need help with my recent order. The delivery was delayed.",
+  "subject": "Order Delivery Issue",
+  "priority": "high",
+  "category": "order",
+  "tags": ["delivery", "order-12345"]
+}
+```
+
+**Required Fields:**
+- `message` - Support message (1-5000 characters)
+
+**Optional Fields:**
+- `subject` - Query subject (max 200 characters, default: "General Inquiry")
+- `priority` - Priority level: `low`, `medium`, `high`, `urgent` (default: `medium`)
+- `category` - Category: `general`, `order`, `payment`, `refund`, `technical`, `medication`, `prescription`, `other` (default: `general`)
+- `tags` - Array of tags for categorization
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Support query created successfully",
+  "data": {
+    "_id": "query_id",
+    "queryNumber": "Q-2025-1047",
+    "patient": {
+      "_id": "patient_id",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john@example.com"
+    },
+    "subject": "Order Delivery Issue",
+    "message": "I need help with my recent order. The delivery was delayed.",
+    "status": "open",
+    "priority": "high",
+    "category": "order",
+    "tags": ["delivery", "order-12345"],
+    "firebaseChatId": "query_id",
+    "messageCount": 1,
+    "lastMessage": {
+      "text": "I need help with my recent order. The delivery was delayed.",
+      "sender": "patient",
+      "timestamp": "2025-01-15T10:30:00.000Z"
+    },
+    "isReadByPatient": true,
+    "isReadBySupport": false,
+    "createdAt": "2025-01-15T10:30:00.000Z",
+    "updatedAt": "2025-01-15T10:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed
+- `401` - Unauthorized
+- `404` - Patient profile not found
+
+**Notes:**
+- Creates a unique query number (format: `Q-YYYY-XXXX`)
+- Automatically creates a Firebase chat for real-time messaging
+- Query status is set to `open` by default
+- First message is automatically added to the chat
+
+---
+
+#### Get All Support Queries
+**GET** `/api/v1/patient/support-queries?status=open&category=order&priority=high&page=1&limit=10`
+
+Get all support queries for the logged-in patient.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Query Parameters:**
+- `status` (optional) - Filter by status: `open`, `in_progress`, `resolved`, `closed`
+- `category` (optional) - Filter by category: `general`, `order`, `payment`, `refund`, `technical`, `medication`, `prescription`, `other`
+- `priority` (optional) - Filter by priority: `low`, `medium`, `high`, `urgent`
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 10, max: 100)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Support queries retrieved successfully",
+  "data": [
+    {
+      "_id": "query_id",
+      "queryNumber": "Q-2025-1047",
+      "patient": {
+        "_id": "patient_id",
+        "firstName": "John",
+        "lastName": "Doe"
+      },
+      "subject": "Order Delivery Issue",
+      "message": "I need help with my recent order...",
+      "status": "open",
+      "priority": "high",
+      "category": "order",
+      "tags": ["delivery"],
+      "firebaseChatId": "query_id",
+      "messageCount": 5,
+      "lastMessage": {
+        "text": "Thank you for your response.",
+        "sender": "patient",
+        "timestamp": "2025-01-15T11:00:00.000Z"
+      },
+      "isReadByPatient": true,
+      "isReadBySupport": false,
+      "assignedTo": null,
+      "createdAt": "2025-01-15T10:30:00.000Z",
+      "updatedAt": "2025-01-15T11:00:00.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 5,
+    "pages": 1
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+
+---
+
+#### Get Support Query by ID
+**GET** `/api/v1/patient/support-queries/:id`
+
+Get a specific support query with all messages from Firebase.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Support query ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Support query retrieved successfully",
+  "data": {
+    "_id": "query_id",
+    "queryNumber": "Q-2025-1047",
+    "patient": {
+      "_id": "patient_id",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john@example.com"
+    },
+    "subject": "Order Delivery Issue",
+    "message": "I need help with my recent order. The delivery was delayed.",
+    "status": "open",
+    "priority": "high",
+    "category": "order",
+    "tags": ["delivery", "order-12345"],
+    "firebaseChatId": "query_id",
+    "messageCount": 5,
+    "lastMessage": {
+      "text": "Thank you for your response.",
+      "sender": "patient",
+      "timestamp": "2025-01-15T11:00:00.000Z"
+    },
+    "isReadByPatient": true,
+    "isReadBySupport": false,
+    "assignedTo": null,
+    "messages": [
+      {
+        "id": "1737123456789",
+        "text": "I need help with my recent order. The delivery was delayed.",
+        "sender": "patient",
+        "senderId": "user_id",
+        "senderName": "John Doe",
+        "timestamp": "2025-01-15T10:30:00.000Z",
+        "read": true
+      },
+      {
+        "id": "1737123500000",
+        "text": "Hello John! I'd be happy to help you with that. Can you tell me more about the intended use and any specific requirements?",
+        "sender": "support",
+        "senderId": "admin_id",
+        "senderName": "Support System",
+        "timestamp": "2025-01-15T10:35:00.000Z",
+        "read": true
+      },
+      {
+        "id": "1737123600000",
+        "text": "It will be used for Wedding Event. I need overhead chairs and good tablecloths.",
+        "sender": "patient",
+        "senderId": "user_id",
+        "senderName": "John Doe",
+        "timestamp": "2025-01-15T10:40:00.000Z",
+        "read": true
+      },
+      {
+        "id": "1737123700000",
+        "text": "Perfect! I've prepared a detailed proposal for you. Please review the attached document.",
+        "sender": "support",
+        "senderId": "admin_id",
+        "senderName": "Support System",
+        "timestamp": "2025-01-15T10:45:00.000Z",
+        "read": true
+      },
+      {
+        "id": "1737123800000",
+        "text": "Thank you for your response.",
+        "sender": "patient",
+        "senderId": "user_id",
+        "senderName": "John Doe",
+        "timestamp": "2025-01-15T11:00:00.000Z",
+        "read": true
+      }
+    ],
+    "createdAt": "2025-01-15T10:30:00.000Z",
+    "updatedAt": "2025-01-15T11:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `404` - Support query not found
+
+**Notes:**
+- Returns all messages from Firebase chat
+- Messages are sorted by timestamp (oldest first)
+- Each message includes sender information and read status
+
+---
+
+#### Send Message to Support Query
+**POST** `/api/v1/patient/support-queries/:id/messages`
+
+Send a message to an existing support query. Message is stored in Firebase for real-time updates.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Support query ID (MongoDB ObjectId)
+
+**Request Body:**
+```json
+{
+  "message": "Thank you for your response. I have reviewed the proposal."
+}
+```
+
+**Required Fields:**
+- `message` - Message text (1-5000 characters)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Message sent successfully",
+  "data": {
+    "messageId": "1737123900000",
+    "text": "Thank you for your response. I have reviewed the proposal.",
+    "sender": "patient",
+    "senderId": "user_id",
+    "senderName": "John Doe",
+    "timestamp": "2025-01-15T11:15:00.000Z",
+    "read": false
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed or query is closed
+- `401` - Unauthorized
+- `404` - Support query not found
+- `500` - Firebase chat not available
+
+**Notes:**
+- Message is stored in Firebase Realtime Database
+- If query status is `resolved`, it will be automatically reopened
+- Message count is incremented in MongoDB
+- Last message is updated in both MongoDB and Firebase
+
+---
+
+#### Mark Messages as Read
+**PUT** `/api/v1/patient/support-queries/:id/read`
+
+Mark all support team messages as read for the patient.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Support query ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Messages marked as read",
+  "data": {
+    "message": "Messages marked as read"
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `404` - Support query not found
+
+**Notes:**
+- Marks all support team messages as read in Firebase
+- Updates `isReadByPatient` status in MongoDB
+
+---
+
+#### Close Support Query
+**PUT** `/api/v1/patient/support-queries/:id/close`
+
+Close a support query. Once closed, no new messages can be sent.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Support query ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Support query closed successfully",
+  "data": {
+    "_id": "query_id",
+    "queryNumber": "Q-2025-1047",
+    "status": "closed",
+    "closedAt": "2025-01-15T12:00:00.000Z",
+    "closedBy": {
+      "_id": "user_id",
+      "firstName": "John",
+      "lastName": "Doe"
+    },
+    "updatedAt": "2025-01-15T12:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Query is already closed
+- `401` - Unauthorized
+- `404` - Support query not found
+
+**Notes:**
+- Updates query status to `closed` in MongoDB
+- Updates Firebase chat status to `closed`
+- Sets `closedAt` timestamp and `closedBy` user
+- Once closed, no new messages can be sent
+
+---
+
+**Firebase Configuration:**
+
+To enable Firebase integration, add the following environment variables to your `.env` file:
+
+```env
+# Firebase Configuration (Option 1: Environment Variables)
+FIREBASE_PROJECT_ID=your-project-id
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxxx@your-project-id.iam.gserviceaccount.com
+FIREBASE_DATABASE_URL=https://your-project-id-default-rtdb.firebaseio.com
+
+# OR
+
+# Firebase Configuration (Option 2: Service Account File Path)
+FIREBASE_SERVICE_ACCOUNT_PATH=./path/to/serviceAccountKey.json
+FIREBASE_DATABASE_URL=https://your-project-id-default-rtdb.firebaseio.com
+```
+
+**Firebase Database Structure:**
+```
+support-chats/
+  {queryId}/
+    queryId: "query_id"
+    queryNumber: "Q-2025-1047"
+    patientId: "patient_id"
+    patientName: "John Doe"
+    status: "open"
+    createdAt: "2025-01-15T10:30:00.000Z"
+    updatedAt: "2025-01-15T11:00:00.000Z"
+    lastMessage: { ... }
+    messages/
+      {timestamp1}: { text, sender, senderId, senderName, timestamp, read }
+      {timestamp2}: { text, sender, senderId, senderName, timestamp, read }
+      ...
+```
+
+**Notes:**
+- If Firebase is not configured, the system will work with MongoDB only (messages won't be stored in Firebase)
+- Firebase enables real-time messaging and updates
+- All queries are stored in MongoDB for persistence and querying
+- Firebase chat ID is the same as the MongoDB query ID for easy reference
+
+---
+
 ### Intake Form
 
 The intake form is divided into three sections that can be saved independently. Each section has its own save endpoint.
@@ -6349,78 +8380,96 @@ View and manage your past prescriptions, diagnoses, allergies, and doctor consul
 #### Reorder Prescription
 **POST** `/patient/prescriptions/:id/reorder`
 
-### Shopping Cart
+### Shopping Cart APIs
 
-Manage your shopping cart items before checkout.
+Complete CRUD operations for managing shopping cart items before checkout.
 
 #### Get Cart
-**GET** `/patient/cart`
+**GET** `/api/v1/patient/cart`
 
-**Headers:** `Authorization: Bearer <token>`
+Get the current user's shopping cart with all items, totals, and applied coupons.
+
+**Headers:** `Authorization: Bearer <patient_token>`
 
 **Response:**
 ```json
 {
   "success": true,
   "data": {
+    "_id": "cart_id",
+    "patient": "patient_id",
     "items": [
       {
-        "_id": "item_id",
-        "productId": "product_123",
-        "productName": "Cetaphil Gentle Skin Cleanser 250ml",
-        "productImage": "https://example.com/image.jpg",
+        "_id": "cart_item_id_1",
+        "productId": "65a1b2c3d4e5f6789012345c",
+        "productName": "Amoxicillin",
+        "productImage": "https://example.com/images/amoxicillin-thumb.jpg",
         "productType": "medication",
-        "quantity": 1,
-        "unitPrice": 78.99,
-        "totalPrice": 78.99,
+        "quantity": 2,
+        "unitPrice": 15.99,
+        "totalPrice": 31.98,
         "isSaved": false
       },
       {
-        "_id": "item_id_2",
-        "productId": "note_id",
-        "productName": "Doctor's Note - Excuse Note",
-        "productType": "doctors_note",
+        "_id": "cart_item_id_2",
+        "productId": "65a1b2c3d4e5f6789012345d",
+        "productName": "Paracetamol",
+        "productImage": "https://example.com/images/paracetamol-thumb.jpg",
+        "productType": "medication",
         "quantity": 1,
-        "unitPrice": 39.00,
-        "totalPrice": 39.00,
+        "unitPrice": 25.50,
+        "totalPrice": 25.50,
         "isSaved": false
       }
     ],
-    "subtotal": 1403.97,
-    "discount": 60.00,
-    "tax": 42.12,
+    "subtotal": 57.48,
+    "discount": 5.75,
+    "tax": 1.72,
     "shippingCharges": 10.00,
-    "totalAmount": 1395.97,
-    "couponCode": "SAVE10"
+    "totalAmount": 63.45,
+    "couponCode": "SAVE10",
+    "createdAt": "2025-01-10T10:00:00.000Z",
+    "updatedAt": "2025-01-15T14:30:00.000Z"
   }
 }
 ```
 
-#### Add to Cart
-**POST** `/patient/cart/items`
+**Notes:**
+- Cart is automatically created if it doesn't exist
+- Items array is always returned (empty array if cart is empty)
+- Tax is automatically calculated (3% of subtotal)
+- Shipping charges default to ₹10.00
+- Saved items (`isSaved: true`) are included in the response but not in checkout calculations
 
-**Headers:** `Authorization: Bearer <token>`
+---
+
+#### Add to Cart
+**POST** `/api/v1/patient/cart/items`
+
+Add a product/medicine to the shopping cart. If the item already exists, the quantity will be increased.
+
+**Headers:** `Authorization: Bearer <patient_token>`
 
 **Request Body:**
 ```json
 {
-  "productId": "product_123",
-  "productName": "Cetaphil Gentle Skin Cleanser 250ml",
-  "productImage": "https://example.com/image.jpg",
+  "productId": "65a1b2c3d4e5f6789012345c",
+  "productName": "Amoxicillin",
+  "productImage": "https://example.com/images/amoxicillin-thumb.jpg",
   "productType": "medication",
-  "quantity": 1,
-  "unitPrice": 78.99
+  "quantity": 2,
+  "unitPrice": 15.99
 }
 ```
 
 **Required Fields:**
-- `productId` - Product identifier (string)
-- `productName` - Product name (string)
-- `unitPrice` - Price per unit (number)
+- `productId` - **Medicine ID from Medicine collection** (MongoDB ObjectId) - This must be the actual `_id` from the Medicine model
+- `productName` - Product/Medicine name (string)
+- `unitPrice` - Price per unit (number, min: 0)
 
 **Optional Fields:**
-- `quantity` - Quantity to add (default: 1)
-- `productImage` - Product image URL
+- `quantity` - Quantity to add (default: 1, min: 1)
+- `productImage` - Product image URL (string)
 - `productType` - Type: `medication`, `doctors_note`, or `other` (default: `medication`)
 
 **Response:**
@@ -6429,29 +8478,65 @@ Manage your shopping cart items before checkout.
   "success": true,
   "message": "Item added to cart successfully",
   "data": {
-    "items": [...],
-    "subtotal": 78.99,
-    "totalAmount": 91.35
+    "_id": "cart_id",
+    "patient": "patient_id",
+    "items": [
+      {
+        "_id": "cart_item_id_1",
+        "productId": "65a1b2c3d4e5f6789012345c",
+        "productName": "Amoxicillin",
+        "productImage": "https://example.com/images/amoxicillin-thumb.jpg",
+        "productType": "medication",
+        "quantity": 2,
+        "unitPrice": 15.99,
+        "totalPrice": 31.98,
+        "isSaved": false
+      }
+    ],
+    "subtotal": 31.98,
+    "discount": 0,
+    "tax": 0.96,
+    "shippingCharges": 10.00,
+    "totalAmount": 42.94,
+    "couponCode": null,
+    "createdAt": "2025-01-10T10:00:00.000Z",
+    "updatedAt": "2025-01-15T14:30:00.000Z"
   }
 }
 ```
 
+**Error Responses:**
+- `400` - Validation failed (missing required fields, invalid productId, invalid price, etc.)
+- `401` - Unauthorized
+- `404` - Patient profile not found
+
 **Notes:**
-- If item already exists, quantity is increased
-- Tax is automatically calculated (3% of subtotal)
-- Shipping charges default to ₹10.00
+- **Product ID**: Must be a valid MongoDB ObjectId from the Medicine collection
+- **Duplicate Items**: If the same `productId` and `productType` already exists in cart, quantity is increased instead of adding a new item
+- **Auto Calculations**: Tax (3%) and shipping charges (₹10.00) are automatically calculated
+- **Cart Creation**: Cart is automatically created if it doesn't exist for the patient
+
+---
 
 #### Update Item Quantity
-**PUT** `/patient/cart/items/:itemId/quantity`
+**PUT** `/api/v1/patient/cart/items/:itemId/quantity`
 
-**Headers:** `Authorization: Bearer <token>`
+Update the quantity of a specific item in the cart. If quantity is set to 0 or less, the item is removed from cart.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `itemId` (path) - Cart item ID (MongoDB ObjectId)
 
 **Request Body:**
 ```json
 {
-  "quantity": 2
+  "quantity": 3
 }
 ```
+
+**Required Fields:**
+- `quantity` - New quantity (integer, min: 1). If set to 0 or less, item will be removed.
 
 **Response:**
 ```json
@@ -6459,17 +8544,53 @@ Manage your shopping cart items before checkout.
   "success": true,
   "message": "Quantity updated",
   "data": {
-    "items": [...],
-    "subtotal": 157.98,
-    "totalAmount": 172.72
+    "_id": "cart_id",
+    "patient": "patient_id",
+    "items": [
+      {
+        "_id": "cart_item_id_1",
+        "productId": "65a1b2c3d4e5f6789012345c",
+        "productName": "Amoxicillin",
+        "productImage": "https://example.com/images/amoxicillin-thumb.jpg",
+        "productType": "medication",
+        "quantity": 3,
+        "unitPrice": 15.99,
+        "totalPrice": 47.97,
+        "isSaved": false
+      }
+    ],
+    "subtotal": 47.97,
+    "discount": 0,
+    "tax": 1.44,
+    "shippingCharges": 10.00,
+    "totalAmount": 59.41,
+    "couponCode": null,
+    "updatedAt": "2025-01-15T14:35:00.000Z"
   }
 }
 ```
 
-#### Remove Item from Cart
-**DELETE** `/patient/cart/items/:itemId`
+**Error Responses:**
+- `400` - Invalid quantity or validation failed
+- `401` - Unauthorized
+- `404` - Cart not found or item not found in cart
 
-**Headers:** `Authorization: Bearer <token>`
+**Notes:**
+- If quantity is set to 0 or negative, the item is automatically removed from cart
+- Cart totals are automatically recalculated after quantity update
+- If cart becomes empty after update, coupon and discount are cleared
+
+---
+
+#### Remove Item from Cart
+**DELETE** `/api/v1/patient/cart/items/:itemId`
+
+Remove a specific item from the shopping cart.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `itemId` (path) - Cart item ID (MongoDB ObjectId)
 
 **Response:**
 ```json
@@ -6477,17 +8598,48 @@ Manage your shopping cart items before checkout.
   "success": true,
   "message": "Item removed from cart",
   "data": {
-    "items": [...],
-    "subtotal": 0,
-    "totalAmount": 0
+    "_id": "cart_id",
+    "patient": "patient_id",
+    "items": [
+      {
+        "_id": "cart_item_id_2",
+        "productId": "65a1b2c3d4e5f6789012345d",
+        "productName": "Paracetamol",
+        "productImage": "https://example.com/images/paracetamol-thumb.jpg",
+        "productType": "medication",
+        "quantity": 1,
+        "unitPrice": 25.50,
+        "totalPrice": 25.50,
+        "isSaved": false
+      }
+    ],
+    "subtotal": 25.50,
+    "discount": 0,
+    "tax": 0.77,
+    "shippingCharges": 10.00,
+    "totalAmount": 36.27,
+    "couponCode": null,
+    "updatedAt": "2025-01-15T14:40:00.000Z"
   }
 }
 ```
 
-#### Clear Cart
-**DELETE** `/patient/cart`
+**Error Responses:**
+- `401` - Unauthorized
+- `404` - Cart not found or item not found
 
-**Headers:** `Authorization: Bearer <token>`
+**Notes:**
+- If cart becomes empty after removal, coupon and discount are automatically cleared
+- Cart totals are automatically recalculated
+
+---
+
+#### Clear Cart
+**DELETE** `/api/v1/patient/cart`
+
+Remove all items from the shopping cart and clear applied coupons.
+
+**Headers:** `Authorization: Bearer <patient_token>`
 
 **Response:**
 ```json
@@ -6495,22 +8647,41 @@ Manage your shopping cart items before checkout.
   "success": true,
   "message": "Cart cleared successfully",
   "data": {
+    "_id": "cart_id",
+    "patient": "patient_id",
     "items": [],
     "subtotal": 0,
-    "totalAmount": 0
+    "discount": 0,
+    "tax": 0,
+    "shippingCharges": 0,
+    "totalAmount": 0,
+    "couponCode": null,
+    "updatedAt": "2025-01-15T14:45:00.000Z"
   }
 }
 ```
 
+**Error Responses:**
+- `401` - Unauthorized
+- `404` - Cart not found
+
 **Notes:**
-- Removes all items from cart
-- Clears applied coupon
-- Saved items are also removed
+- Removes all items from cart (including saved items)
+- Clears applied coupon code
+- Resets all totals to 0
+- Cart document is not deleted, only cleared
+
+---
 
 #### Save Item for Later
-**POST** `/patient/cart/items/:itemId/save`
+**POST** `/api/v1/patient/cart/items/:itemId/save`
 
-**Headers:** `Authorization: Bearer <token>`
+Mark a cart item as "saved for later". Saved items are not included in checkout calculations but remain in the cart.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `itemId` (path) - Cart item ID (MongoDB ObjectId)
 
 **Response:**
 ```json
@@ -6518,19 +8689,104 @@ Manage your shopping cart items before checkout.
   "success": true,
   "message": "Item saved for later",
   "data": {
-    "items": [...]
+    "_id": "cart_id",
+    "patient": "patient_id",
+    "items": [
+      {
+        "_id": "cart_item_id_1",
+        "productId": "65a1b2c3d4e5f6789012345c",
+        "productName": "Amoxicillin",
+        "productImage": "https://example.com/images/amoxicillin-thumb.jpg",
+        "productType": "medication",
+        "quantity": 2,
+        "unitPrice": 15.99,
+        "totalPrice": 31.98,
+        "isSaved": true
+      }
+    ],
+    "subtotal": 0,
+    "discount": 0,
+    "tax": 0,
+    "shippingCharges": 0,
+    "totalAmount": 0,
+    "couponCode": null,
+    "updatedAt": "2025-01-15T14:50:00.000Z"
   }
 }
 ```
 
+**Error Responses:**
+- `401` - Unauthorized
+- `404` - Cart not found or item not found
+
 **Notes:**
-- Saved items are not included in checkout
-- Can be moved back to cart later
+- Saved items (`isSaved: true`) are not included in subtotal, tax, or total calculations
+- Saved items remain in cart and can be moved back to active cart later
+- If all items are saved, cart totals become 0
+
+---
+
+#### Unsave Item (Move Back to Cart)
+**DELETE** `/api/v1/patient/cart/items/:itemId/save`
+
+Move a saved item back to the active cart. This will include the item in checkout calculations again.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `itemId` (path) - Cart item ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Item moved back to cart",
+  "data": {
+    "_id": "cart_id",
+    "patient": "patient_id",
+    "items": [
+      {
+        "_id": "cart_item_id_1",
+        "productId": "65a1b2c3d4e5f6789012345c",
+        "productName": "Amoxicillin",
+        "productImage": "https://example.com/images/amoxicillin-thumb.jpg",
+        "productType": "medication",
+        "quantity": 2,
+        "unitPrice": 15.99,
+        "totalPrice": 31.98,
+        "isSaved": false
+      }
+    ],
+    "subtotal": 31.98,
+    "discount": 0,
+    "tax": 0.96,
+    "shippingCharges": 10.00,
+    "totalAmount": 42.94,
+    "couponCode": null,
+    "updatedAt": "2025-01-15T15:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Item is not saved for later (already active in cart)
+- `401` - Unauthorized
+- `404` - Cart not found or item not found
+
+**Notes:**
+- Moves saved item back to active cart (`isSaved: false`)
+- Item will be included in subtotal, tax, and total calculations
+- Cart totals are automatically recalculated after unsaving
+- If item was already active (not saved), returns 400 error
+
+---
 
 #### Apply Coupon
-**POST** `/patient/cart/coupon`
+**POST** `/api/v1/patient/cart/coupon`
 
-**Headers:** `Authorization: Bearer <token>`
+Apply a coupon code to the cart for discount.
+
+**Headers:** `Authorization: Bearer <patient_token>`
 
 **Request Body:**
 ```json
@@ -6539,38 +8795,61 @@ Manage your shopping cart items before checkout.
 }
 ```
 
+**Required Fields:**
+- `couponCode` - Coupon code string (case-insensitive)
+
 **Response:**
 ```json
 {
   "success": true,
   "message": "Coupon applied successfully",
   "data": {
-    "cart": {
-      "subtotal": 1403.97,
-      "discount": 60.00,
-      "totalAmount": 1395.97,
-      "couponCode": "SAVE10"
-    },
-    "coupon": {
-      "code": "SAVE10",
-      "discountType": "percentage",
-      "discountValue": 10,
-      "discount": 60.00
-    }
+    "_id": "cart_id",
+    "patient": "patient_id",
+    "items": [
+      {
+        "_id": "cart_item_id_1",
+        "productId": "65a1b2c3d4e5f6789012345c",
+        "productName": "Amoxicillin",
+        "productType": "medication",
+        "quantity": 2,
+        "unitPrice": 15.99,
+        "totalPrice": 31.98,
+        "isSaved": false
+      }
+    ],
+    "subtotal": 31.98,
+    "discount": 3.20,
+    "tax": 0.86,
+    "shippingCharges": 10.00,
+    "totalAmount": 39.64,
+    "couponCode": "SAVE10",
+    "updatedAt": "2025-01-15T14:55:00.000Z"
   }
 }
 ```
 
+**Error Responses:**
+- `400` - Invalid coupon code or validation failed
+- `401` - Unauthorized
+- `404` - Cart not found or coupon not found/invalid
+- `409` - Coupon already applied or expired
+
 **Notes:**
 - Coupon code is case-insensitive
-- Validates minimum purchase amount
-- Checks validity dates and usage limits
-- Supports percentage and fixed discounts
+- Coupon must be valid, active, and not expired
+- Discount is calculated based on coupon rules
+- Only one coupon can be applied at a time
+- Cart totals are automatically recalculated after coupon application
+
+---
 
 #### Remove Coupon
-**DELETE** `/patient/cart/coupon`
+**DELETE** `/api/v1/patient/cart/coupon`
 
-**Headers:** `Authorization: Bearer <token>`
+Remove the applied coupon from the cart.
+
+**Headers:** `Authorization: Bearer <patient_token>`
 
 **Response:**
 ```json
@@ -6578,12 +8857,39 @@ Manage your shopping cart items before checkout.
   "success": true,
   "message": "Coupon removed",
   "data": {
-    "subtotal": 1403.97,
+    "_id": "cart_id",
+    "patient": "patient_id",
+    "items": [
+      {
+        "_id": "cart_item_id_1",
+        "productId": "65a1b2c3d4e5f6789012345c",
+        "productName": "Amoxicillin",
+        "productType": "medication",
+        "quantity": 2,
+        "unitPrice": 15.99,
+        "totalPrice": 31.98,
+        "isSaved": false
+      }
+    ],
+    "subtotal": 31.98,
     "discount": 0,
-    "totalAmount": 1443.97
+    "tax": 0.96,
+    "shippingCharges": 10.00,
+    "totalAmount": 42.94,
+    "couponCode": null,
+    "updatedAt": "2025-01-15T15:00:00.000Z"
   }
 }
 ```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `404` - Cart not found
+
+**Notes:**
+- Removes applied coupon code
+- Resets discount to 0
+- Cart totals are automatically recalculated
 
 ### Doctor's Note
 
@@ -6892,13 +9198,57 @@ Complete the purchase process with billing and payment.
       "orderNumber": "ORD202501151234567890",
       "items": [
         {
-          "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+          "_id": "order_item_1",
+          "productId": "65a1b2c3d4e5f6789012345c",
+          "productType": "medication",
+          "medicationName": "Amoxicillin",
+          "brand": "Cetaphill",
+          "originalPrice": 20.99,
+          "salePrice": 15.99,
+          "images": {
+            "thumbnail": "https://example.com/images/amoxicillin-thumb.jpg",
+            "gallery": [
+              "https://example.com/images/amoxicillin-1.jpg"
+            ]
+          },
+          "description": "Antibiotic medication used to treat various bacterial infections",
+          "dosage": "Capsule - 500mg",
+          "dosageOption": {
+            "name": "Capsule - 500mg",
+            "priceAdjustment": 0
+          },
+          "quantityOption": {
+            "name": "20 Tablets",
+            "priceAdjustment": 0
+          },
+          "generics": [
+            "Amoxicillin Trihydrate"
+          ],
           "quantity": 1,
-          "unitPrice": 78.99,
-          "totalPrice": 78.99
+          "unitPrice": 15.99,
+          "totalPrice": 15.99,
+          "status": "ordered"
         }
       ],
-      "shippingAddress": "address_id",
+      "shippingAddress": {
+        "_id": "address_id",
+        "type": "home",
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john.doe@example.com",
+        "fullName": "John Doe",
+        "phoneNumber": "9876543210",
+        "countryCode": "+91",
+        "addressLine1": "123 Main St",
+        "addressLine2": "Apt 4B",
+        "city": "Pune",
+        "state": "Maharashtra",
+        "postalCode": "987612",
+        "country": "India",
+        "isDefault": true,
+        "createdAt": "2025-01-10T10:00:00.000Z",
+        "updatedAt": "2025-01-10T10:00:00.000Z"
+      },
       "billingAddress": {
         "firstName": "John",
         "lastName": "Doe",
@@ -6943,30 +9293,343 @@ Complete the purchase process with billing and payment.
 - Billing address saved with order (same as shipping if checkbox checked)
 - Order comment saved in `notes` field
 
-### Orders
+### Order Management APIs
+
+Complete order management with unified create order API that handles all order types (cart, prescription, custom items).
 
 #### Get All Orders
-**GET** `/patient/orders?status=pending`
+**GET** `/api/v1/patient/orders?status=pending&paymentStatus=paid&startDate=2025-01-01&endDate=2025-01-31&page=1&limit=10`
+
+Get all orders for the logged-in patient (user) with optional filtering and pagination. Returns orders with product details populated.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Query Parameters:**
+- `status` (optional) - Filter by order status: `pending`, `confirmed`, `processing`, `shipped`, `delivered`, `cancelled`, `returned`
+- `paymentStatus` (optional) - Filter by payment status: `pending`, `paid`, `failed`, `refunded`
+- `startDate` (optional) - Filter orders from this date (ISO 8601 format, e.g., `2025-01-01`)
+- `endDate` (optional) - Filter orders until this date (ISO 8601 format, e.g., `2025-01-31`)
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Number of orders per page (default: 10, max: 100)
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "order_id_123",
+      "orderNumber": "ORD202501151234567890",
+      "patient": "patient_id_456",
+      "items": [
+        {
+          "_id": "order_item_1",
+          "productId": "65a1b2c3d4e5f6789012345c",
+          "productType": "medication",
+          "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+          "quantity": 2,
+          "unitPrice": 122.89,
+          "totalPrice": 245.78,
+          "status": "pending",
+          "product": {
+            "_id": "65a1b2c3d4e5f6789012345c",
+            "productName": "Cetaphil Gentle Skin Cleanser 250ml",
+            "brand": "Cetaphil",
+            "originalPrice": 150.00,
+            "salePrice": 122.89,
+            "images": {
+              "thumbnail": "https://example.com/images/cetaphil-thumb.jpg",
+              "gallery": []
+            },
+            "description": "Gentle skin cleanser",
+            "generics": [],
+            "category": "Skincare",
+            "stock": 100,
+            "status": "in_stock",
+            "visibility": true,
+            "isActive": true
+          }
+        }
+      ],
+      "shippingAddress": {
+        "_id": "address_id",
+        "type": "home",
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john.doe@example.com",
+        "fullName": "John Doe",
+        "phoneNumber": "9876543210",
+        "addressLine1": "123 Main Street",
+        "city": "Pune",
+        "state": "Maharashtra",
+        "postalCode": "411001"
+      },
+      "billingAddress": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john.doe@example.com",
+        "phoneNumber": "9876543210",
+        "streetAddress": "123 Main Street",
+        "city": "Pune",
+        "state": "Maharashtra",
+        "zipCode": "411001"
+      },
+      "billingAddressSameAsShipping": true,
+      "subtotal": 737.34,
+      "tax": 22.12,
+      "shippingCharges": 10.00,
+      "discount": 0,
+      "totalAmount": 769.46,
+      "status": "pending",
+      "paymentStatus": "pending",
+      "createdAt": "2025-01-15T10:30:00.000Z",
+      "updatedAt": "2025-01-15T10:30:00.000Z"
+    }
+  ],
+  "pagination": {
+    "total": 25,
+    "page": 1,
+    "limit": 10,
+    "pages": 3,
+    "hasNext": true,
+    "hasPrev": false
+  }
+}
+```
+
+**Notes:**
+- Returns paginated orders for the authenticated patient/user
+- Orders are sorted by creation date (newest first)
+- Each item includes full product details from Medicine collection
+- Shipping address is fully populated
+- Billing address is included (same as shipping if `billingAddressSameAsShipping` is true)
+- Pagination: Default page size is 10, maximum is 100 per page
+- Pagination object includes: `total` (total orders), `page` (current page), `limit` (items per page), `pages` (total pages), `hasNext` (has next page), `hasPrev` (has previous page)
+
+---
 
 #### Get Order by ID
-**GET** `/patient/orders/:id`
+**GET** `/api/v1/patient/orders/:id`
+
+Get a single order by ID with complete details including status and tracking information.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Order ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "order_id",
+    "orderNumber": "ORD202501151234567890",
+    "items": [...],
+    "subtotal": 737.34,
+    "tax": 22.12,
+    "shippingCharges": 10.00,
+    "discount": 0,
+    "totalAmount": 769.46,
+    "status": "pending",
+    "paymentStatus": "pending",
+    "trackingNumber": "TRACK123456",
+    "estimatedDelivery": "2025-01-20T10:00:00.000Z",
+    "shippingAddress": {...},
+    "billingAddress": {...},
+    "createdAt": "2025-01-15T10:30:00.000Z",
+    "updatedAt": "2025-01-15T10:30:00.000Z"
+  }
+}
+```
+
+**Note:** Status and tracking information are included in this response. No separate status/tracking endpoints needed.
 
 #### Create Order
-**POST** `/patient/orders`
+**POST** `/api/v1/patient/orders`
 
-**Headers:** `Authorization: Bearer <token>`
+Create a new order with multiple items. This unified API handles all order types (cart, prescription, or custom items) in one endpoint.
 
-**Option 1: Create Order from Cart**
+**Headers:** `Authorization: Bearer <patient_token>`
 
-**Request Body:**
+**Request Body (Unified Format):**
+```json
+{
+  "shippingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "alex.driver@example.com",
+    "phoneNumber": "+123 987654321",
+    "countryCode": "+1",
+    "addressLine1": "123 Main Street",
+    "addressLine2": "Apt 4B",
+    "city": "San Diego",
+    "state": "California",
+    "postalCode": "22434",
+    "country": "USA",
+    "type": "home"
+  },
+  "items": [
+    {
+      "productId": "65a1b2c3d4e5f6789012345c",
+      "productType": "medication",
+      "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+      "quantity": 2,
+      "unitPrice": 122.89,
+      "totalPrice": 245.78
+    },
+    {
+      "productId": "65a1b2c3d4e5f6789012345d",
+      "productType": "medication",
+      "medicationName": "Cetaphil Gentle Skin Cleanser 350ml",
+      "quantity": 2,
+      "unitPrice": 122.89,
+      "totalPrice": 245.78
+    },
+    {
+      "productId": "65a1b2c3d4e5f6789012345e",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "quantity": 2,
+      "unitPrice": 122.89,
+      "totalPrice": 245.78
+    }
+  ],
+  "subtotal": 737.34,
+  "tax": 22.12,
+  "shippingCharges": 10.00,
+  "discount": 0,
+  "totalAmount": 769.46,
+  "billingAddressSameAsShipping": true,
+  "orderComment": "Please deliver before 5 PM",
+  "createAccount": false
+}
+```
+
+**Alternative: Use Existing Address (by ID)**
+If you want to use an existing saved address:
+```json
+{
+  "shippingAddressId": "65a1b2c3d4e5f6789012345a",
+  "items": [...],
+  "billingAddressSameAsShipping": true
+}
+```
+
+**Alternative: Different Billing Address**
+If `billingAddressSameAsShipping` is `false`, billing address fields are optional:
+```json
+{
+  "shippingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "alex.driver@example.com",
+    "phoneNumber": "+123 987654321",
+    "addressLine1": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "postalCode": "22434"
+  },
+  "billingAddressSameAsShipping": false,
+  "billingAddress": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john@example.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "456 Billing St",
+    "city": "Los Angeles",
+    "zipCode": "90001"
+  },
+  "items": [...]
+}
+```
+
+**Alternative: Create from Cart**
+If you want to create order from cart items, use:
 ```json
 {
   "createFromCart": true,
-  "shippingAddressId": "address_id",
+  "shippingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "alex.driver@example.com",
+    "phoneNumber": "+123 987654321",
+    "addressLine1": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "postalCode": "22434"
+  },
   "billingAddressSameAsShipping": true,
   "orderComment": "Please deliver before 5 PM"
 }
 ```
+
+**Alternative: Create from Prescription**
+If you want to create order from prescription, use:
+```json
+{
+  "prescriptionId": "65a1b2c3d4e5f6789012345b",
+  "shippingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "alex.driver@example.com",
+    "phoneNumber": "+123 987654321",
+    "addressLine1": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "postalCode": "22434"
+  },
+  "shippingCharges": 50.00,
+  "discount": 0,
+  "orderComment": "Prescription order"
+}
+```
+
+**Required Fields:**
+- `shippingAddress` OR `shippingAddressId` - **One of these is required:**
+  - `shippingAddress` - Shipping address object (will be created/saved) with **required fields:**
+    - `firstName` - First name - **Required**
+    - `lastName` - Last name - **Required**
+    - `email` - Email address - **Required**
+    - `phoneNumber` or `phone` - Phone number - **Required**
+    - `addressLine1` or `streetAddress` or `streetAddress1` - Street address line 1 - **Required**
+    - `city` - City - **Required**
+    - `state` or `stateProvince` - State/Province - **Required**
+    - `postalCode` or `zipCode` - Postal/Zip code - **Required**
+    - **Optional fields:**
+      - `addressLine2` or `streetAddress2` - Address line 2 (optional)
+      - `countryCode` - Country code (optional, default: "+91")
+      - `country` - Country (optional, default: "India")
+      - `type` - Address type: "home", "work", or "other" (optional, default: "home")
+      - `fullName` - Full name (optional, will be auto-generated from firstName + lastName)
+  - `shippingAddressId` - Existing address ID (MongoDB ObjectId) - Use this if address already exists
+- `items` - Array of order items (required if not using `createFromCart` or `prescriptionId`), each item must have:
+  - `productId` - **Medicine ID from Medicine collection** (MongoDB ObjectId) - **Required**
+  - `medicationName` - Name of the medication/product - **Required**
+  - `quantity` - Quantity to order (min: 1) - **Required**
+  - `unitPrice` - Price per unit - **Required**
+  - `totalPrice` - Total price for this item (quantity × unitPrice) - **Required**
+
+**Optional Fields:**
+- `createFromCart` - Boolean (default: false). If `true`, items will be taken from cart
+- `prescriptionId` - Prescription ID (MongoDB ObjectId). If provided, items will be taken from prescription
+- `subtotal` - Order subtotal (will be calculated from items if not provided)
+- `tax` - Tax amount (will be calculated as 3% of subtotal for cart, 18% for custom/prescription if not provided)
+- `shippingCharges` - Shipping charges (default: 10.00 for cart orders, 50.00 for custom/prescription orders)
+- `discount` - Discount amount (default: 0)
+- `totalAmount` - Total amount (will be calculated if not provided: subtotal + tax + shippingCharges - discount)
+- `billingAddressSameAsShipping` - Boolean (default: true). If `true`, billing address is automatically copied from shipping address (no need to send `billingAddress` separately)
+- `billingAddress` - Billing address object (optional, only needed if `billingAddressSameAsShipping` is `false`):
+  - `firstName` - First name (required if billing address different)
+  - `lastName` - Last name (required if billing address different)
+  - `email` - Email address (optional)
+  - `phoneNumber` or `phone` - Phone number (optional)
+  - `streetAddress` or `addressLine1` - Street address line 1 (optional)
+  - `streetAddress2` or `addressLine2` - Street address line 2 (optional)
+  - `city` - City (required if billing address different)
+  - `state` or `stateProvince` - State/Province (optional)
+  - `zipCode` or `postalCode` - Zip/Postal code (required if billing address different)
+- `orderComment` or `notes` - Order comment/notes
 
 **Response:**
 ```json
@@ -6980,50 +9643,92 @@ Complete the purchase process with billing and payment.
     "items": [
       {
         "_id": "order_item_1",
-        "productId": "product_123",
+        "productId": "65a1b2c3d4e5f6789012345c",
         "productType": "medication",
         "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+        "brand": "Cetaphil",
+        "originalPrice": 150.00,
+        "salePrice": 122.89,
+        "images": {
+          "thumbnail": "https://example.com/images/cetaphil-250ml-thumb.jpg",
+          "gallery": [
+            "https://example.com/images/cetaphil-250ml-1.jpg",
+            "https://example.com/images/cetaphil-250ml-2.jpg"
+          ]
+        },
+        "description": "Gentle skin cleanser for daily use",
+        "dosage": null,
+        "dosageOption": null,
+        "quantityOption": null,
+        "generics": [],
         "quantity": 2,
-        "unitPrice": 78.99,
-        "totalPrice": 157.98,
-        "status": "ordered"
+        "unitPrice": 122.89,
+        "totalPrice": 245.78,
+        "status": "pending"
       },
       {
         "_id": "order_item_2",
-        "productId": "product_456",
+        "productId": "65a1b2c3d4e5f6789012345d",
         "productType": "medication",
-        "medicationName": "Paracetamol 500mg Tablets",
-        "quantity": 1,
-        "unitPrice": 25.50,
-        "totalPrice": 25.50,
-        "status": "ordered"
+        "medicationName": "Cetaphil Gentle Skin Cleanser 350ml",
+        "brand": "Cetaphil",
+        "originalPrice": 200.00,
+        "salePrice": 122.89,
+        "images": {
+          "thumbnail": "https://example.com/images/cetaphil-350ml-thumb.jpg",
+          "gallery": []
+        },
+        "description": "Gentle skin cleanser for daily use",
+        "quantity": 2,
+        "unitPrice": 122.89,
+        "totalPrice": 245.78,
+        "status": "pending"
+      },
+      {
+        "_id": "order_item_3",
+        "productId": "65a1b2c3d4e5f6789012345e",
+        "productType": "doctors_note",
+        "medicationName": "Doctor's Note - Excuse Note",
+        "quantity": 2,
+        "unitPrice": 122.89,
+        "totalPrice": 245.78,
+        "status": "pending"
       }
     ],
     "shippingAddress": {
       "_id": "address_id",
       "type": "home",
-      "fullName": "John Doe",
-      "addressLine1": "123 Main Street",
-      "city": "Pune",
-      "state": "Maharashtra",
-      "postalCode": "411001"
-    },
-    "billingAddress": {
       "firstName": "John",
       "lastName": "Doe",
       "email": "john.doe@example.com",
+      "fullName": "John Doe",
       "phoneNumber": "9876543210",
-      "streetAddress": "123 Main Street",
+      "countryCode": "+91",
+      "addressLine1": "123 Main Street",
+      "addressLine2": "Apt 4B",
       "city": "Pune",
       "state": "Maharashtra",
-      "zipCode": "411001"
+      "postalCode": "411001",
+      "country": "India",
+      "isDefault": true
+    },
+    "billingAddress": {
+      "firstName": "Alex",
+      "lastName": "Driver",
+      "email": "username@gmail.com",
+      "phoneNumber": "+123 987654321",
+      "streetAddress": "123 Main Street",
+      "streetAddress2": "Apt 4B",
+      "city": "San Diego",
+      "state": "California",
+      "zipCode": "22434"
     },
     "billingAddressSameAsShipping": true,
-    "subtotal": 222.48,
-    "discount": 22.25,
-    "tax": 6.67,
+    "subtotal": 737.34,
+    "discount": 0,
+    "tax": 22.12,
     "shippingCharges": 10.00,
-    "totalAmount": 216.90,
+    "totalAmount": 769.46,
     "status": "pending",
     "paymentStatus": "pending",
     "notes": "Please deliver before 5 PM",
@@ -7033,92 +9738,62 @@ Complete the purchase process with billing and payment.
 }
 ```
 
-**Option 2: Create Order from Prescription**
+**Error Responses:**
+- `400` - Validation failed (missing required fields, invalid productId, empty cart, etc.)
+- `401` - Unauthorized
+- `404` - Address not found, Prescription not found, or Patient profile not found
 
-**Request Body:**
-```json
-{
-  "prescriptionId": "prescription_id",
-  "shippingAddressId": "address_id",
-  "shippingCharges": 50.00,
-  "discount": 0,
-  "orderComment": "Prescription order"
-}
-```
+**Notes:**
+- **Unified API**: One API handles all order types (cart, prescription, custom items)
+- **Product ID Required**: All items must have valid Medicine `_id` from Medicine collection
+- **Auto Product Details**: Product details (brand, images, description, generics) are automatically fetched using `productId`
+- **Product Details Snapshot**: All product details are saved as a snapshot at order creation time
+- **Auto Calculations**: Tax and totals are calculated automatically if not provided
+- **Cart Clearing**: Cart is automatically cleared when `createFromCart: true` is used
+- **Billing Address**: Auto-filled from shipping address if `billingAddressSameAsShipping: true`
 
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Order created successfully",
-  "data": {
-    "_id": "order_id_124",
-    "orderNumber": "ORD202501151234567891",
-    "patient": "patient_id_456",
-    "prescription": {
-      "_id": "prescription_id",
-      "medications": [...]
-    },
-    "items": [
-      {
-        "_id": "order_item_3",
-        "prescriptionItem": "prescription_id",
-        "medicationName": "Paracetamol",
-        "quantity": 2,
-        "unitPrice": 100,
-        "totalPrice": 200,
-        "status": "pending"
-      }
-    ],
-    "shippingAddress": {...},
-    "billingAddress": {...},
-    "subtotal": 200.00,
-    "discount": 0,
-    "tax": 36.00,
-    "shippingCharges": 50.00,
-    "totalAmount": 286.00,
-    "status": "pending",
-    "notes": "Prescription order"
-  }
-}
-```
+**Note:** If `billingAddressSameAsShipping` is `true`, billing address will be automatically copied from shipping address. If `false`, `billingAddress` object is required.
 
-**Option 3: Create Order with Custom Items**
+**Required Fields:**
+- `shippingAddressId` - Address ID for delivery (MongoDB ObjectId)
+- `items` - Array of order items, each item must have:
+  - `productId` - **Medicine ID from Medicine collection** (MongoDB ObjectId) - **Required**. This must be a valid `_id` from the Medicine model/collection.
+  - `medicationName` - Name of the medication/product
+  - `quantity` - Quantity to order (min: 1)
+  - `unitPrice` - Price per unit
+  - `totalPrice` - Total price for this item (quantity × unitPrice)
 
-**Request Body:**
-```json
-{
-  "shippingAddressId": "address_id",
-  "items": [
-    {
-      "medicationName": "Paracetamol 500mg",
-      "quantity": 2,
-      "unitPrice": 50,
-      "totalPrice": 100
-    },
-    {
-      "medicationName": "Aspirin 100mg",
-      "quantity": 1,
-      "unitPrice": 30,
-      "totalPrice": 30
-    }
-  ],
-  "shippingCharges": 50.00,
-  "discount": 10.00,
-  "billingAddressSameAsShipping": false,
-  "billingAddress": {
-    "firstName": "Jane",
-    "lastName": "Doe",
-    "email": "jane.doe@example.com",
-    "phoneNumber": "9876543211",
-    "streetAddress": "456 Oak Avenue",
-    "city": "Mumbai",
-    "state": "Maharashtra",
-    "zipCode": "400001"
-  },
-  "orderComment": "Custom order with different billing address"
-}
-```
+**Optional Fields in Items:**
+- `productType` - Type: `medication`, `doctors_note`, or `other` (default: `medication`)
+- `brand` - Brand name (will be auto-fetched if productId provided)
+- `originalPrice` - Original price (will be auto-fetched if productId provided)
+- `salePrice` - Sale price (will be auto-fetched if productId provided)
+- `images` - Product images (will be auto-fetched if productId provided)
+- `description` - Product description (will be auto-fetched if productId provided)
+- `dosage` - Dosage information
+- `dosageOption` - Dosage option details
+- `quantityOption` - Quantity option details
+- `generics` - Array of generic names (will be auto-fetched if productId provided)
+
+**Optional Fields:**
+- `subtotal` - Order subtotal (will be calculated from items if not provided)
+- `tax` - Tax amount (will be calculated as 3% of subtotal if not provided)
+- `shippingCharges` - Shipping charges (default: 10.00 for cart orders, 50.00 for custom orders)
+- `discount` - Discount amount (default: 0)
+- `totalAmount` - Total amount (will be calculated if not provided: subtotal + tax + shippingCharges - discount)
+- `billingAddressSameAsShipping` - Boolean (default: true). If `true`, billing address is automatically copied from shipping address (no need to send `billingAddress` separately)
+- `billingAddress` - Billing address object (optional, only needed if `billingAddressSameAsShipping` is `false`):
+  - `firstName` - First name (optional)
+  - `lastName` - Last name (optional)
+  - `email` - Email address (optional)
+  - `phoneNumber` or `phone` - Phone number (optional)
+  - `streetAddress` or `addressLine1` - Street address line 1 (optional)
+  - `streetAddress2` or `addressLine2` - Street address line 2 (optional)
+  - `city` - City (optional)
+  - `state` or `stateProvince` - State/Province (optional)
+  - `zipCode` or `postalCode` - Zip/Postal code (optional)
+- `orderComment` or `notes` - Order comment/notes
+- `createAccount` - Boolean (default: false). If `true`, indicates user wants to create an account for later (for guest checkout scenarios)
 
 **Response:**
 ```json
@@ -7130,20 +9805,73 @@ Complete the purchase process with billing and payment.
     "orderNumber": "ORD202501151234567892",
     "items": [
       {
-        "medicationName": "Paracetamol 500mg",
+        "_id": "order_item_4",
+        "productId": "65a1b2c3d4e5f6789012345a",
+        "productType": "medication",
+        "medicationName": "Paracetamol",
+        "brand": "Generic",
+        "originalPrice": 50.00,
+        "salePrice": 50.00,
+        "images": {
+          "thumbnail": "https://example.com/images/paracetamol-thumb.jpg",
+          "gallery": []
+        },
+        "description": "Pain reliever and fever reducer",
+        "dosage": "Tablet - 500mg",
+        "dosageOption": null,
+        "quantityOption": null,
+        "generics": [
+          "Acetaminophen"
+        ],
         "quantity": 2,
         "unitPrice": 50,
         "totalPrice": 100,
         "status": "pending"
       },
       {
-        "medicationName": "Aspirin 100mg",
+        "_id": "order_item_5",
+        "productId": "65a1b2c3d4e5f6789012345b",
+        "productType": "medication",
+        "medicationName": "Aspirin",
+        "brand": "Generic",
+        "originalPrice": 30.00,
+        "salePrice": 30.00,
+        "images": {
+          "thumbnail": "https://example.com/images/aspirin-thumb.jpg",
+          "gallery": []
+        },
+        "description": "Anti-inflammatory medication",
+        "dosage": "Tablet - 100mg",
+        "dosageOption": null,
+        "quantityOption": null,
+        "generics": [
+          "Acetylsalicylic Acid"
+        ],
         "quantity": 1,
         "unitPrice": 30,
         "totalPrice": 30,
         "status": "pending"
       }
     ],
+    "shippingAddress": {
+      "_id": "address_id",
+      "type": "home",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "fullName": "John Doe",
+      "phoneNumber": "9876543210",
+      "countryCode": "+91",
+      "addressLine1": "123 Main Street",
+      "addressLine2": "Apt 4B",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "postalCode": "411001",
+      "country": "India",
+      "isDefault": true,
+      "createdAt": "2025-01-10T10:00:00.000Z",
+      "updatedAt": "2025-01-10T10:00:00.000Z"
+    },
     "billingAddress": {
       "firstName": "Jane",
       "lastName": "Doe",
@@ -7161,10 +9889,25 @@ Complete the purchase process with billing and payment.
     "shippingCharges": 50.00,
     "totalAmount": 193.40,
     "status": "pending",
-    "notes": "Custom order with different billing address"
+    "paymentStatus": "pending",
+    "notes": "Custom order with different billing address",
+    "createdAt": "2025-01-15T10:30:00.000Z",
+    "updatedAt": "2025-01-15T10:30:00.000Z"
   }
 }
 ```
+
+**Error Responses:**
+- `400` - Validation failed, product ID missing, or address not found
+- `401` - Unauthorized
+- `404` - Address not found or product not found
+
+**Notes:**
+- **Product ID Required**: All items must have a valid `productId`. If not provided, the system will try to find the medicine by name, but it's recommended to always provide `productId`.
+- **Auto-fetch Product Details**: If `productId` is provided, product details (brand, images, description, generics, prices) will be automatically fetched and saved with the order.
+- **Items Array**: Order items are always returned as an array, even if empty.
+- **Address Population**: Shipping address is fully populated with all fields in the response.
+- **Product Snapshot**: All product details are saved as a snapshot at order creation time for historical accuracy.
 
 **Required Fields:**
 - `shippingAddressId` - Address ID for delivery (MongoDB ObjectId)
@@ -7177,81 +9920,204 @@ Complete the purchase process with billing and payment.
 - `prescriptionId` - Prescription ID (MongoDB ObjectId)
 
 **Required for Custom Items Order:**
-- `items` - Array of order items with `medicationName`, `quantity`, `unitPrice`, `totalPrice`
+- `items` - Array of order items with complete product details including:
+  - `productId` - Product/Medicine ID
+  - `productType` - Type: `medication`, `doctors_note`, or `other`
+  - `medicationName` - Name of the medication/product
+  - `brand` - Brand name
+  - `originalPrice` - Original price (snapshot at order time)
+  - `salePrice` - Sale price (snapshot at order time)
+  - `images` - Product images (thumbnail and gallery)
+  - `description` - Product description
+  - `dosage` - Selected dosage
+  - `dosageOption` - Dosage option details
+  - `quantityOption` - Quantity option details
+  - `generics` - Array of generic names
+  - `quantity` - Quantity ordered
+  - `unitPrice` - Unit price at order time
+  - `totalPrice` - Total price for this item
+  - `status` - Item status: `pending`, `added`, `saved`, `ordered`
 
 **Optional Fields:**
 - `billingAddressSameAsShipping` - Boolean (default: true)
-- `billingAddress` - Billing address object (required if `billingAddressSameAsShipping` is false)
+- `billingAddress` - Billing address object (optional, only needed if `billingAddressSameAsShipping` is `false`)
+- `createAccount` - Boolean (default: false). If `true`, indicates user wants to create an account for later
 - `shippingCharges` - Override shipping charges
 - `discount` - Discount amount
 - `orderComment` - Order notes/comment
 
 **Notes:**
-- **Cart-based orders**: When `createFromCart: true`, cart items are converted to order items and cart is automatically cleared (saved items are retained)
+- **Cart-based orders**: When `createFromCart: true`, cart items are converted to order items and cart is automatically cleared (saved items are retained). Product details (brand, images, description, etc.) are automatically fetched and saved with the order.
 - **Prescription orders**: Items are automatically created from prescription medications
 - **Custom orders**: Items are created from provided `items` array
+- **Product Details Snapshot**: All product details (brand, images, prices, description, dosage, generics) are saved as a snapshot at the time of order creation. This ensures historical accuracy even if product information changes later.
 - Cart operations (clearing) happen automatically when order is created from cart
 - Billing address is auto-filled from shipping address if not provided
 - Tax is calculated automatically (3% for cart orders, 18% for prescription/custom orders)
 
-#### Delete Order Item
-**DELETE** `/patient/orders/:orderId/items/:itemId`
+**Note:** Orders are immutable after creation. To modify an order, create a new order with the desired items. Status and tracking information are included in the `getOrderById` response.
 
-Delete an item from a pending order.
+---
+
+#### Update Order Notes
+**PUT** `/api/v1/patient/orders/:id/notes`
+
+Update notes/comments for a pending or confirmed order.
+
+**Headers:** `Authorization: Bearer <patient_token>`
 
 **Parameters:**
-- `orderId` (path) - Order ID
-- `itemId` (path) - Order item ID (MongoDB ObjectId)
+- `id` (path) - Order ID (MongoDB ObjectId)
+
+**Request Body:**
+```json
+{
+  "notes": "Please deliver before 5 PM. Ring the doorbell twice."
+}
+```
 
 **Response:**
 ```json
 {
   "success": true,
-  "message": "Item removed from order",
+  "message": "Order notes updated successfully",
   "data": {
-    /* Updated order object */
+    "_id": "order_id_123",
+    "orderNumber": "ORD202501151234567890",
+    "patient": "patient_id_456",
+    "items": [
+      {
+        "_id": "order_item_1",
+        "productId": "65a1b2c3d4e5f6789012345c",
+        "productType": "medication",
+        "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+        "quantity": 2,
+        "unitPrice": 122.89,
+        "totalPrice": 245.78,
+        "status": "pending",
+        "product": {
+          "_id": "65a1b2c3d4e5f6789012345c",
+          "productName": "Cetaphil Gentle Skin Cleanser 250ml",
+          "brand": "Cetaphil",
+          "originalPrice": 150.00,
+          "salePrice": 122.89,
+          "images": {...},
+          "description": "Gentle skin cleanser",
+          "generics": [],
+          "category": "Skincare",
+          "stock": 100,
+          "status": "in_stock",
+          "visibility": true,
+          "isActive": true
+        }
+      }
+    ],
+    "shippingAddress": {
+      "_id": "address_id",
+      "type": "home",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "fullName": "John Doe",
+      "phoneNumber": "9876543210",
+      "addressLine1": "123 Main Street",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "postalCode": "411001"
+    },
+    "billingAddress": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "phoneNumber": "9876543210",
+      "streetAddress": "123 Main Street",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "zipCode": "411001"
+    },
+    "billingAddressSameAsShipping": true,
+    "subtotal": 737.34,
+    "tax": 22.12,
+    "shippingCharges": 10.00,
+    "discount": 0,
+    "totalAmount": 769.46,
+    "status": "pending",
+    "paymentStatus": "pending",
+    "notes": "Please deliver before 5 PM. Ring the doorbell twice.",
+    "createdAt": "2025-01-15T10:30:00.000Z",
+    "updatedAt": "2025-01-15T11:00:00.000Z"
   }
 }
 ```
 
 **Error Responses:**
-- `400` - Cannot modify order in current status (order must be 'pending')
-- `400` - Cannot delete the last item from order
-- `404` - Order not found or Order item not found
+- `400` - Invalid order ID, order status not pending/confirmed, or validation failed
+- `401` - Unauthorized
+- `404` - Order not found
 
-#### Save Order Item
-**POST** `/patient/orders/:orderId/items/:itemId/save`
+**Notes:**
+- Only works for `pending` or `confirmed` orders
+- Notes can be updated multiple times
+- Maximum length: 1000 characters
+- Notes are optional (can be empty string to clear notes)
 
-Mark an order item as saved for later.
+---
+
+#### Delete Order Item
+**DELETE** `/api/v1/patient/orders/:orderId/items/:itemId`
+
+Delete an item from a pending order.
+
+**Headers:** `Authorization: Bearer <patient_token>`
 
 **Parameters:**
-- `orderId` (path) - Order ID
+- `orderId` (path) - Order ID (MongoDB ObjectId)
 - `itemId` (path) - Order item ID (MongoDB ObjectId)
 
 **Response:**
 ```json
 {
   "success": true,
-  "message": "Item saved for later",
+  "message": "Order item deleted successfully",
   "data": {
-    /* Updated order object */
+    "_id": "order_id_123",
+    "orderNumber": "ORD202501151234567890",
+    "items": [...],
+    "subtotal": 491.56,
+    "tax": 14.75,
+    "totalAmount": 516.31,
+    "status": "pending"
   }
 }
 ```
 
+**Error Responses:**
+- `400` - Order status not pending, cannot delete last item
+- `401` - Unauthorized
+- `404` - Order not found or item not found
+
+**Notes:**
+- Only works for `pending` orders
+- Cannot delete the last item (cancel order instead)
+- Totals are automatically recalculated after deletion
+
+---
+
 #### Update Order Item Quantity
-**PUT** `/patient/orders/:orderId/items/:itemId/quantity`
+**PUT** `/api/v1/patient/orders/:orderId/items/:itemId/quantity`
 
 Update the quantity of an item in a pending order.
 
+**Headers:** `Authorization: Bearer <patient_token>`
+
 **Parameters:**
-- `orderId` (path) - Order ID
+- `orderId` (path) - Order ID (MongoDB ObjectId)
 - `itemId` (path) - Order item ID (MongoDB ObjectId)
 
 **Request Body:**
 ```json
 {
-  "quantity": 3
+  "quantity": 5
 }
 ```
 
@@ -7259,24 +10125,370 @@ Update the quantity of an item in a pending order.
 ```json
 {
   "success": true,
-  "message": "Quantity updated",
+  "message": "Order item quantity updated successfully",
   "data": {
-    /* Updated order object */
+    "_id": "order_id_123",
+    "orderNumber": "ORD202501151234567890",
+    "items": [
+      {
+        "_id": "order_item_1",
+        "productId": "65a1b2c3d4e5f6789012345c",
+        "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+        "quantity": 5,
+        "unitPrice": 122.89,
+        "totalPrice": 614.45,
+        "status": "pending",
+        "product": {...}
+      }
+    ],
+    "subtotal": 1228.90,
+    "tax": 36.87,
+    "totalAmount": 1275.77,
+    "status": "pending"
   }
 }
 ```
 
 **Error Responses:**
-- `400` - Cannot modify order in current status (order must be 'pending')
-- `404` - Order not found or Order item not found
+- `400` - Order status not pending, quantity must be at least 1, or validation failed
+- `401` - Unauthorized
+- `404` - Order not found or item not found
 
-#### Reorder
-**POST** `/patient/orders/:orderId/reorder`
+**Notes:**
+- Only works for `pending` orders
+- Quantity must be at least 1
+- Totals are automatically recalculated after update
 
-Create a new order from an existing order (reorder all items).
+---
+
+#### Save Order Item
+**POST** `/api/v1/patient/orders/:orderId/items/:itemId/save`
+
+Mark an order item as saved for later (only for pending orders). Saved items are excluded from order totals.
+
+**Headers:** `Authorization: Bearer <patient_token>`
 
 **Parameters:**
-- `orderId` (path) - Original order ID
+- `orderId` (path) - Order ID (MongoDB ObjectId)
+- `itemId` (path) - Order item ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Order item saved for later",
+  "data": {
+    "_id": "order_id_123",
+    "orderNumber": "ORD202501151234567890",
+    "items": [
+      {
+        "_id": "order_item_1",
+        "productId": "65a1b2c3d4e5f6789012345c",
+        "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+        "quantity": 2,
+        "unitPrice": 122.89,
+        "totalPrice": 245.78,
+        "status": "saved",
+        "isSaved": true,
+        "product": {...}
+      }
+    ],
+    "subtotal": 491.56,
+    "tax": 14.75,
+    "totalAmount": 516.31,
+    "status": "pending"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Order status not pending or item already saved
+- `401` - Unauthorized
+- `404` - Order not found or item not found
+
+**Notes:**
+- Only works for `pending` orders
+- Saved items are excluded from subtotal calculation
+- Totals are automatically recalculated
+
+---
+
+#### Unsave Order Item
+**DELETE** `/api/v1/patient/orders/:orderId/items/:itemId/save`
+
+Move a saved order item back to active (only for pending orders). Item will be included in order totals again.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `orderId` (path) - Order ID (MongoDB ObjectId)
+- `itemId` (path) - Order item ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Order item moved back to active",
+  "data": {
+    "_id": "order_id_123",
+    "orderNumber": "ORD202501151234567890",
+    "items": [
+      {
+        "_id": "order_item_1",
+        "productId": "65a1b2c3d4e5f6789012345c",
+        "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+        "quantity": 2,
+        "unitPrice": 122.89,
+        "totalPrice": 245.78,
+        "status": "pending",
+        "isSaved": false,
+        "product": {...}
+      }
+    ],
+    "subtotal": 737.34,
+    "tax": 22.12,
+    "totalAmount": 769.46,
+    "status": "pending"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Order status not pending or item not saved
+- `401` - Unauthorized
+- `404` - Order not found or item not found
+
+**Notes:**
+- Only works for `pending` orders
+- Unsaved items are included in subtotal calculation
+- Totals are automatically recalculated
+
+---
+
+#### Get Order Status
+**GET** `/api/v1/patient/orders/:id/status`
+
+Get order status and payment status.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Order ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "orderNumber": "ORD202501151234567890",
+    "status": "pending",
+    "paymentStatus": "pending",
+    "createdAt": "2025-01-15T10:30:00.000Z",
+    "updatedAt": "2025-01-15T10:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `404` - Order not found
+
+---
+
+#### Get Order Tracking
+**GET** `/api/v1/patient/orders/:id/tracking`
+
+Get order tracking information including tracking number, estimated delivery, and shipping address.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Order ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "orderNumber": "ORD202501151234567890",
+    "status": "shipped",
+    "paymentStatus": "paid",
+    "trackingNumber": "TRACK123456789",
+    "estimatedDelivery": "2025-01-20T18:00:00.000Z",
+    "deliveredAt": null,
+    "shippingAddress": {
+      "_id": "address_id",
+      "fullName": "John Doe",
+      "addressLine1": "123 Main Street",
+      "addressLine2": "Apt 4B",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "postalCode": "411001",
+      "country": "India",
+      "phoneNumber": "9876543210"
+    },
+    "createdAt": "2025-01-15T10:30:00.000Z",
+    "updatedAt": "2025-01-18T14:20:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `404` - Order not found
+
+**Notes:**
+- `trackingNumber` may be null if order hasn't been shipped yet
+- `estimatedDelivery` may be null if not set
+- `deliveredAt` will be set when order is delivered
+
+---
+
+#### Get Order Invoice
+**GET** `/api/v1/patient/orders/:id/invoice`
+
+Get complete invoice details for an order including customer information, items, and pricing breakdown.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Order ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "invoiceNumber": "INV-ORD202501151234567890",
+    "orderNumber": "ORD202501151234567890",
+    "orderDate": "2025-01-15T10:30:00.000Z",
+    "customer": {
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "phone": "9876543210"
+    },
+    "shippingAddress": {
+      "_id": "address_id",
+      "type": "home",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "fullName": "John Doe",
+      "phoneNumber": "9876543210",
+      "addressLine1": "123 Main Street",
+      "addressLine2": "Apt 4B",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "postalCode": "411001",
+      "country": "India"
+    },
+    "billingAddress": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "phoneNumber": "9876543210",
+      "streetAddress": "123 Main Street",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "zipCode": "411001"
+    },
+    "items": [
+      {
+        "_id": "order_item_1",
+        "productId": "65a1b2c3d4e5f6789012345c",
+        "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+        "quantity": 2,
+        "unitPrice": 122.89,
+        "totalPrice": 245.78,
+        "product": {
+          "_id": "65a1b2c3d4e5f6789012345c",
+          "productName": "Cetaphil Gentle Skin Cleanser 250ml",
+          "brand": "Cetaphil",
+          "originalPrice": 150.00,
+          "salePrice": 122.89
+        }
+      }
+    ],
+    "subtotal": 737.34,
+    "shippingCharges": 10.00,
+    "tax": 22.12,
+    "discount": 0,
+    "totalAmount": 769.46,
+    "status": "pending",
+    "paymentStatus": "pending",
+    "notes": "Please deliver before 5 PM"
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `404` - Order not found
+
+**Notes:**
+- Complete invoice with all order details
+- Customer information from user profile
+- All items with product details
+- Full pricing breakdown
+
+---
+
+#### Cancel Order
+**PUT** `/api/v1/patient/orders/:id/cancel`
+
+Cancel a pending or confirmed order.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Order ID (MongoDB ObjectId)
+
+**Request Body:**
+```json
+{
+  "reason": "Changed my mind, no longer needed"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Order cancelled successfully",
+  "data": {
+    "_id": "order_id_123",
+    "orderNumber": "ORD202501151234567890",
+    "status": "cancelled",
+    "items": [...],
+    "notes": "Cancellation reason: Changed my mind, no longer needed",
+    "createdAt": "2025-01-15T10:30:00.000Z",
+    "updatedAt": "2025-01-15T11:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Order status not pending/confirmed or validation failed
+- `401` - Unauthorized
+- `404` - Order not found
+
+**Notes:**
+- Only works for `pending` or `confirmed` orders
+- Cancellation reason is optional but recommended
+- Reason is appended to order notes
+- Order status changes to `cancelled`
+
+---
+
+#### Reorder
+**POST** `/api/v1/patient/orders/:id/reorder`
+
+Create a new order from an existing order. Uses the same items and shipping address.
+
+**Headers:** `Authorization: Bearer <patient_token>`
+
+**Parameters:**
+- `id` (path) - Order ID (MongoDB ObjectId)
 
 **Response:**
 ```json
@@ -7284,59 +10496,91 @@ Create a new order from an existing order (reorder all items).
   "success": true,
   "message": "Order recreated successfully",
   "data": {
-    /* New order object */
+    "_id": "order_id_124",
+    "orderNumber": "ORD202501151234567891",
+    "patient": "patient_id_456",
+    "items": [
+      {
+        "_id": "order_item_1",
+        "productId": "65a1b2c3d4e5f6789012345c",
+        "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+        "quantity": 2,
+        "unitPrice": 122.89,
+        "totalPrice": 245.78,
+        "status": "pending",
+        "product": {...}
+      }
+    ],
+    "shippingAddress": {...},
+    "billingAddress": {...},
+    "subtotal": 737.34,
+    "tax": 22.12,
+    "shippingCharges": 10.00,
+    "discount": 0,
+    "totalAmount": 769.46,
+    "status": "pending",
+    "notes": "Reordered from order ORD202501151234567890",
+    "createdAt": "2025-01-16T10:30:00.000Z"
   }
 }
 ```
 
-#### Get Order Status
-**GET** `/patient/orders/:id/status`
+**Error Responses:**
+- `401` - Unauthorized
+- `404` - Order not found
 
-Get the current status of an order.
+**Notes:**
+- Creates a new order with same items and shipping address
+- Discount is reset to 0 for the new order
+- Original order is not modified
+- New order status is `pending`
 
-**Parameters:**
-- `id` (path) - Order ID
+---
+
+#### Get Orders Summary
+**GET** `/api/v1/patient/orders/summary`
+
+Get summary statistics for all orders of the logged-in patient.
+
+**Headers:** `Authorization: Bearer <patient_token>`
 
 **Response:**
 ```json
 {
   "success": true,
   "data": {
-    "orderNumber": "ORD-1234567890-1234",
-    "status": "processing",
-    "paymentStatus": "paid",
-    "trackingNumber": "TRACK123456",
-    "estimatedDelivery": "2024-01-20T10:00:00.000Z"
+    "total": 25,
+    "byStatus": {
+      "pending": 2,
+      "confirmed": 3,
+      "processing": 1,
+      "shipped": 5,
+      "delivered": 10,
+      "cancelled": 3,
+      "returned": 1
+    },
+    "byPaymentStatus": {
+      "pending": 2,
+      "paid": 20,
+      "failed": 1,
+      "refunded": 2
+    },
+    "totalAmount": 25000.50,
+    "totalPaid": 22000.30
   }
 }
 ```
 
-#### Get Order Tracking
-**GET** `/patient/orders/:id/tracking`
+**Error Responses:**
+- `401` - Unauthorized
 
-Get tracking information for an order.
+**Notes:**
+- Returns count of orders by status
+- Returns count of orders by payment status
+- `totalAmount` - Sum of all order amounts
+- `totalPaid` - Sum of paid order amounts only
 
-**Parameters:**
-- `id` (path) - Order ID
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "orderNumber": "ORD-1234567890-1234",
-    "status": "shipped",
-    "trackingNumber": "TRACK123456",
-    "estimatedDelivery": "2024-01-20T10:00:00.000Z",
-    "deliveredAt": null,
-    "currentLocation": "In transit",
-    "timeline": [
-      { "status": "pending", "date": "2024-01-15T10:30:00.000Z" },
-      { "status": "shipped", "date": "2024-01-16T14:20:00.000Z" }
-    ]
-  }
-}
-```
+---
 
 ### Payments / Invoice
 
@@ -8100,7 +11344,7 @@ This helps with security monitoring and audit trails.
 ```
 POST /api/v1/patient/cart/items
 {
-  "productId": "product_123",
+  "productId": "65a1b2c3d4e5f6789012345c",
   "productName": "Cetaphil Gentle Skin Cleanser 250ml",
   "unitPrice": 78.99,
   "quantity": 1,
@@ -8514,6 +11758,83 @@ GET /api/v1/admin/medicines?inStock=true&sortBy=price_low
 ### Get Medicine by ID
 **GET** `/api/v1/admin/medicines/:id`
 
+Get complete details of a specific medicine by ID.
+
+**Headers:** No authentication required (Public API)
+
+**Parameters:**
+- `id` (path) - Medicine ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "medicine_id",
+    "productName": "Amoxicillin",
+    "brand": "Cetaphill",
+    "originalPrice": 20.99,
+    "salePrice": 15.99,
+    "images": {
+      "thumbnail": "https://example.com/images/amoxicillin-thumb.jpg",
+      "gallery": ["https://example.com/images/amoxicillin-1.jpg"]
+    },
+    "description": "Antibiotic medication used to treat various bacterial infections",
+    "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+    "category": "Antibiotics",
+    "healthCategory": {
+      "_id": "health_category_id",
+      "name": "Respiratory Health",
+      "slug": "respiratory-health",
+      "description": "Medications and treatments for respiratory conditions",
+      "icon": "https://example.com/icons/respiratory.svg",
+      "types": [
+        {
+          "name": "Asthma",
+          "slug": "asthma",
+          "description": "Medications for asthma management",
+          "icon": "https://example.com/icons/asthma.svg",
+          "order": 0,
+          "isActive": true
+        }
+      ]
+    },
+    "healthTypeSlug": "asthma",
+    "generics": ["Amoxicillin Trihydrate", "Amoxicillin Sodium"],
+    "dosageOptions": [
+      {
+        "name": "Capsule - 500mg",
+        "priceAdjustment": 0
+      }
+    ],
+    "quantityOptions": [
+      {
+        "name": "20 Tablets",
+        "priceAdjustment": 0
+      }
+    ],
+    "stock": 450,
+    "status": "in_stock",
+    "visibility": true,
+    "isActive": true,
+    "isTrendy": true,
+    "isBestOffer": false,
+    "discountPercentage": 0,
+    "views": 0,
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-03T12:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `404` - Medicine not found
+
+---
+
+### Find Similar Medicines
+**GET** `/api/v1/admin/medicines/:id/similar?limit=10`
+
 Get detailed information about a specific medicine.
 
 **Headers:** `Authorization: Bearer <admin_token>`
@@ -8558,6 +11879,116 @@ Get detailed information about a specific medicine.
 - This is a public API (no authentication required)
 - Only returns active and visible medicines
 - Returns medicine with populated healthCategory data if available
+
+---
+
+### Find Similar Medicines
+**GET** `/api/v1/admin/medicines/:id/similar?limit=10`
+
+Find medicines similar to the specified medicine based on health category, health type, category, generics, brand, and price range.
+
+**Headers:** No authentication required (Public API)
+
+**Parameters:**
+- `id` (path) - Medicine ID (MongoDB ObjectId)
+
+**Query Parameters:**
+- `limit` (optional) - Maximum number of similar medicines to return (default: 10, max: 50)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Similar medicines retrieved successfully",
+  "data": [
+    {
+      "_id": "similar_medicine_id_1",
+      "productName": "Amoxicillin Capsules",
+      "brand": "Cetaphill",
+      "originalPrice": 22.99,
+      "salePrice": 16.99,
+      "images": {
+        "thumbnail": "https://example.com/images/amoxicillin-capsules-thumb.jpg",
+        "gallery": ["https://example.com/images/amoxicillin-capsules-1.jpg"]
+      },
+      "description": "Antibiotic medication for bacterial infections",
+      "category": "Antibiotics",
+      "healthCategory": {
+        "_id": "health_category_id",
+        "name": "Respiratory Health",
+        "slug": "respiratory-health",
+        "description": "Medications and treatments for respiratory conditions",
+        "icon": "https://example.com/icons/respiratory.svg",
+        "types": [
+          {
+            "name": "Asthma",
+            "slug": "asthma",
+            "description": "Medications for asthma management",
+            "icon": "https://example.com/icons/asthma.svg",
+            "order": 0,
+            "isActive": true
+          }
+        ]
+      },
+      "healthTypeSlug": "asthma",
+      "generics": ["Amoxicillin Trihydrate"],
+      "dosageOptions": [
+        {
+          "name": "Capsule - 500mg",
+          "priceAdjustment": 0
+        }
+      ],
+      "quantityOptions": [
+        {
+          "name": "20 Tablets",
+          "priceAdjustment": 0
+        }
+      ],
+      "stock": 300,
+      "status": "in_stock",
+      "visibility": true,
+      "isActive": true,
+      "isTrendy": false,
+      "isBestOffer": false,
+      "discountPercentage": 0,
+      "views": 0,
+      "createdAt": "2025-01-02T10:00:00.000Z",
+      "updatedAt": "2025-01-03T12:30:00.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 2,
+    "pages": 1
+  }
+}
+```
+
+**Similarity Criteria (Priority Order):**
+1. **Health Category Match** (Highest Priority) - Medicines with the same health category
+2. **Health Type Slug Match** - Medicines with the same health type slug (chronic condition)
+3. **Category Match** - Medicines in the same category
+4. **Generics Match** - Medicines with matching generic ingredients
+5. **Brand Match** - Medicines from the same brand
+6. **Price Similarity** - Medicines within 30% price range of the original medicine
+
+**Filtering:**
+- Only returns active and visible medicines
+- Only includes medicines with status `in_stock` or `low_stock`
+- Excludes the original medicine itself
+- Results are sorted by similarity score (highest first), then by price (lowest first)
+
+**Error Responses:**
+- `404` - Medicine not found
+- `400` - Invalid medicine ID
+
+**Notes:**
+- This is a public API (no authentication required)
+- Similarity is calculated using multiple criteria with weighted scoring
+- Results are limited to prevent overwhelming responses
+- Price range is automatically calculated (±30% of original medicine price)
+- Medicines are sorted by relevance (most similar first)
 
 ---
 
@@ -10450,281 +13881,321 @@ Delete a contact form query.
 
 ---
 
-## Patient Refill APIs
+## Help Desk APIs
 
-APIs for patients to manage prescription refills.
+APIs for users to reach the help desk for support. Public endpoint for submitting queries, and admin endpoints for managing queries.
 
-### Get All Refills
-**GET** `/api/v1/patient/refills?status=pending&prescriptionId=prescription_id&page=1&limit=10`
+### Submit Help Desk Query (Public)
+**POST** `/api/v1/admin/help-desk`
 
-Get list of all refills for the logged-in patient.
+Submit a help desk query. This is a public endpoint - no authentication required.
 
-**Headers:** `Authorization: Bearer <patient_token>`
+**Headers:** No authentication required (Public API)
 
-**Query Parameters:**
-- `status` (optional) - Filter by status: `pending`, `approved`, `rejected`, `completed`, `cancelled`
-- `prescriptionId` (optional) - Filter by prescription ID
-- `page` (optional) - Page number (default: 1)
-- `limit` (optional) - Items per page (default: 10, max: 100)
+**Request Body:**
+```json
+{
+  "firstName": "John",
+  "email": "john@example.com",
+  "message": "I need help with my order",
+  "priority": "medium",
+  "source": "website"
+}
+```
+
+**Required Fields:**
+- `firstName` - First name (1-100 characters)
+- `email` - Valid email address (max 255 characters)
+
+**Optional Fields:**
+- `message` - Message/query details (max 2000 characters)
+- `priority` - Priority level: `low`, `medium`, `high`, `urgent` (default: `medium`)
+- `source` - Source of query: `website`, `mobile_app`, `api`, `other` (default: `website`)
 
 **Response:**
 ```json
 {
   "success": true,
-  "message": "Refills retrieved successfully",
+  "message": "Help desk query submitted successfully",
+  "data": {
+    "_id": "query_id",
+    "firstName": "John",
+    "email": "john@example.com",
+    "message": "I need help with my order",
+    "status": "pending",
+    "priority": "medium",
+    "source": "website",
+    "ipAddress": "192.168.1.1",
+    "userAgent": "Mozilla/5.0...",
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2025-01-15T10:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed
+- `500` - Server error
+
+**Notes:**
+- IP address and user agent are automatically captured
+- Query is created with status `pending`
+- Admin can view and respond to queries via admin endpoints
+
+---
+
+### Get All Help Desk Queries (Admin/Sub-Admin Only)
+**GET** `/api/v1/admin/help-desk?status=pending&priority=high&page=1&limit=20&sortBy=createdAt&sortOrder=desc`
+
+Get list of all help desk queries with filtering, search, and pagination.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Query Parameters:**
+- `status` (optional) - Filter by status: `pending`, `in_progress`, `resolved`, `closed`
+- `priority` (optional) - Filter by priority: `low`, `medium`, `high`, `urgent`
+- `email` (optional) - Search by email (case-insensitive)
+- `firstName` (optional) - Search by first name (case-insensitive)
+- `startDate` (optional) - Filter queries from this date (ISO 8601 format)
+- `endDate` (optional) - Filter queries until this date (ISO 8601 format)
+- `source` (optional) - Filter by source: `website`, `mobile_app`, `api`, `other`
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 20, max: 100)
+- `sortBy` (optional) - Sort field: `createdAt`, `updatedAt`, `status`, `priority`, `email`, `firstName` (default: `createdAt`)
+- `sortOrder` (optional) - Sort order: `asc` or `desc` (default: `desc`)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Help desk queries retrieved successfully",
   "data": [
     {
-      "_id": "refill_id",
-      "prescription": {
-        "_id": "prescription_id",
-        "prescriptionNumber": "PRES1234567890",
-        "diagnosis": "Hypertension",
-        "medications": [
-          {
-            "name": "Amlodipine",
-            "dosage": "5mg",
-            "frequency": "Once daily",
-            "quantity": 30
-          }
-        ],
-        "status": "active"
-      },
-      "doctor": {
-        "_id": "doctor_id",
-        "user": {
-          "_id": "user_id",
-          "firstName": "Dr. John",
-          "lastName": "Smith",
-          "email": "john.smith@example.com"
-        },
-        "specialty": "Cardiology"
-      },
-      "refillNumber": "REF1234567890",
+      "_id": "query_id",
+      "firstName": "John",
+      "email": "john@example.com",
+      "message": "I need help with my order",
       "status": "pending",
-      "requestedDate": "2025-01-15T10:00:00.000Z",
-      "medications": [
-        {
-          "medicationName": "Amlodipine",
-          "dosage": "5mg",
-          "frequency": "Once daily",
-          "quantity": 30,
-          "instructions": "Take with food"
-        }
-      ],
-      "refillCount": 1,
-      "maxRefills": 3,
-      "notes": "Need refill for next month",
-      "order": null,
+      "priority": "high",
+      "response": null,
+      "respondedBy": null,
+      "respondedAt": null,
+      "tags": [],
+      "source": "website",
+      "ipAddress": "192.168.1.1",
+      "userAgent": "Mozilla/5.0...",
       "createdAt": "2025-01-15T10:00:00.000Z",
       "updatedAt": "2025-01-15T10:00:00.000Z"
     }
   ],
   "pagination": {
     "page": 1,
-    "limit": 10,
-    "total": 5,
-    "pages": 1
-  }
-}
-```
-
----
-
-### Get Refill by ID
-**GET** `/api/v1/patient/refills/:id`
-
-Get details of a specific refill.
-
-**Headers:** `Authorization: Bearer <patient_token>`
-
-**Parameters:**
-- `id` (path) - Refill ID
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Refill retrieved successfully",
-  "data": {
-    "_id": "refill_id",
-    "prescription": {
-      "_id": "prescription_id",
-      "prescriptionNumber": "PRES1234567890",
-      "diagnosis": "Hypertension",
-      "medications": [
-        {
-          "name": "Amlodipine",
-          "dosage": "5mg",
-          "frequency": "Once daily",
-          "quantity": 30
-        }
-      ],
-      "status": "active",
-      "createdAt": "2025-01-01T10:00:00.000Z"
-    },
-    "doctor": {
-      "_id": "doctor_id",
-      "user": {
-        "_id": "user_id",
-        "firstName": "Dr. John",
-        "lastName": "Smith",
-        "email": "john.smith@example.com",
-        "phoneNumber": "1234567890"
-      },
-      "specialty": "Cardiology",
-      "licenseNumber": "#MD-123456"
-    },
-    "refillNumber": "REF1234567890",
-    "status": "pending",
-    "requestedDate": "2025-01-15T10:00:00.000Z",
-    "medications": [
-      {
-        "medicationName": "Amlodipine",
-        "dosage": "5mg",
-        "frequency": "Once daily",
-        "quantity": 30,
-        "instructions": "Take with food"
-      }
-    ],
-    "refillCount": 1,
-    "maxRefills": 3,
-    "notes": "Need refill for next month",
-    "order": null,
-    "createdAt": "2025-01-15T10:00:00.000Z",
-    "updatedAt": "2025-01-15T10:00:00.000Z"
-  }
-}
-```
-
----
-
-### Request Refill (Refill Now)
-**POST** `/api/v1/patient/refills`
-
-Request a refill for a prescription.
-
-**Headers:** `Authorization: Bearer <patient_token>`
-
-**Request Body:**
-```json
-{
-  "prescriptionId": "prescription_id",
-  "medications": [
-    {
-      "medicationName": "Amlodipine",
-      "dosage": "5mg",
-      "frequency": "Once daily",
-      "quantity": 30,
-      "instructions": "Take with food"
-    }
-  ],
-  "maxRefills": 3,
-  "notes": "Need refill for next month"
-}
-```
-
-**Required Fields:**
-- `prescriptionId` - Prescription ID (MongoDB ObjectId)
-
-**Optional Fields:**
-- `medications` - Array of specific medications to refill (if not provided, all medications from prescription will be used)
-  - `medicationName` - Name of medication
-  - `dosage` - Dosage
-  - `frequency` - Frequency
-  - `quantity` - Quantity (positive integer)
-  - `instructions` - Instructions
-- `maxRefills` - Maximum refills allowed (default: 3, max: 10)
-- `notes` - Additional notes (max 500 characters)
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Refill request submitted successfully",
-  "data": {
-    "_id": "refill_id",
-    "prescription": {
-      "_id": "prescription_id",
-      "prescriptionNumber": "PRES1234567890",
-      "diagnosis": "Hypertension",
-      "medications": [
-        {
-          "name": "Amlodipine",
-          "dosage": "5mg",
-          "frequency": "Once daily",
-          "quantity": 30
-        }
-      ],
-      "status": "active"
-    },
-    "doctor": {
-      "_id": "doctor_id",
-      "user": {
-        "_id": "user_id",
-        "firstName": "Dr. John",
-        "lastName": "Smith",
-        "email": "john.smith@example.com"
-      },
-      "specialty": "Cardiology"
-    },
-    "refillNumber": "REF1234567890",
-    "status": "pending",
-    "requestedDate": "2025-01-15T10:00:00.000Z",
-    "medications": [
-      {
-        "medicationName": "Amlodipine",
-        "dosage": "5mg",
-        "frequency": "Once daily",
-        "quantity": 30,
-        "instructions": "Take with food"
-      }
-    ],
-    "refillCount": 1,
-    "maxRefills": 3,
-    "notes": "Need refill for next month",
-    "createdAt": "2025-01-15T10:00:00.000Z",
-    "updatedAt": "2025-01-15T10:00:00.000Z"
+    "limit": 20,
+    "total": 45,
+    "pages": 3
   }
 }
 ```
 
 **Error Responses:**
-- `400` - Validation failed or maximum refills reached
-- `404` - Prescription not found or not active
-- `409` - A pending refill already exists for this prescription
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
 
 ---
 
-### Cancel Refill
-**PUT** `/api/v1/patient/refills/:id/cancel`
+### Get Help Desk Query by ID (Admin/Sub-Admin Only)
+**GET** `/api/v1/admin/help-desk/:id`
 
-Cancel a pending refill request.
+Get complete details of a specific help desk query.
 
-**Headers:** `Authorization: Bearer <patient_token>`
+**Headers:** `Authorization: Bearer <admin_token>`
 
 **Parameters:**
-- `id` (path) - Refill ID
+- `id` (path) - Help desk query ID (MongoDB ObjectId)
 
 **Response:**
 ```json
 {
   "success": true,
-  "message": "Refill cancelled successfully",
+  "message": "Help desk query retrieved successfully",
   "data": {
-    "_id": "refill_id",
-    "status": "cancelled",
+    "_id": "query_id",
+    "firstName": "John",
+    "email": "john@example.com",
+    "message": "I need help with my order",
+    "status": "resolved",
+    "priority": "high",
+    "response": "Thank you for contacting us. We have resolved your order issue.",
+    "respondedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "respondedAt": "2025-01-15T11:00:00.000Z",
+    "tags": ["order", "urgent"],
+    "source": "website",
+    "ipAddress": "192.168.1.1",
+    "userAgent": "Mozilla/5.0...",
+    "createdAt": "2025-01-15T10:00:00.000Z",
     "updatedAt": "2025-01-15T11:00:00.000Z"
   }
 }
 ```
 
 **Error Responses:**
-- `400` - Cannot cancel refill (not in pending status)
-- `404` - Refill not found
+- `400` - Invalid query ID
+- `401` - Unauthorized
+- `403` - Forbidden
+- `404` - Help desk query not found
+
+---
+
+### Update Help Desk Query (Admin/Sub-Admin Only)
+**PUT** `/api/v1/admin/help-desk/:id`
+
+Update a help desk query (status, priority, response, etc.).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Help desk query ID (MongoDB ObjectId)
+
+**Request Body:**
+```json
+{
+  "status": "resolved",
+  "priority": "high",
+  "response": "Thank you for contacting us. We have resolved your order issue.",
+  "tags": ["order", "resolved"]
+}
+```
+
+**Optional Fields:**
+- `firstName` - First name (1-100 characters)
+- `email` - Valid email address (max 255 characters)
+- `message` - Message/query details (max 2000 characters)
+- `status` - Status: `pending`, `in_progress`, `resolved`, `closed`
+- `priority` - Priority: `low`, `medium`, `high`, `urgent`
+- `response` - Admin response (max 5000 characters)
+- `tags` - Array of tags (each tag max 50 characters)
+- `source` - Source: `website`, `mobile_app`, `api`, `other`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Help desk query updated successfully",
+  "data": {
+    "_id": "query_id",
+    "firstName": "John",
+    "email": "john@example.com",
+    "message": "I need help with my order",
+    "status": "resolved",
+    "priority": "high",
+    "response": "Thank you for contacting us. We have resolved your order issue.",
+    "respondedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "respondedAt": "2025-01-15T11:00:00.000Z",
+    "tags": ["order", "resolved"],
+    "source": "website",
+    "ipAddress": "192.168.1.1",
+    "userAgent": "Mozilla/5.0...",
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2025-01-15T11:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed or invalid query ID
+- `401` - Unauthorized
+- `403` - Forbidden
+- `404` - Help desk query not found
 
 **Notes:**
-- Only refills with status `pending` can be cancelled
-- Once approved or rejected, refills cannot be cancelled by patient
+- If `response` is provided and status is updated to `resolved` or `closed`, `respondedBy` and `respondedAt` are automatically set
+- Only provided fields will be updated
+
+---
+
+### Delete Help Desk Query (Admin/Sub-Admin Only)
+**DELETE** `/api/v1/admin/help-desk/:id`
+
+Delete a help desk query.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Help desk query ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Help desk query deleted successfully"
+}
+```
+
+**Error Responses:**
+- `400` - Invalid query ID
+- `401` - Unauthorized
+- `403` - Forbidden
+- `404` - Help desk query not found
+
+---
+
+### Get Help Desk Statistics (Admin/Sub-Admin Only)
+**GET** `/api/v1/admin/help-desk/statistics`
+
+Get statistics about help desk queries (total, by status, by priority, by source).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Help desk statistics retrieved successfully",
+  "data": {
+    "total": 150,
+    "byStatus": {
+      "pending": 25,
+      "inProgress": 10,
+      "resolved": 100,
+      "closed": 15
+    },
+    "byPriority": {
+      "urgent": 5,
+      "high": 20
+    },
+    "bySource": {
+      "website": 120,
+      "mobile_app": 25,
+      "api": 3,
+      "other": 2
+    },
+    "statusBreakdown": {
+      "pending": 25,
+      "in_progress": 10,
+      "resolved": 100,
+      "closed": 15
+    }
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `403` - Forbidden
+
+**Notes:**
+- `byPriority.urgent` and `byPriority.high` only count queries that are not closed
+- Statistics are calculated in real-time from the database
 
 ---
 

@@ -9,16 +9,63 @@ const orderItemSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Prescription'
     },
-    productId: String,
+    productId: {
+      type: String,
+      required: true // Always required - will be set even for prescription items
+    },
     productType: {
       type: String,
       enum: ['medication', 'doctors_note', 'other'],
       default: 'medication'
     },
+    // Product Details (snapshot at time of order)
     medicationName: {
       type: String,
       required: true
     },
+    brand: {
+      type: String,
+      trim: true
+    },
+    originalPrice: {
+      type: Number,
+      min: 0
+    },
+    salePrice: {
+      type: Number,
+      min: 0
+    },
+    images: {
+      thumbnail: {
+        type: String,
+        trim: true
+      },
+      gallery: [{
+        type: String,
+        trim: true
+      }]
+    },
+    description: {
+      type: String,
+      trim: true
+    },
+    dosage: {
+      type: String,
+      trim: true
+    },
+    dosageOption: {
+      name: String,
+      priceAdjustment: Number
+    },
+    quantityOption: {
+      name: String,
+      priceAdjustment: Number
+    },
+    generics: [{
+      type: String,
+      trim: true
+    }],
+    // Order specific
     quantity: {
       type: Number,
       required: true,
@@ -52,8 +99,7 @@ const orderSchema = new mongoose.Schema(
   {
     orderNumber: {
       type: String,
-      unique: true,
-      index: true // faster lookup
+      unique: true // unique already creates index for faster lookup
     },
 
     patient: {

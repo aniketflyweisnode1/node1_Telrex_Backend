@@ -6,16 +6,14 @@ const blogCategorySchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      unique: true,
-      index: true
+      unique: true
     },
     slug: {
       type: String,
       required: true,
       unique: true,
       lowercase: true,
-      trim: true,
-      index: true
+      trim: true
     },
     description: {
       type: String,

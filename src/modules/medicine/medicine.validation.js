@@ -218,3 +218,8 @@ exports.updateStockStatusValidation = [
     .withMessage('Status must be one of: in_stock, low_stock, out_of_stock, discontinued')
 ];
 
+// Find similar medicines validation
+exports.findSimilarMedicinesValidation = [
+  // This validation is for query parameters, handled by route
+];
+

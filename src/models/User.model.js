@@ -6,12 +6,22 @@ const userSchema = new mongoose.Schema(
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
 
-    countryCode: { type: String, required: true },
+    countryCode: { 
+      type: String, 
+      required: function() {
+        // Country code is required only if not using OAuth (Google or Facebook)
+        return !this.googleId && !this.facebookId;
+      }
+    },
 
     phoneNumber: {
       type: String,
-      required: true,
-      unique: true
+      required: function() {
+        // Phone number is required only if not using OAuth (Google or Facebook)
+        return !this.googleId && !this.facebookId;
+      },
+      unique: true,
+      sparse: true // Allows multiple null values
     },
 
     email: {
@@ -21,8 +31,31 @@ const userSchema = new mongoose.Schema(
 
     password: {
       type: String,
-      required: true,
+      required: function() {
+        // Password is required only if not using OAuth (Google or Facebook)
+        return !this.googleId && !this.facebookId;
+      },
       select: false
+    },
+
+    // Google OAuth
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true // Allows multiple null values, unique already creates index
+    },
+
+    // Facebook OAuth
+    facebookId: {
+      type: String,
+      unique: true,
+      sparse: true // Allows multiple null values, unique already creates index
+    },
+
+    authProvider: {
+      type: String,
+      enum: ['local', 'google', 'facebook'],
+      default: 'local'
     },
 
     role: {
@@ -38,7 +71,11 @@ const userSchema = new mongoose.Schema(
 
     agreeConfirmation: {
       type: Boolean,
-      required: true
+      required: function() {
+        // Agree confirmation is required only if not using OAuth (Google or Facebook)
+        return !this.googleId && !this.facebookId;
+      },
+      default: false
     },
 
     isActive: {
@@ -53,10 +90,11 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// 🔐 Hash password
+// 🔐 Hash password (only if password is provided and not using OAuth)
 userSchema.pre('save', async function (next) {
   try {
-    if (!this.isModified('password')) return next();
+    // Skip password hashing if using OAuth (Google or Facebook) or password not modified
+    if (!this.isModified('password') || !this.password || this.googleId || this.facebookId) return next();
     this.password = await bcrypt.hash(this.password, 10);
     next();
   } catch (err) {

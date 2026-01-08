@@ -5,8 +5,7 @@ const doctorsNoteSchema = new mongoose.Schema(
     patient: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Patient',
-      required: true,
-      index: true
+      required: true
     },
     type: {
       type: String,

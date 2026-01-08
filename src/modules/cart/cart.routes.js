@@ -26,6 +26,9 @@ router.delete('/cart', auth, controller.clearCart);
 // Save for later
 router.post('/cart/items/:itemId/save', auth, controller.saveForLater);
 
+// Unsave item (move back to active cart)
+router.delete('/cart/items/:itemId/save', auth, controller.unsaveItem);
+
 // Apply coupon
 router.post('/cart/coupon', auth, applyCouponValidation, validate, controller.applyCoupon);
 

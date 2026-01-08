@@ -7,20 +7,17 @@ const blogSchema = new mongoose.Schema(
       required: true,
       trim: true,
       minlength: 5,
-      maxlength: 200,
-      index: true
+      maxlength: 200
     },
     slug: {
       type: String,
       unique: true,
-      lowercase: true,
-      index: true
+      lowercase: true
     },
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'BlogCategory',
-      required: true,
-      index: true
+      required: true
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
@@ -68,8 +65,7 @@ const blogSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: ['draft', 'published', 'archived'],
-      default: 'draft',
-      index: true
+      default: 'draft'
     },
     publishedAt: {
       type: Date
@@ -80,8 +76,7 @@ const blogSchema = new mongoose.Schema(
     },
     isFeatured: {
       type: Boolean,
-      default: false,
-      index: true
+      default: false
     },
     seoKeywords: [String],
     readingTime: {

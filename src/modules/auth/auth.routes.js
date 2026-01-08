@@ -11,7 +11,9 @@ const {
   forgotPasswordValidation,
   resetPasswordValidation,
   changePasswordValidation,
-  sendOtpValidation
+  sendOtpValidation,
+  googleLoginValidation,
+  facebookLoginValidation
 } = require('./auth.validation');
 
 // Registration & OTP
@@ -24,6 +26,8 @@ router.post('/send-otp', sendOtpValidation, validate, controller.sendOtp);
 router.post('/login', loginValidation, validate, controller.login);        // Email/Phone + Password
 router.post('/login-password', loginValidation, validate, controller.login); // Alias
 router.post('/login-otp', loginOtpValidation, validate, controller.loginWithOtp); // OTP login
+router.post('/login-google', googleLoginValidation, validate, controller.loginWithGoogle); // Google OAuth login
+router.post('/login-facebook', facebookLoginValidation, validate, controller.loginWithFacebook); // Facebook OAuth login
 
 // Password Management
 router.post('/forgot-password', forgotPasswordValidation, validate, controller.forgotPassword);

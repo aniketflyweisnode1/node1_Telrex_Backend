@@ -131,10 +131,25 @@ exports.refreshToken = async (req, res, next) => {
 // Logout
 exports.logout = async (req, res, next) => {
   try {
+    // Get user data before deactivating
+    const User = require('../../models/User.model');
+    const user = await User.findById(req.user.id).select('-password');
+    
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    
     // Deactivate user (set isActive = false)
     await authService.deactivateUser(req.user.id);
-    // In future, you can implement token blacklisting here
-    res.status(200).json({ success: true, message: 'Logged out successfully' });
+    
+    // Return user data in response
+    res.status(200).json({ 
+      success: true, 
+      message: 'Logged out successfully',
+      data: {
+        user: user
+      }
+    });
   } catch (err) { next(err); }
 };
 
@@ -184,4 +199,76 @@ exports.changePassword = async (req, res, next) => {
     await authService.changePassword(req.user.id, oldPassword, newPassword);
     res.status(200).json({ success: true, message: 'Password changed successfully' });
   } catch (err) { next(err); }
+};
+
+// Login with Google
+exports.loginWithGoogle = async (req, res, next) => {
+  try {
+    const { googleToken, rememberMe } = req.body;
+    
+    if (!googleToken) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Google token is required' 
+      });
+    }
+    
+    const user = await authService.loginWithGoogle(googleToken);
+    
+    // Get fresh user data
+    const freshUser = await require('../../models/User.model').findById(user._id).select('-password');
+    const tokens = authService.generateTokens(freshUser, rememberMe);
+    
+    await loginHistoryService.trackLogin(req, freshUser, 'google');
+    
+    res.status(200).json({
+      success: true,
+      message: 'Google login successful',
+      data: {
+        user: freshUser,
+        tokens
+      }
+    });
+  } catch (err) {
+    if (err.message && err.message.includes('Google')) {
+      await loginHistoryService.trackFailedLogin(req, req.body.googleToken || 'google_token', 'google', err.message);
+    }
+    next(err);
+  }
+};
+
+// Login with Facebook
+exports.loginWithFacebook = async (req, res, next) => {
+  try {
+    const { facebookToken, rememberMe } = req.body;
+    
+    if (!facebookToken) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Facebook token is required' 
+      });
+    }
+    
+    const user = await authService.loginWithFacebook(facebookToken);
+    
+    // Get fresh user data
+    const freshUser = await require('../../models/User.model').findById(user._id).select('-password');
+    const tokens = authService.generateTokens(freshUser, rememberMe);
+    
+    await loginHistoryService.trackLogin(req, freshUser, 'facebook');
+    
+    res.status(200).json({
+      success: true,
+      message: 'Facebook login successful',
+      data: {
+        user: freshUser,
+        tokens
+      }
+    });
+  } catch (err) {
+    if (err.message && err.message.includes('Facebook')) {
+      await loginHistoryService.trackFailedLogin(req, req.body.facebookToken || 'facebook_token', 'facebook', err.message);
+    }
+    next(err);
+  }
 };
