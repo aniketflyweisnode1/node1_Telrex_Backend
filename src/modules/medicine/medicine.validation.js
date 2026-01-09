@@ -29,22 +29,17 @@ exports.addMedicineValidation = [
     .isFloat({ min: 0 })
     .withMessage('Sale price must be a positive number'),
   
-  // Usage - Array of objects
+  // Usage - Array of strings
   body('usage')
     .optional()
     .isArray()
     .withMessage('Usage must be an array'),
   
-  body('usage.*.title')
+  body('usage.*')
     .optional()
     .isString()
-    .withMessage('Usage title must be a string')
+    .withMessage('Each usage item must be a string')
     .trim(),
-  
-  body('usage.*.description')
-    .optional()
-    .isString()
-    .withMessage('Usage description must be a string'),
   
   // Description and How it works
   body('description')
@@ -57,7 +52,7 @@ exports.addMedicineValidation = [
     .isString()
     .withMessage('How it works must be a string'),
   
-  // Generics - Array of strings
+  // Generics - Array of strings (keeping original format)
   body('generics')
     .optional()
     .isArray()
@@ -197,7 +192,13 @@ exports.addMedicineValidation = [
   body('discountPercentage')
     .optional()
     .isFloat({ min: 0, max: 100 })
-    .withMessage('Discount percentage must be between 0 and 100')
+    .withMessage('Discount percentage must be between 0 and 100'),
+  
+  // Markup field
+  body('markup')
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage('Markup must be a non-negative number')
 ];
 
 // Medicine ID validation (for route params)
@@ -216,6 +217,24 @@ exports.updateStockStatusValidation = [
     .optional()
     .isIn(['in_stock', 'low_stock', 'out_of_stock', 'discontinued'])
     .withMessage('Status must be one of: in_stock, low_stock, out_of_stock, discontinued')
+];
+
+// Update visibility validation
+exports.updateVisibilityValidation = [
+  body('visibility')
+    .notEmpty()
+    .withMessage('Visibility is required')
+    .isBoolean()
+    .withMessage('Visibility must be a boolean (true or false)')
+    .custom((value) => {
+      if (typeof value === 'string' && (value === 'true' || value === 'false')) {
+        return true;
+      }
+      if (typeof value === 'boolean') {
+        return true;
+      }
+      throw new Error('Visibility must be a boolean or string "true"/"false"');
+    })
 ];
 
 // Find similar medicines validation

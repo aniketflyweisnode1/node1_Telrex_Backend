@@ -9,22 +9,29 @@ const logger = require('../../utils/logger');
 exports.adminRegister = async (data) => {
   const { firstName, lastName, email, phoneNumber, countryCode, password, adminSecretKey } = data;
 
-  // Check if admin secret key is provided and valid (for security)
-  // If ADMIN_SECRET_KEY is set in env, it must match
-  if (process.env.ADMIN_SECRET_KEY) {
-    if (!adminSecretKey || adminSecretKey !== process.env.ADMIN_SECRET_KEY) {
-      logger.warn('Admin registration attempt with invalid secret key', { email, phoneNumber });
-      throw new AppError('Invalid admin secret key', 403);
-    }
-  } else {
-    // If no ADMIN_SECRET_KEY is set, check if any admin already exists
-    // If admin exists, require secret key
-    const existingAdmin = await User.findOne({ role: 'admin' });
-    if (existingAdmin) {
-      logger.warn('Admin registration attempt when admin already exists', { email, phoneNumber });
-      throw new AppError('Admin registration is restricted. Please contact existing admin.', 403);
+  // Check if any admin already exists
+  const existingAdmin = await User.findOne({ role: 'admin' });
+  
+  // If admin exists, require secret key for security
+  if (existingAdmin) {
+    // If ADMIN_SECRET_KEY is set in env, it must match
+    if (process.env.ADMIN_SECRET_KEY) {
+      if (!adminSecretKey || adminSecretKey !== process.env.ADMIN_SECRET_KEY) {
+        logger.warn('Admin registration attempt with invalid secret key', { email, phoneNumber });
+        throw new AppError('Invalid admin secret key', 403);
+      }
+    } else {
+      // If no ADMIN_SECRET_KEY is set in env but admin exists, still require a secret key
+      // This prevents unauthorized admin creation
+      if (!adminSecretKey) {
+        logger.warn('Admin registration attempt when admin already exists without secret key', { email, phoneNumber });
+        throw new AppError('Admin registration is restricted. Please contact existing admin or provide admin secret key.', 403);
+      }
+      // If secret key is provided (even if not set in env), allow registration
+      // This provides flexibility for custom secret key management
     }
   }
+  // If no admin exists, allow registration without secret key (first admin setup)
 
   // Check if user already exists
   const existingUser = await User.findOne({

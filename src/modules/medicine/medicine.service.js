@@ -18,6 +18,36 @@ exports.addMedicine = async (data, files = [], req = null) => {
     return value;
   };
 
+  // Helper function to normalize usage (handle both old object format and new string format)
+  const normalizeUsage = (usage) => {
+    if (!usage || !Array.isArray(usage)) {
+      return [];
+    }
+    
+    return usage.map(item => {
+      // If it's already a string, return it
+      if (typeof item === 'string') {
+        return item.trim();
+      }
+      // If it's an object (old format), convert to string
+      if (typeof item === 'object' && item !== null) {
+        if (item.title && item.description) {
+          return `${item.title}: ${item.description}`;
+        }
+        // If it has description only
+        if (item.description) {
+          return item.description;
+        }
+        // If it has title only
+        if (item.title) {
+          return item.title;
+        }
+      }
+      // Return as string if it's something else
+      return String(item);
+    }).filter(item => item && item.trim().length > 0);
+  };
+
   // Handle images - from JSON body or file uploads
   let imagesData = {
     thumbnail: '',
@@ -101,7 +131,7 @@ exports.addMedicine = async (data, files = [], req = null) => {
     originalPrice: parseFloat(data.originalPrice),
     salePrice: parseFloat(data.salePrice),
     images: imagesData,
-    usage: parseIfString(data.usage) || [],
+    usage: normalizeUsage(parseIfString(data.usage)) || [],
     description: data.description || '',
     howItWorks: data.howItWorks || '',
     generics: parseIfString(data.generics) || [],
@@ -117,6 +147,7 @@ exports.addMedicine = async (data, files = [], req = null) => {
     isTrendy: data.isTrendy !== undefined ? (data.isTrendy === 'true' || data.isTrendy === true) : false,
     isBestOffer: data.isBestOffer !== undefined ? (data.isBestOffer === 'true' || data.isBestOffer === true) : false,
     discountPercentage: data.discountPercentage !== undefined ? parseFloat(data.discountPercentage) : undefined,
+    markup: data.markup !== undefined ? parseFloat(data.markup) : 0,
     stock: data.stock ? parseInt(data.stock) : 0,
     status: data.status || 'in_stock',
     visibility: data.visibility !== undefined ? data.visibility === 'true' || data.visibility === true : true
@@ -442,6 +473,18 @@ exports.updateMedicine = async (medicineId, data, files = [], req = null) => {
     throw new AppError('Medicine not found', 404);
   }
 
+  // Helper function to parse JSON strings from form data
+  const parseIfString = (value) => {
+    if (typeof value === 'string') {
+      try {
+        return JSON.parse(value);
+      } catch (e) {
+        return value;
+      }
+    }
+    return value;
+  };
+
   // Update basic fields
   if (data.productName) medicine.productName = data.productName;
   if (data.brand) medicine.brand = data.brand;
@@ -455,18 +498,6 @@ exports.updateMedicine = async (medicineId, data, files = [], req = null) => {
   if (data.visibility !== undefined) {
     medicine.visibility = data.visibility === 'true' || data.visibility === true;
   }
-  
-  // Helper function to parse JSON strings from form data
-  const parseIfString = (value) => {
-    if (typeof value === 'string') {
-      try {
-        return JSON.parse(value);
-      } catch (e) {
-        return value;
-      }
-    }
-    return value;
-  };
 
   // Update images from JSON body (if provided)
   if (data.images !== undefined) {
@@ -480,10 +511,15 @@ exports.updateMedicine = async (medicineId, data, files = [], req = null) => {
   }
 
   // Update arrays
-  if (data.usage !== undefined) medicine.usage = parseIfString(data.usage);
+  if (data.usage !== undefined) medicine.usage = normalizeUsage(parseIfString(data.usage));
   if (data.generics !== undefined) medicine.generics = parseIfString(data.generics);
   if (data.dosageOptions !== undefined) medicine.dosageOptions = parseIfString(data.dosageOptions);
   if (data.quantityOptions !== undefined) medicine.quantityOptions = parseIfString(data.quantityOptions);
+  
+  // Update markup
+  if (data.markup !== undefined) {
+    medicine.markup = parseFloat(data.markup);
+  }
   
   // Update medical information (paragraphs)
   if (data.precautions !== undefined) medicine.precautions = data.precautions;
@@ -651,6 +687,44 @@ exports.updateMedicineStockStatus = async (medicineId, data) => {
     productName: medicine.productName,
     stock: medicine.stock,
     status: medicine.status
+  });
+
+  // Populate healthCategory if it exists
+  if (medicine.healthCategory) {
+    await medicine.populate({
+      path: 'healthCategory',
+      select: 'name slug description icon types'
+    });
+  }
+
+  return medicine;
+};
+
+// Update medicine visibility
+exports.updateMedicineVisibility = async (medicineId, visibility) => {
+  if (!mongoose.Types.ObjectId.isValid(medicineId)) {
+    throw new AppError('Invalid medicine ID', 400);
+  }
+
+  const medicine = await Medicine.findById(medicineId);
+  
+  if (!medicine) {
+    throw new AppError('Medicine not found', 404);
+  }
+
+  // Update visibility
+  if (visibility !== undefined) {
+    medicine.visibility = visibility === true || visibility === 'true';
+  } else {
+    throw new AppError('Visibility value is required', 400);
+  }
+
+  await medicine.save();
+
+  logger.info('Medicine visibility updated', {
+    medicineId: medicine._id,
+    productName: medicine.productName,
+    visibility: medicine.visibility
   });
 
   // Populate healthCategory if it exists

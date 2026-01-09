@@ -6,7 +6,9 @@ const authMiddleware = require('../../middlewares/auth.middleware');
 const { isAdminOrSubAdmin } = require('../../middlewares/admin.middleware');
 const validate = require('../../middlewares/validate.middleware');
 
-// ==================== PUBLIC GET ROUTES (No Authentication Required) ====================
+// ==================== PUBLIC GET ROUTES (No Authentication Required - No Token Needed) ====================
+// All GET routes below are PUBLIC and do NOT require any authentication token
+// These routes can be accessed without Authorization header
 
 // Get all health categories
 router.get(

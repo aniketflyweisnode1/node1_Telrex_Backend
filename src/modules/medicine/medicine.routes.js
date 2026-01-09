@@ -33,6 +33,14 @@ router.put(
   medicineController.updateMedicineStockStatus
 );
 
+// Update medicine visibility (dedicated endpoint) - MUST come before /medicines/:id - PUBLIC
+router.put(
+  '/medicines/:id/visibility',
+  medicineValidation.updateVisibilityValidation,
+  validate,
+  medicineController.updateMedicineVisibility
+);
+
 // Update medicine (with optional image uploads) - PUBLIC
 router.put(
   '/medicines/:id',
