@@ -3,6 +3,8 @@ const router = express.Router();
 const doctorController = require('./doctor.controller');
 const doctorValidation = require('./doctor.validation');
 const validate = require('../../middlewares/validate.middleware');
+const authMiddleware = require('../../middlewares/auth.middleware');
+const { isAdmin } = require('../../middlewares/admin.middleware');
 
 // ==================== PUBLIC ROUTES (No Authentication Required) ====================
 // Get all doctors
@@ -28,6 +30,14 @@ router.put(
   '/:id/reset-password',
   doctorValidation.resetPasswordValidation,
   doctorController.resetPassword
+);
+
+// Approve doctor (Admin only - MUST come before /:id to avoid route conflicts)
+router.put(
+  '/:id/approve',
+  authMiddleware,
+  isAdmin,
+  doctorController.approveDoctor
 );
 
 router.put(

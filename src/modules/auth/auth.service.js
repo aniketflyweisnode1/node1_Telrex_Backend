@@ -77,48 +77,192 @@ exports.verifyOtpAndLogin = async (user) => {
 exports.doctorLoginWithPassword = async (identifier, password) => {
   const Doctor = require('../../models/Doctor.model');
   
-  // First, find user without role restriction to check if user exists
-  const userExists = await User.findOne({
-    $or: [
-      { email: identifier.toLowerCase() },
-      { phoneNumber: identifier }
-    ]
+  // Normalize identifier (trim whitespace)
+  if (!identifier) {
+    logger.warn('Doctor login attempt failed - No identifier provided');
+    throw new AppError('Email or phone number is required', 400);
+  }
+  
+  const normalizedIdentifier = identifier.trim();
+  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedIdentifier);
+  
+  // Build query based on identifier type
+  // If it's an email, check email field; if it's a phone, check phone field
+  const queryConditions = [];
+  
+  if (isEmail) {
+    // If identifier is an email, check email field (normalized to lowercase)
+    queryConditions.push({ email: normalizedIdentifier.toLowerCase() });
+  } else {
+    // If identifier is a phone number, check phone field (normalized - remove non-numeric)
+    const phoneQuery = normalizedIdentifier.replace(/[^0-9]/g, '');
+    if (phoneQuery && phoneQuery.length >= 10) {
+      queryConditions.push({ phoneNumber: phoneQuery });
+    } else {
+      logger.warn('Doctor login attempt failed - Invalid identifier format', { identifier });
+      throw new AppError('Please provide a valid email or phone number', 400);
+    }
+  }
+  
+  if (queryConditions.length === 0) {
+    logger.warn('Doctor login attempt failed - Invalid identifier format', { identifier });
+    throw new AppError('Please provide a valid email or phone number', 400);
+  }
+  
+  // Find user with password field - MUST use .select('+password') because password has select: false
+  const user = await User.findOne({
+    $or: queryConditions,
+    role: 'doctor' // Filter by role directly in query
+  }).select('+password'); // IMPORTANT: Include password field
+  
+  if (!user) {
+    // Check if user exists but is not a doctor
+    const anyUser = await User.findOne({
+      $or: queryConditions
+    }).select('-password');
+    
+    if (anyUser) {
+      logger.warn('Doctor login attempt failed - User exists but is not a doctor', { 
+        identifier,
+        userId: anyUser._id,
+        role: anyUser.role,
+        email: anyUser.email,
+        phoneNumber: anyUser.phoneNumber
+      });
+      throw new AppError('Invalid credentials or not a doctor account', 401);
+    }
+    
+    logger.warn('Doctor login attempt failed - User not found', { 
+      identifier,
+      queryConditions,
+      isEmail,
+      normalizedIdentifier
+    });
+    throw new AppError('Invalid credentials', 401);
+  }
+  
+  logger.info('Doctor user found', { 
+    userId: user._id, 
+    email: user.email, 
+    phoneNumber: user.phoneNumber,
+    role: user.role,
+    hasPassword: !!user.password,
+    passwordFieldType: typeof user.password,
+    passwordLength: user.password ? user.password.length : 0,
+    identifier 
   });
 
-  if (!userExists) {
-    logger.warn('Doctor login attempt failed - User not found', { identifier });
-    throw new AppError('Invalid credentials', 401);
-  }
-
-  // Check if user is a doctor
-  if (userExists.role !== 'doctor') {
-    logger.warn('Doctor login attempt failed - User is not a doctor', { 
-      identifier, 
-      userId: userExists._id, 
-      role: userExists.role 
+  // Validate password input
+  if (!password || typeof password !== 'string') {
+    logger.warn('Doctor login attempt failed - Invalid password provided', { 
+      userId: user._id, 
+      identifier 
     });
-    throw new AppError('Invalid credentials or not a doctor account', 401);
+    throw new AppError('Password is required', 400);
   }
 
-  // Now find user with password field
-  const user = await User.findOne({
-    $or: [
-      { email: identifier.toLowerCase() },
-      { phoneNumber: identifier }
-    ],
-    role: 'doctor'
-  }).select('+password');
-
-  if (!user) {
-    logger.warn('Doctor login attempt failed - User not found after role check', { identifier });
-    throw new AppError('Invalid credentials', 401);
+  // Check if user has a password set
+  if (!user.password) {
+    logger.warn('Doctor login attempt failed - No password set for user', { 
+      userId: user._id, 
+      identifier,
+      email: user.email,
+      phoneNumber: user.phoneNumber
+    });
+    throw new AppError('Password not set. Please use forgot password to set your password.', 401);
   }
 
-  const isMatch = await bcrypt.compare(password, user.password);
+  // Validate and trim password
+  if (!password || typeof password !== 'string') {
+    logger.warn('Doctor login attempt failed - Invalid password provided', { 
+      userId: user._id, 
+      identifier,
+      passwordType: typeof password
+    });
+    throw new AppError('Password is required', 400);
+  }
+  
+  const trimmedPassword = password.trim();
+  if (!trimmedPassword) {
+    logger.warn('Doctor login attempt failed - Empty password provided', { 
+      userId: user._id, 
+      identifier 
+    });
+    throw new AppError('Password is required', 400);
+  }
+  
+  // Verify password field exists
+  if (!user.password) {
+    logger.warn('Doctor login attempt failed - No password set for user', { 
+      userId: user._id, 
+      identifier,
+      email: user.email,
+      phoneNumber: user.phoneNumber
+    });
+    throw new AppError('Password not set. Please use forgot password to set your password.', 401);
+  }
+  
+  // Check if password looks like a bcrypt hash (starts with $2a$, $2b$, or $2y$)
+  const isBcryptHash = /^\$2[aby]\$\d{2}\$/.test(user.password);
+  if (!isBcryptHash) {
+    logger.error('Doctor login attempt - Password is not a valid bcrypt hash', {
+      userId: user._id,
+      identifier,
+      passwordPrefix: user.password.substring(0, 10)
+    });
+    throw new AppError('Password format error. Please reset your password.', 500);
+  }
+  
+  logger.info('Attempting password comparison', {
+    userId: user._id,
+    identifier,
+    email: user.email,
+    phoneNumber: user.phoneNumber,
+    providedPasswordLength: trimmedPassword.length,
+    hashedPasswordLength: user.password.length,
+    isBcryptHash: isBcryptHash
+  });
+  
+  // Compare passwords using bcrypt
+  let isMatch = false;
+  try {
+    isMatch = await bcrypt.compare(trimmedPassword, user.password);
+    logger.info('Password comparison result', {
+      userId: user._id,
+      identifier,
+      isMatch: isMatch
+    });
+  } catch (error) {
+    logger.error('Password comparison error', {
+      userId: user._id,
+      identifier,
+      error: error.message,
+      stack: error.stack
+    });
+    throw new AppError('Error during password verification', 500);
+  }
+  
   if (!isMatch) {
-    logger.warn('Doctor login attempt failed - Invalid password', { userId: user._id, identifier });
+    // Try to find doctor to provide more context
+    const doctor = await Doctor.findOne({ user: user._id });
+    logger.warn('Doctor login attempt failed - Invalid password', { 
+      userId: user._id, 
+      identifier,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      hasPassword: !!user.password,
+      passwordLength: trimmedPassword.length,
+      doctorExists: !!doctor,
+      doctorStatus: doctor?.status,
+      doctorId: doctor?._id
+    });
     throw new AppError('Invalid credentials', 401);
   }
+  
+  logger.info('Doctor password verified successfully', { 
+    userId: user._id, 
+    identifier 
+  });
 
   // Check if doctor profile exists
   const doctor = await Doctor.findOne({ user: user._id })

@@ -158,6 +158,21 @@ exports.getAvailableSpecialties = async (req, res, next) => {
   }
 };
 
+// Approve doctor
+exports.approveDoctor = async (req, res, next) => {
+  try {
+    const doctor = await doctorService.approveDoctor(req.params.id, req.user.id);
+
+    res.status(200).json({
+      success: true,
+      message: 'Doctor approved successfully',
+      data: doctor
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Doctor signup (self-registration)
 exports.doctorSignup = async (req, res, next) => {
   try {

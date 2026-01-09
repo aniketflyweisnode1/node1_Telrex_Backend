@@ -206,8 +206,9 @@ exports.doctorSignup = async (data, files = {}) => {
     throw new AppError('Doctor with this license number already exists', 409);
   }
 
-  // Hash password
-  const hashedPassword = password ? await bcrypt.hash(password, 10) : await bcrypt.hash(phoneNumber.slice(-6), 10);
+  // Set password (will be hashed by User model's pre-save hook)
+  // Don't hash here - let the User model handle it to avoid double hashing
+  const userPassword = password || phoneNumber.slice(-6);
 
   // Create user with doctor role
   const user = await User.create({
@@ -216,7 +217,7 @@ exports.doctorSignup = async (data, files = {}) => {
     email: email?.toLowerCase(),
     phoneNumber,
     countryCode: countryCode || '+91',
-    password: hashedPassword,
+    password: userPassword, // Will be hashed by pre-save hook
     role: 'doctor',
     isVerified: false,
     isActive: false, // Inactive until admin verifies
@@ -724,6 +725,67 @@ exports.updateDoctor = async (doctorId, data) => {
   await doctor.populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt');
   await doctor.populate('createdBy', 'firstName lastName email');
   await doctor.populate('licenseVerifiedBy', 'firstName lastName email');
+
+  return doctor;
+};
+
+// Approve doctor (change status to active)
+exports.approveDoctor = async (doctorId, adminId) => {
+  if (!mongoose.Types.ObjectId.isValid(doctorId)) {
+    throw new AppError('Invalid doctor ID', 400);
+  }
+
+  // Find doctor without any filters (including inactive ones, as we want to approve them)
+  // Use findById which automatically handles ObjectId conversion
+  const doctor = await Doctor.findById(doctorId).populate('user');
+  
+  if (!doctor) {
+    // Check if doctor exists with different query for debugging
+    const doctorExists = await Doctor.findOne({ _id: doctorId });
+    logger.warn('Doctor approval failed - Doctor not found', { 
+      doctorId, 
+      adminId,
+      doctorExists: !!doctorExists,
+      totalDoctors: await Doctor.countDocuments({})
+    });
+    throw new AppError('Doctor not found', 404);
+  }
+  
+  // Check if user exists
+  if (!doctor.user) {
+    logger.warn('Doctor approval failed - User not found for doctor', { 
+      doctorId, 
+      userId: doctor.user?._id || doctor.user 
+    });
+    throw new AppError('User account not found for this doctor', 404);
+  }
+
+  // Update doctor status to active
+  doctor.status = 'active';
+  doctor.user.isActive = true;
+  
+  // If license is not verified, verify it during approval
+  if (!doctor.licenseVerified) {
+    doctor.licenseVerified = true;
+    doctor.licenseVerifiedAt = new Date();
+    doctor.licenseVerifiedBy = adminId;
+  }
+  
+  await doctor.save();
+  await doctor.user.save();
+
+  logger.info('Doctor approved successfully', {
+    doctorId: doctor._id,
+    userId: doctor.user._id,
+    approvedBy: adminId,
+    status: doctor.status
+  });
+
+  // Populate user data
+  await doctor.populate('user', 'firstName lastName email phoneNumber countryCode role isActive isVerified');
+  if (doctor.licenseVerifiedBy) {
+    await doctor.populate('licenseVerifiedBy', 'firstName lastName email');
+  }
 
   return doctor;
 };
