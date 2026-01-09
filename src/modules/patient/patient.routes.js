@@ -7,7 +7,7 @@ const auth = require('../../middlewares/auth.middleware');
 const { updateProfileValidation } = require('./patient.validation');
 
 // Profile routes
-router.get('/profile', auth, controller.getProfile);
+router.get('/profile', controller.getProfile);
 router.put('/profile', auth, updateProfileValidation, validate, controller.updateProfile);
 
 // ==================== SAVED MEDICINES ROUTES ====================
@@ -15,7 +15,6 @@ router.put('/profile', auth, updateProfileValidation, validate, controller.updat
 // Get all saved medicines
 router.get(
   '/saved-medicines',
-  auth,
   savedMedicineValidation.getSavedMedicinesValidation,
   validate,
   savedMedicineController.getSavedMedicines
@@ -24,7 +23,6 @@ router.get(
 // Check if medicine is saved
 router.get(
   '/saved-medicines/:medicineId/check',
-  auth,
   savedMedicineValidation.medicineIdValidation,
   validate,
   savedMedicineController.isMedicineSaved

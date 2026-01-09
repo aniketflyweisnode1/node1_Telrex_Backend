@@ -3,6 +3,7 @@ const User = require('../../models/User.model');
 const mongoose = require('mongoose');
 const AppError = require('../../utils/AppError');
 const logger = require('../../utils/logger');
+const bcrypt = require('bcryptjs');
 
 // Get statistics for overview cards
 exports.getStatistics = async () => {
@@ -161,6 +162,143 @@ exports.createDoctor = async (adminId, data) => {
   await doctor.populate('createdBy', 'firstName lastName email');
 
   return doctor;
+};
+
+// Doctor signup (self-registration)
+exports.doctorSignup = async (data, files = {}) => {
+  const {
+    firstName,
+    lastName,
+    middleInitial,
+    email,
+    phoneNumber,
+    countryCode,
+    gender,
+    dateOfBirth,
+    specialty,
+    licenseNumber,
+    experience,
+    hospitalAffiliation,
+    languages,
+    bio,
+    consultationFee,
+    password,
+    agreeConfirmation
+  } = data;
+
+  // Check if user already exists
+  const existingUser = await User.findOne({
+    $or: [
+      { email: email?.toLowerCase() },
+      { phoneNumber }
+    ]
+  });
+
+  if (existingUser) {
+    logger.warn('Doctor signup failed - User already exists', { email, phoneNumber });
+    throw new AppError('User with this email or phone number already exists', 409);
+  }
+
+  // Check if license number already exists
+  const existingDoctor = await Doctor.findOne({ licenseNumber });
+  if (existingDoctor) {
+    logger.warn('Doctor signup failed - License number already exists', { licenseNumber });
+    throw new AppError('Doctor with this license number already exists', 409);
+  }
+
+  // Hash password
+  const hashedPassword = password ? await bcrypt.hash(password, 10) : await bcrypt.hash(phoneNumber.slice(-6), 10);
+
+  // Create user with doctor role
+  const user = await User.create({
+    firstName,
+    lastName,
+    email: email?.toLowerCase(),
+    phoneNumber,
+    countryCode: countryCode || '+91',
+    password: hashedPassword,
+    role: 'doctor',
+    isVerified: false,
+    isActive: false, // Inactive until admin verifies
+    agreeConfirmation: agreeConfirmation || false
+  });
+
+  // Prepare doctor data
+  const doctorData = {
+    user: user._id,
+    specialty,
+    licenseNumber,
+    licenseVerified: false,
+    consultationFee: consultationFee || 0,
+    status: 'pending',
+    createdBy: user._id, // Self-created
+    isActive: false // Inactive until verified
+  };
+
+  // Add optional fields
+  if (experience !== undefined) doctorData.experience = experience;
+  if (bio) doctorData.bio = bio;
+  if (languages && languages.length > 0) {
+    doctorData.languages = Array.isArray(languages) ? languages : [languages];
+  }
+  if (hospitalAffiliation) {
+    doctorData.address = doctorData.address || {};
+    doctorData.address.clinicName = hospitalAffiliation;
+  }
+
+  // Handle file uploads - support both multipart/form-data and JSON with file URLs
+  // If files are uploaded via multer
+  if (files && files.profilePicture && files.profilePicture.length > 0) {
+    const profilePictureUrl = `/uploads/${files.profilePicture[0].filename}`;
+    doctorData.profilePicture = profilePictureUrl;
+    doctorData.profileImage = {
+      url: profilePictureUrl,
+      verified: false
+    };
+  }
+  // If profile picture is provided as URL in JSON body
+  else if (data.profilePicture) {
+    const profilePictureUrl = data.profilePicture.startsWith('/') ? data.profilePicture : `/uploads/${data.profilePicture}`;
+    doctorData.profilePicture = profilePictureUrl;
+    doctorData.profileImage = {
+      url: profilePictureUrl,
+      verified: false
+    };
+  }
+
+  // If medical license is uploaded via multer
+  if (files && files.medicalLicense && files.medicalLicense.length > 0) {
+    const licenseDocUrl = `/uploads/${files.medicalLicense[0].filename}`;
+    doctorData.medicalLicense = {
+      licenseNumber: licenseNumber,
+      documentUrl: licenseDocUrl,
+      verified: false
+    };
+  }
+  // If medical license is provided as URL in JSON body
+  else if (data.medicalLicense) {
+    const licenseDocUrl = data.medicalLicense.startsWith('/') ? data.medicalLicense : `/uploads/${data.medicalLicense}`;
+    doctorData.medicalLicense = {
+      licenseNumber: licenseNumber,
+      documentUrl: licenseDocUrl,
+      verified: false
+    };
+  }
+
+  // Create doctor record
+  const doctor = await Doctor.create(doctorData);
+
+  logger.info('Doctor signup successful', {
+    doctorId: doctor._id,
+    userId: user._id,
+    specialty,
+    licenseNumber,
+    email
+  });
+
+  await doctor.populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt');
+
+  return { doctor, user };
 };
 
 // Get all doctors with search and pagination

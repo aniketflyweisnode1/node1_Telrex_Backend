@@ -374,3 +374,113 @@ exports.resetPasswordValidation = [
     .withMessage('Password must contain at least one uppercase letter, one lowercase letter, and one number')
 ];
 
+// Doctor signup validation (self-registration)
+exports.doctorSignupValidation = [
+  body('firstName')
+    .notEmpty()
+    .withMessage('First name is required')
+    .trim()
+    .isLength({ min: 2, max: 50 })
+    .withMessage('First name must be between 2 and 50 characters'),
+  body('lastName')
+    .notEmpty()
+    .withMessage('Last name is required')
+    .trim()
+    .isLength({ min: 2, max: 50 })
+    .withMessage('Last name must be between 2 and 50 characters'),
+  body('middleInitial')
+    .optional()
+    .trim()
+    .isLength({ max: 1 })
+    .withMessage('Middle initial must be a single character'),
+  body('email')
+    .notEmpty()
+    .withMessage('Email is required')
+    .isEmail()
+    .withMessage('Please provide a valid email')
+    .normalizeEmail(),
+  body('phoneNumber')
+    .notEmpty()
+    .withMessage('Mobile number is required')
+    .isMobilePhone()
+    .withMessage('Please provide a valid mobile number'),
+  body('countryCode')
+    .optional()
+    .isString()
+    .withMessage('Country code must be a string')
+    .default('+91'),
+  body('gender')
+    .optional()
+    .isIn(['male', 'female', 'other'])
+    .withMessage('Gender must be male, female, or other'),
+  body('dateOfBirth')
+    .optional()
+    .isISO8601()
+    .withMessage('Date of birth must be a valid date'),
+  body('specialty')
+    .notEmpty()
+    .withMessage('Specialization is required')
+    .isIn([
+      'General Practice',
+      'Cardiology',
+      'Pediatrics',
+      'Dermatology',
+      'Orthopedics',
+      'Neurology',
+      'Psychiatry',
+      'Oncology',
+      'Gynecology',
+      'Urology',
+      'Ophthalmology',
+      'ENT',
+      'Pulmonology',
+      'Gastroenterology',
+      'Endocrinology',
+      'Rheumatology',
+      'Other'
+    ])
+    .withMessage('Invalid specialization'),
+  body('licenseNumber')
+    .notEmpty()
+    .withMessage('Medical license number is required')
+    .trim()
+    .isLength({ min: 3, max: 50 })
+    .withMessage('License number must be between 3 and 50 characters'),
+  body('experience')
+    .optional()
+    .isInt({ min: 0, max: 100 })
+    .withMessage('Years of experience must be between 0 and 100'),
+  body('hospitalAffiliation')
+    .optional()
+    .trim()
+    .isLength({ max: 200 })
+    .withMessage('Hospital affiliation must not exceed 200 characters'),
+  body('languages')
+    .optional()
+    .isArray()
+    .withMessage('Languages must be an array'),
+  body('languages.*')
+    .optional()
+    .isString()
+    .trim()
+    .withMessage('Each language must be a string'),
+  body('bio')
+    .optional()
+    .trim()
+    .isLength({ max: 1000 })
+    .withMessage('Professional bio must not exceed 1000 characters'),
+  body('consultationFee')
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage('Consultation fee must be a positive number')
+    .default(0),
+  body('password')
+    .optional()
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters'),
+  body('agreeConfirmation')
+    .optional()
+    .isBoolean()
+    .withMessage('Agree confirmation must be a boolean')
+];
+

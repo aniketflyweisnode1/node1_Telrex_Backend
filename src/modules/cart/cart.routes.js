@@ -9,7 +9,7 @@ const {
 } = require('./cart.validation');
 
 // Get cart
-router.get('/cart', auth, controller.getCart);
+router.get('/cart', controller.getCart);
 
 // Add to cart
 router.post('/cart/items', auth, addToCartValidation, validate, controller.addToCart);

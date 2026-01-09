@@ -15,26 +15,40 @@ const createTransporter = () => {
 
 /**
  * Send OTP via email
+ * @param {string} email - Recipient email address
+ * @param {string} otpCode - OTP code to send
+ * @param {string} type - Type of OTP: 'login' or 'password-reset' (default: 'login')
  */
-exports.sendOtpEmail = async (email, otpCode) => {
+exports.sendOtpEmail = async (email, otpCode, type = 'login') => {
   try {
     // If SMTP not configured, log to console (for development)
     if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-      console.log(`📧 OTP Email to ${email}: ${otpCode}`);
+      console.log(`📧 OTP Email to ${email} (${type}): ${otpCode}`);
       return { success: true, message: 'OTP logged to console (SMTP not configured)' };
     }
 
     const transporter = createTransporter();
     
+    const isPasswordReset = type === 'password-reset';
+    const subject = isPasswordReset 
+      ? 'Your Password Reset OTP - Telerxs' 
+      : 'Your Login OTP - Telerxs';
+    const title = isPasswordReset 
+      ? 'Your Password Reset OTP' 
+      : 'Your Login OTP';
+    const description = isPasswordReset
+      ? 'Your One-Time Password (OTP) for password reset is:'
+      : 'Your One-Time Password (OTP) for login is:';
+    
     const mailOptions = {
       from: process.env.FROM_EMAIL || 'no-reply@telerxs.com',
       to: email,
-      subject: 'Your Login OTP - Telerxs',
+      subject: subject,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #333;">Your Login OTP</h2>
+          <h2 style="color: #333;">${title}</h2>
           <p>Hello,</p>
-          <p>Your One-Time Password (OTP) for login is:</p>
+          <p>${description}</p>
           <div style="background-color: #f4f4f4; padding: 20px; text-align: center; margin: 20px 0;">
             <h1 style="color: #007bff; font-size: 32px; margin: 0; letter-spacing: 5px;">${otpCode}</h1>
           </div>
@@ -47,12 +61,12 @@ exports.sendOtpEmail = async (email, otpCode) => {
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log(`📧 OTP Email sent to ${email}: ${info.messageId}`);
+    console.log(`📧 OTP Email sent to ${email} (${type}): ${info.messageId}`);
     return { success: true, messageId: info.messageId };
   } catch (error) {
     console.error('Email sending error:', error);
     // Don't throw error - log to console as fallback
-    console.log(`📧 OTP Email to ${email}: ${otpCode}`);
+    console.log(`📧 OTP Email to ${email} (${type}): ${otpCode}`);
     return { success: false, error: error.message };
   }
 };

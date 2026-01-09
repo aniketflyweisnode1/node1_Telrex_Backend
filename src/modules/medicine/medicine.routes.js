@@ -2,12 +2,10 @@ const express = require('express');
 const router = express.Router();
 const medicineController = require('./medicine.controller');
 const medicineValidation = require('./medicine.validation');
-const authMiddleware = require('../../middlewares/auth.middleware');
-const { isAdminOrSubAdmin } = require('../../middlewares/admin.middleware');
 const { uploadMultipleImages } = require('../../middlewares/upload.middleware');
 const validate = require('../../middlewares/validate.middleware');
 
-// ==================== PUBLIC GET ROUTES (No Authentication Required) ====================
+// ==================== PUBLIC ROUTES (No Authentication Required) ====================
 
 // Get all medicines
 router.get('/medicines', medicineController.getAllMedicines);
@@ -18,12 +16,7 @@ router.get('/medicines/:id/similar', medicineController.findSimilarMedicines);
 // Get medicine by ID
 router.get('/medicines/:id', medicineController.getMedicineById);
 
-// ==================== PROTECTED ROUTES (Admin/Sub-Admin Only) ====================
-// All POST, PUT, DELETE routes require authentication and admin/sub-admin access
-router.use(authMiddleware);
-router.use(isAdminOrSubAdmin);
-
-// Add new medicine (with multiple image uploads)
+// Add new medicine (with multiple image uploads) - PUBLIC
 router.post(
   '/medicines',
   uploadMultipleImages,
@@ -32,7 +25,7 @@ router.post(
   medicineController.addMedicine
 );
 
-// Update medicine stock and status (dedicated endpoint) - MUST come before /medicines/:id
+// Update medicine stock and status (dedicated endpoint) - MUST come before /medicines/:id - PUBLIC
 router.put(
   '/medicines/:id/stock-status',
   medicineValidation.updateStockStatusValidation,
@@ -40,7 +33,7 @@ router.put(
   medicineController.updateMedicineStockStatus
 );
 
-// Update medicine (with optional image uploads)
+// Update medicine (with optional image uploads) - PUBLIC
 router.put(
   '/medicines/:id',
   uploadMultipleImages,
@@ -49,7 +42,7 @@ router.put(
   medicineController.updateMedicine
 );
 
-// Delete medicine
+// Delete medicine - PUBLIC
 router.delete('/medicines/:id', medicineController.deleteMedicine);
 
 module.exports = router;

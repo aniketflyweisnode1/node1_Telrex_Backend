@@ -5,10 +5,10 @@ const validate = require('../../middlewares/validate.middleware');
 const { pastMedicationValidation } = require('./past-medication.validation');
 
 // Get all past medications
-router.get('/past-medications', auth, controller.getAllPastMedications);
+router.get('/past-medications', controller.getAllPastMedications);
 
 // Get single past medication by ID
-router.get('/past-medications/:id', auth, controller.getPastMedicationById);
+router.get('/past-medications/:id', controller.getPastMedicationById);
 
 // Add new past medication record
 router.post('/past-medications', auth, pastMedicationValidation, validate, controller.addPastMedication);

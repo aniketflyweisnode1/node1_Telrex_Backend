@@ -2,18 +2,20 @@ const express = require('express');
 const router = express.Router();
 const doctorController = require('./doctor.controller');
 const doctorValidation = require('./doctor.validation');
-const authMiddleware = require('../../middlewares/auth.middleware');
-const { isAdmin } = require('../../middlewares/admin.middleware');
+const validate = require('../../middlewares/validate.middleware');
 
-// All routes require admin authentication
-router.use(authMiddleware);
-router.use(isAdmin);
+// ==================== PUBLIC ROUTES (No Authentication Required) ====================
+// Get all doctors
+router.get('/', doctorController.getAllDoctors);
 
-// Get statistics
+// Get statistics - PUBLIC
 router.get('/statistics', doctorController.getStatistics);
 
-// Get available specialties
+// Get specialties - PUBLIC
 router.get('/specialties', doctorController.getAvailableSpecialties);
+
+// Get doctor by ID - PUBLIC
+router.get('/:id', doctorController.getDoctorById);
 
 // Doctor CRUD routes
 router.post(
@@ -21,10 +23,6 @@ router.post(
   doctorValidation.createDoctorValidation,
   doctorController.createDoctor
 );
-
-router.get('/', doctorController.getAllDoctors);
-
-router.get('/:id', doctorController.getDoctorById);
 
 router.put(
   '/:id/reset-password',

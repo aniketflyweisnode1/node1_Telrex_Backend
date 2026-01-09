@@ -73,6 +73,39 @@ exports.login = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
+// Doctor login with password
+exports.doctorLogin = async (req, res, next) => {
+  try {
+    const { identifier, password, rememberMe } = req.body;
+    if (!identifier || !password) {
+      return res.status(400).json({ success: false, message: 'Email/Phone and password required' });
+    }
+
+    const { user, doctor } = await authService.doctorLoginWithPassword(identifier, password);
+    
+    // Get fresh user data
+    const freshUser = await require('../../models/User.model').findById(user._id).select('-password');
+    const tokens = authService.generateTokens(freshUser, rememberMe);
+    
+    await loginHistoryService.trackLogin(req, freshUser, 'password');
+    
+    res.status(200).json({
+      success: true,
+      message: 'Doctor login successful',
+      data: {
+        user: freshUser,
+        doctor: doctor,
+        tokens
+      }
+    });
+  } catch (err) {
+    if (err.statusCode === 401 || err.statusCode === 404) {
+      await loginHistoryService.trackFailedLogin(req, req.body.identifier, 'password', err.message);
+    }
+    next(err);
+  }
+};
+
 // Login with OTP
 exports.loginWithOtp = async (req, res, next) => {
   try {
@@ -167,23 +200,34 @@ exports.sendOtp = async (req, res, next) => {
 // Forgot password
 exports.forgotPassword = async (req, res, next) => {
   try {
-    const { phoneNumber, countryCode } = req.body;
-    if (!phoneNumber) return res.status(400).json({ success: false, message: 'Phone number required' });
+    const { identifier, countryCode } = req.body;
+    if (!identifier) {
+      return res.status(400).json({ success: false, message: 'Email or phone number is required' });
+    }
     
-    await authService.forgotPassword(phoneNumber, countryCode || '+91');
-    res.status(200).json({ success: true, message: 'OTP sent to your phone number' });
+    const result = await authService.forgotPassword(identifier, countryCode || '+91');
+    res.status(200).json({ 
+      success: true, 
+      message: result.message,
+      data: {
+        otp: result.otp
+      }
+    });
   } catch (err) { next(err); }
 };
 
 // Reset password
 exports.resetPassword = async (req, res, next) => {
   try {
-    const { phoneNumber, otp, newPassword } = req.body;
-    if (!phoneNumber || !otp || !newPassword) {
-      return res.status(400).json({ success: false, message: 'Phone number, OTP and new password required' });
+    const { identifier, otp, newPassword } = req.body;
+    if (!identifier || !otp || !newPassword) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Email/Phone number, OTP and new password are required' 
+      });
     }
     
-    await authService.resetPassword(phoneNumber, otp, newPassword);
+    await authService.resetPassword(identifier, otp, newPassword);
     res.status(200).json({ success: true, message: 'Password reset successfully' });
   } catch (err) { next(err); }
 };

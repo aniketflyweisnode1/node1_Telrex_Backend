@@ -6,10 +6,7 @@ const authMiddleware = require('../../middlewares/auth.middleware');
 const { isDoctor } = require('../../middlewares/doctor.middleware');
 const validate = require('../../middlewares/validate.middleware');
 
-// All routes require authentication and doctor role
-router.use(authMiddleware);
-router.use(isDoctor);
-
+// GET routes are public (no authentication required)
 // Get all consultations
 router.get(
   '/',
@@ -25,6 +22,10 @@ router.get(
   validate,
   doctorConsultationsController.getConsultationById
 );
+
+// All other routes require authentication and doctor role
+router.use(authMiddleware);
+router.use(isDoctor);
 
 // Update consultation status
 router.put(

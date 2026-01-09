@@ -47,31 +47,30 @@ router.use('/admin/blogs', require('../modules/blog/blog.routes'));
 router.use('/admin/contact-form-queries', require('../modules/contact-form-query/contact-form-query.routes'));
 
 /* =======================
-   ADMIN ROUTES (Must come FIRST - contains public login endpoint)
+   MEDICINE ROUTES (Must come FIRST - All routes are PUBLIC, no authentication)
+   Public: All routes (GET, POST, PUT, DELETE) - No authentication required
+======================= */
+router.use('/admin', require('../modules/medicine/medicine.routes'));
+
+/* =======================
+   ADMIN ROUTES (Contains public login endpoint)
    Public: POST /admin/login, POST /admin/register
    Protected: All other routes require admin authentication
 ======================= */
 router.use('/admin', require('../modules/admin/admin.routes'));
 
 /* =======================
-   SUPPORT SYSTEM ADMIN ROUTES (Must come before /admin to avoid route conflicts)
+   SUPPORT SYSTEM ADMIN ROUTES
    Admin/Sub-Admin: Full CRUD and chat management for support system
 ======================= */
 router.use('/admin', require('../modules/support-system/support-system-admin.routes'));
 
 /* =======================
-   HELP DESK ROUTES (Must come before /admin to avoid route conflicts)
+   HELP DESK ROUTES
    Public: POST route (submit help desk query)
    Admin/Sub-Admin: GET, PUT, DELETE routes (full CRUD)
 ======================= */
 router.use('/admin', require('../modules/help-desk/help-desk.routes'));
-
-/* =======================
-   MEDICINE ROUTES (Must come before /admin to avoid route conflicts)
-   Public: GET routes (view medicines)
-   Admin/Sub-Admin: POST, PUT, DELETE routes (full CRUD)
-======================= */
-router.use('/admin', require('../modules/medicine/medicine.routes'));
 
 /* =======================
    DOCTOR EARNINGS ROUTES (Admin/Sub-Admin Only)

@@ -5,10 +5,10 @@ const validate = require('../../middlewares/validate.middleware');
 const { createDoctorsNoteValidation } = require('./doctors-note.validation');
 
 // Get all doctor's notes
-router.get('/doctors-notes', auth, controller.getDoctorsNotes);
+router.get('/doctors-notes', controller.getDoctorsNotes);
 
 // Get single doctor's note
-router.get('/doctors-notes/:id', auth, controller.getDoctorsNoteById);
+router.get('/doctors-notes/:id', controller.getDoctorsNoteById);
 
 // Create doctor's note
 router.post('/doctors-notes', auth, createDoctorsNoteValidation, validate, controller.createDoctorsNote);

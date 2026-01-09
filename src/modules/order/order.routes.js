@@ -15,13 +15,13 @@ const {
 } = require('./order.validation');
 
 // Get all orders
-router.get('/orders', auth, controller.getOrders);
+router.get('/orders', controller.getOrders);
 
 // Get orders summary/stats (must be before /orders/:id to avoid route conflict)
-router.get('/orders/summary', auth, controller.getOrdersSummary);
+router.get('/orders/summary', controller.getOrdersSummary);
 
 // Get single order by ID
-router.get('/orders/:id', auth, controller.getOrderById);
+router.get('/orders/:id', controller.getOrderById);
 
 // Create order (unified - handles cart, prescription, and custom items)
 router.post('/orders', auth, createOrderValidation, validate, controller.createOrder);
@@ -39,13 +39,13 @@ router.post('/orders/:orderId/items/:itemId/save', auth, saveOrderItemValidation
 router.delete('/orders/:orderId/items/:itemId/save', auth, unsaveOrderItemValidation, validate, controller.unsaveOrderItem);
 
 // Get order status
-router.get('/orders/:id/status', auth, orderIdValidation, validate, controller.getOrderStatus);
+router.get('/orders/:id/status', orderIdValidation, validate, controller.getOrderStatus);
 
 // Get order tracking
-router.get('/orders/:id/tracking', auth, orderIdValidation, validate, controller.getOrderTracking);
+router.get('/orders/:id/tracking', orderIdValidation, validate, controller.getOrderTracking);
 
 // Get order invoice
-router.get('/orders/:id/invoice', auth, orderIdValidation, validate, controller.getOrderInvoice);
+router.get('/orders/:id/invoice', orderIdValidation, validate, controller.getOrderInvoice);
 
 // Cancel order
 router.put('/orders/:id/cancel', auth, cancelOrderValidation, validate, controller.cancelOrder);

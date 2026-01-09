@@ -10,7 +10,7 @@ const AppError = require('../../utils/AppError');
 const getDoctor = async (userId) => {
   const doctor = await Doctor.findOne({ user: userId });
   if (!doctor) {
-    throw new AppError('Doctor profile not found', 404);
+    throw new AppError('Doctor profile not found. Please contact an administrator to create your doctor profile.', 404);
   }
   return doctor;
 };

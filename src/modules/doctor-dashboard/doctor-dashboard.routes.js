@@ -6,10 +6,7 @@ const authMiddleware = require('../../middlewares/auth.middleware');
 const { isDoctor } = require('../../middlewares/doctor.middleware');
 const validate = require('../../middlewares/validate.middleware');
 
-// All routes require authentication and doctor role
-router.use(authMiddleware);
-router.use(isDoctor);
-
+// GET routes are public (no authentication required)
 // Get Dashboard Overview (metrics)
 router.get(
   '/overview',
@@ -33,6 +30,10 @@ router.get(
   validate,
   doctorDashboardController.getTodaysSchedule
 );
+
+// All other routes require authentication and doctor role
+router.use(authMiddleware);
+router.use(isDoctor);
 
 module.exports = router;
 

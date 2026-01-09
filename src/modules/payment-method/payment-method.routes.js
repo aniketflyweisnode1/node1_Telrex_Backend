@@ -8,10 +8,10 @@ const {
 } = require('./payment-method.validation');
 
 // Get all payment methods
-router.get('/payment-options', auth, controller.getPaymentMethods);
+router.get('/payment-options', controller.getPaymentMethods);
 
 // Get single payment method
-router.get('/payment-options/:id', auth, controller.getPaymentMethodById);
+router.get('/payment-options/:id', controller.getPaymentMethodById);
 
 // Add new payment method
 router.post('/payment-options', auth, addPaymentMethodValidation, validate, controller.addPaymentMethod);

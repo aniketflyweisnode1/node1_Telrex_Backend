@@ -46,11 +46,37 @@ exports.refreshTokenValidation = [
 ];
 
 exports.forgotPasswordValidation = [
-  body('phoneNumber').notEmpty().withMessage('Phone number is required')
+  body('identifier')
+    .notEmpty()
+    .withMessage('Email or phone number is required')
+    .custom((value) => {
+      // Check if it's a valid email or phone number
+      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      const isPhone = /^[0-9]{10,15}$/.test(value.replace(/[^0-9]/g, ''));
+      if (!isEmail && !isPhone) {
+        throw new Error('Please provide a valid email or phone number');
+      }
+      return true;
+    }),
+  body('countryCode')
+    .optional()
+    .isString()
+    .withMessage('Country code must be a string')
 ];
 
 exports.resetPasswordValidation = [
-  body('phoneNumber').notEmpty().withMessage('Phone number is required'),
+  body('identifier')
+    .notEmpty()
+    .withMessage('Email or phone number is required')
+    .custom((value) => {
+      // Check if it's a valid email or phone number
+      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      const isPhone = /^[0-9]{10,15}$/.test(value.replace(/[^0-9]/g, ''));
+      if (!isEmail && !isPhone) {
+        throw new Error('Please provide a valid email or phone number');
+      }
+      return true;
+    }),
   body('otp').isLength({ min: 6, max: 6 }).withMessage('OTP must be 6 digits'),
   body('newPassword').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
 ];

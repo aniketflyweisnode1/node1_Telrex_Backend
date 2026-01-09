@@ -5,18 +5,8 @@ const refillValidation = require('./refill.validation');
 const authMiddleware = require('../../middlewares/auth.middleware');
 const validate = require('../../middlewares/validate.middleware');
 
-// All routes require authentication
-router.use(authMiddleware);
-
-// Create refill
-router.post(
-  '/refills',
-  refillValidation.createRefillValidation,
-  validate,
-  refillController.createRefill
-);
-
-// Get all refills
+// ==================== PUBLIC GET ROUTES ====================
+// Get all refills - PUBLIC
 router.get(
   '/refills',
   refillValidation.getRefillsValidation,
@@ -32,7 +22,7 @@ router.post(
   refillController.createOrderFromRefill
 );
 
-// Get all refill orders (orders created from refills) - must come before /refills/:id
+// Get all refill orders (orders created from refills) - must come before /refills/:id - PUBLIC
 router.get(
   '/refills/orders',
   refillValidation.getRefillOrdersValidation,
@@ -40,7 +30,7 @@ router.get(
   refillController.getRefillOrders
 );
 
-// Get refill order by ID - must come before /refills/:id
+// Get refill order by ID - must come before /refills/:id - PUBLIC
 router.get(
   '/refills/orders/:id',
   refillValidation.refillOrderIdValidation,
@@ -64,12 +54,23 @@ router.put(
   refillController.skipRefill
 );
 
-// Get refill by ID (must come last to avoid route conflicts)
+// Get refill by ID (must come last to avoid route conflicts) - PUBLIC
 router.get(
   '/refills/:id',
   refillValidation.refillIdValidation,
   validate,
   refillController.getRefillById
+);
+
+// ==================== PROTECTED ROUTES (Require Authentication) ====================
+router.use(authMiddleware);
+
+// Create refill
+router.post(
+  '/refills',
+  refillValidation.createRefillValidation,
+  validate,
+  refillController.createRefill
 );
 
 // Update refill

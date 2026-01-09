@@ -10,7 +10,7 @@ const {
 } = require('./intake-form.validation');
 
 // Get complete intake form
-router.get('/intake-form', auth, controller.getIntakeForm);
+router.get('/intake-form', controller.getIntakeForm);
 
 // Section-wise save endpoints
 router.post('/intake-form/basic-information', auth, basicInformationValidation, validate, controller.saveBasicInformation);

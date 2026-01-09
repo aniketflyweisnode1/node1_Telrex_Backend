@@ -73,6 +73,80 @@ exports.verifyOtpAndLogin = async (user) => {
   return { user, accessToken, refreshToken };
 };
 
+// Doctor login with password
+exports.doctorLoginWithPassword = async (identifier, password) => {
+  const Doctor = require('../../models/Doctor.model');
+  
+  // First, find user without role restriction to check if user exists
+  const userExists = await User.findOne({
+    $or: [
+      { email: identifier.toLowerCase() },
+      { phoneNumber: identifier }
+    ]
+  });
+
+  if (!userExists) {
+    logger.warn('Doctor login attempt failed - User not found', { identifier });
+    throw new AppError('Invalid credentials', 401);
+  }
+
+  // Check if user is a doctor
+  if (userExists.role !== 'doctor') {
+    logger.warn('Doctor login attempt failed - User is not a doctor', { 
+      identifier, 
+      userId: userExists._id, 
+      role: userExists.role 
+    });
+    throw new AppError('Invalid credentials or not a doctor account', 401);
+  }
+
+  // Now find user with password field
+  const user = await User.findOne({
+    $or: [
+      { email: identifier.toLowerCase() },
+      { phoneNumber: identifier }
+    ],
+    role: 'doctor'
+  }).select('+password');
+
+  if (!user) {
+    logger.warn('Doctor login attempt failed - User not found after role check', { identifier });
+    throw new AppError('Invalid credentials', 401);
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    logger.warn('Doctor login attempt failed - Invalid password', { userId: user._id, identifier });
+    throw new AppError('Invalid credentials', 401);
+  }
+
+  // Check if doctor profile exists
+  const doctor = await Doctor.findOne({ user: user._id })
+    .populate('user', 'firstName lastName email phoneNumber countryCode role isActive isVerified');
+
+  if (!doctor) {
+    logger.warn('Doctor login attempt failed - Doctor profile not found', { userId: user._id });
+    throw new AppError('Doctor profile not found. Please contact an administrator.', 404);
+  }
+
+  // Activate user and update last login
+  user.isActive = true;
+  user.lastLoginAt = new Date();
+  await user.save();
+
+  // Remove password before returning
+  user.password = undefined;
+
+  logger.info('Doctor logged in successfully', {
+    userId: user._id,
+    doctorId: doctor._id,
+    identifier,
+    loginMethod: 'password'
+  });
+
+  return { user, doctor };
+};
+
 // Generate tokens for login
 exports.generateTokens = (user, rememberMe = false) => {
   const accessToken = generateAccessToken({ id: user._id, role: user.role });
@@ -95,20 +169,30 @@ exports.refreshAccessToken = async (refreshToken) => {
   }
 };
 
-// Forgot password - send OTP
-exports.forgotPassword = async (phoneNumber, countryCode) => {
-  const user = await User.findOne({ phoneNumber });
-  if (!user) throw new AppError('User not found', 404);
-  
-  const otpService = require('./otp.service');
-  await otpService.sendOtp(phoneNumber, countryCode);
-  return { message: 'OTP sent to your phone number' };
+// Helper to check if identifier is email
+const isEmail = (identifier) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
 };
 
-// Reset password with OTP
-exports.resetPassword = async (phoneNumber, otp, newPassword) => {
+// Forgot password - send OTP (accepts email or phone)
+exports.forgotPassword = async (identifier, countryCode) => {
   const otpService = require('./otp.service');
-  const user = await otpService.verifyOtp(phoneNumber, otp);
+  
+  // Use sendPasswordResetOtp which sends password reset specific OTP
+  const otpCode = await otpService.sendPasswordResetOtp(identifier, countryCode);
+  
+  const isEmailIdentifier = isEmail(identifier);
+  const message = isEmailIdentifier 
+    ? 'OTP sent to your email address' 
+    : 'OTP sent to your phone number';
+  
+  return { message, otp: otpCode };
+};
+
+// Reset password with OTP (accepts email or phone)
+exports.resetPassword = async (identifier, otp, newPassword) => {
+  const otpService = require('./otp.service');
+  const user = await otpService.verifyOtp(identifier, otp);
   
   if (!user) throw new AppError('Invalid or expired OTP', 400);
   
