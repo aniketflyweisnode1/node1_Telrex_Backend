@@ -85,8 +85,14 @@ exports.updateDoctor = async (req, res, next) => {
       });
     }
 
-    // Add verifiedBy for license verification
-    if (req.body.licenseVerified === true) {
+    // Add verifiedBy for license verification (only if user is authenticated)
+    // If not authenticated, verifiedBy will be handled in service layer
+    if (req.body.licenseVerified === true && req.user) {
+      req.body.verifiedBy = req.user.id;
+    }
+    
+    // Also handle medicalLicense.verified
+    if (req.body.medicalLicense && req.body.medicalLicense.verified === true && req.user) {
       req.body.verifiedBy = req.user.id;
     }
 

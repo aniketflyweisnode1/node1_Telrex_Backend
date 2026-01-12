@@ -25,14 +25,41 @@ const getUserId = async (req) => {
     return doctor.user.toString();
   }
   
-  throw new AppError('User ID or Doctor ID is required', 400);
+  throw new AppError('User ID or Doctor ID is required. For public access, provide userId or doctorId as query parameter. Example: ?userId=... or ?doctorId=...', 400);
 };
 
 // Get Dashboard Overview
 exports.getDashboardOverview = async (req, res, next) => {
   try {
-    const userId = await getUserId(req);
+    const { doctorId } = req.query;
+    let userId;
+    let doctor = null;
+    
+    // If doctorId is provided directly, use it to get doctor and userId
+    if (doctorId) {
+      doctor = await Doctor.findById(doctorId);
+      if (!doctor) {
+        throw new AppError('Doctor not found', 404);
+      }
+      userId = doctor.user.toString();
+    } else {
+      // Otherwise, get userId from req (authenticated) or query params
+      userId = await getUserId(req);
+    }
+    
     const dashboardData = await doctorDashboardService.getDashboardOverview(userId, req.query);
+    
+    // Include doctorId in response if it was provided
+    if (doctorId && doctor) {
+      dashboardData.doctorId = doctor._id.toString();
+      dashboardData.doctor = {
+        id: doctor._id.toString(),
+        name: `${doctor.firstName || ''} ${doctor.lastName || ''}`.trim(),
+        specialty: doctor.specialty,
+        status: doctor.status
+      };
+    }
+    
     res.status(200).json({
       success: true,
       message: 'Dashboard data retrieved successfully',

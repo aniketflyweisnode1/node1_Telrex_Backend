@@ -19,10 +19,13 @@ router.get('/specialties', doctorController.getAvailableSpecialties);
 // Get doctor by ID - PUBLIC
 router.get('/:id', doctorController.getDoctorById);
 
-// Doctor CRUD routes
+// Doctor CRUD routes (Admin only)
 router.post(
   '/',
+  authMiddleware,
+  isAdmin,
   doctorValidation.createDoctorValidation,
+  validate,
   doctorController.createDoctor
 );
 
@@ -40,13 +43,20 @@ router.put(
   doctorController.approveDoctor
 );
 
+// Update doctor (Public - no authentication required)
 router.put(
   '/:id',
   doctorValidation.updateDoctorValidation,
+  validate,
   doctorController.updateDoctor
 );
 
-router.delete('/:id', doctorController.deleteDoctor);
+router.delete(
+  '/:id',
+  authMiddleware,
+  isAdmin,
+  doctorController.deleteDoctor
+);
 
 module.exports = router;
 

@@ -53,6 +53,13 @@ router.use('/admin/contact-form-queries', require('../modules/contact-form-query
 router.use('/admin', require('../modules/medicine/medicine.routes'));
 
 /* =======================
+   DOCTOR ROUTES (Public GET routes - Must come before /admin to avoid middleware conflicts)
+   Public: GET routes (view doctors, statistics, specialties, doctor by ID)
+   Admin: POST, PUT, DELETE routes require admin authentication
+======================= */
+router.use('/admin/doctors', require('../modules/doctor/doctor.routes'));
+
+/* =======================
    ADMIN ROUTES (Contains public login endpoint)
    Public: POST /admin/login, POST /admin/register
    Protected: All other routes require admin authentication
@@ -77,11 +84,6 @@ router.use('/admin', require('../modules/help-desk/help-desk.routes'));
    Must come before doctor routes to avoid route conflicts
 ======================= */
 router.use('/admin', require('../modules/doctor-earnings/doctor-earnings.routes'));
-
-/* =======================
-   DOCTOR ROUTES (Admin Only)
-======================= */
-router.use('/admin/doctors', require('../modules/doctor/doctor.routes'));
 
 /* =======================
    INTAKE FORM FIELD ROUTES (Admin/Sub-Admin Only)

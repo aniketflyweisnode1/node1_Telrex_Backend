@@ -5,7 +5,26 @@ exports.getDashboardOverviewValidation = [
   query('period')
     .optional()
     .isIn(['all', 'today', 'last_7_days', 'last_30_days', 'this_month', 'last_month'])
-    .withMessage('Invalid period. Must be one of: all, today, last_7_days, last_30_days, this_month, last_month')
+    .withMessage('Invalid period. Must be one of: all, today, last_7_days, last_30_days, this_month, last_month'),
+  query('userId')
+    .optional()
+    .isMongoId()
+    .withMessage('User ID must be a valid MongoDB ID'),
+  query('doctorId')
+    .optional()
+    .isMongoId()
+    .withMessage('Doctor ID must be a valid MongoDB ID'),
+  query()
+    .custom((value, { req }) => {
+      // At least one of userId, doctorId, or req.user must be present
+      if (req.user && req.user.id) {
+        return true; // Authenticated user
+      }
+      if (req.query.userId || req.query.doctorId) {
+        return true; // Query parameters provided
+      }
+      throw new Error('Either userId or doctorId query parameter is required for public access, or user must be authenticated');
+    })
 ];
 
 // Validation for recent consultations
@@ -17,11 +36,48 @@ exports.getRecentConsultationsValidation = [
   query('limit')
     .optional()
     .isInt({ min: 1, max: 100 })
-    .withMessage('Limit must be between 1 and 100')
+    .withMessage('Limit must be between 1 and 100'),
+  query('userId')
+    .optional()
+    .isMongoId()
+    .withMessage('User ID must be a valid MongoDB ID'),
+  query('doctorId')
+    .optional()
+    .isMongoId()
+    .withMessage('Doctor ID must be a valid MongoDB ID'),
+  query()
+    .custom((value, { req }) => {
+      // At least one of userId, doctorId, or req.user must be present
+      if (req.user && req.user.id) {
+        return true; // Authenticated user
+      }
+      if (req.query.userId || req.query.doctorId) {
+        return true; // Query parameters provided
+      }
+      throw new Error('Either userId or doctorId query parameter is required for public access, or user must be authenticated');
+    })
 ];
 
 // Validation for today's schedule
 exports.getTodaysScheduleValidation = [
-  // No validation needed for now, but can be extended
+  query('userId')
+    .optional()
+    .isMongoId()
+    .withMessage('User ID must be a valid MongoDB ID'),
+  query('doctorId')
+    .optional()
+    .isMongoId()
+    .withMessage('Doctor ID must be a valid MongoDB ID'),
+  query()
+    .custom((value, { req }) => {
+      // At least one of userId, doctorId, or req.user must be present
+      if (req.user && req.user.id) {
+        return true; // Authenticated user
+      }
+      if (req.query.userId || req.query.doctorId) {
+        return true; // Query parameters provided
+      }
+      throw new Error('Either userId or doctorId query parameter is required for public access, or user must be authenticated');
+    })
 ];
 
