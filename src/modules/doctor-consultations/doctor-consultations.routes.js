@@ -7,12 +7,28 @@ const { isDoctor } = require('../../middlewares/doctor.middleware');
 const validate = require('../../middlewares/validate.middleware');
 
 // GET routes are public (no authentication required)
-// Get all consultations
+// Get all consultations (no doctor filter - for admin)
+router.get(
+  '/all',
+  doctorConsultationsValidation.getAllConsultationsValidation,
+  validate,
+  doctorConsultationsController.getAllConsultations
+);
+
+// Get consultations by doctor (filters by specific doctor)
 router.get(
   '/',
-  doctorConsultationsValidation.getConsultationsValidation,
+  doctorConsultationsValidation.getConsultationsByDoctorValidation,
   validate,
-  doctorConsultationsController.getConsultations
+  doctorConsultationsController.getConsultationsByDoctor
+);
+
+// Get consultations by doctor ID (path parameter) - MUST be before /:id route
+router.get(
+  '/doctor/:doctorId',
+  doctorConsultationsValidation.getConsultationsByDoctorIdValidation,
+  validate,
+  doctorConsultationsController.getConsultationsByDoctorId
 );
 
 // Get consultation by ID
