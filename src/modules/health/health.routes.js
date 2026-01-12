@@ -5,6 +5,59 @@ const healthValidation = require('./health.validation');
 const authMiddleware = require('../../middlewares/auth.middleware');
 const { isAdminOrSubAdmin } = require('../../middlewares/admin.middleware');
 const validate = require('../../middlewares/validate.middleware');
+const { verifyAccessToken } = require('../../utils/jwt');
+const User = require('../../models/User.model');
+
+// Optional auth middleware - sets req.user if token is valid, but doesn't fail if no token
+const optionalAuthMiddleware = async (req, res, next) => {
+  const logger = require('../../utils/logger');
+  const authHeader = req.headers.authorization;
+
+  logger.info('Optional auth middleware called', {
+    path: req.path,
+    method: req.method,
+    hasAuthHeader: !!authHeader
+  });
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    // No token provided - continue without authentication
+    logger.info('No auth header, continuing without authentication');
+    return next();
+  }
+
+  const token = authHeader.split(' ')[1];
+
+  try {
+    const decoded = verifyAccessToken(token);
+    logger.info('Token decoded successfully', { userId: decoded.id });
+    
+    // Load user data if token is valid
+    const user = await User.findById(decoded.id).select('-password');
+    if (user) {
+      req.user = {
+        id: user._id,
+        role: user.role,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        isVerified: user.isVerified
+      };
+      logger.info('User found and set in req.user', { userId: user._id, role: user.role });
+    } else {
+      logger.warn('User not found in database but token is valid', { userId: decoded.id });
+    }
+    // If user not found, continue without req.user (don't fail)
+    next();
+  } catch (err) {
+    // If token is invalid, continue without authentication (don't fail)
+    logger.warn('Token verification failed, continuing without authentication', {
+      error: err.message,
+      errorName: err.name
+    });
+    next();
+  }
+};
 
 // ==================== PUBLIC GET ROUTES (No Authentication Required - No Token Needed) ====================
 // All GET routes below are PUBLIC and do NOT require any authentication token
@@ -82,6 +135,44 @@ router.get(
   healthController.getBestOffers
 );
 
+// ==================== MEDICINE MARKING ROUTES (Public - Optional Auth) ====================
+// Mark medicine as trendy (Optional auth - works with or without token)
+router.put(
+  '/medications/:id/mark-trendy',
+  optionalAuthMiddleware,
+  healthValidation.medicineIdValidation,
+  validate,
+  healthController.markMedicineAsTrendy
+);
+
+// Unmark medicine as trendy (Optional auth - works with or without token)
+router.put(
+  '/medications/:id/unmark-trendy',
+  optionalAuthMiddleware,
+  healthValidation.medicineIdValidation,
+  validate,
+  healthController.unmarkMedicineAsTrendy
+);
+
+// Mark medicine as best offer (Optional auth - works with or without token)
+router.put(
+  '/medications/:id/mark-best-offer',
+  optionalAuthMiddleware,
+  healthValidation.medicineIdValidation,
+  healthValidation.markBestOfferValidation,
+  validate,
+  healthController.markMedicineAsBestOffer
+);
+
+// Unmark medicine as best offer (Optional auth - works with or without token)
+router.put(
+  '/medications/:id/unmark-best-offer',
+  optionalAuthMiddleware,
+  healthValidation.medicineIdValidation,
+  validate,
+  healthController.unmarkMedicineAsBestOffer
+);
+
 // ==================== PROTECTED ROUTES (Admin/Sub-Admin Only) ====================
 // All POST, PUT, DELETE routes require authentication and admin/sub-admin access
 router.use(authMiddleware);
@@ -129,39 +220,7 @@ router.delete(
 );
 
 // ==================== MEDICINE MANAGEMENT ROUTES (Admin/Sub-Admin Only) ====================
-
-// Mark medicine as trendy
-router.put(
-  '/medications/:id/mark-trendy',
-  healthValidation.medicineIdValidation,
-  validate,
-  healthController.markMedicineAsTrendy
-);
-
-// Unmark medicine as trendy
-router.put(
-  '/medications/:id/unmark-trendy',
-  healthValidation.medicineIdValidation,
-  validate,
-  healthController.unmarkMedicineAsTrendy
-);
-
-// Mark medicine as best offer
-router.put(
-  '/medications/:id/mark-best-offer',
-  healthValidation.medicineIdValidation,
-  healthValidation.markBestOfferValidation,
-  validate,
-  healthController.markMedicineAsBestOffer
-);
-
-// Unmark medicine as best offer
-router.put(
-  '/medications/:id/unmark-best-offer',
-  healthValidation.medicineIdValidation,
-  validate,
-  healthController.unmarkMedicineAsBestOffer
-);
+// Note: Mark/Unmark trendy and best offer routes are defined in PUBLIC section above
 
 // Update medicine health category and type relation
 router.put(

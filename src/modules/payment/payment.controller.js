@@ -28,6 +28,22 @@ exports.createPaymentIntent = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
+exports.confirmPayment = async (req, res, next) => {
+  try {
+    const { paymentIntentId, paymentMethodId } = req.body;
+    if (!paymentIntentId) {
+      return res.status(400).json({ success: false, message: 'Payment intent ID is required' });
+    }
+    
+    const payment = await paymentService.confirmPayment(req.user.id, paymentIntentId, paymentMethodId);
+    res.status(200).json({ 
+      success: true, 
+      message: 'Payment confirmed successfully', 
+      data: payment 
+    });
+  } catch (err) { next(err); }
+};
+
 exports.verifyPayment = async (req, res, next) => {
   try {
     const { paymentIntentId } = req.body;

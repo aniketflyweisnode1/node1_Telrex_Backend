@@ -556,8 +556,44 @@ exports.updateDoctor = async (doctorId, data) => {
   // Update user data
   if (firstName) doctor.user.firstName = firstName;
   if (lastName) doctor.user.lastName = lastName;
-  if (email) doctor.user.email = email.toLowerCase();
-  if (phoneNumber) doctor.user.phoneNumber = phoneNumber;
+  
+  // Check email uniqueness if being updated
+  if (email) {
+    const emailLower = email.toLowerCase();
+    if (emailLower !== doctor.user.email) {
+      const existingUser = await User.findOne({ 
+        email: emailLower,
+        _id: { $ne: doctor.user._id }
+      });
+      if (existingUser) {
+        logger.warn('Doctor update failed - Email already exists', { 
+          doctorId, 
+          email: emailLower 
+        });
+        throw new AppError('Email already exists for another user', 409);
+      }
+      doctor.user.email = emailLower;
+    }
+  }
+  
+  // Check phone number uniqueness if being updated
+  if (phoneNumber) {
+    if (phoneNumber !== doctor.user.phoneNumber) {
+      const existingUser = await User.findOne({ 
+        phoneNumber,
+        _id: { $ne: doctor.user._id }
+      });
+      if (existingUser) {
+        logger.warn('Doctor update failed - Phone number already exists', { 
+          doctorId, 
+          phoneNumber 
+        });
+        throw new AppError('Phone number already exists for another user', 409);
+      }
+      doctor.user.phoneNumber = phoneNumber;
+    }
+  }
+  
   if (countryCode) doctor.user.countryCode = countryCode;
   if (status !== undefined) {
     doctor.user.isActive = status === 'active';

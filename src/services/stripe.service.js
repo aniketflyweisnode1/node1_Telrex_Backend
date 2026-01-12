@@ -2,8 +2,35 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const AppError = require('../utils/AppError');
 const logger = require('../utils/logger');
 
+// Create payment method from card details
+exports.createPaymentMethod = async (cardDetails) => {
+  try {
+    const paymentMethod = await stripe.paymentMethods.create({
+      type: 'card',
+      card: {
+        number: cardDetails.number,
+        exp_month: cardDetails.exp_month,
+        exp_year: cardDetails.exp_year,
+        cvc: cardDetails.cvc
+      },
+      billing_details: cardDetails.billing_details || {}
+    });
+    
+    logger.info('Payment method created', {
+      paymentMethodId: paymentMethod.id
+    });
+    
+    return paymentMethod;
+  } catch (error) {
+    logger.error('Payment method creation failed', {
+      error: error.message
+    });
+    throw new AppError(`Payment method creation failed: ${error.message}`, 400);
+  }
+};
+
 // Create payment intent
-exports.createPaymentIntent = async (amount, currency, metadata = {}) => {
+exports.createPaymentIntent = async (amount, currency, metadata = {}, cardDetails = null) => {
   try {
     // Convert amount to smallest currency unit (paise for INR)
     const amountInSmallestUnit = Math.round(amount * 100);
@@ -12,28 +39,50 @@ exports.createPaymentIntent = async (amount, currency, metadata = {}) => {
       amount,
       amountInSmallestUnit,
       currency,
-      metadata
+      metadata,
+      hasCardDetails: !!cardDetails
     });
     
-    const paymentIntent = await stripe.paymentIntents.create({
+    let paymentMethodId = null;
+    
+    // If card details provided, create payment method
+    if (cardDetails) {
+      const paymentMethod = await this.createPaymentMethod(cardDetails);
+      paymentMethodId = paymentMethod.id;
+      logger.info('Payment method created for payment intent', {
+        paymentMethodId
+      });
+    }
+    
+    const paymentIntentData = {
       amount: amountInSmallestUnit,
       currency: currency.toLowerCase(),
       metadata: metadata,
       automatic_payment_methods: {
-        enabled: true
+        enabled: !paymentMethodId // Only enable automatic if no payment method provided
       }
-    });
+    };
+    
+    // If payment method exists, attach it
+    if (paymentMethodId) {
+      paymentIntentData.payment_method = paymentMethodId;
+      paymentIntentData.confirm = true; // Auto-confirm if payment method provided
+    }
+    
+    const paymentIntent = await stripe.paymentIntents.create(paymentIntentData);
     
     logger.info('Stripe payment intent created', {
       paymentIntentId: paymentIntent.id,
       status: paymentIntent.status,
-      amount: amountInSmallestUnit
+      amount: amountInSmallestUnit,
+      confirmed: !!paymentMethodId
     });
     
     return {
       paymentIntentId: paymentIntent.id,
       clientSecret: paymentIntent.client_secret,
-      status: paymentIntent.status
+      status: paymentIntent.status,
+      paymentMethodId: paymentMethodId
     };
   } catch (error) {
     logger.error('Stripe payment intent creation failed', {

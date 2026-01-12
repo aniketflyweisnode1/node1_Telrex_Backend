@@ -1,4 +1,5 @@
 const medicineService = require('./medicine.service');
+const healthService = require('../health/health.service');
 const path = require('path');
 
 // Add new medicine
@@ -11,6 +12,36 @@ exports.addMedicine = async (req, res, next) => {
       success: true,
       message: 'Medicine added successfully',
       data: medicine
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Add new medicine and mark as best offer
+exports.addBestMedicine = async (req, res, next) => {
+  try {
+    const files = req.files || [];
+    const userId = req.user ? req.user.id : null;
+    
+    // Add the medicine first
+    const medicine = await medicineService.addMedicine(req.body, files, req);
+    
+    // Mark as best offer with optional discount percentage
+    const discountData = req.body.discountPercentage !== undefined 
+      ? { discountPercentage: req.body.discountPercentage } 
+      : null;
+    
+    const bestMedicine = await healthService.markMedicineAsBestOffer(
+      medicine._id.toString(), 
+      discountData, 
+      userId
+    );
+    
+    res.status(201).json({
+      success: true,
+      message: 'Medicine added and marked as best offer successfully',
+      data: bestMedicine
     });
   } catch (err) {
     next(err);

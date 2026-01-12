@@ -191,13 +191,35 @@ exports.deactivateHealthCategory = async (req, res, next) => {
 // Mark medicine as trendy
 exports.markMedicineAsTrendy = async (req, res, next) => {
   try {
-    const medicine = await healthService.markMedicineAsTrendy(req.params.id, req.user.id);
+    const logger = require('../../utils/logger');
+    const medicineId = req.params.id;
+    const userId = req.user ? req.user.id : null;
+    
+    logger.info('Mark trendy controller called', {
+      medicineId,
+      hasUser: !!req.user,
+      userId
+    });
+
+    const medicine = await healthService.markMedicineAsTrendy(medicineId, userId);
+    
+    logger.info('Medicine marked as trendy successfully', {
+      medicineId: medicine._id,
+      isTrendy: medicine.isTrendy
+    });
+
     res.status(200).json({
       success: true,
       message: 'Medicine marked as trendy successfully',
       data: medicine
     });
   } catch (err) {
+    const logger = require('../../utils/logger');
+    logger.error('Error marking medicine as trendy', {
+      error: err.message,
+      stack: err.stack,
+      medicineId: req.params.id
+    });
     next(err);
   }
 };
@@ -205,13 +227,35 @@ exports.markMedicineAsTrendy = async (req, res, next) => {
 // Unmark medicine as trendy
 exports.unmarkMedicineAsTrendy = async (req, res, next) => {
   try {
-    const medicine = await healthService.unmarkMedicineAsTrendy(req.params.id, req.user.id);
+    const logger = require('../../utils/logger');
+    const medicineId = req.params.id;
+    const userId = req.user ? req.user.id : null;
+    
+    logger.info('Unmark trendy controller called', {
+      medicineId,
+      hasUser: !!req.user,
+      userId
+    });
+
+    const medicine = await healthService.unmarkMedicineAsTrendy(medicineId, userId);
+    
+    logger.info('Medicine unmarked as trendy successfully', {
+      medicineId: medicine._id,
+      isTrendy: medicine.isTrendy
+    });
+
     res.status(200).json({
       success: true,
       message: 'Medicine unmarked as trendy successfully',
       data: medicine
     });
   } catch (err) {
+    const logger = require('../../utils/logger');
+    logger.error('Error unmarking medicine as trendy', {
+      error: err.message,
+      stack: err.stack,
+      medicineId: req.params.id
+    });
     next(err);
   }
 };
@@ -219,13 +263,45 @@ exports.unmarkMedicineAsTrendy = async (req, res, next) => {
 // Mark medicine as best offer
 exports.markMedicineAsBestOffer = async (req, res, next) => {
   try {
-    const medicine = await healthService.markMedicineAsBestOffer(req.params.id, req.body, req.user.id);
+    const logger = require('../../utils/logger');
+    const medicineId = req.params.id;
+    
+    logger.info('Mark best offer controller called', {
+      medicineId,
+      hasUser: !!req.user,
+      userId: req.user?.id,
+      body: req.body
+    });
+
+    const userId = req.user ? req.user.id : null;
+    // Handle empty body - if body is empty string or undefined, use empty object
+    const bodyData = (req.body && Object.keys(req.body).length > 0) ? req.body : {};
+    
+    logger.info('Calling service to mark best offer', {
+      medicineId,
+      bodyData,
+      userId
+    });
+
+    const medicine = await healthService.markMedicineAsBestOffer(medicineId, bodyData, userId);
+    
+    logger.info('Medicine marked successfully', {
+      medicineId: medicine._id,
+      isBestOffer: medicine.isBestOffer
+    });
+
     res.status(200).json({
       success: true,
       message: 'Medicine marked as best offer successfully',
       data: medicine
     });
   } catch (err) {
+    const logger = require('../../utils/logger');
+    logger.error('Error marking medicine as best offer', {
+      error: err.message,
+      stack: err.stack,
+      medicineId: req.params.id
+    });
     next(err);
   }
 };
@@ -233,13 +309,35 @@ exports.markMedicineAsBestOffer = async (req, res, next) => {
 // Unmark medicine as best offer
 exports.unmarkMedicineAsBestOffer = async (req, res, next) => {
   try {
-    const medicine = await healthService.unmarkMedicineAsBestOffer(req.params.id, req.user.id);
+    const logger = require('../../utils/logger');
+    const medicineId = req.params.id;
+    const userId = req.user ? req.user.id : null;
+    
+    logger.info('Unmark best offer controller called', {
+      medicineId,
+      hasUser: !!req.user,
+      userId
+    });
+
+    const medicine = await healthService.unmarkMedicineAsBestOffer(medicineId, userId);
+    
+    logger.info('Medicine unmarked as best offer successfully', {
+      medicineId: medicine._id,
+      isBestOffer: medicine.isBestOffer
+    });
+
     res.status(200).json({
       success: true,
       message: 'Medicine unmarked as best offer successfully',
       data: medicine
     });
   } catch (err) {
+    const logger = require('../../utils/logger');
+    logger.error('Error unmarking medicine as best offer', {
+      error: err.message,
+      stack: err.stack,
+      medicineId: req.params.id
+    });
     next(err);
   }
 };

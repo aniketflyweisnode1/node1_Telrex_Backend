@@ -641,128 +641,220 @@ exports.deactivateHealthCategory = async (categoryId, userId) => {
 
 // Mark medicine as trendy
 exports.markMedicineAsTrendy = async (medicineId, userId) => {
+  logger.info('Mark trendy request received', {
+    medicineId,
+    userId
+  });
+
   if (!mongoose.Types.ObjectId.isValid(medicineId)) {
+    logger.warn('Invalid medicine ID format', { medicineId });
     throw new AppError('Invalid medicine ID', 400);
   }
 
+  // Find medicine by ID
   const medicine = await Medicine.findById(medicineId);
   
   if (!medicine) {
+    logger.warn('Medicine not found', { medicineId });
     throw new AppError('Medicine not found', 404);
   }
 
+  logger.info('Medicine found', {
+    medicineId: medicine._id,
+    productName: medicine.productName,
+    currentIsTrendy: medicine.isTrendy
+  });
+
+  // Mark as trendy
   medicine.isTrendy = true;
   await medicine.save();
 
-  logger.info('Medicine marked as trendy', {
+  logger.info('Medicine marked as trendy successfully', {
     medicineId: medicine._id,
     productName: medicine.productName,
     updatedBy: userId
   });
 
-  return await Medicine.findById(medicine._id)
+  const updatedMedicine = await Medicine.findById(medicine._id)
     .populate({
       path: 'healthCategory',
       select: 'name slug description icon'
     })
     .lean();
+
+  logger.info('Medicine retrieved after update', {
+    medicineId: updatedMedicine._id,
+    isTrendy: updatedMedicine.isTrendy
+  });
+
+  return updatedMedicine;
 };
 
 // Unmark medicine as trendy
 exports.unmarkMedicineAsTrendy = async (medicineId, userId) => {
+  logger.info('Unmark trendy request received', {
+    medicineId,
+    userId
+  });
+
   if (!mongoose.Types.ObjectId.isValid(medicineId)) {
+    logger.warn('Invalid medicine ID format', { medicineId });
     throw new AppError('Invalid medicine ID', 400);
   }
 
+  // Find medicine by ID
   const medicine = await Medicine.findById(medicineId);
   
   if (!medicine) {
+    logger.warn('Medicine not found', { medicineId });
     throw new AppError('Medicine not found', 404);
   }
 
+  logger.info('Medicine found', {
+    medicineId: medicine._id,
+    productName: medicine.productName,
+    currentIsTrendy: medicine.isTrendy
+  });
+
+  // Unmark as trendy
   medicine.isTrendy = false;
   await medicine.save();
 
-  logger.info('Medicine unmarked as trendy', {
+  logger.info('Medicine unmarked as trendy successfully', {
     medicineId: medicine._id,
     productName: medicine.productName,
     updatedBy: userId
   });
 
-  return await Medicine.findById(medicine._id)
+  const updatedMedicine = await Medicine.findById(medicine._id)
     .populate({
       path: 'healthCategory',
       select: 'name slug description icon'
     })
     .lean();
+
+  logger.info('Medicine retrieved after update', {
+    medicineId: updatedMedicine._id,
+    isTrendy: updatedMedicine.isTrendy
+  });
+
+  return updatedMedicine;
 };
 
 // Mark medicine as best offer
 exports.markMedicineAsBestOffer = async (medicineId, data, userId) => {
+  logger.info('Mark best offer request received', {
+    medicineId,
+    hasData: !!data,
+    discountPercentage: data?.discountPercentage,
+    userId
+  });
+
   if (!mongoose.Types.ObjectId.isValid(medicineId)) {
+    logger.warn('Invalid medicine ID format', { medicineId });
     throw new AppError('Invalid medicine ID', 400);
   }
 
+  // Find medicine by ID
   const medicine = await Medicine.findById(medicineId);
   
   if (!medicine) {
+    logger.warn('Medicine not found', { medicineId });
     throw new AppError('Medicine not found', 404);
   }
 
+  logger.info('Medicine found', {
+    medicineId: medicine._id,
+    productName: medicine.productName,
+    currentIsBestOffer: medicine.isBestOffer
+  });
+
+  // Mark as best offer
   medicine.isBestOffer = true;
   
   // Set discount percentage if provided
   if (data && data.discountPercentage !== undefined) {
     if (data.discountPercentage < 0 || data.discountPercentage > 100) {
+      logger.warn('Invalid discount percentage', { discountPercentage: data.discountPercentage });
       throw new AppError('Discount percentage must be between 0 and 100', 400);
     }
     medicine.discountPercentage = data.discountPercentage;
+    logger.info('Discount percentage set', { discountPercentage: data.discountPercentage });
   }
 
   await medicine.save();
 
-  logger.info('Medicine marked as best offer', {
+  logger.info('Medicine marked as best offer successfully', {
     medicineId: medicine._id,
     productName: medicine.productName,
     discountPercentage: medicine.discountPercentage,
     updatedBy: userId
   });
 
-  return await Medicine.findById(medicine._id)
+  const updatedMedicine = await Medicine.findById(medicine._id)
     .populate({
       path: 'healthCategory',
       select: 'name slug description icon'
     })
     .lean();
+
+  logger.info('Medicine retrieved after update', {
+    medicineId: updatedMedicine._id,
+    isBestOffer: updatedMedicine.isBestOffer
+  });
+
+  return updatedMedicine;
 };
 
 // Unmark medicine as best offer
 exports.unmarkMedicineAsBestOffer = async (medicineId, userId) => {
+  logger.info('Unmark best offer request received', {
+    medicineId,
+    userId
+  });
+
   if (!mongoose.Types.ObjectId.isValid(medicineId)) {
+    logger.warn('Invalid medicine ID format', { medicineId });
     throw new AppError('Invalid medicine ID', 400);
   }
 
+  // Find medicine by ID
   const medicine = await Medicine.findById(medicineId);
   
   if (!medicine) {
+    logger.warn('Medicine not found', { medicineId });
     throw new AppError('Medicine not found', 404);
   }
 
+  logger.info('Medicine found', {
+    medicineId: medicine._id,
+    productName: medicine.productName,
+    currentIsBestOffer: medicine.isBestOffer
+  });
+
+  // Unmark as best offer
   medicine.isBestOffer = false;
   await medicine.save();
 
-  logger.info('Medicine unmarked as best offer', {
+  logger.info('Medicine unmarked as best offer successfully', {
     medicineId: medicine._id,
     productName: medicine.productName,
     updatedBy: userId
   });
 
-  return await Medicine.findById(medicine._id)
+  const updatedMedicine = await Medicine.findById(medicine._id)
     .populate({
       path: 'healthCategory',
       select: 'name slug description icon'
     })
     .lean();
+
+  logger.info('Medicine retrieved after update', {
+    medicineId: updatedMedicine._id,
+    isBestOffer: updatedMedicine.isBestOffer
+  });
+
+  return updatedMedicine;
 };
 
 // Update medicine health category and type

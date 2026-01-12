@@ -8,6 +8,7 @@ router.get('/orders/:id/invoice', controller.getInvoice);
 
 // Payment operations (authenticated) - Stripe only
 router.post('/payments/intent', auth, controller.createPaymentIntent); // Create Stripe payment intent
+router.post('/payments/confirm', auth, controller.confirmPayment); // Confirm payment intent (for testing/backend)
 router.post('/payments/verify', auth, controller.verifyPayment); // Verify payment after client confirmation
 router.get('/payments/history', controller.getPaymentHistory);
 router.post('/payments/refund', auth, controller.refundPayment);

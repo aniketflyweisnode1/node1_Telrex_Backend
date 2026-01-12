@@ -25,6 +25,15 @@ router.post(
   medicineController.addMedicine
 );
 
+// Add new medicine and mark as best offer (with multiple image uploads) - PUBLIC
+router.post(
+  '/medicines/best',
+  uploadMultipleImages,
+  medicineValidation.addMedicineValidation,
+  validate,
+  medicineController.addBestMedicine
+);
+
 // Update medicine stock and status (dedicated endpoint) - MUST come before /medicines/:id - PUBLIC
 router.put(
   '/medicines/:id/stock-status',

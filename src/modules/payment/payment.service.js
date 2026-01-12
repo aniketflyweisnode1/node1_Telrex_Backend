@@ -68,6 +68,12 @@ exports.getInvoice = async (userId, orderId) => {
 
 // Create payment intent (Stripe)
 exports.createPaymentIntent = async (userId, data) => {
+  // Validate required fields
+  if (!data.orderId) {
+    logger.warn('Payment intent creation failed - Order ID missing', { userId });
+    throw new AppError('Order ID is required', 400);
+  }
+  
   const patient = await getPatient(userId);
   
   const order = await Order.findOne({
@@ -78,6 +84,12 @@ exports.createPaymentIntent = async (userId, data) => {
   if (!order) {
     logger.warn('Payment intent creation failed - Order not found', { userId, orderId: data.orderId });
     throw new AppError('Order not found', 404);
+  }
+  
+  // Validate order amount
+  if (!order.totalAmount || order.totalAmount <= 0) {
+    logger.warn('Payment intent creation failed - Invalid order amount', { userId, orderId: data.orderId, totalAmount: order.totalAmount });
+    throw new AppError('Order amount must be greater than 0', 400);
   }
   if (order.paymentStatus === 'paid') {
     logger.warn('Payment intent creation failed - Order already paid', { userId, orderId: data.orderId });
@@ -117,7 +129,23 @@ exports.createPaymentIntent = async (userId, data) => {
     });
   }
   
-  // Create Stripe payment intent
+  // Prepare card details if provided
+  let cardDetails = null;
+  if (data.card) {
+    cardDetails = {
+      number: data.card.number,
+      exp_month: data.card.exp_month,
+      exp_year: data.card.exp_year,
+      cvc: data.card.cvc,
+      billing_details: data.card.billing_details || {
+        name: patient.fullName || `${patient.firstName || ''} ${patient.lastName || ''}`.trim(),
+        email: patient.email || '',
+        phone: patient.phoneNumber || ''
+      }
+    };
+  }
+  
+  // Create Stripe payment intent (with card details if provided)
   const stripeResult = await stripeService.createPaymentIntent(
     order.totalAmount,
     data.currency || 'inr',
@@ -126,16 +154,40 @@ exports.createPaymentIntent = async (userId, data) => {
       paymentId: payment._id.toString(),
       patientId: patient._id.toString(),
       orderNumber: order.orderNumber
-    }
+    },
+    cardDetails
   );
   
   // Update payment with Stripe details
   payment.stripePaymentIntentId = stripeResult.paymentIntentId;
   payment.stripeClientSecret = stripeResult.clientSecret;
-  payment.paymentStatus = 'processing';
+  
+  // If payment was confirmed (card details provided), update status accordingly
+  if (stripeResult.status === 'succeeded') {
+    payment.paymentStatus = 'success';
+    payment.isVerified = true;
+    payment.verifiedAt = new Date();
+    payment.transactionId = stripeResult.paymentIntentId;
+    
+    // Update order
+    order.paymentStatus = 'paid';
+    order.status = 'confirmed';
+    await order.save();
+    
+    logger.info('Payment completed successfully during intent creation', {
+      paymentId: payment.paymentId,
+      orderId: order._id
+    });
+  } else if (stripeResult.status === 'processing') {
+    payment.paymentStatus = 'processing';
+  } else {
+    payment.paymentStatus = 'processing'; // Default for requires_payment_method
+  }
+  
   payment.gatewayResponse = {
     paymentIntentId: stripeResult.paymentIntentId,
-    status: stripeResult.status
+    status: stripeResult.status,
+    paymentMethodId: stripeResult.paymentMethodId
   };
   await payment.save();
   
@@ -158,6 +210,106 @@ exports.createPaymentIntent = async (userId, data) => {
     clientSecret: stripeResult.clientSecret,
     paymentIntentId: stripeResult.paymentIntentId
   };
+};
+
+// Confirm payment intent with payment method (for testing/backend confirmation)
+exports.confirmPayment = async (userId, paymentIntentId, paymentMethodId = null) => {
+  const patient = await getPatient(userId);
+  
+  // Find payment record
+  const payment = await Payment.findOne({
+    stripePaymentIntentId: paymentIntentId,
+    patient: patient._id
+  }).populate('order');
+  
+  if (!payment) throw new AppError('Payment not found', 404);
+  
+  // If payment method ID not provided, create a test payment method for testing
+  let finalPaymentMethodId = paymentMethodId;
+  
+  if (!finalPaymentMethodId) {
+    // For testing: create a test payment method
+    // In production, this should come from the frontend
+    const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+    
+    try {
+      // Create a test payment method (for testing only)
+      const testPaymentMethod = await stripe.paymentMethods.create({
+        type: 'card',
+        card: {
+          number: '4242424242424242', // Stripe test card
+          exp_month: 12,
+          exp_year: new Date().getFullYear() + 1,
+          cvc: '123'
+        }
+      });
+      
+      finalPaymentMethodId = testPaymentMethod.id;
+      logger.info('Test payment method created for confirmation', {
+        paymentMethodId: finalPaymentMethodId,
+        paymentIntentId
+      });
+    } catch (error) {
+      logger.error('Failed to create test payment method', {
+        error: error.message,
+        paymentIntentId
+      });
+      throw new AppError(`Failed to create payment method: ${error.message}`, 400);
+    }
+  }
+  
+  // Confirm the payment intent
+  try {
+    const paymentIntent = await stripeService.confirmPaymentIntent(paymentIntentId, finalPaymentMethodId);
+    
+    // Update payment based on Stripe status
+    if (paymentIntent.status === 'succeeded') {
+      payment.paymentStatus = 'success';
+      payment.isVerified = true;
+      payment.verifiedAt = new Date();
+      payment.transactionId = paymentIntent.latest_charge || paymentIntent.id;
+      payment.stripeChargeId = paymentIntent.latest_charge;
+      payment.paidAt = new Date(paymentIntent.created * 1000);
+      payment.gatewayResponse = paymentIntent;
+      
+      // Update order
+      if (payment.order) {
+        payment.order.paymentStatus = 'paid';
+        payment.order.status = 'confirmed';
+        await payment.order.save();
+      }
+      
+      logger.info('Payment confirmed successfully', {
+        paymentId: payment._id,
+        paymentIntentId,
+        status: 'succeeded'
+      });
+    } else if (paymentIntent.status === 'processing') {
+      payment.paymentStatus = 'processing';
+      payment.gatewayResponse = paymentIntent;
+    } else {
+      payment.paymentStatus = 'failed';
+      payment.failedAt = new Date();
+      payment.failureReason = paymentIntent.last_payment_error?.message || 'Payment confirmation failed';
+      payment.gatewayResponse = paymentIntent;
+      
+      if (payment.order) {
+        payment.order.paymentStatus = 'failed';
+        await payment.order.save();
+      }
+    }
+    
+    await payment.save();
+    
+    return payment;
+  } catch (error) {
+    logger.error('Payment confirmation failed', {
+      error: error.message,
+      paymentIntentId,
+      userId
+    });
+    throw new AppError(`Payment confirmation failed: ${error.message}`, 400);
+  }
 };
 
 // Verify payment (after client-side confirmation)
