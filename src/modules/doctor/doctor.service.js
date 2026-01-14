@@ -106,7 +106,9 @@ exports.createDoctor = async (adminId, data) => {
     role: 'doctor',
     isVerified: licenseVerified || false,
     isActive: status === 'active',
-    agreeConfirmation: true
+    agreeConfirmation: true,
+    gender: data.gender,
+    dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : undefined
   });
 
   // Prepare doctor data
@@ -158,7 +160,7 @@ exports.createDoctor = async (adminId, data) => {
     licenseNumber
   });
 
-  await doctor.populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt');
+  await doctor.populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt gender dateOfBirth');
   await doctor.populate('createdBy', 'firstName lastName email');
 
   return doctor;
@@ -221,7 +223,9 @@ exports.doctorSignup = async (data, files = {}) => {
     role: 'doctor',
     isVerified: false,
     isActive: false, // Inactive until admin verifies
-    agreeConfirmation: agreeConfirmation || false
+    agreeConfirmation: agreeConfirmation || false,
+    gender: gender,
+    dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : undefined
   });
 
   // Prepare doctor data
@@ -297,7 +301,7 @@ exports.doctorSignup = async (data, files = {}) => {
     email
   });
 
-  await doctor.populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt');
+  await doctor.populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt gender dateOfBirth');
 
   return { doctor, user };
 };
@@ -438,7 +442,7 @@ exports.getAllDoctors = async (query) => {
   const skip = (parseInt(page) - 1) * parseInt(limit);
 
   const doctors = await Doctor.find(filter)
-    .populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt')
+    .populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt gender dateOfBirth')
     .populate('createdBy', 'firstName lastName email')
     .populate('licenseVerifiedBy', 'firstName lastName email')
     .sort({ createdAt: -1 })
@@ -477,7 +481,7 @@ exports.getDoctorById = async (doctorId) => {
   }
   try {
     const doctor = await Doctor.findById(doctorId)
-      .populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt')
+      .populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt gender dateOfBirth')
       .populate('createdBy', 'firstName lastName email')
       .populate('licenseVerifiedBy', 'firstName lastName email');
 
@@ -556,6 +560,10 @@ exports.updateDoctor = async (doctorId, data) => {
   // Update user data
   if (firstName) doctor.user.firstName = firstName;
   if (lastName) doctor.user.lastName = lastName;
+  if (data.gender !== undefined) doctor.user.gender = data.gender;
+  if (data.dateOfBirth !== undefined) {
+    doctor.user.dateOfBirth = data.dateOfBirth ? new Date(data.dateOfBirth) : null;
+  }
   
   // Check email uniqueness if being updated
   if (email) {
@@ -758,7 +766,7 @@ exports.updateDoctor = async (doctorId, data) => {
     updatedFields: Object.keys(data)
   });
 
-  await doctor.populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt');
+  await doctor.populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt gender dateOfBirth');
   await doctor.populate('createdBy', 'firstName lastName email');
   await doctor.populate('licenseVerifiedBy', 'firstName lastName email');
 
@@ -818,7 +826,7 @@ exports.approveDoctor = async (doctorId, adminId) => {
   });
 
   // Populate user data
-  await doctor.populate('user', 'firstName lastName email phoneNumber countryCode role isActive isVerified');
+  await doctor.populate('user', 'firstName lastName email phoneNumber countryCode role isActive isVerified gender dateOfBirth');
   if (doctor.licenseVerifiedBy) {
     await doctor.populate('licenseVerifiedBy', 'firstName lastName email');
   }

@@ -30,6 +30,14 @@ exports.createDoctorValidation = [
     .isString()
     .withMessage('Country code must be a string')
     .default('+91'),
+  body('gender')
+    .optional()
+    .isIn(['male', 'female', 'other'])
+    .withMessage('Gender must be male, female, or other'),
+  body('dateOfBirth')
+    .optional()
+    .isISO8601()
+    .withMessage('Date of birth must be a valid date'),
   body('specialty')
     .notEmpty()
     .withMessage('Specialty is required')
@@ -208,6 +216,14 @@ exports.updateDoctorValidation = [
     .optional()
     .isString()
     .withMessage('Country code must be a string'),
+  body('gender')
+    .optional()
+    .isIn(['male', 'female', 'other'])
+    .withMessage('Gender must be male, female, or other'),
+  body('dateOfBirth')
+    .optional()
+    .isISO8601()
+    .withMessage('Date of birth must be a valid date'),
   body('specialty')
     .optional()
     .isIn([

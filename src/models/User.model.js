@@ -83,6 +83,15 @@ const userSchema = new mongoose.Schema(
       default: false
     },
 
+    gender: {
+      type: String,
+      enum: ['male', 'female', 'other']
+    },
+
+    dateOfBirth: {
+      type: Date
+    },
+
     lastLoginAt: {
       type: Date
     }
