@@ -32,5 +32,11 @@ router.put(
   adminPatientController.updatePatientStatus
 );
 
+// Health History routes - nested under patient ID
+router.use('/patients/:id/health-history', require('../health-history/health-history.routes'));
+
+// Prescription routes - nested under patient ID
+router.use('/patients/:id/prescriptions', require('./admin-patient-prescription.routes'));
+
 module.exports = router;
 

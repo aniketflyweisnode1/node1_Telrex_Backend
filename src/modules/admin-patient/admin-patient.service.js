@@ -6,6 +6,7 @@ const Chat = require('../../models/Chat.model');
 const IntakeForm = require('../../models/IntakeForm.model');
 const Address = require('../../models/Address.model');
 const HealthRecord = require('../../models/HealthRecord.model');
+const HealthHistory = require('../../models/HealthHistory.model');
 const Payment = require('../../models/Payment.model');
 const AppError = require('../../utils/AppError');
 
@@ -175,10 +176,24 @@ exports.getPatientById = async (patientId) => {
     intakeForm,
     addresses,
     healthRecords,
+    healthHistories,
     payments
   ] = await Promise.all([
     Prescription.find({ patient: patientId })
-      .populate('doctor', 'firstName lastName')
+      .populate({
+        path: 'doctor',
+        populate: {
+          path: 'user',
+          select: '-password'
+        }
+      })
+      .populate({
+        path: 'patient',
+        populate: {
+          path: 'user',
+          select: '-password'
+        }
+      })
       .sort({ createdAt: -1 })
       .lean(),
     Order.find({ patient: patientId })
@@ -193,6 +208,27 @@ exports.getPatientById = async (patientId) => {
     IntakeForm.findOne({ patient: patientId }).lean(),
     Address.find({ patient: patientId }).lean(),
     HealthRecord.find({ patient: patientId }).sort({ createdAt: -1 }).lean(),
+    HealthHistory.find({ patient: patientId })
+      .populate({
+        path: 'doctor',
+        populate: {
+          path: 'user',
+          select: '-password'
+        }
+      })
+      .populate({
+        path: 'patient',
+        populate: {
+          path: 'user',
+          select: '-password'
+        }
+      })
+      .populate({
+        path: 'createdBy',
+        select: 'firstName lastName email role'
+      })
+      .sort({ createdAt: -1 })
+      .lean(),
     Payment.find({ patient: patientId }).sort({ createdAt: -1 }).lean()
   ]);
 
@@ -231,6 +267,7 @@ exports.getPatientById = async (patientId) => {
       intakeForm,
       addresses,
       healthRecords,
+      healthHistories,
       payments
     }
   };
