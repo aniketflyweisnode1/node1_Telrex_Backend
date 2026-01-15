@@ -53,6 +53,13 @@ router.use('/admin/contact-form-queries', require('../modules/contact-form-query
 router.use('/admin', require('../modules/medicine/medicine.routes'));
 
 /* =======================
+   SPECIALIZATION ROUTES (Public GET routes - Must come before /admin to avoid middleware conflicts)
+   Public: GET routes (view specializations)
+   Admin/Sub-Admin: POST, PUT, DELETE routes require authentication
+======================= */
+router.use('/admin/specializations', require('../modules/specialization/specialization.routes'));
+
+/* =======================
    DOCTOR ROUTES (Public GET routes - Must come before /admin to avoid middleware conflicts)
    Public: GET routes (view doctors, statistics, specialties, doctor by ID)
    Admin: POST, PUT, DELETE routes require admin authentication

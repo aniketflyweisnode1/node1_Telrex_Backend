@@ -40,27 +40,9 @@ exports.createDoctorValidation = [
     .withMessage('Date of birth must be a valid date'),
   body('specialty')
     .notEmpty()
-    .withMessage('Specialty is required')
-    .isIn([
-      'General Practice',
-      'Cardiology',
-      'Pediatrics',
-      'Dermatology',
-      'Orthopedics',
-      'Neurology',
-      'Psychiatry',
-      'Oncology',
-      'Gynecology',
-      'Urology',
-      'Ophthalmology',
-      'ENT',
-      'Pulmonology',
-      'Gastroenterology',
-      'Endocrinology',
-      'Rheumatology',
-      'Other'
-    ])
-    .withMessage('Invalid specialty'),
+    .withMessage('Specialization ID is required')
+    .isMongoId()
+    .withMessage('Specialization ID must be a valid MongoDB ID'),
   body('licenseNumber')
     .notEmpty()
     .withMessage('License number is required')
@@ -226,26 +208,8 @@ exports.updateDoctorValidation = [
     .withMessage('Date of birth must be a valid date'),
   body('specialty')
     .optional()
-    .isIn([
-      'General Practice',
-      'Cardiology',
-      'Pediatrics',
-      'Dermatology',
-      'Orthopedics',
-      'Neurology',
-      'Psychiatry',
-      'Oncology',
-      'Gynecology',
-      'Urology',
-      'Ophthalmology',
-      'ENT',
-      'Pulmonology',
-      'Gastroenterology',
-      'Endocrinology',
-      'Rheumatology',
-      'Other'
-    ])
-    .withMessage('Invalid specialty'),
+    .isMongoId()
+    .withMessage('Specialization ID must be a valid MongoDB ID'),
   body('licenseNumber')
     .optional()
     .trim()
@@ -435,27 +399,9 @@ exports.doctorSignupValidation = [
     .withMessage('Date of birth must be a valid date'),
   body('specialty')
     .notEmpty()
-    .withMessage('Specialization is required')
-    .isIn([
-      'General Practice',
-      'Cardiology',
-      'Pediatrics',
-      'Dermatology',
-      'Orthopedics',
-      'Neurology',
-      'Psychiatry',
-      'Oncology',
-      'Gynecology',
-      'Urology',
-      'Ophthalmology',
-      'ENT',
-      'Pulmonology',
-      'Gastroenterology',
-      'Endocrinology',
-      'Rheumatology',
-      'Other'
-    ])
-    .withMessage('Invalid specialization'),
+    .withMessage('Specialization ID is required')
+    .isMongoId()
+    .withMessage('Specialization ID must be a valid MongoDB ID'),
   body('licenseNumber')
     .notEmpty()
     .withMessage('Medical license number is required')

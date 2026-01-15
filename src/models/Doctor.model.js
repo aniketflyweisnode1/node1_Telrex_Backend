@@ -9,27 +9,9 @@ const doctorSchema = new mongoose.Schema(
       unique: true
     },
     specialty: {
-      type: String,
-      required: true,
-      enum: [
-        'General Practice',
-        'Cardiology',
-        'Pediatrics',
-        'Dermatology',
-        'Orthopedics',
-        'Neurology',
-        'Psychiatry',
-        'Oncology',
-        'Gynecology',
-        'Urology',
-        'Ophthalmology',
-        'ENT',
-        'Pulmonology',
-        'Gastroenterology',
-        'Endocrinology',
-        'Rheumatology',
-        'Other'
-      ]
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Specialization',
+      required: true
     },
     licenseNumber: {
       type: String,

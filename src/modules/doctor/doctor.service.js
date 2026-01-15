@@ -67,7 +67,7 @@ exports.createDoctor = async (adminId, data) => {
     email, 
     phoneNumber, 
     countryCode, 
-    specialty, 
+    specialty, // Now accepts specialization ID
     licenseNumber, 
     licenseVerified, 
     consultationFee, 
@@ -93,6 +93,19 @@ exports.createDoctor = async (adminId, data) => {
   if (existingDoctor) {
     logger.warn('Doctor creation failed - License number already exists', { licenseNumber });
     throw new AppError('Doctor with this license number already exists', 409);
+  }
+
+  // Validate specialization exists
+  const Specialization = require('../../models/Specialization.model');
+  if (!mongoose.Types.ObjectId.isValid(specialty)) {
+    throw new AppError('Invalid specialization ID format', 400);
+  }
+  const specialization = await Specialization.findById(specialty);
+  if (!specialization) {
+    throw new AppError('Specialization not found', 404);
+  }
+  if (!specialization.isActive) {
+    throw new AppError('Cannot assign inactive specialization to doctor', 400);
   }
 
   // Create user with doctor role
@@ -206,6 +219,19 @@ exports.doctorSignup = async (data, files = {}) => {
   if (existingDoctor) {
     logger.warn('Doctor signup failed - License number already exists', { licenseNumber });
     throw new AppError('Doctor with this license number already exists', 409);
+  }
+
+  // Validate specialization exists
+  const Specialization = require('../../models/Specialization.model');
+  if (!mongoose.Types.ObjectId.isValid(specialty)) {
+    throw new AppError('Invalid specialization ID format', 400);
+  }
+  const specialization = await Specialization.findById(specialty);
+  if (!specialization) {
+    throw new AppError('Specialization not found', 404);
+  }
+  if (!specialization.isActive) {
+    throw new AppError('Cannot assign inactive specialization to doctor', 400);
   }
 
   // Set password (will be hashed by User model's pre-save hook)
@@ -443,6 +469,7 @@ exports.getAllDoctors = async (query) => {
 
   const doctors = await Doctor.find(filter)
     .populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt gender dateOfBirth')
+    .populate('specialty', 'name description')
     .populate('createdBy', 'firstName lastName email')
     .populate('licenseVerifiedBy', 'firstName lastName email')
     .sort({ createdAt: -1 })
@@ -482,6 +509,7 @@ exports.getDoctorById = async (doctorId) => {
   try {
     const doctor = await Doctor.findById(doctorId)
       .populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt gender dateOfBirth')
+      .populate('specialty', 'name description')
       .populate('createdBy', 'firstName lastName email')
       .populate('licenseVerifiedBy', 'firstName lastName email');
 
