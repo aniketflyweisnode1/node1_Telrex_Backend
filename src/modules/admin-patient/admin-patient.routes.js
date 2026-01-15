@@ -38,5 +38,8 @@ router.use('/patients/:id/health-history', require('../health-history/health-his
 // Prescription routes - nested under patient ID
 router.use('/patients/:id/prescriptions', require('./admin-patient-prescription.routes'));
 
+// Transaction history routes - nested under patient ID
+router.use('/patients/:id/transactions', require('./admin-patient-transaction.routes'));
+
 module.exports = router;
 
