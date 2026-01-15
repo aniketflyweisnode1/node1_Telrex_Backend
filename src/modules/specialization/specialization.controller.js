@@ -76,6 +76,26 @@ exports.updateSpecialization = async (req, res, next) => {
 };
 
 /**
+ * Change specialization status (admin only)
+ */
+exports.changeSpecializationStatus = async (req, res, next) => {
+  try {
+    const specialization = await specializationService.changeSpecializationStatus(
+      req.params.id,
+      req.body.isActive
+    );
+
+    res.status(200).json({
+      success: true,
+      message: `Specialization ${specialization.isActive ? 'activated' : 'deactivated'} successfully`,
+      data: specialization
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
  * Delete specialization (admin only)
  */
 exports.deleteSpecialization = async (req, res, next) => {

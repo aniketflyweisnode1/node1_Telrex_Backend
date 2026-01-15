@@ -170,6 +170,49 @@ exports.updateSpecialization = async (specializationId, data) => {
 };
 
 /**
+ * Change specialization status (active/inactive) (admin only)
+ * @param {string} specializationId - Specialization ID
+ * @param {boolean} isActive - Active status
+ * @returns {Promise<object>} Updated specialization
+ */
+exports.changeSpecializationStatus = async (specializationId, isActive) => {
+  if (!mongoose.Types.ObjectId.isValid(specializationId)) {
+    throw new AppError('Invalid specialization ID format', 400);
+  }
+
+  const specialization = await Specialization.findById(specializationId);
+  if (!specialization) {
+    throw new AppError('Specialization not found', 404);
+  }
+
+  // If trying to deactivate, check if any active doctors are using it
+  if (isActive === false) {
+    const activeDoctorsCount = await Doctor.countDocuments({
+      specialization: specializationId,
+      isActive: true,
+      status: 'active'
+    });
+
+    if (activeDoctorsCount > 0) {
+      throw new AppError(
+        `Cannot deactivate specialization. ${activeDoctorsCount} active doctor(s) are using this specialization. Please update or deactivate those doctors first.`,
+        400
+      );
+    }
+  }
+
+  specialization.isActive = isActive;
+  await specialization.save();
+
+  return await Specialization.findById(specialization._id)
+    .populate({
+      path: 'createdBy',
+      select: 'firstName lastName email'
+    })
+    .lean();
+};
+
+/**
  * Delete specialization (admin only)
  * @param {string} specializationId - Specialization ID
  * @returns {Promise<object>} Deletion result

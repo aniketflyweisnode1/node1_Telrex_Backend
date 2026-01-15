@@ -84,6 +84,21 @@ exports.updateSpecializationValidation = [
 ];
 
 /**
+ * Validation for changing specialization status
+ */
+exports.changeSpecializationStatusValidation = [
+  param('id')
+    .isMongoId()
+    .withMessage('Specialization ID must be a valid MongoDB ID'),
+  body('isActive')
+    .notEmpty()
+    .withMessage('isActive status is required')
+    .isBoolean()
+    .withMessage('isActive must be a boolean')
+    .toBoolean()
+];
+
+/**
  * Validation for deleting specialization
  */
 exports.deleteSpecializationValidation = [

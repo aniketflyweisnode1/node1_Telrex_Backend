@@ -36,6 +36,22 @@ router.post(
   specializationController.createSpecialization
 );
 
+// Change specialization status (active/inactive) - MUST come before /:id route
+// Supports both PUT and PATCH methods
+router.put(
+  '/:id/status',
+  specializationValidation.changeSpecializationStatusValidation,
+  validate,
+  specializationController.changeSpecializationStatus
+);
+
+router.patch(
+  '/:id/status',
+  specializationValidation.changeSpecializationStatusValidation,
+  validate,
+  specializationController.changeSpecializationStatus
+);
+
 // Update specialization
 router.put(
   '/:id',
