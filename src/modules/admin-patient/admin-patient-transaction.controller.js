@@ -40,3 +40,22 @@ exports.getTransactionById = async (req, res, next) => {
   }
 };
 
+/**
+ * Get invoice for a transaction
+ * GET /api/v1/admin/patients/:id/transactions/:transactionId/invoice
+ */
+exports.getTransactionInvoice = async (req, res, next) => {
+  try {
+    const invoice = await adminPatientTransactionService.getTransactionInvoice(
+      req.params.id,
+      req.params.transactionId
+    );
+    res.status(200).json({
+      success: true,
+      data: invoice
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+

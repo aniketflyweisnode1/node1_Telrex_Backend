@@ -1,5 +1,6 @@
 const Doctor = require('../../models/Doctor.model');
 const User = require('../../models/User.model');
+const Specialization = require('../../models/Specialization.model');
 const mongoose = require('mongoose');
 const AppError = require('../../utils/AppError');
 const logger = require('../../utils/logger');
@@ -8,14 +9,54 @@ const bcrypt = require('bcryptjs');
 // Get statistics for overview cards
 exports.getStatistics = async () => {
   try {
+    // Get current month dates
+    const now = new Date();
+    const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const currentMonthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+    
+    // Get last month dates
+    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+    
+    // Total providers (current month)
     const totalProviders = await Doctor.countDocuments({ isActive: true });
-    const pendingVerification = await Doctor.countDocuments({ 
-      licenseVerified: false,
-      isActive: true 
+    
+    // Total providers (last month) for comparison
+    const lastMonthProviders = await Doctor.countDocuments({
+      isActive: true,
+      createdAt: { $lte: lastMonthEnd }
     });
     
-    // Calculate average rating
-    const doctorsWithRatings = await Doctor.aggregate([
+    // Calculate percentage change
+    const totalProvidersChange = lastMonthProviders > 0 
+      ? ((totalProviders - lastMonthProviders) / lastMonthProviders) * 100 
+      : 0;
+    
+    // Status counts
+    const statusCounts = await Doctor.aggregate([
+      { $match: { isActive: true } },
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+    
+    const statusMap = {
+      active: 0,
+      pending: 0,
+      suspended: 0
+    };
+    
+    statusCounts.forEach(item => {
+      if (statusMap.hasOwnProperty(item._id)) {
+        statusMap[item._id] = item.count;
+      }
+    });
+    
+    // Calculate average rating (current month)
+    const doctorsWithRatingsCurrent = await Doctor.aggregate([
       { $match: { isActive: true, 'rating.totalRatings': { $gt: 0 } } },
       {
         $group: {
@@ -26,27 +67,85 @@ exports.getStatistics = async () => {
       }
     ]);
     
-    const avgProviderRating = doctorsWithRatings.length > 0 
-      ? doctorsWithRatings[0].avgRating 
+    const avgProviderRating = doctorsWithRatingsCurrent.length > 0 
+      ? doctorsWithRatingsCurrent[0].avgRating 
+      : 0;
+    
+    // Average rating (last month) for comparison
+    const doctorsWithRatingsLastMonth = await Doctor.aggregate([
+      { 
+        $match: { 
+          isActive: true, 
+          'rating.totalRatings': { $gt: 0 },
+          createdAt: { $lte: lastMonthEnd }
+        } 
+      },
+      {
+        $group: {
+          _id: null,
+          avgRating: { $avg: '$rating.average' }
+        }
+      }
+    ]);
+    
+    const lastMonthAvgRating = doctorsWithRatingsLastMonth.length > 0 
+      ? doctorsWithRatingsLastMonth[0].avgRating 
+      : 0;
+    
+    // Calculate percentage change for rating
+    const avgRatingChange = lastMonthAvgRating > 0 
+      ? ((avgProviderRating - lastMonthAvgRating) / lastMonthAvgRating) * 100 
       : 0;
 
-    // Payouts pending (placeholder - implement based on your payment system)
+    // Payouts pending - get from DoctorPayout model
+    const DoctorPayout = require('../../models/DoctorPayout.model');
+    const pendingPayouts = await DoctorPayout.aggregate([
+      { 
+        $match: { 
+          status: { $in: ['pending', 'processing'] }
+        } 
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: '$amount' },
+          providerCount: { $addToSet: '$doctor' } // Get unique doctors
+        }
+      }
+    ]);
+    
     const payoutsPending = {
-      amount: 0,
-      providerCount: 0
+      amount: pendingPayouts.length > 0 ? pendingPayouts[0].totalAmount : 0,
+      providerCount: pendingPayouts.length > 0 ? pendingPayouts[0].providerCount.length : 0
     };
 
     const statistics = {
-      totalProviders,
-      pendingVerification,
-      payoutsPending,
-      avgProviderRating: parseFloat(avgProviderRating.toFixed(1))
+      totalProviders: {
+        value: totalProviders,
+        change: parseFloat(totalProvidersChange.toFixed(2)),
+        changeType: totalProvidersChange >= 0 ? 'increase' : 'decrease'
+      },
+      payoutsPending: {
+        amount: payoutsPending.amount,
+        providerCount: payoutsPending.providerCount
+      },
+      avgProviderRating: {
+        value: parseFloat(avgProviderRating.toFixed(1)),
+        change: parseFloat(avgRatingChange.toFixed(2)),
+        changeType: avgRatingChange >= 0 ? 'increase' : 'decrease'
+      },
+      statusCounts: {
+        all: totalProviders,
+        active: statusMap.active,
+        pending: statusMap.pending,
+        suspended: statusMap.suspended
+      }
     };
 
     logger.info('Doctor statistics retrieved', {
-      totalProviders,
-      pendingVerification,
-      avgProviderRating: statistics.avgProviderRating
+      totalProviders: statistics.totalProviders.value,
+      avgProviderRating: statistics.avgProviderRating.value,
+      payoutsPending: statistics.payoutsPending
     });
 
     return statistics;
@@ -174,6 +273,7 @@ exports.createDoctor = async (adminId, data) => {
   });
 
   await doctor.populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt gender dateOfBirth');
+  await doctor.populate('specialty', 'name description isActive');
   await doctor.populate('createdBy', 'firstName lastName email');
 
   return doctor;
@@ -328,6 +428,7 @@ exports.doctorSignup = async (data, files = {}) => {
   });
 
   await doctor.populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt gender dateOfBirth');
+  await doctor.populate('specialty', 'name description isActive');
 
   return { doctor, user };
 };
@@ -353,14 +454,25 @@ exports.getAllDoctors = async (query) => {
     const matchingUsers = await User.find(userSearchFilter).select('_id');
     const userIds = matchingUsers.map(u => u._id);
     
-    // Also check if search matches license number or specialty
+    // Also check if search matches license number or specialty (now from Specialization model)
     const searchRegex = new RegExp(search, 'i');
-    const matchingSpecialties = [
-      'General Practice', 'Cardiology', 'Pediatrics', 'Dermatology',
-      'Orthopedics', 'Neurology', 'Psychiatry', 'Oncology',
-      'Gynecology', 'Urology', 'Ophthalmology', 'ENT',
-      'Pulmonology', 'Gastroenterology', 'Endocrinology', 'Rheumatology', 'Other'
-    ].filter(s => searchRegex.test(s));
+    
+    // Find specializations that match the search term
+    let specializationIds = [];
+    try {
+      const matchingSpecializations = await Specialization.find({
+        name: { $regex: search, $options: 'i' },
+        isActive: true
+      }).select('_id').lean();
+      // Ensure all IDs are valid ObjectIds and convert to ObjectId instances
+      specializationIds = matchingSpecializations
+        .map(s => s._id)
+        .filter(id => mongoose.Types.ObjectId.isValid(id))
+        .map(id => new mongoose.Types.ObjectId(id));
+    } catch (err) {
+      // If Specialization query fails, just skip specialization search
+      logger.warn('Error searching specializations', { error: err.message });
+    }
     
     // Build search filter
     const searchConditions = [];
@@ -370,9 +482,16 @@ exports.getAllDoctors = async (query) => {
       searchConditions.push({ user: { $in: userIds } });
     }
     
-    // If specialty matches, add specialty filter
-    if (matchingSpecialties.length > 0) {
-      searchConditions.push({ specialty: { $in: matchingSpecialties } });
+    // If specialty matches, add specialty filter (using ObjectId)
+    // Only add if we have valid ObjectIds
+    if (specializationIds.length > 0) {
+      // Ensure all IDs are ObjectId instances before using in $in query
+      const validSpecializationIds = specializationIds
+        .filter(id => mongoose.Types.ObjectId.isValid(id))
+        .map(id => id instanceof mongoose.Types.ObjectId ? id : new mongoose.Types.ObjectId(id));
+      if (validSpecializationIds.length > 0) {
+        searchConditions.push({ specialty: { $in: validSpecializationIds } });
+      }
     }
     
     // If license number matches
@@ -397,18 +516,90 @@ exports.getAllDoctors = async (query) => {
     filter.$or = searchConditions;
   }
 
-  // Specialty filter
+  // Specialty filter (now accepts ObjectId or name - dynamic lookup from Specialization model)
   if (specialty) {
-    if (filter.$or) {
-      const searchFilter = { $or: filter.$or };
-      filter = {
-        $and: [
-          searchFilter,
-          { specialty: specialty }
-        ]
+    try {
+      let specialtyId = null;
+      
+      // Always lookup specialization dynamically - support both ObjectId and name
+      if (mongoose.Types.ObjectId.isValid(specialty)) {
+        // If it's a valid ObjectId, find by ID
+        const specialization = await Specialization.findById(specialty).lean();
+        if (!specialization || !specialization.isActive) {
+          // If specialization doesn't exist or is inactive, return empty results
+          return {
+            doctors: [],
+            pagination: {
+              page: parseInt(page),
+              limit: parseInt(limit),
+              total: 0,
+              pages: 0
+            }
+          };
+        }
+        // Convert to ObjectId to ensure it's the correct type
+        specialtyId = new mongoose.Types.ObjectId(specialization._id);
+      } else {
+        // If not a valid ObjectId, it must be a name - find by name dynamically
+        const specialization = await Specialization.findOne({ 
+          name: { $regex: new RegExp(`^${specialty}$`, 'i') },
+          isActive: true 
+        }).lean();
+        
+        if (!specialization) {
+          // Specialization not found by name, return empty results
+          return {
+            doctors: [],
+            pagination: {
+              page: parseInt(page),
+              limit: parseInt(limit),
+              total: 0,
+              pages: 0
+            }
+          };
+        }
+        // Convert to ObjectId to ensure it's the correct type
+        specialtyId = new mongoose.Types.ObjectId(specialization._id);
+      }
+      
+      // Ensure specialtyId is a valid ObjectId before using in filter
+      if (!specialtyId || !mongoose.Types.ObjectId.isValid(specialtyId)) {
+        logger.warn('Invalid specialty ID after lookup', { specialty, specialtyId });
+        return {
+          doctors: [],
+          pagination: {
+            page: parseInt(page),
+            limit: parseInt(limit),
+            total: 0,
+            pages: 0
+          }
+        };
+      }
+      
+      // Apply specialty filter
+      if (filter.$or) {
+        const searchFilter = { $or: filter.$or };
+        filter = {
+          $and: [
+            searchFilter,
+            { specialty: specialtyId }
+          ]
+        };
+      } else {
+        filter.specialty = specialtyId;
+      }
+    } catch (err) {
+      // If specialty lookup fails, return empty results
+      logger.warn('Error looking up specialty', { specialty, error: err.message, stack: err.stack });
+      return {
+        doctors: [],
+        pagination: {
+          page: parseInt(page),
+          limit: parseInt(limit),
+          total: 0,
+          pages: 0
+        }
       };
-    } else {
-      filter.specialty = specialty;
     }
   }
 
@@ -467,11 +658,23 @@ exports.getAllDoctors = async (query) => {
 
   const skip = (parseInt(page) - 1) * parseInt(limit);
 
+  // Build populate options with error handling for specialty
+  const populateOptions = [
+    { path: 'user', select: 'firstName lastName email phoneNumber countryCode role isActive createdAt gender dateOfBirth' },
+    {
+      path: 'specialty',
+      select: 'name description',
+      // Match only active specializations and handle null/invalid IDs gracefully
+      match: { isActive: true },
+      // If specialty is invalid or doesn't exist, set it to null instead of throwing error
+      options: { lean: true }
+    },
+    { path: 'createdBy', select: 'firstName lastName email' },
+    { path: 'licenseVerifiedBy', select: 'firstName lastName email' }
+  ];
+
   const doctors = await Doctor.find(filter)
-    .populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt gender dateOfBirth')
-    .populate('specialty', 'name description')
-    .populate('createdBy', 'firstName lastName email')
-    .populate('licenseVerifiedBy', 'firstName lastName email')
+    .populate(populateOptions)
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(parseInt(limit))
@@ -795,6 +998,7 @@ exports.updateDoctor = async (doctorId, data) => {
   });
 
   await doctor.populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt gender dateOfBirth');
+  await doctor.populate('specialty', 'name description isActive');
   await doctor.populate('createdBy', 'firstName lastName email');
   await doctor.populate('licenseVerifiedBy', 'firstName lastName email');
 
@@ -855,6 +1059,7 @@ exports.approveDoctor = async (doctorId, adminId) => {
 
   // Populate user data
   await doctor.populate('user', 'firstName lastName email phoneNumber countryCode role isActive isVerified gender dateOfBirth');
+  await doctor.populate('specialty', 'name description isActive');
   if (doctor.licenseVerifiedBy) {
     await doctor.populate('licenseVerifiedBy', 'firstName lastName email');
   }
@@ -905,29 +1110,27 @@ exports.resetDoctorPassword = async (doctorId, newPassword) => {
   return { message: 'Password reset successfully' };
 };
 
-// Get available specialties
-exports.getAvailableSpecialties = () => {
-  const specialties = [
-    'General Practice',
-    'Cardiology',
-    'Pediatrics',
-    'Dermatology',
-    'Orthopedics',
-    'Neurology',
-    'Psychiatry',
-    'Oncology',
-    'Gynecology',
-    'Urology',
-    'Ophthalmology',
-    'ENT',
-    'Pulmonology',
-    'Gastroenterology',
-    'Endocrinology',
-    'Rheumatology',
-    'Other'
-  ];
+// Get available specialties (dynamic - fetched from Specialization model)
+exports.getAvailableSpecialties = async () => {
+  try {
+    // Fetch all active specializations from database
+    const specializations = await Specialization.find({ isActive: true })
+      .select('_id name description')
+      .sort({ name: 1 })
+      .lean();
 
-  logger.debug('Available specialties retrieved', { count: specialties.length });
-  return specialties;
+    logger.info('Available specialties retrieved dynamically', { 
+      count: specializations.length 
+    });
+
+    return specializations;
+  } catch (err) {
+    logger.error('Error retrieving available specialties', {
+      error: err.message,
+      stack: err.stack
+    });
+    // Return empty array on error instead of throwing
+    return [];
+  }
 };
 

@@ -26,5 +26,13 @@ router.get(
   adminPatientTransactionController.getTransactionById
 );
 
+// Get invoice for a transaction
+router.get(
+  '/:transactionId/invoice',
+  adminPatientTransactionValidation.getTransactionByIdValidation,
+  validate,
+  adminPatientTransactionController.getTransactionInvoice
+);
+
 module.exports = router;
 

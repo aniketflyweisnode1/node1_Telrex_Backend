@@ -14,7 +14,8 @@ exports.basicInformationValidation = [
   body('zip').optional().isString().withMessage('Zip must be a string'),
   body('maritalStatus').optional().isIn(['single', 'married', 'divorced', 'widowed', 'separated']).withMessage('Invalid marital status'),
   body('govtIssuedCertificate').optional().isIn(['aadhaar', 'pan', 'passport', 'driving_license', 'voter_id', 'other']).withMessage('Invalid certificate type'),
-  body('certificateUpload').optional().isString().withMessage('Certificate upload must be a string (URL or path)')
+  body('certificateUpload').optional().isString().withMessage('Certificate upload must be a string (URL or path)'),
+  body('profileImage').optional().isString().withMessage('Profile image must be a string (URL or path)')
 ];
 
 // Emergency Contact Validation

@@ -40,6 +40,7 @@ const intakeFormSchema = new mongoose.Schema(
         enum: ['aadhaar', 'pan', 'passport', 'driving_license', 'voter_id', 'other']
       },
       certificateUpload: String, // File URL or path
+      profileImage: String, // Profile image URL or path
       isBasicInfoComplete: {
         type: Boolean,
         default: false

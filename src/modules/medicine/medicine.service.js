@@ -727,15 +727,21 @@ exports.updateMedicineVisibility = async (medicineId, visibility) => {
     visibility: medicine.visibility
   });
 
+  // Fetch updated medicine with all fields to ensure fresh data is returned immediately
+  const updatedMedicine = await Medicine.findById(medicineId)
+    .select('_id productName brand originalPrice salePrice images description generics dosageOptions quantityOptions category stock status visibility isActive healthCategory healthTypeSlug isTrendy isBestOffer discountPercentage views createdAt updatedAt')
+    .lean();
+
   // Populate healthCategory if it exists
-  if (medicine.healthCategory) {
-    await medicine.populate({
-      path: 'healthCategory',
-      select: 'name slug description icon types'
-    });
+  if (updatedMedicine && updatedMedicine.healthCategory) {
+    const HealthCategory = require('../../models/HealthCategory.model');
+    const healthCategory = await HealthCategory.findById(updatedMedicine.healthCategory).lean();
+    if (healthCategory) {
+      updatedMedicine.healthCategory = healthCategory;
+    }
   }
 
-  return medicine;
+  return updatedMedicine || medicine.toObject();
 };
 
 // Delete medicine (soft delete)

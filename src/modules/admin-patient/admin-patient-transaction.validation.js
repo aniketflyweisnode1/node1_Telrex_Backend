@@ -45,7 +45,19 @@ exports.getTransactionHistoryValidation = [
     .optional()
     .trim()
     .isLength({ min: 1, max: 100 })
-    .withMessage('Search term must be between 1 and 100 characters')
+    .withMessage('Search term must be between 1 and 100 characters'),
+  query('type')
+    .optional()
+    .isIn(['Refill', 'Excuse', 'Shopping'])
+    .withMessage('Transaction type must be one of: Refill, Excuse, Shopping'),
+  query('minAmount')
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage('Minimum amount must be a positive number'),
+  query('maxAmount')
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage('Maximum amount must be a positive number')
 ];
 
 // Validation for getting transaction by ID

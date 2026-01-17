@@ -8,7 +8,10 @@ const Address = require('../../models/Address.model');
 const HealthRecord = require('../../models/HealthRecord.model');
 const HealthHistory = require('../../models/HealthHistory.model');
 const Payment = require('../../models/Payment.model');
+const Medicine = require('../../models/Medicine.model');
 const AppError = require('../../utils/AppError');
+const logger = require('../../utils/logger');
+const mongoose = require('mongoose');
 
 // Calculate age from date of birth
 const calculateAge = (dateOfBirth) => {
@@ -232,6 +235,35 @@ exports.getPatientById = async (patientId) => {
     Payment.find({ patient: patientId }).sort({ createdAt: -1 }).lean()
   ]);
 
+  // Populate medicine details for prescriptions
+  const prescriptionsWithMedicine = await Promise.all(
+    prescriptions.map(async (prescription) => {
+      // Check if medicine is an ObjectId (MongoDB ObjectId format)
+      if (prescription.medicine && mongoose.Types.ObjectId.isValid(prescription.medicine)) {
+        try {
+          const medicine = await Medicine.findById(prescription.medicine)
+            .select('productName brand originalPrice salePrice images description generics dosageOptions quantityOptions category stock status visibility isActive')
+            .lean();
+          
+          if (medicine) {
+            return {
+              ...prescription,
+              medicine: medicine
+            };
+          }
+        } catch (error) {
+          // If medicine not found, keep original medicine value
+          logger.warn('Medicine not found for prescription', {
+            prescriptionId: prescription._id,
+            medicineId: prescription.medicine
+          });
+        }
+      }
+      // If medicine is not an ObjectId or not found, return as is
+      return prescription;
+    })
+  );
+
   // Calculate statistics
   const consultationsCount = prescriptions.length;
   const ordersCount = orders.length;
@@ -261,7 +293,7 @@ exports.getPatientById = async (patientId) => {
       lastOrder
     },
     relations: {
-      prescriptions,
+      prescriptions: prescriptionsWithMedicine,
       orders,
       chats,
       intakeForm,
