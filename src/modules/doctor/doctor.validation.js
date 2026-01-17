@@ -446,3 +446,36 @@ exports.doctorSignupValidation = [
     .withMessage('Agree confirmation must be a boolean')
 ];
 
+// Get doctors by specialization validation
+const { query } = require('express-validator');
+exports.getDoctorsBySpecializationValidation = [
+  query('page')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Page must be a positive integer'),
+  query('limit')
+    .optional()
+    .isInt({ min: 1, max: 100 })
+    .withMessage('Limit must be between 1 and 100'),
+  query('status')
+    .optional()
+    .isIn(['active', 'pending', 'suspended'])
+    .withMessage('Status must be active, pending, or suspended'),
+  query('minRating')
+    .optional()
+    .isFloat({ min: 0, max: 5 })
+    .withMessage('Min rating must be between 0 and 5'),
+  query('maxRating')
+    .optional()
+    .isFloat({ min: 0, max: 5 })
+    .withMessage('Max rating must be between 0 and 5'),
+  query('sortBy')
+    .optional()
+    .isIn(['rating', 'consultationFee', 'experience', 'createdAt'])
+    .withMessage('Sort by must be rating, consultationFee, experience, or createdAt'),
+  query('sortOrder')
+    .optional()
+    .isIn(['asc', 'desc'])
+    .withMessage('Sort order must be asc or desc')
+];
+

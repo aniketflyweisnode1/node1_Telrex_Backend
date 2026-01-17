@@ -5,7 +5,8 @@ const logger = require('../../utils/logger');
 exports.getAllFooterSections = async (req, res, next) => {
   try {
     // Check if user is authenticated (admin/sub-admin can see all, public can only see published)
-    const isPublic = !req.user || (req.user.role !== 'admin' && req.user.role !== 'sub-admin');
+    // req.user might be undefined for public routes, so check safely
+    const isPublic = !req.user || (req.user && req.user.role !== 'admin' && req.user.role !== 'sub-admin');
     const sections = await footerService.getAllFooterSections(req.query, isPublic);
     res.status(200).json({
       success: true,
@@ -21,8 +22,23 @@ exports.getAllFooterSections = async (req, res, next) => {
 exports.getFooterSectionBySection = async (req, res, next) => {
   try {
     // Check if user is authenticated (admin/sub-admin can see all, public can only see published)
-    const isPublic = !req.user || (req.user.role !== 'admin' && req.user.role !== 'sub-admin');
+    // req.user might be undefined for public routes, so check safely
+    // If req.user exists and has admin/sub-admin role, isPublic = false (can see draft)
+    // If req.user doesn't exist or is not admin/sub-admin, isPublic = true (only published)
+    const isPublic = !req.user || (req.user && req.user.role !== 'admin' && req.user.role !== 'sub-admin');
+    
     const section = await footerService.getFooterSectionBySection(req.params.section, isPublic);
+    
+    // If section is null (doesn't exist or not published for public), return empty data
+    // This allows frontend to handle gracefully without throwing errors
+    if (section === null) {
+      return res.status(200).json({
+        success: true,
+        message: 'Footer section not found',
+        data: null
+      });
+    }
+    
     res.status(200).json({
       success: true,
       message: 'Footer section retrieved successfully',
@@ -37,8 +53,19 @@ exports.getFooterSectionBySection = async (req, res, next) => {
 exports.getFooterSectionById = async (req, res, next) => {
   try {
     // Check if user is authenticated (admin/sub-admin can see all, public can only see published)
-    const isPublic = !req.user || (req.user.role !== 'admin' && req.user.role !== 'sub-admin');
+    // req.user might be undefined for public routes, so check safely
+    const isPublic = !req.user || (req.user && req.user.role !== 'admin' && req.user.role !== 'sub-admin');
     const section = await footerService.getFooterSectionById(req.params.id, isPublic);
+    
+    // If section is null (doesn't exist or not published for public), return empty data
+    if (section === null) {
+      return res.status(200).json({
+        success: true,
+        message: 'Footer section not found',
+        data: null
+      });
+    }
+    
     res.status(200).json({
       success: true,
       message: 'Footer section retrieved successfully',

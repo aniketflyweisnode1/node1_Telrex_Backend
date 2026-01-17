@@ -38,6 +38,7 @@ exports.getFooterSectionBySection = async (sectionName, isPublic = false) => {
   if (isPublic) {
     filter.status = 'published';
   }
+  // For admin access, return section regardless of status (no status filter)
 
   const section = await Footer.findOne(filter)
     .populate({
@@ -46,18 +47,9 @@ exports.getFooterSectionBySection = async (sectionName, isPublic = false) => {
     })
     .lean();
 
-  if (!section) {
-    // Check if section exists but is in draft status (for public access)
-    if (isPublic) {
-      const draftSection = await Footer.findOne({ section: sectionName, status: 'draft' });
-      if (draftSection) {
-        throw new AppError('Footer section is not published yet', 404);
-      }
-    }
-    throw new AppError('Footer section not found', 404);
-  }
-
-  return section;
+  // Return null if section not found (instead of throwing error)
+  // This allows frontend to handle gracefully
+  return section || null;
 };
 
 // Get footer section by ID
@@ -76,8 +68,9 @@ exports.getFooterSectionById = async (sectionId, isPublic = false) => {
     })
     .lean();
 
+  // Return null instead of throwing error - allows frontend to handle gracefully
   if (!section) {
-    throw new AppError('Footer section not found', 404);
+    return null;
   }
 
   return section;

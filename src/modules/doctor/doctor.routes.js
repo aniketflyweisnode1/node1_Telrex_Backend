@@ -16,6 +16,14 @@ router.get('/statistics', doctorController.getStatistics);
 // Get specialties - PUBLIC
 router.get('/specialties', doctorController.getAvailableSpecialties);
 
+// Get doctors by specialization - PUBLIC (must come before /:id to avoid route conflicts)
+router.get(
+  '/specialization/:specializationIdOrName',
+  doctorValidation.getDoctorsBySpecializationValidation,
+  validate,
+  doctorController.getDoctorsBySpecialization
+);
+
 // Get doctor by ID - PUBLIC
 router.get('/:id', doctorController.getDoctorById);
 

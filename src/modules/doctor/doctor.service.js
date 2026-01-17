@@ -697,7 +697,150 @@ exports.getAllDoctors = async (query) => {
     total,
     page: parseInt(page),
     limit: parseInt(limit),
-    filters: { search, specialty, status, licenseVerified, isActive }
+  });
+
+  return result;
+};
+
+// Get doctors by specialization (Public API)
+exports.getDoctorsBySpecialization = async (specializationIdOrName, query = {}) => {
+  const { page = 1, limit = 10, status, minRating, maxRating, sortBy = 'rating', sortOrder = 'desc' } = query;
+  
+  let filter = {
+    isActive: true,
+    status: 'active' // Only return active doctors for public API
+  };
+
+  // Find specialization by ID or name
+  let specialtyId = null;
+  try {
+    if (mongoose.Types.ObjectId.isValid(specializationIdOrName)) {
+      // If it's a valid ObjectId, find by ID
+      const specialization = await Specialization.findById(specializationIdOrName).lean();
+      if (!specialization || !specialization.isActive) {
+        return {
+          doctors: [],
+          pagination: {
+            page: parseInt(page),
+            limit: parseInt(limit),
+            total: 0,
+            pages: 0
+          },
+          specialization: null
+        };
+      }
+      specialtyId = new mongoose.Types.ObjectId(specialization._id);
+    } else {
+      // If not a valid ObjectId, it must be a name - find by name dynamically
+      const specialization = await Specialization.findOne({ 
+        name: { $regex: new RegExp(`^${specializationIdOrName}$`, 'i') },
+        isActive: true 
+      }).lean();
+      
+      if (!specialization) {
+        return {
+          doctors: [],
+          pagination: {
+            page: parseInt(page),
+            limit: parseInt(limit),
+            total: 0,
+            pages: 0
+          },
+          specialization: null
+        };
+      }
+      specialtyId = new mongoose.Types.ObjectId(specialization._id);
+    }
+  } catch (err) {
+    logger.error('Error finding specialization', { error: err.message, specializationIdOrName });
+    return {
+      doctors: [],
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total: 0,
+        pages: 0
+      },
+      specialization: null
+    };
+  }
+
+  // Apply specialty filter
+  filter.specialty = specialtyId;
+
+  // Status filter (optional, defaults to 'active')
+  if (status && ['active', 'pending', 'suspended'].includes(status)) {
+    filter.status = status;
+  }
+
+  // Rating filters
+  if (minRating !== undefined || maxRating !== undefined) {
+    filter['rating.average'] = {};
+    if (minRating !== undefined) {
+      filter['rating.average'].$gte = parseFloat(minRating);
+    }
+    if (maxRating !== undefined) {
+      filter['rating.average'].$lte = parseFloat(maxRating);
+    }
+  }
+
+  // Sort options
+  let sort = {};
+  if (sortBy === 'rating') {
+    sort['rating.average'] = sortOrder === 'asc' ? 1 : -1;
+  } else if (sortBy === 'consultationFee') {
+    sort.consultationFee = sortOrder === 'asc' ? 1 : -1;
+  } else if (sortBy === 'experience') {
+    sort.experience = sortOrder === 'asc' ? 1 : -1;
+  } else {
+    sort.createdAt = sortOrder === 'asc' ? 1 : -1;
+  }
+
+  const skip = (parseInt(page) - 1) * parseInt(limit);
+
+  // Get specialization details
+  const specialization = await Specialization.findById(specialtyId).lean();
+
+  // Build populate options
+  const populateOptions = [
+    { 
+      path: 'user', 
+      select: 'firstName lastName email phoneNumber countryCode role isActive gender dateOfBirth profileImage' 
+    },
+    {
+      path: 'specialty',
+      select: 'name description',
+      match: { isActive: true }
+    }
+  ];
+
+  const doctors = await Doctor.find(filter)
+    .populate(populateOptions)
+    .sort(sort)
+    .skip(skip)
+    .limit(parseInt(limit))
+    .lean();
+
+  const total = await Doctor.countDocuments(filter);
+
+  const result = {
+    doctors,
+    pagination: {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      total,
+      pages: Math.ceil(total / parseInt(limit))
+    },
+    specialization: specialization || null
+  };
+
+  logger.info('Doctors retrieved by specialization', {
+    specializationIdOrName,
+    specialization: specialization?.name,
+    count: doctors.length,
+    total,
+    page: parseInt(page),
+    limit: parseInt(limit)
   });
 
   return result;

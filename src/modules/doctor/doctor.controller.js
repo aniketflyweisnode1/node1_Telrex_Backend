@@ -164,6 +164,24 @@ exports.getAvailableSpecialties = async (req, res, next) => {
   }
 };
 
+// Get doctors by specialization (Public API)
+exports.getDoctorsBySpecialization = async (req, res, next) => {
+  try {
+    const specializationIdOrName = req.params.specializationIdOrName;
+    const result = await doctorService.getDoctorsBySpecialization(specializationIdOrName, req.query);
+
+    res.status(200).json({
+      success: true,
+      message: 'Doctors retrieved successfully',
+      data: result.doctors,
+      pagination: result.pagination,
+      specialization: result.specialization
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Approve doctor
 exports.approveDoctor = async (req, res, next) => {
   try {

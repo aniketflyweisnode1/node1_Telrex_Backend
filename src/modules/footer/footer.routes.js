@@ -37,38 +37,41 @@ const getSectionId = (sectionName) => async (req, res, next) => {
 // Get all footer sections (public - only published)
 router.get(
   '/',
+  optionalAuthMiddleware, // Optional auth - allows admin to see all, public sees only published
   footerValidation.getAllFooterSectionsValidation,
   validate,
   footerController.getAllFooterSections
 );
 
-// Get footer section by section name (public - only published)
+// Get footer section by section name (public - only published, admin can see all)
 router.get(
   '/section/:section',
+  optionalAuthMiddleware, // Optional auth - allows admin to see all, public sees only published
   footerValidation.sectionNameValidation,
   validate,
   footerController.getFooterSectionBySection
 );
 
-// Individual section GET routes (public - only published) - Must come before /:id route
-router.get('/logo', setSectionParam('logo'), footerController.getFooterSectionBySection);
-router.get('/about', setSectionParam('about-us'), footerController.getFooterSectionBySection);
-router.get('/how-works', setSectionParam('how-works'), footerController.getFooterSectionBySection);
-router.get('/leadership', setSectionParam('leadership'), footerController.getFooterSectionBySection);
-router.get('/faq', setSectionParam('faq'), footerController.getFooterSectionBySection);
-router.get('/careers', setSectionParam('careers'), footerController.getFooterSectionBySection);
-router.get('/support', setSectionParam('support'), footerController.getFooterSectionBySection);
-router.get('/blogs', setSectionParam('blogs'), footerController.getFooterSectionBySection);
-router.get('/shipping-returns', setSectionParam('shipping-returns'), footerController.getFooterSectionBySection);
-router.get('/privacy-policy', setSectionParam('privacy-policy'), footerController.getFooterSectionBySection);
-router.get('/terms-conditions', setSectionParam('terms-conditions'), footerController.getFooterSectionBySection);
-router.get('/consent-telehealth', setSectionParam('consent-telehealth'), footerController.getFooterSectionBySection);
-router.get('/contact', setSectionParam('contact'), footerController.getFooterSectionBySection);
-router.get('/address', setSectionParam('address'), footerController.getFooterSectionBySection);
-router.get('/social-media', setSectionParam('social-media'), footerController.getFooterSectionBySection);
+// Individual section GET routes (public - only published, admin can see all) - Must come before /:id route
+// Optional auth allows both authenticated (admin) and unauthenticated (public) access
+router.get('/logo', optionalAuthMiddleware, setSectionParam('logo'), footerController.getFooterSectionBySection);
+router.get('/about', optionalAuthMiddleware, setSectionParam('about-us'), footerController.getFooterSectionBySection);
+router.get('/how-works', optionalAuthMiddleware, setSectionParam('how-works'), footerController.getFooterSectionBySection);
+router.get('/leadership', optionalAuthMiddleware, setSectionParam('leadership'), footerController.getFooterSectionBySection);
+router.get('/faq', optionalAuthMiddleware, setSectionParam('faq'), footerController.getFooterSectionBySection);
+router.get('/careers', optionalAuthMiddleware, setSectionParam('careers'), footerController.getFooterSectionBySection);
+router.get('/support', optionalAuthMiddleware, setSectionParam('support'), footerController.getFooterSectionBySection);
+router.get('/blogs', optionalAuthMiddleware, setSectionParam('blogs'), footerController.getFooterSectionBySection);
+router.get('/shipping-returns', optionalAuthMiddleware, setSectionParam('shipping-returns'), footerController.getFooterSectionBySection);
+router.get('/privacy-policy', optionalAuthMiddleware, setSectionParam('privacy-policy'), footerController.getFooterSectionBySection);
+router.get('/terms-conditions', optionalAuthMiddleware, setSectionParam('terms-conditions'), footerController.getFooterSectionBySection);
+router.get('/consent-telehealth', optionalAuthMiddleware, setSectionParam('consent-telehealth'), footerController.getFooterSectionBySection);
+router.get('/contact', optionalAuthMiddleware, setSectionParam('contact'), footerController.getFooterSectionBySection);
+router.get('/address', optionalAuthMiddleware, setSectionParam('address'), footerController.getFooterSectionBySection);
+router.get('/social-media', optionalAuthMiddleware, setSectionParam('social-media'), footerController.getFooterSectionBySection);
 
-// Get footer section by ID (public - only published) - Must come after specific routes
-router.get('/:id', footerController.getFooterSectionById);
+// Get footer section by ID (public - only published, admin can see all) - Must come after specific routes
+router.get('/:id', optionalAuthMiddleware, footerController.getFooterSectionById);
 
 // ==================== PROTECTED ROUTES (Admin/Sub-Admin Only) ====================
 // All POST, PUT, DELETE routes require authentication and admin/sub-admin access
