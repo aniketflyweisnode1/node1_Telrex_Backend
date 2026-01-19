@@ -24,6 +24,9 @@ router.get(
   doctorController.getDoctorsBySpecialization
 );
 
+// Get filter options - PUBLIC (must come before /:id to avoid route conflicts)
+router.get('/filter-options', doctorController.getFilterOptions);
+
 // Get doctor by ID - PUBLIC
 router.get('/:id', doctorController.getDoctorById);
 

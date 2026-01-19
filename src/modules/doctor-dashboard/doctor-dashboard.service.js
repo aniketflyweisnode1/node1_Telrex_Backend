@@ -4,7 +4,9 @@ const IntakeForm = require('../../models/IntakeForm.model');
 const Chat = require('../../models/Chat.model');
 const Patient = require('../../models/Patient.model');
 const User = require('../../models/User.model');
+const mongoose = require('mongoose');
 const AppError = require('../../utils/AppError');
+const logger = require('../../utils/logger');
 
 // Get doctor from userId
 const getDoctor = async (userId) => {
@@ -17,8 +19,20 @@ const getDoctor = async (userId) => {
 
 // Get dashboard overview data
 exports.getDashboardOverview = async (userId, query = {}) => {
-  const doctor = await getDoctor(userId);
-  const doctorId = doctor._id;
+  // If doctorId is provided in query, use it directly
+  let doctor;
+  let doctorId;
+  
+  if (query.doctorId) {
+    doctor = await Doctor.findById(query.doctorId);
+    if (!doctor) {
+      throw new AppError('Doctor not found', 404);
+    }
+    doctorId = doctor._id;
+  } else {
+    doctor = await getDoctor(userId);
+    doctorId = doctor._id;
+  }
 
   // Get date range for filtering
   const period = query.period || 'all';
@@ -58,12 +72,60 @@ exports.getDashboardOverview = async (userId, query = {}) => {
     }
   }
 
-  // Total Consultations (count of prescriptions)
-  const totalConsultationsFilter = { doctor: doctorId };
-  if (Object.keys(dateFilter).length > 0) {
+  // Total Consultations (count of intake forms with status 'submitted')
+  // Ensure doctorId is ObjectId
+  const doctorObjectId = doctorId instanceof mongoose.Types.ObjectId 
+    ? doctorId 
+    : new mongoose.Types.ObjectId(doctorId.toString());
+  
+  // Build filter - always include doctor and status
+  const totalConsultationsFilter = { 
+    doctor: doctorObjectId, 
+    status: 'submitted' 
+  };
+  
+  // Only add date filter if period is not 'all' and dateFilter is not empty
+  if (period !== 'all' && Object.keys(dateFilter).length > 0) {
     totalConsultationsFilter.createdAt = dateFilter;
   }
-  const totalConsultations = await Prescription.countDocuments(totalConsultationsFilter);
+  
+  // Debug: Log the filter
+  logger.info('Dashboard overview - counting consultations', {
+    doctorId: doctorObjectId.toString(),
+    doctorIdType: typeof doctorId,
+    doctorObjectIdType: doctorObjectId.constructor.name,
+    filter: JSON.stringify(totalConsultationsFilter),
+    period,
+    dateFilterKeys: Object.keys(dateFilter).length
+  });
+  
+  // First, let's check if there are any intake forms for this doctor at all
+  const allIntakeFormsForDoctor = await IntakeForm.find({ doctor: doctorObjectId }).select('_id status createdAt doctor').limit(5).lean();
+  logger.info('Dashboard overview - all intake forms for doctor', {
+    count: allIntakeFormsForDoctor.length,
+    forms: allIntakeFormsForDoctor.map(f => ({
+      id: f._id.toString(),
+      status: f.status,
+      doctor: f.doctor?.toString(),
+      createdAt: f.createdAt
+    }))
+  });
+  
+  const totalConsultations = await IntakeForm.countDocuments(totalConsultationsFilter);
+  
+  // Also count all consultations for this doctor (without date filter) for debugging
+  const allConsultationsCount = await IntakeForm.countDocuments({ 
+    doctor: doctorObjectId, 
+    status: 'submitted' 
+  });
+  
+  logger.info('Dashboard overview - consultation counts', {
+    totalConsultations,
+    allConsultationsCount,
+    period,
+    dateFilter: Object.keys(dateFilter).length > 0 ? dateFilter : 'empty',
+    filterUsed: totalConsultationsFilter
+  });
 
   // Calculate percentage change for consultations
   let consultationsChange = 0;
@@ -98,8 +160,9 @@ exports.getDashboardOverview = async (userId, query = {}) => {
     }
 
     if (previousPeriodStart && previousPeriodEnd) {
-      const previousConsultations = await Prescription.countDocuments({
-        doctor: doctorId,
+      const previousConsultations = await IntakeForm.countDocuments({
+        doctor: doctorObjectId,
+        status: 'submitted',
         createdAt: { $gte: previousPeriodStart, $lte: previousPeriodEnd }
       });
 
@@ -140,8 +203,25 @@ exports.getDashboardOverview = async (userId, query = {}) => {
 
 // Get recent consultations
 exports.getRecentConsultations = async (userId, query = {}) => {
-  const doctor = await getDoctor(userId);
-  const doctorId = doctor._id;
+  // If doctorId is provided in query, use it directly
+  let doctor;
+  let doctorId;
+  
+  if (query.doctorId) {
+    doctor = await Doctor.findById(query.doctorId);
+    if (!doctor) {
+      throw new AppError('Doctor not found', 404);
+    }
+    doctorId = doctor._id;
+  } else {
+    doctor = await getDoctor(userId);
+    doctorId = doctor._id;
+  }
+  
+  // Ensure doctorId is ObjectId
+  const doctorObjectId = doctorId instanceof mongoose.Types.ObjectId 
+    ? doctorId 
+    : new mongoose.Types.ObjectId(doctorId.toString());
 
   const limit = parseInt(query.limit) || 10;
   const page = parseInt(query.page) || 1;
@@ -149,7 +229,7 @@ exports.getRecentConsultations = async (userId, query = {}) => {
 
   // Get recent intake forms (consultation requests) assigned to this doctor
   const intakeForms = await IntakeForm.find({ 
-    doctor: doctorId,
+    doctor: doctorObjectId,
     status: 'submitted' // Only show submitted (pending) consultations
   })
     .populate({
@@ -165,7 +245,7 @@ exports.getRecentConsultations = async (userId, query = {}) => {
     .skip(skip)
     .lean();
 
-  // Format consultations
+  // Format consultations with intake form details
   const consultations = intakeForms.map(intakeForm => {
     const patient = intakeForm.patient?.user;
     const patientName = patient 
@@ -229,7 +309,16 @@ exports.getRecentConsultations = async (userId, query = {}) => {
       }),
       status: status,
       statusType: statusType,
-      intakeFormId: intakeForm._id
+      intakeFormId: intakeForm._id,
+      intakeForm: {
+        _id: intakeForm._id,
+        basicInformation: intakeForm.basicInformation || null,
+        emergencyContact: intakeForm.emergencyContact || null,
+        medicalQuestions: intakeForm.medicalQuestions || null,
+        status: intakeForm.status,
+        createdAt: intakeForm.createdAt,
+        updatedAt: intakeForm.updatedAt
+      }
     };
   });
 
@@ -239,7 +328,7 @@ exports.getRecentConsultations = async (userId, query = {}) => {
       page,
       limit,
       total: await IntakeForm.countDocuments({ 
-        doctor: doctorId,
+        doctor: doctorObjectId,
         status: 'submitted'
       })
     }

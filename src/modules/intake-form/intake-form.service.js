@@ -3,10 +3,13 @@ const Patient = require('../../models/Patient.model');
 const Doctor = require('../../models/Doctor.model');
 const AppError = require('../../utils/AppError');
 
-// Get patient from userId
+// Get patient from userId - create if doesn't exist
 const getPatient = async (userId) => {
-  const patient = await Patient.findOne({ user: userId });
-  if (!patient) throw new AppError('Patient profile not found', 404);
+  let patient = await Patient.findOne({ user: userId });
+  if (!patient) {
+    // Create patient profile if it doesn't exist
+    patient = await Patient.create({ user: userId, isActive: true });
+  }
   return patient;
 };
 

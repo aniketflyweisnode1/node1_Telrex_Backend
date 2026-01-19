@@ -65,3 +65,17 @@ exports.getPrescriptionsByRegion = async (req, res, next) => {
   }
 };
 
+// Get Filter Options
+exports.getFilterOptions = async (req, res, next) => {
+  try {
+    const filterOptions = await dashboardService.getFilterOptions();
+    res.status(200).json({
+      success: true,
+      message: 'Filter options retrieved successfully',
+      data: filterOptions
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+

@@ -110,30 +110,42 @@ exports.getConsultationActivity = async (query = {}) => {
 
   const total = await Prescription.countDocuments(filter);
 
-  const data = prescriptions.map(prescription => ({
-    prescriptionId: prescription.prescriptionNumber,
-    doctor: {
-      _id: prescription.doctor._id,
-      name: prescription.doctor.user 
-        ? `Dr. ${prescription.doctor.user.firstName} ${prescription.doctor.user.lastName}`
-        : 'N/A',
-      email: prescription.doctor.user?.email || 'N/A',
-      profilePicture: prescription.doctor.user?.profilePicture || prescription.doctor.profilePicture,
-      specialty: prescription.doctor.specialty
-    },
-    patient: {
-      _id: prescription.patient._id,
-      name: prescription.patient.user
-        ? `${prescription.patient.user.firstName} ${prescription.patient.user.lastName}`
-        : 'N/A',
-      email: prescription.patient.user?.email || 'N/A'
-    },
-    diagnosis: prescription.diagnosis,
-    date: prescription.createdAt,
-    status: prescription.status,
-    medications: prescription.medications,
-    followUpDate: prescription.followUpDate
-  }));
+  const data = prescriptions.map(prescription => {
+    const doctor = prescription.doctor || {};
+    const doctorUser = doctor.user || {};
+  
+    const patient = prescription.patient || {};
+    const patientUser = patient.user || {};
+  
+    return {
+      prescriptionId: prescription.prescriptionNumber,
+  
+      doctor: {
+        _id: doctor._id || null,
+        name: doctorUser.firstName
+          ? `Dr. ${doctorUser.firstName} ${doctorUser.lastName || ''}`
+          : 'N/A',
+        email: doctorUser.email || 'N/A',
+        profilePicture: doctorUser.profilePicture || doctor.profilePicture || null,
+        specialty: doctor.specialty || 'N/A'
+      },
+  
+      patient: {
+        _id: patient._id || null,
+        name: patientUser.firstName
+          ? `${patientUser.firstName} ${patientUser.lastName || ''}`
+          : 'N/A',
+        email: patientUser.email || 'N/A'
+      },
+  
+      diagnosis: prescription.diagnosis || null,
+      date: prescription.createdAt,
+      status: prescription.status,
+      medications: prescription.medications || [],
+      followUpDate: prescription.followUpDate || null
+    };
+  });
+  
 
   return {
     data,
@@ -232,39 +244,49 @@ exports.getPrescriptionsAndOrders = async (query = {}) => {
   const combinedData = [
     ...prescriptions.map(p => ({
       type: 'prescription',
-      id: p.prescriptionNumber,
-      prescriptionId: p.prescriptionNumber,
+      id: p?.prescriptionNumber || null,
+      prescriptionId: p?.prescriptionNumber || null,
       orderId: null,
-      doctor: p.doctor.user
-        ? `Dr. ${p.doctor.user.firstName} ${p.doctor.user.lastName}`
-        : 'N/A',
-      patient: p.patient.user
-        ? `${p.patient.user.firstName} ${p.patient.user.lastName}`
-        : 'N/A',
-      diagnosis: p.diagnosis,
-      items: p.medications?.length || 0,
-      totalAmount: 0, // Prescriptions don't have amount
-      status: p.status,
-      date: p.createdAt,
-      isOrdered: p.isOrdered
+  
+      doctor:
+        p?.doctor && p?.doctor?.user
+          ? `Dr. ${p.doctor.user.firstName || ""} ${p.doctor.user.lastName || ""}`
+          : 'N/A',
+  
+      patient:
+        p?.patient && p?.patient?.user
+          ? `${p.patient.user.firstName || ""} ${p.patient.user.lastName || ""}`
+          : 'N/A',
+  
+      diagnosis: p?.diagnosis || null,
+      items: Array.isArray(p?.medications) ? p.medications.length : 0,
+      totalAmount: 0,
+      status: p?.status || 'pending',
+      date: p?.createdAt || null,
+      isOrdered: p?.isOrdered || false
     })),
+  
     ...orders.map(o => ({
       type: 'order',
-      id: o.orderNumber,
-      prescriptionId: o.prescription?.prescriptionNumber || null,
-      orderId: o.orderNumber,
+      id: o?.orderNumber || null,
+      prescriptionId: o?.prescription?.prescriptionNumber || null,
+      orderId: o?.orderNumber || null,
       doctor: null,
-      patient: o.patient.user
-        ? `${o.patient.user.firstName} ${o.patient.user.lastName}`
-        : 'N/A',
+  
+      patient:
+        o?.patient && o?.patient?.user
+          ? `${o.patient.user.firstName || ""} ${o.patient.user.lastName || ""}`
+          : 'N/A',
+  
       diagnosis: null,
-      items: o.items?.length || 0,
-      totalAmount: o.totalAmount || 0,
-      status: o.orderStatus,
-      date: o.createdAt,
+      items: Array.isArray(o?.items) ? o.items.length : 0,
+      totalAmount: o?.totalAmount || 0,
+      status: o?.orderStatus || 'pending',
+      date: o?.createdAt || null,
       isOrdered: true
     }))
   ];
+  
 
   // Sort by date and paginate
   combinedData.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -457,6 +479,11 @@ exports.getPharmacyInventory = async (query = {}) => {
     filter.brand = brand;
   }
 
+  // If lowStock filter is applied, filter based on inventory status
+  if (lowStock === 'true') {
+    filter.status = 'low_stock';
+  }
+
   const skip = (parseInt(page) - 1) * parseInt(limit);
   const sort = {};
   sort[sortBy] = sortOrder === 'asc' ? 1 : -1;
@@ -469,26 +496,38 @@ exports.getPharmacyInventory = async (query = {}) => {
 
   const total = await Medicine.countDocuments(filter);
 
-  // Get all medicines for stock calculation (if lowStock filter is applied)
-  let allMedicines = medicines;
-  if (lowStock === 'true') {
-    // Filter medicines with low stock (you may need to add stock field to Medicine model)
-    // For now, we'll return all medicines
-    allMedicines = medicines;
-  }
+  const data = medicines.map(medicine => {
+    // Inventory-based stock status mapping
+    let stockStatus = 'instock';
+    if (medicine.stock === 0) {
+      stockStatus = 'outofstock';
+    } else if (medicine.stock > 0 && medicine.stock <= 10) {
+      stockStatus = 'lowstock';
+    } else {
+      stockStatus = 'instock';
+    }
 
-  const data = allMedicines.map(medicine => ({
-    _id: medicine._id,
-    productName: medicine.productName,
-    brand: medicine.brand,
-    originalPrice: medicine.originalPrice,
-    salePrice: medicine.salePrice,
-    productImages: medicine.productImages || [],
-    stock: medicine.stock || 0, // Assuming stock field exists
-    status: medicine.isActive ? 'active' : 'inactive',
-    createdAt: medicine.createdAt,
-    updatedAt: medicine.updatedAt
-  }));
+    return {
+      _id: medicine._id,
+      productName: medicine.productName,
+      brand: medicine.brand,
+      category: medicine.category || null,   // ✅ Added
+      originalPrice: medicine.originalPrice,
+      salePrice: medicine.salePrice,
+      markup: medicine.markup || 0,          // ✅ Added
+      dosageOptions: medicine.dosageOptions || [], // ✅ Added
+      productImages: medicine.images
+        ? {
+            thumbnail: medicine.images.thumbnail || null,
+            gallery: medicine.images.gallery || []
+          }
+        : {},
+      stock: medicine.stock || 0,
+      stockStatus, // ✅ Correct inventory-based status
+      createdAt: medicine.createdAt,
+      updatedAt: medicine.updatedAt
+    };
+  });
 
   // Get unique brands for filter
   const brands = await Medicine.distinct('brand');
@@ -504,8 +543,9 @@ exports.getPharmacyInventory = async (query = {}) => {
     brands,
     summary: {
       totalProducts: total,
-      activeProducts: await Medicine.countDocuments({ isActive: true }),
-      inactiveProducts: await Medicine.countDocuments({ isActive: false })
+      inStockProducts: await Medicine.countDocuments({ stock: { $gt: 10 } }),
+      lowStockProducts: await Medicine.countDocuments({ stock: { $gt: 0, $lte: 10 } }),
+      outOfStockProducts: await Medicine.countDocuments({ stock: 0 })
     }
   };
 };

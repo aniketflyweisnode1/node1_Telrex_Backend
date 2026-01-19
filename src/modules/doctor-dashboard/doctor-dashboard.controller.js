@@ -42,6 +42,8 @@ exports.getDashboardOverview = async (req, res, next) => {
         throw new AppError('Doctor not found', 404);
       }
       userId = doctor.user.toString();
+      // Pass doctorId to service
+      req.query.doctorId = doctorId;
     } else {
       // Otherwise, get userId from req (authenticated) or query params
       userId = await getUserId(req);

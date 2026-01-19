@@ -40,5 +40,8 @@ router.get(
   dashboardController.getPrescriptionsByRegion
 );
 
+// Get Filter Options (Public - for filter dropdowns)
+router.get('/dashboard/filter-options', dashboardController.getFilterOptions);
+
 module.exports = router;
 

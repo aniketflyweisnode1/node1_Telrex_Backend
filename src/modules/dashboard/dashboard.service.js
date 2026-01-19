@@ -6,6 +6,10 @@ const Chat = require('../../models/Chat.model');
 const DoctorPayout = require('../../models/DoctorPayout.model');
 const Address = require('../../models/Address.model');
 const LoginHistory = require('../../models/LoginHistory.model');
+const Doctor = require('../../models/Doctor.model');
+const Medicine = require('../../models/Medicine.model');
+const Patient = require('../../models/Patient.model');
+const mongoose = require('mongoose');
 const AppError = require('../../utils/AppError');
 
 // Helper function to get date range
@@ -106,11 +110,42 @@ const calculatePercentageChange = (current, previous) => {
   return ((current - previous) / previous) * 100;
 };
 
+// Helper function to build patient filter based on region
+const buildPatientFilterByRegion = async (region) => {
+  if (!region) return {};
+  
+  // Find patients with addresses in the specified region/state
+  const addresses = await Address.find({ state: region }).select('patient').lean();
+  const patientIds = [...new Set(addresses.map(addr => addr.patient.toString()))];
+  
+  if (patientIds.length === 0) {
+    // Return a filter that matches nothing
+    return { _id: { $in: [] } };
+  }
+  
+  return { _id: { $in: patientIds.map(id => new mongoose.Types.ObjectId(id)) } };
+};
+
+// Helper function to build doctor filter based on region
+const buildDoctorFilterByRegion = async (region) => {
+  if (!region) return {};
+  
+  // Find doctors with addresses in the specified region/state
+  const doctors = await Doctor.find({ 'address.state': region }).select('_id').lean();
+  const doctorIds = doctors.map(doc => doc._id);
+  
+  if (doctorIds.length === 0) {
+    return { _id: { $in: [] } };
+  }
+  
+  return { _id: { $in: doctorIds } };
+};
+
 // Get Dashboard Data
 exports.getDashboardData = async (query = {}) => {
   const {
     period = 'last_30_days',
-    region, // Placeholder for future region filtering
+    region, // Filter by region/state
     doctorId, // Filter by specific doctor
     medicationId // Filter by specific medication
   } = query;
@@ -118,15 +153,99 @@ exports.getDashboardData = async (query = {}) => {
   const { startDate, endDate } = getDateRange(period);
   const { startDate: prevStartDate, endDate: prevEndDate } = getPreviousPeriod(period);
 
-  // Build filters
+  // Build base filters
   const currentFilter = { createdAt: { $gte: startDate, $lte: endDate } };
   const previousFilter = { createdAt: { $gte: prevStartDate, $lte: prevEndDate } };
+
+  // Build region-based filters
+  let patientFilter = {};
+  let doctorFilter = {};
+  if (region) {
+    patientFilter = await buildPatientFilterByRegion(region);
+    doctorFilter = await buildDoctorFilterByRegion(region);
+  }
+
+  // Build doctor filter
+  let prescriptionDoctorFilter = {};
+  let chatDoctorFilter = {};
+  if (doctorId && mongoose.Types.ObjectId.isValid(doctorId)) {
+    const doctorObjectId = new mongoose.Types.ObjectId(doctorId);
+    prescriptionDoctorFilter = { doctor: doctorObjectId };
+    chatDoctorFilter = { doctor: doctorObjectId };
+  }
+
+  // Build medication filter for orders
+  let medicationOrderFilter = {};
+  if (medicationId && mongoose.Types.ObjectId.isValid(medicationId)) {
+    medicationOrderFilter = {
+      'items.productId': new mongoose.Types.ObjectId(medicationId),
+      'items.productType': 'medication'
+    };
+  }
 
   // Get today's date range
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
   const todayEnd = new Date();
   todayEnd.setHours(23, 59, 59, 999);
+
+  // Build user filter for region
+  let userFilter = {};
+  if (region) {
+    // Get user IDs from patients and doctors in the region
+    const patients = await Patient.find(patientFilter).select('user').lean();
+    const doctors = await Doctor.find(doctorFilter).select('user').lean();
+    const userIds = [
+      ...patients.map(p => p.user?.toString()).filter(Boolean),
+      ...doctors.map(d => d.user?.toString()).filter(Boolean)
+    ];
+    if (userIds.length > 0) {
+      userFilter = { _id: { $in: userIds.map(id => new mongoose.Types.ObjectId(id)) } };
+    } else {
+      userFilter = { _id: { $in: [] } };
+    }
+  }
+
+  // Build payment filter (filter by patient region)
+  let paymentFilter = {};
+  if (region) {
+    const patients = await Patient.find(patientFilter).select('_id').lean();
+    const patientIds = patients.map(p => p._id);
+    if (patientIds.length > 0) {
+      paymentFilter = { patient: { $in: patientIds } };
+    } else {
+      paymentFilter = { patient: { $in: [] } };
+    }
+  }
+
+  // Build order filter (filter by patient region and medication)
+  let orderBaseFilter = {};
+  if (region) {
+    const patients = await Patient.find(patientFilter).select('_id').lean();
+    const patientIds = patients.map(p => p._id);
+    if (patientIds.length > 0) {
+      orderBaseFilter = { patient: { $in: patientIds } };
+    } else {
+      orderBaseFilter = { patient: { $in: [] } };
+    }
+  }
+
+  // Build prescription filter (filter by patient region and doctor)
+  let prescriptionBaseFilter = {};
+  if (region || doctorId) {
+    if (region) {
+      const patients = await Patient.find(patientFilter).select('_id').lean();
+      const patientIds = patients.map(p => p._id);
+      if (patientIds.length > 0) {
+        prescriptionBaseFilter = { patient: { $in: patientIds } };
+      } else {
+        prescriptionBaseFilter = { patient: { $in: [] } };
+      }
+    }
+    if (doctorId && mongoose.Types.ObjectId.isValid(doctorId)) {
+      prescriptionBaseFilter = { ...prescriptionBaseFilter, ...prescriptionDoctorFilter };
+    }
+  }
 
   // Get current period data
   const [
@@ -143,29 +262,33 @@ exports.getDashboardData = async (query = {}) => {
     ordersProcessing,
     completedDeliveries
   ] = await Promise.all([
-    // Current period - Total Users
+    // Current period - Total Users (filtered by region)
     User.countDocuments({ 
       role: { $in: ['patient', 'doctor'] },
-      createdAt: { $lte: endDate }
+      createdAt: { $lte: endDate },
+      ...userFilter
     }),
 
-    // Current period - Total Revenue (all successful payments)
+    // Current period - Total Revenue (filtered by region)
     Payment.aggregate([
       {
         $match: {
           paymentStatus: 'success',
-          ...currentFilter
+          ...currentFilter,
+          ...paymentFilter
         }
       },
       { $group: { _id: null, total: { $sum: '$amount' } } }
     ]),
 
-    // Current period - Pharmacy Sales (orders with medication items)
+    // Current period - Pharmacy Sales (filtered by region and medication)
     Order.aggregate([
       {
         $match: {
           ...currentFilter,
-          paymentStatus: 'paid'
+          ...orderBaseFilter,
+          paymentStatus: 'paid',
+          ...(Object.keys(medicationOrderFilter).length > 0 ? {} : {})
         }
       },
       {
@@ -173,7 +296,8 @@ exports.getDashboardData = async (query = {}) => {
       },
       {
         $match: {
-          'items.productType': 'medication'
+          'items.productType': 'medication',
+          ...(Object.keys(medicationOrderFilter).length > 0 ? medicationOrderFilter : {})
         }
       },
       {
@@ -184,34 +308,39 @@ exports.getDashboardData = async (query = {}) => {
       }
     ]),
 
-    // Today - Consultations (prescriptions created today)
+    // Today - Consultations (filtered by region and doctor)
     Prescription.countDocuments({
-      createdAt: { $gte: todayStart, $lte: todayEnd }
+      createdAt: { $gte: todayStart, $lte: todayEnd },
+      ...prescriptionBaseFilter
     }),
 
-    // Previous period - Total Users
+    // Previous period - Total Users (filtered by region)
     User.countDocuments({ 
       role: { $in: ['patient', 'doctor'] },
-      createdAt: { $lte: prevEndDate }
+      createdAt: { $lte: prevEndDate },
+      ...userFilter
     }),
 
-    // Previous period - Total Revenue
+    // Previous period - Total Revenue (filtered by region)
     Payment.aggregate([
       {
         $match: {
           paymentStatus: 'success',
-          ...previousFilter
+          ...previousFilter,
+          ...paymentFilter
         }
       },
       { $group: { _id: null, total: { $sum: '$amount' } } }
     ]),
 
-    // Previous period - Pharmacy Sales
+    // Previous period - Pharmacy Sales (filtered by region and medication)
     Order.aggregate([
       {
         $match: {
           ...previousFilter,
-          paymentStatus: 'paid'
+          ...orderBaseFilter,
+          paymentStatus: 'paid',
+          ...(Object.keys(medicationOrderFilter).length > 0 ? {} : {})
         }
       },
       {
@@ -219,7 +348,8 @@ exports.getDashboardData = async (query = {}) => {
       },
       {
         $match: {
-          'items.productType': 'medication'
+          'items.productType': 'medication',
+          ...(Object.keys(medicationOrderFilter).length > 0 ? medicationOrderFilter : {})
         }
       },
       {
@@ -230,28 +360,43 @@ exports.getDashboardData = async (query = {}) => {
       }
     ]),
 
-    // Previous period - Consultations Today (same day last period)
+    // Previous period - Consultations Today (filtered by region and doctor)
     Prescription.countDocuments({
       createdAt: { 
         $gte: new Date(prevStartDate.getTime() + (todayStart.getTime() - startDate.getTime())),
         $lte: new Date(prevStartDate.getTime() + (todayEnd.getTime() - startDate.getTime()))
-      }
+      },
+      ...prescriptionBaseFilter
     }),
 
-    // Active Consultations (active chats/prescriptions)
-    Chat.countDocuments({ status: 'active' }),
-
-    // Prescriptions Issued (in current period)
-    Prescription.countDocuments({ ...currentFilter }),
-
-    // Orders Processing (orders with status processing/pending)
-    Order.countDocuments({ 
-      orderStatus: { $in: ['pending', 'processing', 'confirmed'] }
+    // Active Consultations (filtered by doctor)
+    Chat.countDocuments({ 
+      status: 'active',
+      ...chatDoctorFilter
     }),
 
-    // Completed Deliveries (orders with status delivered/completed)
+    // Prescriptions Issued (filtered by region and doctor)
+    Prescription.countDocuments({ 
+      ...currentFilter,
+      ...prescriptionBaseFilter
+    }),
+
+    // Orders Processing (filtered by region and medication)
     Order.countDocuments({ 
-      orderStatus: 'delivered'
+      orderStatus: { $in: ['pending', 'processing', 'confirmed'] },
+      ...orderBaseFilter,
+      ...(Object.keys(medicationOrderFilter).length > 0 ? {
+        items: { $elemMatch: medicationOrderFilter }
+      } : {})
+    }),
+
+    // Completed Deliveries (filtered by region and medication)
+    Order.countDocuments({ 
+      orderStatus: 'delivered',
+      ...orderBaseFilter,
+      ...(Object.keys(medicationOrderFilter).length > 0 ? {
+        items: { $elemMatch: medicationOrderFilter }
+      } : {})
     })
   ]);
 
@@ -701,5 +846,73 @@ exports.getPrescriptionsByRegion = async (query = {}) => {
     total: total,
     period: period
   };
+};
+
+// Get Filter Options for Dashboard
+exports.getFilterOptions = async () => {
+  try {
+    // Get unique regions/states from addresses
+    const regions = await Address.distinct('state', { state: { $exists: true, $ne: null, $ne: '' } })
+      .then(states => states.sort().map(state => ({ id: state, name: state })));
+
+    // Also get regions from doctor addresses if they exist
+    const doctorAddresses = await Doctor.distinct('address.state', { 'address.state': { $exists: true, $ne: null, $ne: '' } });
+    const allRegions = [...new Set([...regions.map(r => r.id), ...doctorAddresses])]
+      .sort()
+      .map(state => ({ id: state, name: state }));
+
+    // Get all active doctors (simplified list)
+    const doctors = await Doctor.find({ isActive: true, status: 'active' })
+      .populate('user', 'firstName lastName email')
+      .populate('specialty', 'name')
+      .select('user specialty consultationFee rating status')
+      .lean()
+      .then(docs => docs.map(doc => ({
+        _id: doc._id,
+        name: doc.user ? `${doc.user.firstName} ${doc.user.lastName}` : 'Unknown',
+        email: doc.user?.email,
+        specialty: doc.specialty?.name || 'N/A',
+        consultationFee: doc.consultationFee,
+        rating: doc.rating?.average || 0
+      })));
+
+    // Get all active medications/medicines (simplified list)
+    const medications = await Medicine.find({ isActive: true })
+      .select('productName brand category salePrice originalPrice status images')
+      .sort({ productName: 1 })
+      .lean()
+      .limit(500) // Limit to 500 most recent for performance
+      .then(meds => meds.map(med => ({
+        _id: med._id,
+        name: med.productName,
+        brand: med.brand,
+        category: med.category,
+        salePrice: med.salePrice,
+        originalPrice: med.originalPrice,
+        status: med.status,
+        image: med.images?.gallery?.[0] || med.images?.thumbnail || null
+      })));
+
+    // Period options
+    const periods = [
+      { id: 'today', name: 'Today' },
+      { id: 'last_7_days', name: 'Last 7 Days' },
+      { id: 'last_30_days', name: 'Last 30 Days' },
+      { id: 'last_90_days', name: 'Last 90 Days' },
+      { id: 'last_365_days', name: 'Last 365 Days' },
+      { id: 'this_month', name: 'This Month' },
+      { id: 'last_month', name: 'Last Month' },
+      { id: 'this_year', name: 'This Year' }
+    ];
+
+    return {
+      regions: allRegions,
+      doctors: doctors,
+      medications: medications,
+      periods: periods
+    };
+  } catch (error) {
+    throw new AppError(`Error fetching filter options: ${error.message}`, 500);
+  }
 };
 

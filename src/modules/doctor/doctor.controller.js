@@ -182,6 +182,21 @@ exports.getDoctorsBySpecialization = async (req, res, next) => {
   }
 };
 
+// Get filter options (Public API)
+exports.getFilterOptions = async (req, res, next) => {
+  try {
+    const doctors = await doctorService.getFilterOptions();
+
+    res.status(200).json({
+      success: true,
+      message: 'Doctor filter options retrieved successfully',
+      data: doctors
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Approve doctor
 exports.approveDoctor = async (req, res, next) => {
   try {

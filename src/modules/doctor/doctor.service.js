@@ -846,6 +846,30 @@ exports.getDoctorsBySpecialization = async (specializationIdOrName, query = {}) 
   return result;
 };
 
+// Get filter options (simplified list for dropdowns)
+exports.getFilterOptions = async () => {
+  try {
+    const doctors = await Doctor.find({ isActive: true, status: 'active' })
+      .populate('user', 'firstName lastName email')
+      .populate('specialty', 'name')
+      .select('user specialty consultationFee rating status')
+      .lean()
+      .then(docs => docs.map(doc => ({
+        _id: doc._id,
+        name: doc.user ? `${doc.user.firstName} ${doc.user.lastName}` : 'Unknown',
+        email: doc.user?.email,
+        specialty: doc.specialty?.name || 'N/A',
+        consultationFee: doc.consultationFee,
+        rating: doc.rating?.average || 0
+      })));
+
+    return doctors;
+  } catch (error) {
+    logger.error('Error fetching doctor filter options', { error: error.message });
+    throw new AppError(`Error fetching doctor filter options: ${error.message}`, 500);
+  }
+};
+
 // Get doctor by ID
 exports.getDoctorById = async (doctorId) => {
   // Validate doctorId is a valid MongoDB ObjectId
