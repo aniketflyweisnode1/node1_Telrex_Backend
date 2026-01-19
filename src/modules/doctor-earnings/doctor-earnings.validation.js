@@ -1,4 +1,5 @@
 const { body, query } = require('express-validator');
+const mongoose = require('mongoose');
 
 // Validation for getting doctor earnings summary
 exports.getDoctorEarningsSummaryValidation = [
@@ -10,31 +11,22 @@ exports.getDoctorEarningsSummaryValidation = [
     .optional()
     .isInt({ min: 1, max: 100 })
     .withMessage('Limit must be between 1 and 100'),
+  query('search')
+    .optional()
+    .isString()
+    .trim()
+    .withMessage('Search must be a string'),
   query('specialty')
     .optional()
-    .isIn([
-      'General Practice',
-      'Cardiology',
-      'Pediatrics',
-      'Dermatology',
-      'Orthopedics',
-      'Neurology',
-      'Psychiatry',
-      'Oncology',
-      'Gynecology',
-      'Urology',
-      'Ophthalmology',
-      'ENT',
-      'Pulmonology',
-      'Gastroenterology',
-      'Endocrinology',
-      'Rheumatology',
-      'Other'
-    ])
-    .withMessage('Invalid specialty'),
+    .custom((value) => {
+      // Accept MongoDB ObjectId or empty string
+      if (!value || value === '') return true;
+      return mongoose.Types.ObjectId.isValid(value);
+    })
+    .withMessage('Specialty must be a valid MongoDB ObjectId'),
   query('sortBy')
     .optional()
-    .isIn(['totalEarnings', 'consultations', 'feesPerHour', 'availableEarnings'])
+    .isIn(['totalEarnings', 'consultations', 'feesPerHour', 'availableEarnings', 'doctor.fullName', 'specialty.name'])
     .withMessage('Invalid sortBy field'),
   query('sortOrder')
     .optional()
@@ -42,34 +34,31 @@ exports.getDoctorEarningsSummaryValidation = [
     .withMessage('Sort order must be asc or desc')
 ];
 
-// Validation for processing payout
+// Validation for processing payout (Admin Panel - Process Payout Modal)
 exports.processPayoutValidation = [
   body('amount')
     .notEmpty()
-    .withMessage('Amount is required')
+    .withMessage('Payment amount is required')
     .isFloat({ min: 0.01 })
-    .withMessage('Amount must be a positive number'),
+    .withMessage('Payment amount must be greater than 0'),
+  // Bank account is optional if doctor has bank account in profile
   body('bankAccount.accountHolder')
-    .notEmpty()
-    .withMessage('Account holder name is required')
+    .optional()
     .isString()
-    .withMessage('Account holder must be a string')
+    .withMessage('Account holder name must be a string')
     .trim(),
   body('bankAccount.bankName')
-    .notEmpty()
-    .withMessage('Bank name is required')
+    .optional()
     .isString()
     .withMessage('Bank name must be a string')
     .trim(),
   body('bankAccount.accountNumber')
-    .notEmpty()
-    .withMessage('Account number is required')
+    .optional()
     .isString()
     .withMessage('Account number must be a string')
     .trim(),
   body('bankAccount.routingNumber')
-    .notEmpty()
-    .withMessage('Routing number is required')
+    .optional()
     .isString()
     .withMessage('Routing number must be a string')
     .trim(),
@@ -81,14 +70,31 @@ exports.processPayoutValidation = [
     .optional()
     .isIn(['bank_transfer', 'wire_transfer', 'ach', 'check'])
     .withMessage('Invalid payout method'),
+  body('payoutGateway')
+    .optional()
+    .isIn(['stripe', 'paypal', 'manual'])
+    .withMessage('Invalid payout gateway'),
   body('currency')
     .optional()
     .isString()
-    .withMessage('Currency must be a string'),
+    .withMessage('Currency must be a string')
+    .isLength({ min: 3, max: 3 })
+    .withMessage('Currency must be a 3-letter code (e.g., USD)'),
+  body('autoComplete')
+    .optional()
+    .isBoolean()
+    .withMessage('Auto complete must be a boolean'),
+  body('transactionId')
+    .optional()
+    .isString()
+    .withMessage('Transaction ID must be a string')
+    .trim(),
   body('notes')
     .optional()
     .isString()
-    .withMessage('Notes must be a string')
+    .trim()
+    .isLength({ max: 500 })
+    .withMessage('Notes must not exceed 500 characters')
 ];
 
 // Validation for updating payout status

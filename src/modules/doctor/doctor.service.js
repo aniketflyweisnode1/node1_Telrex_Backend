@@ -870,15 +870,25 @@ exports.getFilterOptions = async () => {
   }
 };
 
-// Get doctor by ID
+// Get doctor by ID (for admin and public access)
 exports.getDoctorById = async (doctorId) => {
+  // Validate and sanitize doctorId
+  if (!doctorId || typeof doctorId !== 'string') {
+    throw new AppError('Doctor ID is required and must be a string', 400);
+  }
+
+  // Trim whitespace
+  doctorId = doctorId.trim();
+
   // Validate doctorId is a valid MongoDB ObjectId
   if (!mongoose.Types.ObjectId.isValid(doctorId)) {
-    throw new AppError('Invalid doctor ID format', 400);
+    logger.warn('Invalid doctor ID format', { doctorId, type: typeof doctorId });
+    throw new AppError(`Invalid doctor ID format. Expected a valid MongoDB ObjectId, received: ${doctorId}`, 400);
   }
+
   try {
     const doctor = await Doctor.findById(doctorId)
-      .populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt gender dateOfBirth')
+      .populate('user', 'firstName lastName email phoneNumber countryCode role isActive createdAt gender dateOfBirth profilePicture')
       .populate('specialty', 'name description')
       .populate('createdBy', 'firstName lastName email')
       .populate('licenseVerifiedBy', 'firstName lastName email');

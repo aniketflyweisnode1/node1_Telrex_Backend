@@ -27,8 +27,14 @@ router.get(
 // Get filter options - PUBLIC (must come before /:id to avoid route conflicts)
 router.get('/filter-options', doctorController.getFilterOptions);
 
-// Get doctor by ID - PUBLIC
-router.get('/:id', doctorController.getDoctorById);
+// Get doctor by ID - PUBLIC (with validation) - Must be last to avoid catching other routes
+// Note: /admin/doctors/earnings is handled by doctor-earnings module which is mounted before this
+router.get(
+  '/:id',
+  doctorValidation.getDoctorByIdValidation,
+  validate,
+  doctorController.getDoctorById
+);
 
 // Doctor CRUD routes (Admin only)
 router.post(

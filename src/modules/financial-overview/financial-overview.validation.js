@@ -12,8 +12,17 @@ exports.getFinancialOverviewValidation = [
 exports.getRevenueChartValidation = [
   query('year')
     .optional()
-    .isInt({ min: 2020, max: 2100 })
+    .custom((value) => {
+      // Accept year as integer or string
+      if (!value || value === '') return true;
+      const year = parseInt(value);
+      return !isNaN(year) && year >= 2020 && year <= 2100;
+    })
     .withMessage('Year must be a valid year between 2020 and 2100')
+    .customSanitizer((value) => {
+      // Return as string if provided, let service parse it
+      return value || null;
+    })
 ];
 
 // Validation for recent transactions query parameters
@@ -30,6 +39,14 @@ exports.getRecentTransactionsValidation = [
     .optional()
     .isIn(['all', 'consultation', 'pharmacy', 'payouts'])
     .withMessage('Type must be one of: all, consultation, pharmacy, payouts'),
+  query('year')
+    .optional()
+    .custom((value) => {
+      if (!value || value === '') return true;
+      const year = parseInt(value);
+      return !isNaN(year) && year >= 2020 && year <= 2100;
+    })
+    .withMessage('Year must be a valid year between 2020 and 2100'),
   query('startDate')
     .optional()
     .isISO8601()

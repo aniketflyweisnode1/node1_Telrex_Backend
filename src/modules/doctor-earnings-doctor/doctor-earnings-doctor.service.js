@@ -216,8 +216,22 @@ exports.getPayoutRequests = async (userId, query = {}) => {
     filter.status = query.status;
   }
 
-  // Get payouts with populated data
+  // Get payouts with populated data (including doctor details for admin panel)
   const payouts = await DoctorPayout.find(filter)
+    .populate({
+      path: 'doctor',
+      select: 'user consultationFee specialty',
+      populate: [
+        {
+          path: 'user',
+          select: 'firstName lastName email profilePicture phoneNumber countryCode'
+        },
+        {
+          path: 'specialty',
+          select: 'name'
+        }
+      ]
+    })
     .populate({
       path: 'processedBy',
       select: 'firstName lastName email'
@@ -227,39 +241,86 @@ exports.getPayoutRequests = async (userId, query = {}) => {
     .skip(skip)
     .lean();
 
-  // Format payouts with all details
+  // Format payouts with all details (including doctor information for admin panel)
   const formattedPayouts = payouts.map(payout => ({
     _id: payout._id,
-    payoutId: payout.payoutId,
+    payoutId: payout.payoutId || null,
+    // Doctor Information (for admin panel display)
+    doctor: payout.doctor ? {
+      _id: payout.doctor._id,
+      doctorId: payout.doctor._id.toString(),
+      name: payout.doctor.user ? `${payout.doctor.user.firstName || ''} ${payout.doctor.user.lastName || ''}`.trim() : 'Unknown',
+      displayName: payout.doctor.user ? `Dr. ${payout.doctor.user.firstName || ''} ${payout.doctor.user.lastName || ''}`.trim() : 'Unknown',
+      firstName: payout.doctor.user?.firstName || '',
+      lastName: payout.doctor.user?.lastName || '',
+      email: payout.doctor.user?.email || '',
+      phoneNumber: payout.doctor.user?.phoneNumber || '',
+      countryCode: payout.doctor.user?.countryCode || '',
+      profilePicture: payout.doctor.user?.profilePicture || null,
+      specialty: payout.doctor.specialty ? {
+        _id: payout.doctor.specialty._id?.toString() || null,
+        name: payout.doctor.specialty.name || 'N/A'
+      } : null,
+      consultationFee: payout.doctor.consultationFee || 0
+    } : null,
+    // Payout Details
     amount: payout.amount,
+    amountDisplay: `$${(payout.amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
     currency: payout.currency || 'USD',
     status: payout.status,
-    payoutMethod: payout.payoutMethod,
+    statusDisplay: payout.status.charAt(0).toUpperCase() + payout.status.slice(1), // Capitalized status
+    payoutMethod: payout.payoutMethod || 'bank_transfer',
     payoutGateway: payout.payoutGateway || 'manual',
+    // Bank Account Details
     bankAccount: payout.bankAccount ? {
-      accountHolder: payout.bankAccount.accountHolder,
-      accountHolderName: payout.bankAccount.accountHolder,
-      bankName: payout.bankAccount.bankName,
+      accountHolder: payout.bankAccount.accountHolder || '',
+      accountHolderName: payout.bankAccount.accountHolder || '',
+      bankName: payout.bankAccount.bankName || '',
       accountNumber: payout.bankAccount.accountNumber ? `****${payout.bankAccount.accountNumber.slice(-4)}` : null,
-      fullAccountNumber: payout.bankAccount.accountNumber || null, // For display purposes, can be masked
-      routingNumber: payout.bankAccount.routingNumber ? `****${payout.bankAccount.routingNumber.slice(-4)}` : null,
-      fullRoutingNumber: payout.bankAccount.routingNumber || null,
+      fullAccountNumber: payout.bankAccount.accountNumber || null, // Full number for admin use
+      routingNumber: payout.bankAccount.routingNumber || null,
+      maskedRoutingNumber: payout.bankAccount.routingNumber ? `****${payout.bankAccount.routingNumber.slice(-4)}` : null,
+      fullRoutingNumber: payout.bankAccount.routingNumber || null, // Full routing for admin use
       accountType: payout.bankAccount.accountType || 'checking'
     } : null,
+    // Transaction Details
     transactionId: payout.transactionId || null,
     notes: payout.notes || null,
     failureReason: payout.failureReason || null,
+    // Processed By (Admin who processed)
     processedBy: payout.processedBy ? {
       _id: payout.processedBy._id,
-      id: payout.processedBy._id,
-      name: `${payout.processedBy.firstName || ''} ${payout.processedBy.lastName || ''}`.trim(),
-      firstName: payout.processedBy.firstName,
-      lastName: payout.processedBy.lastName,
-      email: payout.processedBy.email
+      id: payout.processedBy._id.toString(),
+      name: `${payout.processedBy.firstName || ''} ${payout.processedBy.lastName || ''}`.trim() || 'Admin',
+      firstName: payout.processedBy.firstName || '',
+      lastName: payout.processedBy.lastName || '',
+      email: payout.processedBy.email || ''
     } : null,
+    // Timestamps
     requestedAt: payout.createdAt,
+    requestedAtDisplay: payout.createdAt ? new Date(payout.createdAt).toLocaleString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }) : null,
     processedAt: payout.processedAt || null,
+    processedAtDisplay: payout.processedAt ? new Date(payout.processedAt).toLocaleString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }) : null,
     failedAt: payout.failedAt || null,
+    failedAtDisplay: payout.failedAt ? new Date(payout.failedAt).toLocaleString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }) : null,
     createdAt: payout.createdAt,
     updatedAt: payout.updatedAt
   }));
@@ -340,10 +401,11 @@ exports.createPayoutRequest = async (userId, data) => {
     throw new AppError('Invalid payout amount. Amount must be greater than 0', 400);
   }
 
-  // Get available earnings
-  const consultationsCount = await Prescription.countDocuments({ 
+  // Get available earnings (consultations * consultationFee)
+  // Use IntakeForm with status 'submitted' to match earnings summary calculation
+  const consultationsCount = await IntakeForm.countDocuments({ 
     doctor: doctorId,
-    status: { $ne: 'cancelled' }
+    status: 'submitted'
   });
   
   const totalEarnings = consultationsCount * (doctor.consultationFee || 0);

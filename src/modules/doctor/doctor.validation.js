@@ -446,6 +446,16 @@ exports.doctorSignupValidation = [
     .withMessage('Agree confirmation must be a boolean')
 ];
 
+// Get doctor by ID validation
+const { param } = require('express-validator');
+exports.getDoctorByIdValidation = [
+  param('id')
+    .notEmpty()
+    .withMessage('Doctor ID is required')
+    .isMongoId()
+    .withMessage('Doctor ID must be a valid MongoDB ObjectId')
+];
+
 // Get doctors by specialization validation
 const { query } = require('express-validator');
 exports.getDoctorsBySpecializationValidation = [

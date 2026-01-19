@@ -60,7 +60,14 @@ router.use('/admin', require('../modules/medicine/medicine.routes'));
 router.use('/admin/specializations', require('../modules/specialization/specialization.routes'));
 
 /* =======================
-   DOCTOR ROUTES (Public GET routes - Must come before /admin to avoid middleware conflicts)
+   DOCTOR EARNINGS ROUTES (Admin/Sub-Admin Only)
+   MUST come BEFORE doctor routes to avoid route conflicts
+   This ensures /admin/doctors/earnings matches before /admin/doctors/:id
+======================= */
+router.use('/admin', require('../modules/doctor-earnings/doctor-earnings.routes'));
+
+/* =======================
+   DOCTOR ROUTES (Public GET routes - Must come after doctor-earnings to avoid route conflicts)
    Public: GET routes (view doctors, statistics, specialties, doctor by ID)
    Admin: POST, PUT, DELETE routes require admin authentication
 ======================= */
@@ -85,13 +92,6 @@ router.use('/admin', require('../modules/support-system/support-system-admin.rou
    Public: POST route (submit help desk query)
    Admin/Sub-Admin: GET, PUT, DELETE routes (full CRUD)
 ======================= */
-
-
-/* =======================
-   DOCTOR EARNINGS ROUTES (Admin/Sub-Admin Only)
-   Must come before doctor routes to avoid route conflicts
-======================= */
-router.use('/admin', require('../modules/doctor-earnings/doctor-earnings.routes'));
 
 /* =======================
    INTAKE FORM FIELD ROUTES (Admin/Sub-Admin Only)

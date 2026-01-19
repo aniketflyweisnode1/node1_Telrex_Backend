@@ -1,13 +1,20 @@
 const doctorEarningsService = require('./doctor-earnings.service');
 
-// Get doctor earnings summary
+// Get doctor earnings summary (Admin Panel - All Doctors with Details and Payment Info)
 exports.getDoctorEarningsSummary = async (req, res, next) => {
   try {
     const result = await doctorEarningsService.getDoctorEarningsSummary(req.query);
     res.status(200).json({
       success: true,
-      data: result.doctors,
-      pagination: result.pagination
+      message: 'Doctor earnings summary retrieved successfully',
+      data: result.doctors || [], // Array of multiple doctors with complete details (matching table structure from image)
+      count: result.doctors?.length || 0,
+      pagination: result.pagination || {
+        page: 1,
+        limit: 10,
+        total: 0,
+        pages: 0
+      }
     });
   } catch (err) {
     next(err);
@@ -27,12 +34,13 @@ exports.getDoctorEarningsById = async (req, res, next) => {
   }
 };
 
-// Get doctor bank account information
+// Get doctor bank account information (for Process Payout Modal)
 exports.getDoctorBankAccount = async (req, res, next) => {
   try {
     const bankAccount = await doctorEarningsService.getDoctorBankAccount(req.params.id);
     res.status(200).json({
       success: true,
+      message: 'Doctor bank account information retrieved successfully',
       data: bankAccount
     });
   } catch (err) {
@@ -40,7 +48,7 @@ exports.getDoctorBankAccount = async (req, res, next) => {
   }
 };
 
-// Process payout
+// Process payout (Admin Panel - Process Payout Modal)
 exports.processPayout = async (req, res, next) => {
   try {
     const payout = await doctorEarningsService.processPayout(
@@ -50,7 +58,7 @@ exports.processPayout = async (req, res, next) => {
     );
     res.status(201).json({
       success: true,
-      message: 'Payout processed successfully',
+      message: `Payout of ${payout.amountDisplay} processed successfully for ${payout.doctor.displayName}`,
       data: payout
     });
   } catch (err) {

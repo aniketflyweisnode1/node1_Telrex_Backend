@@ -16,14 +16,17 @@ exports.getEarningsSummaryValidation = [
     .withMessage('Doctor ID must be a valid MongoDB ID'),
   query()
     .custom((value, { req }) => {
-      // At least one of userId, doctorId, or req.user must be present
+      // At least one of userId, doctorId, req.user, or Authorization header must be present
       if (req.user && req.user.id) {
         return true; // Authenticated user
+      }
+      if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        return true; // Token provided (will be validated by optionalAuth middleware)
       }
       if (req.query.userId || req.query.doctorId) {
         return true; // Query parameters provided
       }
-      throw new Error('Either userId or doctorId query parameter is required for public access, or user must be authenticated');
+      throw new Error('Either userId or doctorId query parameter is required for public access, or user must be authenticated with a token');
     })
 ];
 
@@ -51,14 +54,17 @@ exports.getPayoutRequestsValidation = [
     .withMessage('Doctor ID must be a valid MongoDB ID'),
   query()
     .custom((value, { req }) => {
-      // At least one of userId, doctorId, or req.user must be present
+      // At least one of userId, doctorId, req.user, or Authorization header must be present
       if (req.user && req.user.id) {
         return true; // Authenticated user
+      }
+      if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        return true; // Token provided (will be validated by optionalAuth middleware)
       }
       if (req.query.userId || req.query.doctorId) {
         return true; // Query parameters provided
       }
-      throw new Error('Either userId or doctorId query parameter is required for public access, or user must be authenticated');
+      throw new Error('Either userId or doctorId query parameter is required for public access, or user must be authenticated with a token');
     })
 ];
 
@@ -93,14 +99,17 @@ exports.getReportsAndAnalyticsValidation = [
     .withMessage('Doctor ID must be a valid MongoDB ID'),
   query()
     .custom((value, { req }) => {
-      // At least one of userId, doctorId, or req.user must be present
+      // At least one of userId, doctorId, req.user, or Authorization header must be present
       if (req.user && req.user.id) {
         return true; // Authenticated user
+      }
+      if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        return true; // Token provided (will be validated by optionalAuth middleware)
       }
       if (req.query.userId || req.query.doctorId) {
         return true; // Query parameters provided
       }
-      throw new Error('Either userId or doctorId query parameter is required for public access, or user must be authenticated');
+      throw new Error('Either userId or doctorId query parameter is required for public access, or user must be authenticated with a token');
     })
 ];
 

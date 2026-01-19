@@ -17,10 +17,11 @@ exports.getFinancialOverview = async (req, res, next) => {
 // Get revenue chart data
 exports.getRevenueChart = async (req, res, next) => {
   try {
-    const year = req.query.year ? parseInt(req.query.year) : null;
+    const year = req.query.year || null; // Pass as string, service will parse
     const chartData = await financialOverviewService.getRevenueChart(year);
     res.status(200).json({
       success: true,
+      message: 'Revenue chart data retrieved successfully',
       data: chartData
     });
   } catch (err) {
@@ -34,8 +35,11 @@ exports.getRecentTransactions = async (req, res, next) => {
     const result = await financialOverviewService.getRecentTransactions(req.query);
     res.status(200).json({
       success: true,
+      message: 'Recent transactions retrieved successfully',
       data: result.transactions,
       counts: result.counts,
+      availableYears: result.availableYears || [],
+      year: result.year,
       pagination: result.pagination
     });
   } catch (err) {

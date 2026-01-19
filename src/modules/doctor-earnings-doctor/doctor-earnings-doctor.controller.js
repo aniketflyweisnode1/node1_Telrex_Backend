@@ -10,6 +10,10 @@ const getUserId = async (req) => {
     return req.user.id;
   }
   
+  // Check if Authorization header is present (optionalAuth should have set req.user, but if not, we can still proceed)
+  // If token is present but req.user is not set, it means optionalAuth didn't set it (invalid/expired token or user not found)
+  // In that case, we'll check query parameters
+  
   // If public route, get userId from query parameters
   const { userId, doctorId } = req.query;
   
@@ -26,7 +30,12 @@ const getUserId = async (req) => {
     return doctor.user.toString();
   }
   
-  throw new AppError('User ID or Doctor ID is required. For public access, provide userId or doctorId as query parameter. Example: ?userId=... or ?doctorId=...', 400);
+  // If Authorization header is present but req.user is not set, the token might be invalid
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+    throw new AppError('Invalid or expired token. Please check your authentication token.', 401);
+  }
+  
+  throw new AppError('User ID or Doctor ID is required. For public access, provide userId or doctorId as query parameter. For authenticated access, provide a valid Bearer token. Example: ?userId=... or ?doctorId=...', 400);
 };
 
 // Get earnings summary
