@@ -10,6 +10,14 @@ exports.getCheckoutSummary = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
+// Get payment options
+exports.getPaymentOptions = async (req, res, next) => {
+  try {
+    const paymentOptions = await checkoutService.getPaymentOptions(req.user.id);
+    res.status(200).json({ success: true, data: paymentOptions });
+  } catch (err) { next(err); }
+};
+
 // Process checkout (create order and payment)
 exports.processCheckout = async (req, res, next) => {
   try {

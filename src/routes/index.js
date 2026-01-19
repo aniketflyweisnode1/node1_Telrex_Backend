@@ -71,6 +71,7 @@ router.use('/admin/doctors', require('../modules/doctor/doctor.routes'));
    Public: POST /admin/login, POST /admin/register
    Protected: All other routes require admin authentication
 ======================= */
+router.use('/admin/help', require('../modules/help-desk/help-desk.routes'));
 router.use('/admin', require('../modules/admin/admin.routes'));
 
 /* =======================
@@ -84,7 +85,7 @@ router.use('/admin', require('../modules/support-system/support-system-admin.rou
    Public: POST route (submit help desk query)
    Admin/Sub-Admin: GET, PUT, DELETE routes (full CRUD)
 ======================= */
-router.use('/admin', require('../modules/help-desk/help-desk.routes'));
+
 
 /* =======================
    DOCTOR EARNINGS ROUTES (Admin/Sub-Admin Only)

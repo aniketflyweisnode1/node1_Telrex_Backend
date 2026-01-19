@@ -147,3 +147,126 @@ exports.validateCheckout = async (userId, data) => {
   };
 };
 
+// Get payment options for checkout
+exports.getPaymentOptions = async (userId) => {
+  const patient = await getPatient(userId);
+  const PaymentMethod = require('../../models/PaymentMethod.model');
+  
+  // Get saved payment methods
+  const savedPaymentMethods = await PaymentMethod.find({
+    patient: patient._id,
+    isActive: true
+  })
+    .select('-securityCode -gatewayToken')
+    .sort({ isDefault: -1, createdAt: -1 })
+    .lean();
+  
+  // Available payment methods configuration
+  const availablePaymentMethods = [
+    {
+      id: 'card',
+      name: 'Credit/Debit Card',
+      type: 'card',
+      icon: 'card',
+      description: 'Pay using credit or debit card',
+      enabled: true,
+      supportedCardTypes: ['visa', 'mastercard', 'amex', 'discover', 'rupay'],
+      requiresDetails: true
+    },
+    {
+      id: 'upi',
+      name: 'UPI',
+      type: 'upi',
+      icon: 'upi',
+      description: 'Pay using UPI (PhonePe, Google Pay, Paytm, etc.)',
+      enabled: true,
+      requiresDetails: true
+    },
+    {
+      id: 'netbanking',
+      name: 'Net Banking',
+      type: 'netbanking',
+      icon: 'netbanking',
+      description: 'Pay using internet banking',
+      enabled: true,
+      requiresDetails: true
+    },
+    {
+      id: 'wallet',
+      name: 'Digital Wallet',
+      type: 'wallet',
+      icon: 'wallet',
+      description: 'Pay using digital wallet (Paytm, PhonePe, etc.)',
+      enabled: true,
+      supportedWallets: ['paytm', 'phonepe', 'googlepay', 'amazonpay'],
+      requiresDetails: true
+    },
+    {
+      id: 'cod',
+      name: 'Cash on Delivery',
+      type: 'cod',
+      icon: 'cod',
+      description: 'Pay cash when your order is delivered',
+      enabled: true,
+      requiresDetails: false,
+      maxAmount: 5000, // Maximum amount for COD (if applicable)
+      available: true
+    }
+  ];
+  
+  // Format saved payment methods
+  const formattedSavedMethods = savedPaymentMethods.map(method => {
+    const baseMethod = {
+      _id: method._id,
+      type: method.type,
+      isDefault: method.isDefault,
+      createdAt: method.createdAt
+    };
+    
+    if (method.type === 'card') {
+      return {
+        ...baseMethod,
+        cardType: method.cardType,
+        cardLast4: method.cardLast4,
+        cardBrand: method.cardBrand,
+        expiryDate: method.expiryDate,
+        cardHolderName: method.cardHolderName,
+        bankName: method.bankName,
+        displayName: `${method.cardBrand ? method.cardBrand.toUpperCase() : 'Card'} •••• ${method.cardLast4}`
+      };
+    } else if (method.type === 'upi') {
+      return {
+        ...baseMethod,
+        upiId: method.upiId,
+        displayName: method.upiId
+      };
+    } else if (method.type === 'wallet') {
+      return {
+        ...baseMethod,
+        walletType: method.walletType,
+        walletId: method.walletId,
+        displayName: `${method.walletType ? method.walletType.charAt(0).toUpperCase() + method.walletType.slice(1) : 'Wallet'} •••• ${method.walletId ? method.walletId.slice(-4) : ''}`
+      };
+    } else if (method.type === 'netbanking') {
+      return {
+        ...baseMethod,
+        bankName: method.bankName,
+        displayName: method.bankName || 'Net Banking'
+      };
+    }
+    
+    return baseMethod;
+  });
+  
+  return {
+    availablePaymentMethods,
+    savedPaymentMethods: formattedSavedMethods,
+    defaultPaymentMethod: formattedSavedMethods.find(m => m.isDefault) || null,
+    paymentGateway: {
+      provider: 'stripe',
+      enabled: true,
+      currency: 'INR'
+    }
+  };
+};
+

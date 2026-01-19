@@ -5,7 +5,10 @@ const validate = require('../../middlewares/validate.middleware');
 const { processCheckoutValidation } = require('./checkout.validation');
 
 // Get checkout summary
-router.get('/checkout', controller.getCheckoutSummary);
+router.get('/checkout', auth, controller.getCheckoutSummary);
+
+// Get payment options
+router.get('/checkout/payment-options', auth, controller.getPaymentOptions);
 
 // Process checkout (create order and payment)
 router.post('/checkout', auth, processCheckoutValidation, validate, controller.processCheckout);

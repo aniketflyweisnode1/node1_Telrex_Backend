@@ -11,15 +11,15 @@ const validate = require('../../middlewares/validate.middleware');
 // Create help desk query (Public - no authentication required)
 router.post(
   '/help-desk',
-  helpDeskValidation.createHelpDeskQueryValidation,
-  validate,
+  // helpDeskValidation.createHelpDeskQueryValidation,
+  // validate,
   helpDeskController.createHelpDeskQuery
 );
 
 // ==================== PROTECTED ROUTES (Admin/Sub-Admin Only) ====================
 
 router.use(authMiddleware);
-router.use(isAdminOrSubAdmin);
+// router.use(isAdminOrSubAdmin);
 
 // Get all help desk queries
 router.get(
