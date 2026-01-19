@@ -2,6 +2,7 @@ const IntakeForm = require('../../models/IntakeForm.model');
 const Patient = require('../../models/Patient.model');
 const Doctor = require('../../models/Doctor.model');
 const AppError = require('../../utils/AppError');
+const logger = require('../../utils/logger');
 
 // Get patient from userId - create if doesn't exist
 const getPatient = async (userId) => {
@@ -116,17 +117,87 @@ exports.saveMedicalQuestions = async (userId, data) => {
   const patient = await getPatient(userId);
   let intakeForm = await IntakeForm.findOne({ patient: patient._id });
   
-  // Check if required fields are present (at least one should be filled)
-  const hasData = data.pastMedicalHistory?.length > 0 || 
-                  data.currentMedications?.length > 0 || 
-                  data.medicationAllergies?.length > 0 ||
-                  data.preferredPharmacies?.length > 0 ||
-                  data.howDidYouHearAboutUs;
+  // Handle preferred pharmacy - single object (not array)
+  let preferredPharmacy = null;
   
+  // Get existing pharmacy if form exists
+  if (intakeForm?.medicalQuestions?.preferredPharmacy) {
+    preferredPharmacy = { ...intakeForm.medicalQuestions.preferredPharmacy };
+  }
+  
+  // Handle single pharmacy entry form (like image) - "Add" field or individual fields
+  if (data.addPharmacy || data.add || data.pharmacyName || data.address) {
+    // Both addPharmacy and pharmacyName are recommended/required
+    const pharmacyNameFromAdd = data.addPharmacy ? String(data.addPharmacy).trim() : (data.add ? String(data.add).trim() : '');
+    const pharmacyNameFromField = data.pharmacyName ? String(data.pharmacyName).trim() : '';
+    
+    // Use addPharmacy first, then pharmacyName, but both should ideally be present
+    const pharmacyName = pharmacyNameFromAdd || pharmacyNameFromField;
+    const address = data.address ? String(data.address).trim() : '';
+    
+    // Validate that at least one name field is provided
+    if (!pharmacyNameFromAdd && !pharmacyNameFromField) {
+      logger.warn('Pharmacy name missing - both addPharmacy and pharmacyName are empty', {
+        addPharmacy: data.addPharmacy,
+        pharmacyName: data.pharmacyName
+      });
+      // Keep existing pharmacy if name is missing
+    } else {
+      // Log for debugging
+      logger.info('Processing single pharmacy entry', {
+        addPharmacy: data.addPharmacy,
+        pharmacyName: data.pharmacyName,
+        resolvedPharmacyName: pharmacyName,
+        address: address,
+        hasPharmacyName: !!pharmacyName,
+        hasAddress: !!address
+      });
+      
+      // Save if pharmacy name is provided (address is optional)
+      if (pharmacyName) {
+        preferredPharmacy = {
+          addPharmacy: pharmacyNameFromAdd || '',
+          pharmacyName: pharmacyName || '',
+          address: address || '',
+          city: data.city ? String(data.city).trim() : '',
+          state: data.state ? String(data.state).trim() : '',
+          zip: data.zip ? String(data.zip).trim() : ''
+        };
+        logger.info('Single pharmacy saved successfully', { pharmacyName: preferredPharmacy.pharmacyName, address: preferredPharmacy.address });
+      } else {
+        logger.warn('Pharmacy not saved - pharmacy name is required', { addPharmacy: data.addPharmacy, pharmacyName: data.pharmacyName, address: data.address });
+        // Keep existing pharmacy if new data is invalid
+      }
+    }
+  }
+  // If no pharmacy data provided, keep existing pharmacy
+  
+  // Build medical questions data
+  // If arrays are provided in request, use them (even if empty), otherwise keep existing
   const medicalQuestionsData = {
-    ...data,
-    isMedicalQuestionsComplete: hasData
+    pastMedicalHistory: Array.isArray(data.pastMedicalHistory) 
+      ? data.pastMedicalHistory 
+      : (intakeForm?.medicalQuestions?.pastMedicalHistory || []),
+    currentMedications: Array.isArray(data.currentMedications) 
+      ? data.currentMedications 
+      : (intakeForm?.medicalQuestions?.currentMedications || []),
+    medicationAllergies: Array.isArray(data.medicationAllergies) 
+      ? data.medicationAllergies 
+      : (intakeForm?.medicalQuestions?.medicationAllergies || []),
+    preferredPharmacy: preferredPharmacy,
+    howDidYouHearAboutUs: data.howDidYouHearAboutUs !== undefined 
+      ? (data.howDidYouHearAboutUs || '') 
+      : (intakeForm?.medicalQuestions?.howDidYouHearAboutUs || '')
   };
+  
+  // Check if required fields are present (at least one should be filled)
+  const hasData = medicalQuestionsData.pastMedicalHistory?.length > 0 || 
+                  medicalQuestionsData.currentMedications?.length > 0 || 
+                  medicalQuestionsData.medicationAllergies?.length > 0 ||
+                  (medicalQuestionsData.preferredPharmacy && (medicalQuestionsData.preferredPharmacy.pharmacyName || medicalQuestionsData.preferredPharmacy.address)) ||
+                  medicalQuestionsData.howDidYouHearAboutUs;
+  
+  medicalQuestionsData.isMedicalQuestionsComplete = hasData;
   
   if (!intakeForm) {
     intakeForm = await IntakeForm.create({ 
@@ -134,10 +205,7 @@ exports.saveMedicalQuestions = async (userId, data) => {
       medicalQuestions: medicalQuestionsData 
     });
   } else {
-    intakeForm.medicalQuestions = {
-      ...intakeForm.medicalQuestions,
-      ...medicalQuestionsData
-    };
+    intakeForm.medicalQuestions = medicalQuestionsData;
     await intakeForm.save();
   }
   

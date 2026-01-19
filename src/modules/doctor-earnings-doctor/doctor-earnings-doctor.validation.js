@@ -5,7 +5,26 @@ exports.getEarningsSummaryValidation = [
   query('period')
     .optional()
     .isIn(['today', 'last_7_days', 'last_30_days', 'this_month', 'last_month', 'all'])
-    .withMessage('Period must be one of: today, last_7_days, last_30_days, this_month, last_month, all')
+    .withMessage('Period must be one of: today, last_7_days, last_30_days, this_month, last_month, all'),
+  query('userId')
+    .optional()
+    .isMongoId()
+    .withMessage('User ID must be a valid MongoDB ID'),
+  query('doctorId')
+    .optional()
+    .isMongoId()
+    .withMessage('Doctor ID must be a valid MongoDB ID'),
+  query()
+    .custom((value, { req }) => {
+      // At least one of userId, doctorId, or req.user must be present
+      if (req.user && req.user.id) {
+        return true; // Authenticated user
+      }
+      if (req.query.userId || req.query.doctorId) {
+        return true; // Query parameters provided
+      }
+      throw new Error('Either userId or doctorId query parameter is required for public access, or user must be authenticated');
+    })
 ];
 
 // Get payout requests validation
@@ -21,7 +40,26 @@ exports.getPayoutRequestsValidation = [
   query('status')
     .optional()
     .isIn(['pending', 'processing', 'completed', 'failed', 'cancelled'])
-    .withMessage('Status must be one of: pending, processing, completed, failed, cancelled')
+    .withMessage('Status must be one of: pending, processing, completed, failed, cancelled'),
+  query('userId')
+    .optional()
+    .isMongoId()
+    .withMessage('User ID must be a valid MongoDB ID'),
+  query('doctorId')
+    .optional()
+    .isMongoId()
+    .withMessage('Doctor ID must be a valid MongoDB ID'),
+  query()
+    .custom((value, { req }) => {
+      // At least one of userId, doctorId, or req.user must be present
+      if (req.user && req.user.id) {
+        return true; // Authenticated user
+      }
+      if (req.query.userId || req.query.doctorId) {
+        return true; // Query parameters provided
+      }
+      throw new Error('Either userId or doctorId query parameter is required for public access, or user must be authenticated');
+    })
 ];
 
 // Create payout request validation
@@ -44,6 +82,25 @@ exports.getReportsAndAnalyticsValidation = [
   query('period')
     .optional()
     .isIn(['today', 'last_7_days', 'last_30_days', 'this_month', 'last_month', 'this_year'])
-    .withMessage('Period must be one of: today, last_7_days, last_30_days, this_month, last_month, this_year')
+    .withMessage('Period must be one of: today, last_7_days, last_30_days, this_month, last_month, this_year'),
+  query('userId')
+    .optional()
+    .isMongoId()
+    .withMessage('User ID must be a valid MongoDB ID'),
+  query('doctorId')
+    .optional()
+    .isMongoId()
+    .withMessage('Doctor ID must be a valid MongoDB ID'),
+  query()
+    .custom((value, { req }) => {
+      // At least one of userId, doctorId, or req.user must be present
+      if (req.user && req.user.id) {
+        return true; // Authenticated user
+      }
+      if (req.query.userId || req.query.doctorId) {
+        return true; // Query parameters provided
+      }
+      throw new Error('Either userId or doctorId query parameter is required for public access, or user must be authenticated');
+    })
 ];
 

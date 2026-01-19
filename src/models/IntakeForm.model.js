@@ -76,13 +76,14 @@ const intakeFormSchema = new mongoose.Schema(
       pastMedicalHistory: [String],
       currentMedications: [String],
       medicationAllergies: [String],
-      preferredPharmacies: [{
+      preferredPharmacy: {
+        addPharmacy: String,
         pharmacyName: String,
         address: String,
         city: String,
         state: String,
         zip: String
-      }],
+      },
       howDidYouHearAboutUs: String,
       isMedicalQuestionsComplete: {
         type: Boolean,

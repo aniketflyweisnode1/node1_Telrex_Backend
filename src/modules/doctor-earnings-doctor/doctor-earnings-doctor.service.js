@@ -227,42 +227,63 @@ exports.getPayoutRequests = async (userId, query = {}) => {
     .skip(skip)
     .lean();
 
-  // Format payouts
+  // Format payouts with all details
   const formattedPayouts = payouts.map(payout => ({
-    id: payout._id,
+    _id: payout._id,
+    payoutId: payout.payoutId,
     amount: payout.amount,
     currency: payout.currency || 'USD',
     status: payout.status,
     payoutMethod: payout.payoutMethod,
+    payoutGateway: payout.payoutGateway || 'manual',
     bankAccount: payout.bankAccount ? {
+      accountHolder: payout.bankAccount.accountHolder,
       accountHolderName: payout.bankAccount.accountHolder,
       bankName: payout.bankAccount.bankName,
       accountNumber: payout.bankAccount.accountNumber ? `****${payout.bankAccount.accountNumber.slice(-4)}` : null,
+      fullAccountNumber: payout.bankAccount.accountNumber || null, // For display purposes, can be masked
       routingNumber: payout.bankAccount.routingNumber ? `****${payout.bankAccount.routingNumber.slice(-4)}` : null,
-      accountType: payout.bankAccount.accountType
+      fullRoutingNumber: payout.bankAccount.routingNumber || null,
+      accountType: payout.bankAccount.accountType || 'checking'
     } : null,
-    transactionId: payout.transactionId,
-    notes: payout.notes,
-    failureReason: payout.failureReason,
+    transactionId: payout.transactionId || null,
+    notes: payout.notes || null,
+    failureReason: payout.failureReason || null,
     processedBy: payout.processedBy ? {
+      _id: payout.processedBy._id,
       id: payout.processedBy._id,
-      name: `${payout.processedBy.firstName} ${payout.processedBy.lastName}`,
+      name: `${payout.processedBy.firstName || ''} ${payout.processedBy.lastName || ''}`.trim(),
+      firstName: payout.processedBy.firstName,
+      lastName: payout.processedBy.lastName,
       email: payout.processedBy.email
     } : null,
     requestedAt: payout.createdAt,
-    processedAt: payout.processedAt,
-    failedAt: payout.failedAt
+    processedAt: payout.processedAt || null,
+    failedAt: payout.failedAt || null,
+    createdAt: payout.createdAt,
+    updatedAt: payout.updatedAt
   }));
 
   const total = await DoctorPayout.countDocuments(filter);
 
   return {
     payouts: formattedPayouts,
+    summary: {
+      total: total,
+      pending: await DoctorPayout.countDocuments({ doctor: doctorId, status: 'pending' }),
+      processing: await DoctorPayout.countDocuments({ doctor: doctorId, status: 'processing' }),
+      completed: await DoctorPayout.countDocuments({ doctor: doctorId, status: 'completed' }),
+      failed: await DoctorPayout.countDocuments({ doctor: doctorId, status: 'failed' }),
+      cancelled: await DoctorPayout.countDocuments({ doctor: doctorId, status: 'cancelled' })
+    },
     pagination: {
       page,
       limit,
       total,
       pages: Math.ceil(total / limit)
+    },
+    filters: {
+      status: query.status || 'all'
     }
   };
 };

@@ -41,12 +41,55 @@ exports.medicalQuestionsValidation = [
   body('currentMedications.*').optional().isString().withMessage('Each medication must be a string'),
   body('medicationAllergies').optional().isArray().withMessage('Medication allergies must be an array'),
   body('medicationAllergies.*').optional().isString().withMessage('Each allergy must be a string'),
+  
+  // Preferred Pharmacies - can be sent as array or as individual fields
   body('preferredPharmacies').optional().isArray().withMessage('Preferred pharmacies must be an array'),
   body('preferredPharmacies.*.pharmacyName').optional().isString().withMessage('Pharmacy name must be a string'),
   body('preferredPharmacies.*.address').optional().isString().withMessage('Pharmacy address must be a string'),
   body('preferredPharmacies.*.city').optional().isString().withMessage('Pharmacy city must be a string'),
   body('preferredPharmacies.*.state').optional().isString().withMessage('Pharmacy state must be a string'),
-  body('preferredPharmacies.*.zip').optional().isPostalCode('any').withMessage('Invalid pharmacy zip code'),
+  body('preferredPharmacies.*.zip').optional().isString().withMessage('Pharmacy zip must be a string'),
+  
+  // "Add" field - simple text input to quickly add a pharmacy name
+  body('addPharmacy')
+    .optional()
+    .isString()
+    .trim()
+    .withMessage('Add pharmacy must be a string'),
+  body('add')
+    .optional()
+    .isString()
+    .trim()
+    .withMessage('Add must be a string'),
+  
+  // Individual pharmacy fields (for adding one pharmacy at a time)
+  // Both addPharmacy and pharmacyName are required when adding pharmacy
+  body('pharmacyName')
+    .optional()
+    .isString()
+    .withMessage('Pharmacy name must be a string'),
+  
+  // Custom validation: If pharmacy fields are present, both addPharmacy and pharmacyName should be provided
+  body()
+    .custom((value, { req }) => {
+      const hasPharmacyData = req.body.addPharmacy || req.body.add || req.body.pharmacyName || req.body.address;
+      if (hasPharmacyData) {
+        // If any pharmacy field is present, both addPharmacy and pharmacyName should be provided
+        const hasAddPharmacy = !!(req.body.addPharmacy || req.body.add);
+        const hasPharmacyName = !!req.body.pharmacyName;
+        
+        if (!hasAddPharmacy && !hasPharmacyName) {
+          throw new Error('Either addPharmacy (or add) or pharmacyName is required when adding pharmacy');
+        }
+      }
+      return true;
+    })
+    .withMessage('Both addPharmacy and pharmacyName fields are recommended when adding pharmacy'),
+  body('address').optional().isString().withMessage('Pharmacy address must be a string'),
+  body('city').optional().isString().withMessage('Pharmacy city must be a string'),
+  body('state').optional().isString().withMessage('Pharmacy state must be a string'),
+  body('zip').optional().isString().withMessage('Pharmacy zip must be a string'),
+  
   body('howDidYouHearAboutUs').optional().isString().withMessage('How did you hear about us must be a string')
 ];
 

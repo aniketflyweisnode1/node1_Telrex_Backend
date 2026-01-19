@@ -4,6 +4,9 @@ const IntakeForm = require('../../models/IntakeForm.model');
 const Chat = require('../../models/Chat.model');
 const Patient = require('../../models/Patient.model');
 const User = require('../../models/User.model');
+const Refill = require('../../models/Refill.model');
+const DoctorPayout = require('../../models/DoctorPayout.model');
+const Payment = require('../../models/Payment.model');
 const mongoose = require('mongoose');
 const AppError = require('../../utils/AppError');
 const logger = require('../../utils/logger');
@@ -34,42 +37,57 @@ exports.getDashboardOverview = async (userId, query = {}) => {
     doctorId = doctor._id;
   }
 
-  // Get date range for filtering
-  const period = query.period || 'all';
-  let dateFilter = {};
-  
-  if (period !== 'all') {
+  // Helper function to get date range based on period
+  const getDateRange = (period) => {
     const now = new Date();
-    let startDate;
+    let startDate, endDate = new Date(now);
+    endDate.setHours(23, 59, 59, 999);
 
     switch (period) {
+      case 'daily':
       case 'today':
         startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        startDate.setHours(0, 0, 0, 0);
         break;
+      case 'weekly':
       case 'last_7_days':
         startDate = new Date(now);
         startDate.setDate(startDate.getDate() - 7);
+        startDate.setHours(0, 0, 0, 0);
+        break;
+      case 'monthly':
+      case 'this_month':
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        startDate.setHours(0, 0, 0, 0);
+        endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
         break;
       case 'last_30_days':
         startDate = new Date(now);
         startDate.setDate(startDate.getDate() - 30);
-        break;
-      case 'this_month':
-        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        startDate.setHours(0, 0, 0, 0);
         break;
       case 'last_month':
         startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-        const endDate = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
-        dateFilter = { $gte: startDate, $lte: endDate };
+        startDate.setHours(0, 0, 0, 0);
+        endDate = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
         break;
       default:
-        startDate = new Date(now);
-        startDate.setDate(startDate.getDate() - 30);
+        // 'all' or unknown - no date filter
+        return { startDate: null, endDate: null };
     }
 
-    if (period !== 'last_month') {
-      dateFilter = { $gte: startDate };
-    }
+    return { startDate, endDate };
+  };
+
+  // Get date range for filtering
+  const period = query.period || 'all';
+  const { startDate, endDate } = getDateRange(period);
+  let dateFilter = {};
+  
+  if (startDate && endDate) {
+    dateFilter = { $gte: startDate, $lte: endDate };
+  } else if (startDate) {
+    dateFilter = { $gte: startDate };
   }
 
   // Total Consultations (count of intake forms with status 'submitted')
@@ -89,95 +107,147 @@ exports.getDashboardOverview = async (userId, query = {}) => {
     totalConsultationsFilter.createdAt = dateFilter;
   }
   
-  // Debug: Log the filter
-  logger.info('Dashboard overview - counting consultations', {
-    doctorId: doctorObjectId.toString(),
-    doctorIdType: typeof doctorId,
-    doctorObjectIdType: doctorObjectId.constructor.name,
-    filter: JSON.stringify(totalConsultationsFilter),
-    period,
-    dateFilterKeys: Object.keys(dateFilter).length
-  });
-  
-  // First, let's check if there are any intake forms for this doctor at all
-  const allIntakeFormsForDoctor = await IntakeForm.find({ doctor: doctorObjectId }).select('_id status createdAt doctor').limit(5).lean();
-  logger.info('Dashboard overview - all intake forms for doctor', {
-    count: allIntakeFormsForDoctor.length,
-    forms: allIntakeFormsForDoctor.map(f => ({
-      id: f._id.toString(),
-      status: f.status,
-      doctor: f.doctor?.toString(),
-      createdAt: f.createdAt
-    }))
-  });
-  
-  const totalConsultations = await IntakeForm.countDocuments(totalConsultationsFilter);
-  
-  // Also count all consultations for this doctor (without date filter) for debugging
-  const allConsultationsCount = await IntakeForm.countDocuments({ 
-    doctor: doctorObjectId, 
-    status: 'submitted' 
-  });
-  
-  logger.info('Dashboard overview - consultation counts', {
-    totalConsultations,
-    allConsultationsCount,
-    period,
-    dateFilter: Object.keys(dateFilter).length > 0 ? dateFilter : 'empty',
-    filterUsed: totalConsultationsFilter
-  });
-
-  // Calculate percentage change for consultations
-  let consultationsChange = 0;
-  if (period !== 'all' && period !== 'today') {
+  // Helper function to get previous period date range
+  const getPreviousPeriodRange = (period) => {
     const now = new Date();
     let previousPeriodStart, previousPeriodEnd;
 
     switch (period) {
+      case 'daily':
+      case 'today':
+        // Previous day
+        previousPeriodEnd = new Date(now);
+        previousPeriodEnd.setDate(previousPeriodEnd.getDate() - 1);
+        previousPeriodEnd.setHours(23, 59, 59, 999);
+        previousPeriodStart = new Date(previousPeriodEnd);
+        previousPeriodStart.setHours(0, 0, 0, 0);
+        break;
+      case 'weekly':
       case 'last_7_days':
         previousPeriodEnd = new Date(now);
         previousPeriodEnd.setDate(previousPeriodEnd.getDate() - 7);
+        previousPeriodEnd.setHours(23, 59, 59, 999);
         previousPeriodStart = new Date(previousPeriodEnd);
         previousPeriodStart.setDate(previousPeriodStart.getDate() - 7);
+        previousPeriodStart.setHours(0, 0, 0, 0);
+        break;
+      case 'monthly':
+      case 'this_month':
+        previousPeriodStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        previousPeriodStart.setHours(0, 0, 0, 0);
+        previousPeriodEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
         break;
       case 'last_30_days':
         previousPeriodEnd = new Date(now);
         previousPeriodEnd.setDate(previousPeriodEnd.getDate() - 30);
+        previousPeriodEnd.setHours(23, 59, 59, 999);
         previousPeriodStart = new Date(previousPeriodEnd);
         previousPeriodStart.setDate(previousPeriodStart.getDate() - 30);
-        break;
-      case 'this_month':
-        previousPeriodStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-        previousPeriodEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
+        previousPeriodStart.setHours(0, 0, 0, 0);
         break;
       case 'last_month':
         previousPeriodStart = new Date(now.getFullYear(), now.getMonth() - 2, 1);
+        previousPeriodStart.setHours(0, 0, 0, 0);
         previousPeriodEnd = new Date(now.getFullYear(), now.getMonth() - 1, 0, 23, 59, 59);
         break;
       default:
-        previousPeriodStart = null;
-        previousPeriodEnd = null;
+        return { previousPeriodStart: null, previousPeriodEnd: null };
     }
 
-    if (previousPeriodStart && previousPeriodEnd) {
-      const previousConsultations = await IntakeForm.countDocuments({
-        doctor: doctorObjectId,
-        status: 'submitted',
-        createdAt: { $gte: previousPeriodStart, $lte: previousPeriodEnd }
-      });
+    return { previousPeriodStart, previousPeriodEnd };
+  };
 
-      if (previousConsultations > 0) {
-        consultationsChange = ((totalConsultations - previousConsultations) / previousConsultations) * 100;
-      } else if (totalConsultations > 0) {
-        consultationsChange = 100;
-      }
+  // Calculate percentage change
+  const calculatePercentageChange = (current, previous) => {
+    if (!previous || previous === 0) {
+      return current > 0 ? 100 : 0;
     }
+    return ((current - previous) / previous) * 100;
+  };
+
+  // Get previous period range
+  const { previousPeriodStart, previousPeriodEnd } = getPreviousPeriodRange(period);
+  let previousDateFilter = {};
+  if (previousPeriodStart && previousPeriodEnd) {
+    previousDateFilter = { $gte: previousPeriodStart, $lte: previousPeriodEnd };
   }
 
-  // Prescriptions Issued (same as consultations, but can be filtered differently)
-  const prescriptionsIssued = totalConsultations;
+  // Calculate all metrics in parallel
+  const [
+    totalConsultations,
+    previousConsultations,
+    prescriptionsIssued,
+    previousPrescriptions,
+    totalEarnings,
+    previousEarnings
+  ] = await Promise.all([
+    // Current period consultations
+    IntakeForm.countDocuments(totalConsultationsFilter),
+    
+    // Previous period consultations
+    previousPeriodStart && previousPeriodEnd
+      ? IntakeForm.countDocuments({
+          doctor: doctorObjectId,
+          status: 'submitted',
+          createdAt: previousDateFilter
+        })
+      : Promise.resolve(0),
+    
+    // Current period prescriptions (same as consultations for now)
+    IntakeForm.countDocuments(totalConsultationsFilter),
+    
+    // Previous period prescriptions
+    previousPeriodStart && previousPeriodEnd
+      ? IntakeForm.countDocuments({
+          doctor: doctorObjectId,
+          status: 'submitted',
+          createdAt: previousDateFilter
+        })
+      : Promise.resolve(0),
+    
+    // Current period earnings (from completed payouts)
+    DoctorPayout.aggregate([
+      {
+        $match: {
+          doctor: doctorObjectId,
+          status: 'completed',
+          ...(Object.keys(dateFilter).length > 0 ? { createdAt: dateFilter } : {})
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: '$amount' }
+        }
+      }
+    ]).then(result => result[0]?.total || 0),
+    
+    // Previous period earnings
+    previousPeriodStart && previousPeriodEnd
+      ? DoctorPayout.aggregate([
+          {
+            $match: {
+              doctor: doctorObjectId,
+              status: 'completed',
+              createdAt: previousDateFilter
+            }
+          },
+          {
+            $group: {
+              _id: null,
+              total: { $sum: '$amount' }
+            }
+          }
+        ]).then(result => result[0]?.total || 0)
+      : Promise.resolve(0)
+  ]);
 
-  // Patient Rating (from doctor profile)
+  // Calculate percentage changes
+  const consultationsChange = calculatePercentageChange(totalConsultations, previousConsultations);
+  const prescriptionsChange = calculatePercentageChange(prescriptionsIssued, previousPrescriptions);
+  const earningsChange = calculatePercentageChange(totalEarnings, previousEarnings);
+
+  // Patient Rating (from doctor profile - doesn't change with period)
   const patientRating = doctor.rating?.average || 0;
   const totalRatings = doctor.rating?.totalRatings || 0;
 
@@ -190,14 +260,25 @@ exports.getDashboardOverview = async (userId, query = {}) => {
       },
       prescriptionsIssued: {
         value: prescriptionsIssued,
-        change: consultationsChange > 0 ? `+${consultationsChange.toFixed(1)}%` : consultationsChange < 0 ? `${consultationsChange.toFixed(1)}%` : '0%',
-        trend: consultationsChange >= 0 ? 'up' : 'down'
+        change: prescriptionsChange > 0 ? `+${prescriptionsChange.toFixed(1)}%` : prescriptionsChange < 0 ? `${prescriptionsChange.toFixed(1)}%` : '0%',
+        trend: prescriptionsChange >= 0 ? 'up' : 'down'
+      },
+      totalEarnings: {
+        value: totalEarnings,
+        change: earningsChange > 0 ? `+${earningsChange.toFixed(1)}%` : earningsChange < 0 ? `${earningsChange.toFixed(1)}%` : '0%',
+        trend: earningsChange >= 0 ? 'up' : 'down',
+        currency: 'USD'
       },
       patientRating: {
         value: patientRating,
         totalRatings: totalRatings
       }
-    }
+    },
+    period: period,
+    dateRange: startDate && endDate ? {
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString()
+    } : null
   };
 };
 
@@ -245,9 +326,73 @@ exports.getRecentConsultations = async (userId, query = {}) => {
     .skip(skip)
     .lean();
 
-  // Format consultations with intake form details
+  // Get patient IDs from intake forms
+  const patientIds = intakeForms
+    .map(form => form.patient?._id)
+    .filter(id => id);
+
+  // Get refills for these patients
+  const refills = await Refill.find({
+    patient: { $in: patientIds },
+    status: { $in: ['pending', 'approved'] } // Only active refills
+  })
+    .populate({
+      path: 'medicine',
+      select: 'productName brand images'
+    })
+    .populate({
+      path: 'patient',
+      select: 'user',
+      populate: {
+        path: 'user',
+        select: 'firstName lastName'
+      }
+    })
+    .sort({ createdAt: -1 })
+    .lean();
+
+  // Group refills by patient ID
+  const refillsByPatient = {};
+  refills.forEach(refill => {
+    const patientId = refill.patient?._id?.toString();
+    if (patientId) {
+      if (!refillsByPatient[patientId]) {
+        refillsByPatient[patientId] = [];
+      }
+      refillsByPatient[patientId].push({
+        _id: refill._id,
+        refillNumber: refill.refillNumber,
+        medicationName: refill.medicationName,
+        medicine: refill.medicine ? {
+          _id: refill.medicine._id,
+          productName: refill.medicine.productName,
+          brand: refill.medicine.brand,
+          images: refill.medicine.images
+        } : null,
+        quantity: refill.quantity,
+        dosage: refill.dosage,
+        frequency: refill.frequency,
+        instructions: refill.instructions,
+        status: refill.status,
+        unitPrice: refill.unitPrice,
+        totalPrice: refill.totalPrice,
+        notes: refill.notes,
+        refillCount: refill.refillCount,
+        maxRefills: refill.maxRefills,
+        autoRefill: refill.autoRefill,
+        autoRefillFrequency: refill.autoRefillFrequency,
+        requestedDate: refill.requestedDate,
+        approvedDate: refill.approvedDate,
+        createdAt: refill.createdAt,
+        updatedAt: refill.updatedAt
+      });
+    }
+  });
+
+  // Format consultations with intake form details and refill data
   const consultations = intakeForms.map(intakeForm => {
     const patient = intakeForm.patient?.user;
+    const patientId = intakeForm.patient?._id?.toString();
     const patientName = patient 
       ? `${patient.firstName || ''} ${patient.lastName || ''}`.trim() 
       : intakeForm.basicInformation?.firstName && intakeForm.basicInformation?.lastName
@@ -297,6 +442,9 @@ exports.getRecentConsultations = async (userId, query = {}) => {
       hour12: true
     });
 
+    // Get refills for this patient
+    const patientRefills = patientId ? (refillsByPatient[patientId] || []) : [];
+
     return {
       id: intakeForm._id,
       patientName: patientName,
@@ -310,6 +458,8 @@ exports.getRecentConsultations = async (userId, query = {}) => {
       status: status,
       statusType: statusType,
       intakeFormId: intakeForm._id,
+      refills: patientRefills,
+      refillCount: patientRefills.length,
       intakeForm: {
         _id: intakeForm._id,
         basicInformation: intakeForm.basicInformation || null,

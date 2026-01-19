@@ -4,8 +4,8 @@ const { query } = require('express-validator');
 exports.getDashboardOverviewValidation = [
   query('period')
     .optional()
-    .isIn(['all', 'today', 'last_7_days', 'last_30_days', 'this_month', 'last_month'])
-    .withMessage('Invalid period. Must be one of: all, today, last_7_days, last_30_days, this_month, last_month'),
+    .isIn(['all', 'daily', 'today', 'weekly', 'last_7_days', 'monthly', 'this_month', 'last_30_days', 'last_month'])
+    .withMessage('Invalid period. Must be one of: all, daily, today, weekly, last_7_days, monthly, this_month, last_30_days, last_month'),
   query('userId')
     .optional()
     .isMongoId()
