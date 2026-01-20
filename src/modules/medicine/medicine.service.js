@@ -4,6 +4,33 @@ const AppError = require('../../utils/AppError');
 const mongoose = require('mongoose');
 const logger = require('../../utils/logger');
 
+// Helper function to populate subCategory (type) from healthCategory
+const populateSubCategory = async (medicine) => {
+  if (medicine.healthCategory && medicine.healthTypeId) {
+    // If healthCategory is already populated (object), use it directly
+    if (typeof medicine.healthCategory === 'object' && medicine.healthCategory.types) {
+      const type = medicine.healthCategory.types.find(
+        t => t._id && t._id.toString() === medicine.healthTypeId.toString()
+      );
+      if (type) {
+        medicine.subCategory = type;
+      }
+    } else if (medicine.healthCategory) {
+      // If healthCategory is just an ID, fetch it
+      const category = await HealthCategory.findById(medicine.healthCategory).lean();
+      if (category && category.types) {
+        const type = category.types.find(
+          t => t._id && t._id.toString() === medicine.healthTypeId.toString()
+        );
+        if (type) {
+          medicine.subCategory = type;
+        }
+      }
+    }
+  }
+  return medicine;
+};
+
 // Add new medicine
 exports.addMedicine = async (data, files = [], req = null) => {
   // Helper function to parse JSON strings from form data
@@ -96,30 +123,59 @@ exports.addMedicine = async (data, files = [], req = null) => {
     imagesData.gallery = [...existingGallery, ...galleryUrls];
   }
 
+  // Map category/subCategory to healthCategory/healthTypeSlug for backward compatibility
+  // Support both field names: category/subCategory (preferred) and healthCategory/healthTypeSlug (legacy)
+  const healthCategoryId = data.category || data.healthCategory;
+  const healthTypeSlugValue = data.subCategory || data.healthTypeSlug;
+
   // Validate healthCategory and healthTypeSlug relationship
-  // If healthTypeSlug is provided, healthCategory MUST be provided
-  if (data.healthTypeSlug && !data.healthCategory) {
-    throw new AppError('Health category is required when health type slug is provided', 400);
+  // If subCategory/healthTypeSlug is provided, category/healthCategory MUST be provided
+  if (healthTypeSlugValue && !healthCategoryId) {
+    throw new AppError('Category is required when subCategory is provided', 400);
   }
 
+  // Initialize healthTypeId and actualHealthTypeSlug outside the if block so they're accessible later
+  let healthTypeId = null;
+  let actualHealthTypeSlug = null;
+
   // Validate healthCategory if provided
-  if (data.healthCategory) {
-    if (!mongoose.Types.ObjectId.isValid(data.healthCategory)) {
-      throw new AppError('Invalid health category ID', 400);
+  if (healthCategoryId) {
+    if (!mongoose.Types.ObjectId.isValid(healthCategoryId)) {
+      throw new AppError('Invalid category ID', 400);
     }
 
-    const healthCategory = await HealthCategory.findById(data.healthCategory);
+    const healthCategory = await HealthCategory.findById(healthCategoryId);
     if (!healthCategory || !healthCategory.isActive) {
-      throw new AppError('Health category not found or inactive', 404);
+      throw new AppError('Category not found or inactive', 404);
     }
 
-    // Validate healthTypeSlug if provided - must exist in the selected category's types
-    if (data.healthTypeSlug) {
-      const typeExists = healthCategory.types.some(
-        type => type.slug === data.healthTypeSlug && type.isActive
-      );
-      if (!typeExists) {
-        throw new AppError(`Health type "${data.healthTypeSlug}" not found in the selected category "${healthCategory.name}". Available types: ${healthCategory.types.filter(t => t.isActive).map(t => t.slug).join(', ')}`, 404);
+    // Validate healthTypeSlug/subCategory if provided - must exist in the selected category's types
+    // subCategory can be either slug (string) or type ID (ObjectId)
+    if (healthTypeSlugValue) {
+      // Check if it's a valid ObjectId (type ID) or a slug
+      const isObjectId = mongoose.Types.ObjectId.isValid(healthTypeSlugValue);
+      
+      let typeFound = null;
+      if (isObjectId) {
+        // It's a type ID - find the type by _id
+        typeFound = healthCategory.types.find(
+          type => type._id && type._id.toString() === healthTypeSlugValue && type.isActive
+        );
+        if (!typeFound) {
+          throw new AppError(`SubCategory type ID "${healthTypeSlugValue}" not found in the selected category "${healthCategory.name}"`, 404);
+        }
+        healthTypeId = typeFound._id;
+        actualHealthTypeSlug = typeFound.slug; // Get the slug from the type
+      } else {
+        // It's a slug - find the type by slug
+        typeFound = healthCategory.types.find(
+          type => type.slug === healthTypeSlugValue && type.isActive
+        );
+        if (!typeFound) {
+          throw new AppError(`SubCategory "${healthTypeSlugValue}" not found in the selected category "${healthCategory.name}". Available subCategories: ${healthCategory.types.filter(t => t.isActive).map(t => t.slug).join(', ')}`, 404);
+        }
+        healthTypeId = typeFound._id;
+        actualHealthTypeSlug = healthTypeSlugValue; // Use the provided slug
       }
     }
   }
@@ -142,8 +198,9 @@ exports.addMedicine = async (data, files = [], req = null) => {
     drugInteractions: data.drugInteractions || '',
     indications: data.indications || '',
     category: data.category || '',
-    healthCategory: data.healthCategory || undefined,
-    healthTypeSlug: data.healthTypeSlug || undefined,
+    healthCategory: healthCategoryId || undefined,
+    healthTypeSlug: actualHealthTypeSlug || undefined,
+    healthTypeId: healthTypeId || undefined,
     isTrendy: data.isTrendy !== undefined ? (data.isTrendy === 'true' || data.isTrendy === true) : false,
     isBestOffer: data.isBestOffer !== undefined ? (data.isBestOffer === 'true' || data.isBestOffer === true) : false,
     discountPercentage: data.discountPercentage !== undefined ? parseFloat(data.discountPercentage) : undefined,
@@ -174,7 +231,13 @@ exports.addMedicine = async (data, files = [], req = null) => {
     });
   }
   
-  return medicine;
+  // Convert to plain object for easier manipulation
+  let medicineObj = medicine.toObject ? medicine.toObject() : medicine;
+  
+  // Populate subCategory (type) from healthCategory
+  medicineObj = await populateSubCategory(medicineObj);
+  
+  return medicineObj;
 };
 
 // Get all medicines
@@ -272,7 +335,7 @@ exports.getAllMedicines = async (query = {}) => {
   }
 
   const skip = (parseInt(page) - 1) * parseInt(limit);
-  const medicines = await Medicine.find(filter)
+  let medicines = await Medicine.find(filter)
     .populate({
       path: 'healthCategory',
       select: 'name slug description icon types',
@@ -282,6 +345,9 @@ exports.getAllMedicines = async (query = {}) => {
     .skip(skip)
     .limit(parseInt(limit))
     .lean();
+
+  // Populate subCategory (type) for each medicine
+  medicines = await Promise.all(medicines.map(medicine => populateSubCategory(medicine)));
 
   const total = await Medicine.countDocuments(filter);
 
@@ -317,6 +383,9 @@ exports.getMedicineById = async (medicineId) => {
   if (!medicine) {
     throw new AppError('Medicine not found', 404);
   }
+  
+  // Populate subCategory (type) from healthCategory
+  medicine = await populateSubCategory(medicine);
   
   // Return medicine regardless of visibility or isActive - if you have the ID, you can access it
   // This allows admin to see and manage hidden/soft-deleted medicines
@@ -547,43 +616,100 @@ exports.updateMedicine = async (medicineId, data, files = [], req = null) => {
   if (data.drugInteractions !== undefined) medicine.drugInteractions = data.drugInteractions;
   if (data.indications !== undefined) medicine.indications = data.indications;
 
-  // Validate and update healthCategory and healthTypeSlug relationship
-  // If healthTypeSlug is provided, healthCategory MUST be provided
-  if (data.healthTypeSlug !== undefined && !data.healthCategory && !medicine.healthCategory) {
-    throw new AppError('Health category is required when health type slug is provided', 400);
+  // Map category/subCategory to healthCategory/healthTypeSlug for backward compatibility
+  // Support both field names: category/subCategory (preferred) and healthCategory/healthTypeSlug (legacy)
+  const healthCategoryId = data.category || data.healthCategory;
+  const healthTypeSlugValue = data.subCategory !== undefined ? data.subCategory : (data.healthTypeSlug !== undefined ? data.healthTypeSlug : undefined);
+
+  // Validate relationship: If subCategory/healthTypeSlug is provided, category/healthCategory MUST be provided
+  if (healthTypeSlugValue !== undefined && !healthCategoryId && !medicine.healthCategory) {
+    throw new AppError('Category is required when subCategory is provided', 400);
   }
 
   // Validate healthCategory if provided or if healthTypeSlug is provided
-  const healthCategoryToValidate = data.healthCategory || (data.healthTypeSlug ? medicine.healthCategory : null);
+  const healthCategoryToValidate = healthCategoryId || (healthTypeSlugValue !== undefined ? medicine.healthCategory : null);
   
   if (healthCategoryToValidate) {
     if (!mongoose.Types.ObjectId.isValid(healthCategoryToValidate)) {
-      throw new AppError('Invalid health category ID', 400);
+      throw new AppError('Invalid category ID', 400);
     }
 
     const healthCategory = await HealthCategory.findById(healthCategoryToValidate);
     if (!healthCategory || !healthCategory.isActive) {
-      throw new AppError('Health category not found or inactive', 404);
+      throw new AppError('Category not found or inactive', 404);
     }
 
-    // Validate healthTypeSlug if provided - must exist in the selected category's types
-    const healthTypeSlugToValidate = data.healthTypeSlug !== undefined ? data.healthTypeSlug : medicine.healthTypeSlug;
+    // Validate healthTypeSlug/subCategory if provided - must exist in the selected category's types
+    // subCategory can be either slug (string) or type ID (ObjectId)
+    const healthTypeSlugToValidate = healthTypeSlugValue !== undefined ? healthTypeSlugValue : medicine.healthTypeSlug;
+    let healthTypeId = medicine.healthTypeId || null;
+    let actualHealthTypeSlug = medicine.healthTypeSlug || null;
+    
     if (healthTypeSlugToValidate) {
-      const typeExists = healthCategory.types.some(
-        type => type.slug === healthTypeSlugToValidate && type.isActive
-      );
-      if (!typeExists) {
-        throw new AppError(`Health type "${healthTypeSlugToValidate}" not found in the selected category "${healthCategory.name}". Available types: ${healthCategory.types.filter(t => t.isActive).map(t => t.slug).join(', ')}`, 404);
+      // Check if it's a valid ObjectId (type ID) or a slug
+      const isObjectId = mongoose.Types.ObjectId.isValid(healthTypeSlugToValidate);
+      
+      let typeFound = null;
+      if (isObjectId) {
+        // It's a type ID - find the type by _id
+        typeFound = healthCategory.types.find(
+          type => type._id && type._id.toString() === healthTypeSlugToValidate && type.isActive
+        );
+        if (!typeFound) {
+          throw new AppError(`SubCategory type ID "${healthTypeSlugToValidate}" not found in the selected category "${healthCategory.name}"`, 404);
+        }
+        healthTypeId = typeFound._id;
+        actualHealthTypeSlug = typeFound.slug; // Get the slug from the type
+      } else {
+        // It's a slug - find the type by slug
+        typeFound = healthCategory.types.find(
+          type => type.slug === healthTypeSlugToValidate && type.isActive
+        );
+        if (!typeFound) {
+          throw new AppError(`SubCategory "${healthTypeSlugToValidate}" not found in the selected category "${healthCategory.name}". Available subCategories: ${healthCategory.types.filter(t => t.isActive).map(t => t.slug).join(', ')}`, 404);
+        }
+        healthTypeId = typeFound._id;
+        actualHealthTypeSlug = healthTypeSlugToValidate; // Use the provided slug
       }
     }
   }
 
   // Update healthCategory and healthTypeSlug
-  if (data.healthCategory !== undefined) {
-    medicine.healthCategory = data.healthCategory || undefined;
+  // Support both category/subCategory and healthCategory/healthTypeSlug field names
+  if (data.category !== undefined || data.healthCategory !== undefined) {
+    medicine.healthCategory = healthCategoryId || undefined;
   }
-  if (data.healthTypeSlug !== undefined) {
-    medicine.healthTypeSlug = data.healthTypeSlug || undefined;
+  if (data.subCategory !== undefined || data.healthTypeSlug !== undefined) {
+    medicine.healthTypeSlug = actualHealthTypeSlug !== null ? actualHealthTypeSlug : undefined;
+    // Update healthTypeId if we found it above
+    if (healthTypeId) {
+      medicine.healthTypeId = healthTypeId;
+    }
+  }
+  
+  // If subCategory is provided without category, but medicine already has a category, validate subCategory against it
+  if (data.subCategory && !healthCategoryId && medicine.healthCategory) {
+    const healthCategory = await HealthCategory.findById(medicine.healthCategory);
+    if (healthCategory) {
+      const isObjectId = mongoose.Types.ObjectId.isValid(data.subCategory);
+      let typeFound = null;
+      
+      if (isObjectId) {
+        typeFound = healthCategory.types.find(
+          type => type._id && type._id.toString() === data.subCategory && type.isActive
+        );
+      } else {
+        typeFound = healthCategory.types.find(
+          type => type.slug === data.subCategory && type.isActive
+        );
+      }
+      
+      if (!typeFound) {
+        throw new AppError(`SubCategory "${data.subCategory}" not found in the current category "${healthCategory.name}". Available subCategories: ${healthCategory.types.filter(t => t.isActive).map(t => t.slug).join(', ')}`, 404);
+      }
+      medicine.healthTypeSlug = isObjectId ? typeFound.slug : data.subCategory;
+      medicine.healthTypeId = typeFound._id;
+    }
   }
   
   // Update admin flags
@@ -660,7 +786,13 @@ exports.updateMedicine = async (medicineId, data, files = [], req = null) => {
     });
   }
   
-  return medicine;
+  // Convert to plain object for easier manipulation
+  let medicineObj = medicine.toObject ? medicine.toObject() : medicine;
+  
+  // Populate subCategory (type) from healthCategory
+  medicineObj = await populateSubCategory(medicineObj);
+  
+  return medicineObj;
 };
 
 // Update medicine stock and status

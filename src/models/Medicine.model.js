@@ -153,6 +153,10 @@ const medicineSchema = new mongoose.Schema(
       type: String,
       trim: true
     },
+    healthTypeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: null
+    },
     // Admin managed flags
     isTrendy: {
       type: Boolean,

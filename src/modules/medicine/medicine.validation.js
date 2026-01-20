@@ -149,9 +149,37 @@ exports.addMedicineValidation = [
     .isBoolean()
     .withMessage('Visibility must be a boolean'),
   
-  // Health Category and Type relationships
-  // Note: If healthTypeSlug is provided, healthCategory MUST be provided
-  // healthTypeSlug must be one of the types within the selected healthCategory
+  // Category and SubCategory (Preferred field names)
+  // category = Health Category ID (MongoDB ObjectId)
+  // subCategory = Health Type Slug (from category's types array)
+  body('category')
+    .optional()
+    .isMongoId()
+    .withMessage('Category ID must be a valid MongoDB ObjectId'),
+  
+  body('subCategory')
+    .optional()
+    .custom((value, { req }) => {
+      // If subCategory is provided, category must also be provided
+      if (value && !req.body.category && !req.body.healthCategory) {
+        throw new Error('Category is required when subCategory is provided');
+      }
+      // subCategory can be either a slug (string) or type ID (MongoDB ObjectId)
+      if (value) {
+        const mongoose = require('mongoose');
+        const isObjectId = mongoose.Types.ObjectId.isValid(value);
+        const isSlug = typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value.trim());
+        if (!isObjectId && !isSlug) {
+          throw new Error('SubCategory must be either a valid MongoDB ObjectId or a lowercase alphanumeric slug with hyphens');
+        }
+      }
+      return true;
+    })
+    .withMessage('SubCategory must be either a type ID (MongoDB ObjectId) or a slug (lowercase alphanumeric with hyphens)'),
+
+  // Health Category and Type relationships (Legacy/Alternative field names for backward compatibility)
+  // Note: If healthTypeSlug/subCategory is provided, healthCategory/category MUST be provided
+  // healthTypeSlug/subCategory must be one of the types within the selected healthCategory/category
   body('healthCategory')
     .optional()
     .isMongoId()
@@ -163,9 +191,9 @@ exports.addMedicineValidation = [
     .matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
     .withMessage('Health type slug must be lowercase alphanumeric with hyphens')
     .custom((value, { req }) => {
-      // If healthTypeSlug is provided, healthCategory must also be provided
-      if (value && !req.body.healthCategory) {
-        throw new Error('Health category is required when health type slug is provided');
+      // If healthTypeSlug is provided, healthCategory or category must also be provided
+      if (value && !req.body.healthCategory && !req.body.category) {
+        throw new Error('Category (or healthCategory) is required when healthTypeSlug is provided');
       }
       return true;
     }),
