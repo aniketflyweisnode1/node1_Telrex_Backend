@@ -1,5 +1,8 @@
 const Cart = require('../../models/Cart.model');
 const Patient = require('../../models/Patient.model');
+const Medicine = require('../../models/Medicine.model');
+const SavedMedicine = require('../../models/SavedMedicine.model');
+const mongoose = require('mongoose');
 const AppError = require('../../utils/AppError');
 
 // Get patient from userId
@@ -23,6 +26,31 @@ exports.getCart = async (userId) => {
   const patient = await getPatient(userId);
   const cart = await getOrCreateCart(patient._id);
   return cart;
+};
+
+// Get saved items (saved for later)
+exports.getSavedItems = async (userId) => {
+  const patient = await getPatient(userId);
+  const cart = await Cart.findOne({ patient: patient._id });
+  
+  if (!cart) {
+    return {
+      items: [],
+      totalSaved: 0
+    };
+  }
+  
+  // Filter only saved items
+  const savedItems = cart.items.filter(item => item.isSaved === true);
+  
+  // Calculate total value of saved items
+  const totalSaved = savedItems.reduce((sum, item) => sum + item.totalPrice, 0);
+  
+  return {
+    items: savedItems,
+    totalSaved: totalSaved,
+    count: savedItems.length
+  };
 };
 
 // Add item to cart
@@ -135,7 +163,45 @@ exports.saveForLater = async (userId, itemId) => {
   const item = cart.items.id(itemId);
   if (!item) throw new AppError('Item not found in cart', 404);
   
+  // Check if item is already saved
+  if (item.isSaved) {
+    throw new AppError('Item is already saved for later', 400);
+  }
+  
+  // Mark item as saved in cart
   item.isSaved = true;
+  
+  // If productId matches a medicine, save it to SavedMedicine collection
+  if (item.productId && mongoose.Types.ObjectId.isValid(item.productId)) {
+    try {
+      // Check if medicine exists
+      const medicine = await Medicine.findOne({
+        _id: item.productId,
+        isActive: true,
+        visibility: true
+      });
+      
+      if (medicine) {
+        // Check if already saved in SavedMedicine
+        const existingSaved = await SavedMedicine.findOne({
+          patient: patient._id,
+          medicine: item.productId
+        });
+        
+        // If not already saved, save it
+        if (!existingSaved) {
+          await SavedMedicine.create({
+            patient: patient._id,
+            medicine: item.productId
+          });
+        }
+      }
+    } catch (error) {
+      // Log error but don't fail the cart save operation
+      console.error('Error saving medicine to SavedMedicine:', error.message);
+    }
+  }
+  
   await cart.save();
   
   return cart;
@@ -156,6 +222,11 @@ exports.unsaveItem = async (userId, itemId) => {
   }
   
   item.isSaved = false;
+  
+  // Note: We don't remove from SavedMedicine collection when unsaving from cart
+  // because the user might want to keep it in their saved medicines list
+  // They can remove it separately using the unsave medicine API
+  
   await cart.save();
   
   return cart;

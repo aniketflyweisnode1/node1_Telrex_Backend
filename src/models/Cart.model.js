@@ -71,11 +71,12 @@ const cartSchema = new mongoose.Schema(
 
 // Calculate totals before save
 cartSchema.pre('save', function (next) {
-  // Calculate subtotal from items
-  this.subtotal = this.items.reduce((sum, item) => sum + item.totalPrice, 0);
+  // Calculate subtotal from items (exclude saved items)
+  const activeItems = this.items.filter(item => !item.isSaved);
+  this.subtotal = activeItems.reduce((sum, item) => sum + item.totalPrice, 0);
   
-  // Reset tax, shipping, and discount if cart is empty
-  if (this.subtotal === 0 || this.items.length === 0) {
+  // Reset tax, shipping, and discount if cart is empty or all items are saved
+  if (this.subtotal === 0 || activeItems.length === 0) {
     this.tax = 0;
     this.shippingCharges = 0;
     this.discount = 0;

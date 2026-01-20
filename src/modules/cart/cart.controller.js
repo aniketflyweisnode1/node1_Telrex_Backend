@@ -106,3 +106,15 @@ exports.removeCoupon = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
+// Get saved items (saved for later)
+exports.getSavedItems = async (req, res, next) => {
+  try {
+    const result = await cartService.getSavedItems(req.user.id);
+    res.status(200).json({ 
+      success: true, 
+      message: 'Saved items retrieved successfully', 
+      data: result 
+    });
+  } catch (err) { next(err); }
+};
+
