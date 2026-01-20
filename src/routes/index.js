@@ -53,6 +53,15 @@ router.use('/admin/contact-form-queries', require('../modules/contact-form-query
 router.use('/admin', require('../modules/medicine/medicine.routes'));
 
 /* =======================
+   ADMIN ROUTES (Contains public login endpoint)
+   MUST come FIRST before other /admin routes to ensure public endpoints are accessible
+   Public: POST /admin/login, POST /admin/register
+   Protected: All other routes require admin authentication
+======================= */
+router.use('/admin/help', require('../modules/help-desk/help-desk.routes'));
+router.use('/admin', require('../modules/admin/admin.routes'));
+
+/* =======================
    SPECIALIZATION ROUTES (Public GET routes - Must come before /admin to avoid middleware conflicts)
    Public: GET routes (view specializations)
    Admin/Sub-Admin: POST, PUT, DELETE routes require authentication
@@ -72,14 +81,6 @@ router.use('/admin', require('../modules/doctor-earnings/doctor-earnings.routes'
    Admin: POST, PUT, DELETE routes require admin authentication
 ======================= */
 router.use('/admin/doctors', require('../modules/doctor/doctor.routes'));
-
-/* =======================
-   ADMIN ROUTES (Contains public login endpoint)
-   Public: POST /admin/login, POST /admin/register
-   Protected: All other routes require admin authentication
-======================= */
-router.use('/admin/help', require('../modules/help-desk/help-desk.routes'));
-router.use('/admin', require('../modules/admin/admin.routes'));
 
 /* =======================
    SUPPORT SYSTEM ADMIN ROUTES

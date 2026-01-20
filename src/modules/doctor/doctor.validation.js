@@ -456,8 +456,41 @@ exports.getDoctorByIdValidation = [
     .withMessage('Doctor ID must be a valid MongoDB ObjectId')
 ];
 
-// Get doctors by specialization validation
+// Get all doctors validation (query parameters)
 const { query } = require('express-validator');
+exports.getAllDoctorsValidation = [
+  query('page')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Page must be a positive integer'),
+  query('limit')
+    .optional()
+    .isInt({ min: 1, max: 100 })
+    .withMessage('Limit must be between 1 and 100'),
+  query('status')
+    .optional()
+    .isIn(['active', 'pending', 'suspended'])
+    .withMessage('Status must be active, pending, or suspended'),
+  query('specialty')
+    .optional()
+    .isString()
+    .withMessage('Specialty must be a string (ObjectId or name)'),
+  query('licenseVerified')
+    .optional()
+    .isIn(['true', 'false', true, false])
+    .withMessage('licenseVerified must be true or false'),
+  query('isActive')
+    .optional()
+    .isIn(['true', 'false', true, false])
+    .withMessage('isActive must be true or false'),
+  query('search')
+    .optional()
+    .isString()
+    .trim()
+    .withMessage('Search must be a string')
+];
+
+// Get doctors by specialization validation
 exports.getDoctorsBySpecializationValidation = [
   query('page')
     .optional()

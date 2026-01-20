@@ -8,7 +8,12 @@ const { isAdmin } = require('../../middlewares/admin.middleware');
 
 // ==================== PUBLIC ROUTES (No Authentication Required) ====================
 // Get all doctors
-router.get('/', doctorController.getAllDoctors);
+router.get(
+  '/',
+  doctorValidation.getAllDoctorsValidation,
+  validate,
+  doctorController.getAllDoctors
+);
 
 // Get statistics - PUBLIC
 router.get('/statistics', doctorController.getStatistics);
