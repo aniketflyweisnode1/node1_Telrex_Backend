@@ -49,9 +49,14 @@ exports.submitConsultation = async (req, res, next) => {
   try {
     const { doctorId } = req.body;
     const form = await intakeFormService.submitConsultation(req.user.id, doctorId);
+    
+    const message = doctorId 
+      ? 'Consultation submitted successfully. Your consultation request has been sent to the doctor.'
+      : 'Consultation submitted successfully.';
+    
     res.status(200).json({ 
       success: true, 
-      message: 'Consultation submitted successfully. Your consultation request has been sent to the doctor.', 
+      message: message, 
       data: form 
     });
   } catch (err) { next(err); }

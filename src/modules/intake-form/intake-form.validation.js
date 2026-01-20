@@ -96,8 +96,7 @@ exports.medicalQuestionsValidation = [
 // Submit Consultation Validation
 exports.submitConsultationValidation = [
   body('doctorId')
-    .notEmpty()
-    .withMessage('Doctor ID is required')
+    .optional()
     .isMongoId()
     .withMessage('Doctor ID must be a valid MongoDB ID')
 ];

@@ -230,19 +230,17 @@ exports.submitConsultation = async (userId, doctorId) => {
     throw new AppError('Intake form not found. Please complete the intake form first.', 404);
   }
 
-  // Validate doctor ID
-  if (!doctorId) {
-    throw new AppError('Doctor ID is required to submit consultation.', 400);
-  }
+  // Validate and verify doctor ID if provided (optional)
+  if (doctorId) {
+    // Verify doctor exists and is active
+    const doctor = await Doctor.findById(doctorId);
+    if (!doctor) {
+      throw new AppError('Doctor not found.', 404);
+    }
 
-  // Verify doctor exists and is active
-  const doctor = await Doctor.findById(doctorId);
-  if (!doctor) {
-    throw new AppError('Doctor not found.', 404);
-  }
-
-  if (!doctor.isActive || doctor.status !== 'active') {
-    throw new AppError('Selected doctor is not available for consultations.', 400);
+    if (!doctor.isActive || doctor.status !== 'active') {
+      throw new AppError('Selected doctor is not available for consultations.', 400);
+    }
   }
 
   // Check if all required sections are complete
@@ -260,9 +258,12 @@ exports.submitConsultation = async (userId, doctorId) => {
     throw new AppError('Consultation has already been submitted.', 400);
   }
 
-  // Update status to submitted and assign doctor
+  // Update status to submitted and assign doctor (if provided)
   intakeForm.status = 'submitted';
-  intakeForm.doctor = doctorId;
+  if (doctorId) {
+    intakeForm.doctor = doctorId;
+  }
+  // If doctorId is not provided, doctor field remains null/unchanged
   await intakeForm.save();
 
   // Populate doctor information before returning

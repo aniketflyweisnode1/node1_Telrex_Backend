@@ -91,13 +91,21 @@ exports.getConsultationActivity = async (query = {}) => {
   const prescriptions = await Prescription.find(filter)
     .populate({
       path: 'doctor',
-      populate: {
-        path: 'user',
-        select: 'firstName lastName email profilePicture'
-      }
+      select: 'user specialty profilePicture profileImage',
+      populate: [
+        {
+          path: 'user',
+          select: 'firstName lastName email profilePicture profileImage'
+        },
+        {
+          path: 'specialty',
+          select: 'name'
+        }
+      ]
     })
     .populate({
       path: 'patient',
+      select: 'user',
       populate: {
         path: 'user',
         select: 'firstName lastName email'
@@ -110,37 +118,96 @@ exports.getConsultationActivity = async (query = {}) => {
 
   const total = await Prescription.countDocuments(filter);
 
-  const data = prescriptions.map(prescription => {
+  const data = prescriptions.map((prescription, index) => {
     const doctor = prescription.doctor || {};
     const doctorUser = doctor.user || {};
   
     const patient = prescription.patient || {};
     const patientUser = patient.user || {};
   
-    return {
-      prescriptionId: prescription.prescriptionNumber,
+    // Format prescription ID - use prescriptionNumber if available, otherwise generate rx format
+    // For UI display, prefer shorter format
+    let prescriptionId;
+    if (prescription.prescriptionNumber) {
+      // Convert PRES1234567890 to rx1234567890 or keep original
+      prescriptionId = prescription.prescriptionNumber.startsWith('PRES') 
+        ? prescription.prescriptionNumber.replace('PRES', 'rx')
+        : prescription.prescriptionNumber;
+    } else {
+      // Generate simple rx format based on index and timestamp
+      const uniqueId = (total - skip - index).toString().padStart(3, '0');
+      prescriptionId = `rx${uniqueId}`;
+    }
   
-      doctor: {
-        _id: doctor._id || null,
-        name: doctorUser.firstName
-          ? `Dr. ${doctorUser.firstName} ${doctorUser.lastName || ''}`
-          : 'N/A',
-        email: doctorUser.email || 'N/A',
-        profilePicture: doctorUser.profilePicture || doctor.profilePicture || null,
-        specialty: doctor.specialty || 'N/A'
-      },
+    // Get doctor name with proper formatting
+    // Handle case where doctor might be null or not populated
+    let doctorName = 'N/A';
+    if (doctor && doctor._id) {
+      if (doctorUser && doctorUser.firstName) {
+        doctorName = doctorUser.firstName && doctorUser.lastName
+          ? `Dr. ${doctorUser.firstName} ${doctorUser.lastName}`
+          : `Dr. ${doctorUser.firstName}`;
+      }
+    }
+  
+    // Get patient name
+    const patientName = patientUser.firstName && patientUser.lastName
+      ? `${patientUser.firstName} ${patientUser.lastName}`
+      : patientUser.firstName || 'N/A';
+  
+    // Get profile picture - check multiple possible locations
+    // Handle case where doctor might be null
+    let profilePicture = null;
+    if (doctor && doctor._id) {
+      profilePicture = doctorUser?.profilePicture 
+        || doctorUser?.profileImage?.url 
+        || doctor?.profilePicture 
+        || doctor?.profileImage?.url
+        || null;
+    }
+  
+    // Get diagnosis from prescription description or use medicine name
+    // Since Prescription model doesn't have diagnosis field, use description or medicine name
+    // Format it properly for UI display
+    let diagnosis = prescription.diagnosis;
+    if (!diagnosis) {
+      // If diagnosis field doesn't exist, try to extract from description
+      if (prescription.description) {
+        // Try to extract diagnosis from description (first line or first 50 chars)
+        diagnosis = prescription.description.split('\n')[0].substring(0, 50) || prescription.description.substring(0, 50);
+      } else if (prescription.medicine) {
+        // Use medicine name as fallback
+        diagnosis = prescription.medicine;
+      } else {
+        diagnosis = 'N/A';
+      }
+    }
+  
+    // Format date to YYYY-MM-DD format for UI
+    const date = prescription.createdAt 
+      ? new Date(prescription.createdAt).toISOString().split('T')[0]
+      : null;
+  
+    return {
+      prescriptionId: prescriptionId,
+  
+      doctor: doctor && doctor._id ? {
+        _id: doctor._id,
+        name: doctorName,
+        email: doctorUser?.email || 'N/A',
+        profilePicture: profilePicture,
+        specialty: doctor.specialty?.name || (typeof doctor.specialty === 'string' ? doctor.specialty : null) || null
+      } : null,
   
       patient: {
         _id: patient._id || null,
-        name: patientUser.firstName
-          ? `${patientUser.firstName} ${patientUser.lastName || ''}`
-          : 'N/A',
+        name: patientName,
         email: patientUser.email || 'N/A'
       },
   
-      diagnosis: prescription.diagnosis || null,
-      date: prescription.createdAt,
-      status: prescription.status,
+      diagnosis: diagnosis,
+      date: date,
+      status: prescription.status || 'active',
       medications: prescription.medications || [],
       followUpDate: prescription.followUpDate || null
     };
@@ -199,13 +266,21 @@ exports.getPrescriptionsAndOrders = async (query = {}) => {
     prescriptions = await Prescription.find(prescriptionFilter)
       .populate({
         path: 'doctor',
-        populate: {
-          path: 'user',
-          select: 'firstName lastName email'
-        }
+        select: 'user specialty profilePicture profileImage',
+        populate: [
+          {
+            path: 'user',
+            select: 'firstName lastName email profilePicture profileImage'
+          },
+          {
+            path: 'specialty',
+            select: 'name'
+          }
+        ]
       })
       .populate({
         path: 'patient',
+        select: 'user',
         populate: {
           path: 'user',
           select: 'firstName lastName email'
@@ -219,72 +294,243 @@ exports.getPrescriptionsAndOrders = async (query = {}) => {
   // Get Orders
   if (!type || type === 'all' || type === 'orders') {
     const orderFilter = { ...dateFilter };
-    if (status) orderFilter.orderStatus = status;
+    if (status) orderFilter.status = status;
     if (search) {
       orderFilter.$or = [
         { orderNumber: { $regex: search, $options: 'i' } }
       ];
     }
 
+    // First get orders with basic populate
     orders = await Order.find(orderFilter)
       .populate({
         path: 'patient',
+        select: 'user',
         populate: {
           path: 'user',
           select: 'firstName lastName email'
         }
       })
       .populate('prescription')
+      .populate({
+        path: 'shippingAddress',
+        select: 'streetAddress city state zipCode'
+      })
       .sort({ createdAt: -1 })
       .limit(parseInt(limit) * 2)
       .lean();
+
+    // Manually populate prescription.doctor for all orders
+    const Doctor = require('../../models/Doctor.model');
+    orders = await Promise.all(orders.map(async (order) => {
+      if (order.prescription && order.prescription.doctor) {
+        // If doctor is just an ID, populate it fully
+        const doctorId = typeof order.prescription.doctor === 'string' 
+          ? order.prescription.doctor 
+          : order.prescription.doctor._id;
+        
+        if (doctorId) {
+          const doctor = await Doctor.findById(doctorId)
+            .populate({
+              path: 'user',
+              select: 'firstName lastName email profilePicture profileImage'
+            })
+            .populate({
+              path: 'specialty',
+              select: 'name'
+            })
+            .select('user specialty profilePicture profileImage')
+            .lean();
+          
+          if (doctor) {
+            order.prescription.doctor = doctor;
+          }
+        }
+      }
+      return order;
+    }));
   }
+
+  // Helper function to format prescription ID
+  const formatPrescriptionId = (prescriptionNumber) => {
+    if (!prescriptionNumber) return null;
+    // Format: PRE-001 RX-12345
+    if (prescriptionNumber.startsWith('PRES')) {
+      const num = prescriptionNumber.replace('PRES', '');
+      return `PRE-001 RX-${num.substring(num.length - 5)}`;
+    }
+    return prescriptionNumber;
+  };
+
+  // Helper function to map status for UI
+  const mapStatus = (status) => {
+    const statusMap = {
+      'pending': 'Pending',
+      'processing': 'Processing',
+      'confirmed': 'Processing',
+      'shipped': 'Dispatched',
+      'dispatched': 'Dispatched',
+      'delivered': 'Delivered',
+      'cancelled': 'Cancelled',
+      'active': 'Pending',
+      'completed': 'Delivered'
+    };
+    return statusMap[status?.toLowerCase()] || status || 'Pending';
+  };
+
+  // Helper function to get pharmacy name
+  const getPharmacy = (order) => {
+    // You can customize this based on your pharmacy logic
+    // For now, use a default or extract from address
+    if (order?.shippingAddress) {
+      // You might want to add pharmacy field to order or address
+      return 'Central Pharmacy'; // Default or extract from address
+    }
+    return 'Central Pharmacy'; // Default pharmacy name
+  };
+
+  // Helper function to get diagnosis from prescription
+  const getDiagnosis = (prescription) => {
+    if (prescription?.diagnosis) {
+      return prescription.diagnosis;
+    }
+    if (prescription?.description) {
+      // Extract first line or first 50 chars
+      const firstLine = prescription.description.split('\n')[0];
+      return firstLine.substring(0, 50) || prescription.description.substring(0, 50);
+    }
+    if (prescription?.medicine) {
+      return prescription.medicine;
+    }
+    return 'N/A';
+  };
 
   // Combine and format data
   const combinedData = [
-    ...prescriptions.map(p => ({
-      type: 'prescription',
-      id: p?.prescriptionNumber || null,
-      prescriptionId: p?.prescriptionNumber || null,
-      orderId: null,
+    ...prescriptions.map(p => {
+      const doctor = p?.doctor || {};
+      const doctorUser = doctor?.user || {};
+      const patient = p?.patient || {};
+      const patientUser = patient?.user || {};
+
+      // Get doctor name with Dr. prefix
+      let doctorName = null;
+      let doctorEmail = null;
+      let doctorProfilePicture = null;
+      
+      // Check if doctor exists and is populated
+      if (doctor && doctor._id) {
+        // Check if user is populated
+        if (doctorUser && (doctorUser.firstName || doctorUser.email)) {
+          doctorName = doctorUser.firstName && doctorUser.lastName
+            ? `Dr. ${doctorUser.firstName} ${doctorUser.lastName}`
+            : doctorUser.firstName
+              ? `Dr. ${doctorUser.firstName}`
+              : null;
+          doctorEmail = doctorUser.email || null;
+          doctorProfilePicture = doctorUser.profilePicture 
+            || doctorUser.profileImage?.url 
+            || doctor.profilePicture 
+            || doctor.profileImage?.url
+            || null;
+        }
+      }
+
+      // Get patient name
+      const patientName = patientUser.firstName && patientUser.lastName
+        ? `${patientUser.firstName} ${patientUser.lastName}`
+        : patientUser.firstName || 'N/A';
+      const patientEmail = patientUser.email || 'N/A';
+
+      return {
+        type: 'prescription',
+        prescriptionId: formatPrescriptionId(p?.prescriptionNumber),
+        patient: {
+          name: patientName,
+          email: patientEmail
+        },
+        doctor: (doctor && doctor._id && doctorName) ? {
+          name: doctorName,
+          email: doctorEmail || 'N/A',
+          profilePicture: doctorProfilePicture
+        } : null,
+        diagnosis: getDiagnosis(p),
+        pharmacy: 'Central Pharmacy', // Default or from prescription
+        status: mapStatus(p?.status),
+        date: p?.createdAt ? new Date(p.createdAt).toISOString().split('T')[0] : null,
+        originalData: {
+          status: p?.status || 'pending',
+          isOrdered: p?.isOrdered || false
+        }
+      };
+    }),
   
-      doctor:
-        p?.doctor && p?.doctor?.user
-          ? `Dr. ${p.doctor.user.firstName || ""} ${p.doctor.user.lastName || ""}`
-          : 'N/A',
-  
-      patient:
-        p?.patient && p?.patient?.user
-          ? `${p.patient.user.firstName || ""} ${p.patient.user.lastName || ""}`
-          : 'N/A',
-  
-      diagnosis: p?.diagnosis || null,
-      items: Array.isArray(p?.medications) ? p.medications.length : 0,
-      totalAmount: 0,
-      status: p?.status || 'pending',
-      date: p?.createdAt || null,
-      isOrdered: p?.isOrdered || false
-    })),
-  
-    ...orders.map(o => ({
-      type: 'order',
-      id: o?.orderNumber || null,
-      prescriptionId: o?.prescription?.prescriptionNumber || null,
-      orderId: o?.orderNumber || null,
-      doctor: null,
-  
-      patient:
-        o?.patient && o?.patient?.user
-          ? `${o.patient.user.firstName || ""} ${o.patient.user.lastName || ""}`
-          : 'N/A',
-  
-      diagnosis: null,
-      items: Array.isArray(o?.items) ? o.items.length : 0,
-      totalAmount: o?.totalAmount || 0,
-      status: o?.orderStatus || 'pending',
-      date: o?.createdAt || null,
-      isOrdered: true
-    }))
+    ...orders.map(o => {
+      const prescription = o?.prescription || {};
+      const doctor = prescription?.doctor || {};
+      const doctorUser = doctor?.user || {};
+      const patient = o?.patient || {};
+      const patientUser = patient?.user || {};
+
+      // Get doctor name with Dr. prefix from prescription
+      // Check if doctor exists and is populated
+      let doctorName = null;
+      let doctorEmail = null;
+      let doctorProfilePicture = null;
+      
+      // Check if doctor exists (not null/undefined) and has _id
+      if (doctor && doctor._id) {
+        // Check if user is populated
+        if (doctorUser && (doctorUser.firstName || doctorUser.email)) {
+          doctorName = doctorUser.firstName && doctorUser.lastName
+            ? `Dr. ${doctorUser.firstName} ${doctorUser.lastName}`
+            : doctorUser.firstName
+              ? `Dr. ${doctorUser.firstName}`
+              : null;
+          doctorEmail = doctorUser.email || null;
+          doctorProfilePicture = doctorUser.profilePicture 
+            || doctorUser.profileImage?.url 
+            || doctor.profilePicture 
+            || doctor.profileImage?.url
+            || null;
+        } else {
+          // Doctor exists but user not populated - try to populate it
+          // For now, set to null - will be handled separately if needed
+          doctorName = null;
+          doctorEmail = null;
+          doctorProfilePicture = null;
+        }
+      }
+
+      // Get patient name
+      const patientName = patientUser.firstName && patientUser.lastName
+        ? `${patientUser.firstName} ${patientUser.lastName}`
+        : patientUser.firstName || 'N/A';
+      const patientEmail = patientUser.email || 'N/A';
+
+      return {
+        type: 'order',
+        prescriptionId: formatPrescriptionId(prescription?.prescriptionNumber || o?.orderNumber),
+        patient: {
+          name: patientName,
+          email: patientEmail
+        },
+        doctor: (doctor && doctor._id && doctorName) ? {
+          name: doctorName,
+          email: doctorEmail || 'N/A',
+          profilePicture: doctorProfilePicture
+        } : null,
+        diagnosis: getDiagnosis(prescription),
+        pharmacy: getPharmacy(o),
+        status: mapStatus(o?.status),
+        date: o?.createdAt ? new Date(o.createdAt).toISOString().split('T')[0] : null,
+        originalData: {
+          orderNumber: o?.orderNumber,
+          totalAmount: o?.totalAmount || 0,
+          status: o?.status || 'pending'
+        }
+      };
+    })
   ];
   
 
