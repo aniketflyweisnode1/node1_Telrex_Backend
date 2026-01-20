@@ -8,7 +8,12 @@ const validate = require('../../middlewares/validate.middleware');
 // ==================== PUBLIC ROUTES (No Authentication Required) ====================
 
 // Get all medicines
-router.get('/medicines', medicineController.getAllMedicines);
+router.get(
+  '/medicines',
+  medicineValidation.getAllMedicinesValidation,
+  validate,
+  medicineController.getAllMedicines
+);
 
 // Find similar medicines (Public) - MUST come before /medicines/:id to avoid route conflicts
 router.get('/medicines/:id/similar', medicineController.findSimilarMedicines);

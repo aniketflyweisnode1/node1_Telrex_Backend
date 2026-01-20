@@ -229,13 +229,28 @@ exports.getAllMedicines = async (query = {}) => {
     filter.status = status;
   }
 
-  // Visibility filter
-  if (visibility !== undefined) {
-    filter.visibility = visibility === 'true' || visibility === true;
-  }
-
-  // For public access, only show visible medicines
-  if (visibility === undefined) {
+  // Visibility filter - Support multiple options for clearer API usage
+  // Options:
+  // 1. visibility=all or includeHidden=true or all=true -> Show all medicines (no visibility filter)
+  // 2. visibility=true -> Show only visible medicines
+  // 3. visibility=false -> Show only hidden medicines
+  // 4. No visibility param -> Default: show only visible medicines (public access)
+  
+  const visibilityValue = visibility || query.visibility;
+  const includeHidden = query.includeHidden === 'true' || query.includeHidden === true;
+  const showAll = query.all === 'true' || query.all === true;
+  
+  if (visibilityValue === 'all' || includeHidden || showAll) {
+    // Show all medicines regardless of visibility
+    // Don't add visibility filter
+  } else if (visibilityValue === 'true' || visibilityValue === true) {
+    // Show only visible medicines
+    filter.visibility = true;
+  } else if (visibilityValue === 'false' || visibilityValue === false) {
+    // Show only hidden medicines
+    filter.visibility = false;
+  } else {
+    // Default behavior: only show visible medicines (public access)
     filter.visibility = true;
   }
 
@@ -283,11 +298,19 @@ exports.getAllMedicines = async (query = {}) => {
 
 // Get medicine by ID
 exports.getMedicineById = async (medicineId) => {
-  const medicine = await Medicine.findOne({ _id: medicineId, isActive: true })
+  // Validate medicine ID
+  if (!mongoose.Types.ObjectId.isValid(medicineId)) {
+    throw new AppError('Invalid medicine ID', 400);
+  }
+
+  // Allow access to medicine by ID regardless of visibility or isActive status
+  // This is for admin/management purposes - if you have the ID, you should be able to access it
+  // Use findById instead of findOne to ensure we get the medicine
+  let medicine = await Medicine.findById(medicineId)
     .populate({
       path: 'healthCategory',
-      select: 'name slug description icon types',
-      match: { isActive: true }
+      select: 'name slug description icon types'
+      // Removed match condition - populate even if category is inactive for management purposes
     })
     .lean();
   
@@ -295,11 +318,8 @@ exports.getMedicineById = async (medicineId) => {
     throw new AppError('Medicine not found', 404);
   }
   
-  // For public access, only return if visible
-  if (medicine.visibility === false) {
-    throw new AppError('Medicine not found', 404);
-  }
-  
+  // Return medicine regardless of visibility or isActive - if you have the ID, you can access it
+  // This allows admin to see and manage hidden/soft-deleted medicines
   return medicine;
 };
 
@@ -706,25 +726,43 @@ exports.updateMedicineVisibility = async (medicineId, visibility) => {
     throw new AppError('Invalid medicine ID', 400);
   }
 
+  // Use findOne to ensure we get the medicine even if isActive is false
   const medicine = await Medicine.findById(medicineId);
   
   if (!medicine) {
     throw new AppError('Medicine not found', 404);
   }
 
-  // Update visibility
+  // Ensure isActive is preserved - don't accidentally set it to false
+  const wasActive = medicine.isActive;
+
+  // Update visibility only
   if (visibility !== undefined) {
     medicine.visibility = visibility === true || visibility === 'true';
   } else {
     throw new AppError('Visibility value is required', 400);
   }
 
-  await medicine.save();
+  // Explicitly ensure isActive remains unchanged
+  medicine.isActive = wasActive !== undefined ? wasActive : true;
+
+  // Only update visibility field explicitly to prevent any side effects
+  await Medicine.updateOne(
+    { _id: medicineId },
+    { 
+      $set: { 
+        visibility: medicine.visibility,
+        // Explicitly preserve isActive to prevent accidental deletion
+        isActive: medicine.isActive
+      }
+    }
+  );
 
   logger.info('Medicine visibility updated', {
     medicineId: medicine._id,
     productName: medicine.productName,
-    visibility: medicine.visibility
+    visibility: medicine.visibility,
+    isActive: medicine.isActive
   });
 
   // Fetch updated medicine with all fields to ensure fresh data is returned immediately

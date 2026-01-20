@@ -1,4 +1,4 @@
-const { body } = require('express-validator');
+const { body, query } = require('express-validator');
 
 // Add Medicine Validation
 exports.addMedicineValidation = [
@@ -235,6 +235,64 @@ exports.updateVisibilityValidation = [
       }
       throw new Error('Visibility must be a boolean or string "true"/"false"');
     })
+];
+
+// Get all medicines validation (query parameters)
+exports.getAllMedicinesValidation = [
+  query('page')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Page must be a positive integer'),
+  query('limit')
+    .optional()
+    .isInt({ min: 1, max: 100 })
+    .withMessage('Limit must be between 1 and 100'),
+  query('visibility')
+    .optional()
+    .custom((value) => {
+      const validValues = ['true', 'false', 'all', true, false];
+      if (validValues.includes(value)) {
+        return true;
+      }
+      throw new Error('Visibility must be true, false, or all');
+    }),
+  query('includeHidden')
+    .optional()
+    .isIn(['true', 'false', true, false])
+    .withMessage('includeHidden must be true or false'),
+  query('all')
+    .optional()
+    .isIn(['true', 'false', true, false])
+    .withMessage('all must be true or false'),
+  query('status')
+    .optional()
+    .isIn(['in_stock', 'low_stock', 'out_of_stock'])
+    .withMessage('Status must be in_stock, low_stock, or out_of_stock'),
+  query('category')
+    .optional()
+    .isString()
+    .withMessage('Category must be a string'),
+  query('search')
+    .optional()
+    .isString()
+    .trim()
+    .withMessage('Search must be a string'),
+  query('availability')
+    .optional()
+    .isIn(['in_stock', 'out_of_stock', 'low_stock', 'available', 'all'])
+    .withMessage('Availability must be in_stock, out_of_stock, low_stock, available, or all'),
+  query('inStock')
+    .optional()
+    .isIn(['true', 'false', true, false])
+    .withMessage('inStock must be true or false'),
+  query('sortBy')
+    .optional()
+    .isString()
+    .withMessage('sortBy must be a string'),
+  query('sortOrder')
+    .optional()
+    .isIn(['asc', 'desc'])
+    .withMessage('sortOrder must be asc or desc')
 ];
 
 // Find similar medicines validation
