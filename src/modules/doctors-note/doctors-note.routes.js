@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const controller = require('./doctors-note.controller');
 const auth = require('../../middlewares/auth.middleware');
+const { isAdminOrSubAdmin } = require('../../middlewares/admin.middleware');
 const validate = require('../../middlewares/validate.middleware');
-const { createDoctorsNoteValidation } = require('./doctors-note.validation');
+const { createDoctorsNoteValidation, createTemplateValidation, updateTemplateValidation } = require('./doctors-note.validation');
 
 // Get all doctor's notes
 router.get('/doctors-notes', controller.getDoctorsNotes);
@@ -21,6 +22,13 @@ router.put('/doctors-notes/:id', auth, createDoctorsNoteValidation, validate, co
 
 // Delete doctor's note
 router.delete('/doctors-notes/:id', auth, controller.deleteDoctorsNote);
+
+// ==================== TEMPLATE ROUTES (PUBLIC) ====================
+// Get all templates (Public - no authentication required)
+router.get('/doctors-note-templates', controller.getTemplates);
+
+// Get template by ID (Public - no authentication required)
+router.get('/doctors-note-templates/:id', controller.getTemplateById);
 
 module.exports = router;
 

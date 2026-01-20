@@ -9034,6 +9034,591 @@ Request and manage doctor's excuse notes for work or school.
 **Notes:**
 - Can only delete notes with `pending` status
 
+### Doctor's Note Templates (Public)
+
+Browse available doctor's note templates/products that can be purchased.
+
+#### Get All Templates (Public)
+**GET** `/api/v1/patient/doctors-note-templates`
+
+Get all active and visible doctor's note templates. No authentication required.
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "template_id",
+      "title": "Doctor's Note",
+      "productName": "Excuse Note",
+      "price": 49.99,
+      "description": "Our Excuse Notes for Injury or Illness provide essential documentation to verify your absence from work, school due to a medical condition, with coverage for up to 3 days. You can quickly obtain an Excuse Note for your short-term recovery. Please note, this is a simple doctor's note and cannot be used for FMLA or other extended absences. We do not fill out additional forms or offer further doctor verification for your employer.",
+      "shortDescription": "Get your Excuse Note from Company name and focus on getting better. Once you submit your request, a doctor will review it; please allow up to 12 hours for E-delivery.",
+      "coverageDays": 3,
+      "image": {
+        "url": "https://example.com/image.jpg",
+        "alt": "Doctor's Note"
+      },
+      "isActive": true,
+      "visibility": true,
+      "createdBy": {
+        "_id": "admin_id",
+        "firstName": "Admin",
+        "lastName": "User",
+        "email": "admin@example.com"
+      },
+      "order": 0,
+      "createdAt": "2024-12-24T10:00:00.000Z",
+      "updatedAt": "2024-12-24T10:00:00.000Z"
+    }
+  ]
+}
+```
+
+**Notes:**
+- Returns only templates with `isActive: true` and `visibility: true`
+- Results are sorted by `order` field (ascending), then by creation date (newest first)
+- No authentication required - publicly accessible
+
+#### Get Template by ID (Public)
+**GET** `/api/v1/patient/doctors-note-templates/:id`
+
+Get details of a specific doctor's note template. No authentication required.
+
+**Parameters:**
+- `id` (path) - Template ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "template_id",
+    "title": "Doctor's Note",
+    "productName": "Excuse Note",
+    "price": 49.99,
+    "description": "Our Excuse Notes for Injury or Illness provide essential documentation...",
+    "shortDescription": "Get your Excuse Note from Company name and focus on getting better...",
+    "coverageDays": 3,
+    "image": {
+      "url": "https://example.com/image.jpg",
+      "alt": "Doctor's Note"
+    },
+    "isActive": true,
+    "visibility": true,
+    "createdBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "order": 0,
+    "createdAt": "2024-12-24T10:00:00.000Z",
+    "updatedAt": "2024-12-24T10:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `404` - Template not found or not active/visible
+
+**Notes:**
+- Only returns templates that are active and visible
+- No authentication required - publicly accessible
+
+---
+
+## Doctor's Note Template Management APIs (Admin/Sub-Admin Only)
+
+Manage doctor's note templates/products. All endpoints require admin or sub-admin authentication.
+
+### Get All Templates (Admin)
+**GET** `/api/v1/admin/doctors-note-templates`
+
+Get all doctor's note templates with pagination and filters. No authentication required (public endpoint).
+
+**Example URLs:**
+- Get all templates: `GET /api/v1/admin/doctors-note-templates`
+- Get active and visible templates: `GET /api/v1/admin/doctors-note-templates?isActive=true&visibility=true`
+- Get active templates only: `GET /api/v1/admin/doctors-note-templates?isActive=true`
+- Get visible templates only: `GET /api/v1/admin/doctors-note-templates?visibility=true`
+- Get hidden templates (visibility=false): `GET /api/v1/admin/doctors-note-templates?visibility=false`
+- Get inactive templates: `GET /api/v1/admin/doctors-note-templates?isActive=false`
+- Get active but hidden templates: `GET /api/v1/admin/doctors-note-templates?isActive=true&visibility=false`
+- Get with pagination: `GET /api/v1/admin/doctors-note-templates?page=1&limit=10&isActive=true&visibility=true`
+- Search templates: `GET /api/v1/admin/doctors-note-templates?search=excuse&isActive=true&visibility=true`
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "template_id",
+      "title": "Doctor's Note",
+      "productName": "Excuse Note",
+      "price": 49.99,
+      "description": "Our Excuse Notes for Injury or Illness provide essential documentation...",
+      "shortDescription": "Get your Excuse Note from Company name and focus on getting better...",
+      "coverageDays": 3,
+      "image": {
+        "url": "https://example.com/image.jpg",
+        "alt": "Doctor's Note"
+      },
+      "isActive": true,
+      "visibility": true,
+      "createdBy": {
+        "_id": "admin_id",
+        "firstName": "Admin",
+        "lastName": "User",
+        "email": "admin@example.com"
+      },
+      "updatedBy": {
+        "_id": "admin_id",
+        "firstName": "Admin",
+        "lastName": "User",
+        "email": "admin@example.com"
+      },
+      "order": 0,
+      "createdAt": "2024-12-24T10:00:00.000Z",
+      "updatedAt": "2024-12-24T10:00:00.000Z"
+    }
+  ]
+}
+```
+
+**Query Parameters:**
+- `page` (optional, default: 1) - Page number
+- `limit` (optional, default: 10, max: 100) - Items per page
+- `search` (optional) - Search in title, productName, or description
+- `isActive` (optional) - Filter by active status: `true` or `false`
+- `visibility` (optional) - Filter by visibility: `true` or `false`
+- `includeDeleted` (optional) - Include soft-deleted templates: `true` or `false` (default: `false`)
+- `sortBy` (optional, default: `order`) - Sort field: `order`, `price`, `createdAt`, `updatedAt`
+- `sortOrder` (optional, default: `asc`) - Sort order: `asc` or `desc`
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "template_id",
+      "title": "Doctor's Note",
+      "productName": "Excuse Note",
+      "price": 49.99,
+      "description": "Our Excuse Notes for Injury or Illness provide essential documentation...",
+      "shortDescription": "Get your Excuse Note from Company name and focus on getting better...",
+      "coverageDays": 3,
+      "image": {
+        "url": "https://example.com/image.jpg",
+        "alt": "Doctor's Note"
+      },
+      "isActive": true,
+      "visibility": true,
+      "isDeleted": false,
+      "createdBy": {
+        "_id": "admin_id",
+        "firstName": "Admin",
+        "lastName": "User",
+        "email": "admin@example.com"
+      },
+      "updatedBy": {
+        "_id": "admin_id",
+        "firstName": "Admin",
+        "lastName": "User",
+        "email": "admin@example.com"
+      },
+      "order": 0,
+      "createdAt": "2024-12-24T10:00:00.000Z",
+      "updatedAt": "2024-12-24T10:00:00.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 25,
+    "pages": 3
+  }
+}
+```
+
+**Notes:**
+- Returns all templates (excluding soft-deleted by default)
+- Use `includeDeleted=true` to include soft-deleted templates
+- Filter by `isActive` and `visibility` status
+- Includes `updatedBy` field if template was updated
+- Results are sorted by `sortBy` field (default: `order`), then by creation date (newest first)
+- Supports pagination with `page` and `limit` parameters
+
+### Get Template by ID (Admin)
+**GET** `/api/v1/admin/doctors-note-templates/:id`
+
+Get details of a specific template. Requires admin or sub-admin authentication.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Template ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "template_id",
+    "title": "Doctor's Note",
+    "productName": "Excuse Note",
+    "price": 49.99,
+    "description": "Our Excuse Notes for Injury or Illness provide essential documentation...",
+    "shortDescription": "Get your Excuse Note from Company name and focus on getting better...",
+    "coverageDays": 3,
+    "image": {
+      "url": "https://example.com/image.jpg",
+      "alt": "Doctor's Note"
+    },
+    "isActive": true,
+    "visibility": true,
+    "createdBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "updatedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "order": 0,
+    "createdAt": "2024-12-24T10:00:00.000Z",
+    "updatedAt": "2024-12-24T10:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Template not found
+
+### Create Template (Admin)
+**POST** `/api/v1/admin/doctors-note-templates`
+
+Create a new doctor's note template/product. Requires admin or sub-admin authentication.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Request Body:**
+```json
+{
+  "title": "Doctor's Note",
+  "productName": "Excuse Note",
+  "price": 49.99,
+  "description": "Our Excuse Notes for Injury or Illness provide essential documentation to verify your absence from work, school due to a medical condition, with coverage for up to 3 days. You can quickly obtain an Excuse Note for your short-term recovery. Please note, this is a simple doctor's note and cannot be used for FMLA or other extended absences. We do not fill out additional forms or offer further doctor verification for your employer.",
+  "shortDescription": "Get your Excuse Note from Company name and focus on getting better. Once you submit your request, a doctor will review it; please allow up to 12 hours for E-delivery.",
+  "coverageDays": 3,
+  "image": {
+    "url": "https://example.com/image.jpg",
+    "alt": "Doctor's Note"
+  },
+  "isActive": true,
+  "visibility": true,
+  "order": 0
+}
+```
+
+**Required Fields:**
+- `productName` (string) - Product name (e.g., "Excuse Note")
+- `price` (number) - Price (must be >= 0)
+- `description` (string) - Full product description
+
+**Optional Fields:**
+- `title` (string) - Title (default: "Doctor's Note")
+- `shortDescription` (string) - Short description
+- `coverageDays` (number) - Coverage days (1-30, default: 3)
+- `image.url` (string) - Image URL
+- `image.alt` (string) - Image alt text
+- `isActive` (boolean) - Whether template is active (default: true)
+- `visibility` (boolean) - Whether template is visible to public (default: true)
+- `order` (number) - Display order (default: 0)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Template created successfully",
+  "data": {
+    "_id": "template_id",
+    "title": "Doctor's Note",
+    "productName": "Excuse Note",
+    "price": 49.99,
+    "description": "Our Excuse Notes for Injury or Illness provide essential documentation...",
+    "shortDescription": "Get your Excuse Note from Company name and focus on getting better...",
+    "coverageDays": 3,
+    "image": {
+      "url": "https://example.com/image.jpg",
+      "alt": "Doctor's Note"
+    },
+    "isActive": true,
+    "visibility": true,
+    "createdBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "order": 0,
+    "createdAt": "2024-12-24T10:00:00.000Z",
+    "updatedAt": "2024-12-24T10:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+
+**Notes:**
+- `createdBy` is automatically set to the authenticated admin user
+- Template is created with `isActive: true` and `visibility: true` by default
+
+### Update Template (Admin)
+**PUT** `/api/v1/admin/doctors-note-templates/:id`
+
+Update an existing doctor's note template. Requires admin or sub-admin authentication.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Template ID (MongoDB ObjectId)
+
+**Request Body:** (All fields optional)
+
+**Example 1: Update status and visibility only**
+```json
+{
+  "isActive": false,
+  "visibility": false
+}
+```
+
+**Example 2: Update all fields**
+```json
+{
+  "title": "Doctor's Note",
+  "productName": "Excuse Note",
+  "price": 49.99,
+  "description": "Updated description...",
+  "shortDescription": "Updated short description...",
+  "coverageDays": 5,
+  "image": {
+    "url": "https://example.com/new-image.jpg",
+    "alt": "Updated Doctor's Note"
+  },
+  "isActive": false,
+  "visibility": false,
+  "order": 1
+}
+```
+
+**Example 3: Activate template**
+```json
+{
+  "isActive": true,
+  "visibility": true
+}
+```
+
+**Example 4: Hide template (keep active but not visible)**
+```json
+{
+  "visibility": false
+}
+```
+
+**Example 5: Deactivate template (keep visible but inactive)**
+```json
+{
+  "isActive": false
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Template updated successfully",
+  "data": {
+    "_id": "template_id",
+    "title": "Doctor's Note",
+    "productName": "Excuse Note",
+    "price": 49.99,
+    "description": "Updated description...",
+    "shortDescription": "Updated short description...",
+    "coverageDays": 5,
+    "image": {
+      "url": "https://example.com/new-image.jpg",
+      "alt": "Updated Doctor's Note"
+    },
+    "isActive": false,
+    "visibility": false,
+    "createdBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "updatedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "order": 1,
+    "createdAt": "2024-12-24T10:00:00.000Z",
+    "updatedAt": "2024-12-24T11:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Template not found
+
+**Notes:**
+- `updatedBy` is automatically set to the authenticated admin user
+- Only provided fields will be updated
+- Can update `isActive` and `visibility` to control template availability
+
+### Delete Template (Soft Delete - Admin)
+**DELETE** `/api/v1/admin/doctors-note-templates/:id`
+
+Soft delete a doctor's note template. The template is marked as deleted but not permanently removed from the database. Requires admin or sub-admin authentication.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Template ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Template deleted successfully"
+}
+```
+
+**Error Responses:**
+- `400` - Template is already deleted
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Template not found
+
+**Notes:**
+- **Soft Delete**: Template is marked as `isDeleted: true` but remains in database
+- Template will not appear in default GET requests (use `includeDeleted=true` to see deleted templates)
+- Can be restored using the restore endpoint
+- `deletedAt` and `deletedBy` fields are automatically set
+- Template data is preserved for audit purposes
+
+### Hard Delete Template (Permanent Delete - Admin)
+**DELETE** `/api/v1/admin/doctors-note-templates/:id/hard`
+
+Permanently delete a doctor's note template from the database. This action cannot be undone. Requires admin or sub-admin authentication.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Template ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Template permanently deleted successfully"
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Template not found
+
+**Notes:**
+- **⚠️ Warning**: This action cannot be undone. Use with caution.
+- Template will be completely removed from the database
+- All associated data will be lost
+- Cannot be restored after hard delete
+- Recommended to use soft delete first, then hard delete only when absolutely necessary
+
+### Restore Template (Admin)
+**PUT** `/api/v1/admin/doctors-note-templates/:id/restore`
+
+Restore a soft-deleted doctor's note template. Requires admin or sub-admin authentication.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Template ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Template restored successfully",
+  "data": {
+    "_id": "template_id",
+    "title": "Doctor's Note",
+    "productName": "Excuse Note",
+    "price": 49.99,
+    "description": "Our Excuse Notes for Injury or Illness provide essential documentation...",
+    "shortDescription": "Get your Excuse Note from Company name and focus on getting better...",
+    "coverageDays": 3,
+    "image": {
+      "url": "https://example.com/image.jpg",
+      "alt": "Doctor's Note"
+    },
+    "isActive": true,
+    "visibility": true,
+    "isDeleted": false,
+    "createdBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "updatedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "order": 0,
+    "createdAt": "2024-12-24T10:00:00.000Z",
+    "updatedAt": "2024-12-24T11:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Template is not deleted
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Template not found
+
+**Notes:**
+- Restores soft-deleted templates by setting `isDeleted: false`
+- Clears `deletedAt` and `deletedBy` fields
+- Sets `updatedBy` to the current admin user
+- Template will appear in default GET requests after restoration
+- Cannot restore hard-deleted templates
+
 ### Checkout
 
 Complete the purchase process with billing and payment.
@@ -15473,6 +16058,1346 @@ Update a medicine's relationship with health category and type (chronic conditio
 - If `healthTypeSlug` is provided, it must exist in the selected `healthCategory`
 - Both fields are optional - you can update just one or both
 - The health type slug is validated against the health category's types
+
+---
+
+## Compliance & Security APIs (Admin/Sub-Admin Only)
+
+### Get Dashboard Statistics
+**GET** `/api/v1/admin/compliance-security/dashboard`
+
+Get comprehensive dashboard statistics including 24-hour security metrics and all compliance settings.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Dashboard statistics retrieved successfully",
+  "data": {
+    "metrics": {
+      "failedLoginAttempts": 3,
+      "activeSessions": 12,
+      "dataExportRequests": 5,
+      "securityAlerts": 0
+    },
+    "complianceSettings": [
+      {
+        "_id": "compliance_id_1",
+        "type": "hipaa",
+        "title": "HIPAA Compliance",
+        "description": "All patient health information is encrypted and stored securely",
+        "status": "active",
+        "features": [
+          {
+            "name": "End-to-end encryption for data in transit",
+            "enabled": true
+          },
+          {
+            "name": "AES-256 encryption for data at rest",
+            "enabled": true
+          },
+          {
+            "name": "Regular security audits",
+            "enabled": true
+          },
+          {
+            "name": "Business Associate Agreements in place",
+            "enabled": true
+          }
+        ],
+        "lastUpdatedBy": {
+          "_id": "admin_id",
+          "firstName": "Admin",
+          "lastName": "User",
+          "email": "admin@example.com"
+        },
+        "isActive": true,
+        "createdAt": "2025-01-01T10:00:00.000Z",
+        "updatedAt": "2025-01-15T14:30:00.000Z"
+      },
+      {
+        "_id": "compliance_id_2",
+        "type": "gdpr",
+        "title": "GDPR Compliance",
+        "description": "Full compliance with EU data protection regulations",
+        "status": "active",
+        "features": [
+          {
+            "name": "Right to be forgotten implementation",
+            "enabled": true
+          },
+          {
+            "name": "Data portability support",
+            "enabled": true
+          },
+          {
+            "name": "Consent management system",
+            "enabled": true
+          },
+          {
+            "name": "Privacy by design architecture",
+            "enabled": true
+          }
+        ],
+        "lastUpdatedBy": {
+          "_id": "admin_id",
+          "firstName": "Admin",
+          "lastName": "User",
+          "email": "admin@example.com"
+        },
+        "isActive": true,
+        "createdAt": "2025-01-01T10:00:00.000Z",
+        "updatedAt": "2025-01-15T14:30:00.000Z"
+      },
+      {
+        "_id": "compliance_id_3",
+        "type": "rbac",
+        "title": "Role-Based Access Control",
+        "description": "Granular permissions for all system users",
+        "status": "active",
+        "features": [
+          {
+            "name": "Admin, sub-admin, and doctor roles",
+            "enabled": true
+          },
+          {
+            "name": "Custom permission sets",
+            "enabled": true
+          },
+          {
+            "name": "Activity logging for all users",
+            "enabled": true
+          },
+          {
+            "name": "Automatic session timeout",
+            "enabled": true
+          }
+        ],
+        "lastUpdatedBy": {
+          "_id": "admin_id",
+          "firstName": "Admin",
+          "lastName": "User",
+          "email": "admin@example.com"
+        },
+        "isActive": true,
+        "createdAt": "2025-01-01T10:00:00.000Z",
+        "updatedAt": "2025-01-15T14:30:00.000Z"
+      },
+      {
+        "_id": "compliance_id_4",
+        "type": "audit_trail",
+        "title": "Audit Trail",
+        "description": "Complete logging of all system activities",
+        "status": "active",
+        "features": [
+          {
+            "name": "Prescription creation and modifications",
+            "enabled": true
+          },
+          {
+            "name": "User access logs",
+            "enabled": true
+          },
+          {
+            "name": "Data export tracking",
+            "enabled": true
+          },
+          {
+            "name": "Communication logs retention",
+            "enabled": true
+          }
+        ],
+        "lastUpdatedBy": {
+          "_id": "admin_id",
+          "firstName": "Admin",
+          "lastName": "User",
+          "email": "admin@example.com"
+        },
+        "isActive": true,
+        "createdAt": "2025-01-01T10:00:00.000Z",
+        "updatedAt": "2025-01-15T14:30:00.000Z"
+      }
+    ]
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+
+**Notes:**
+- Metrics are calculated for the last 24 hours
+- Failed login attempts are counted from LoginHistory with status 'failed'
+- Active sessions represent unique users who logged in successfully in the last 24 hours
+- Data export requests and security alerts are tracked via SecurityMetric model
+
+---
+
+### Get All Compliance Settings
+**GET** `/api/v1/admin/compliance-security/compliance-settings`
+
+Get a paginated list of all compliance settings with search, filter, and sort capabilities.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Query Parameters:**
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 10, max: 100)
+- `type` (optional) - Filter by type: `hipaa`, `gdpr`, `rbac`, `audit_trail`
+- `status` (optional) - Filter by status: `active`, `inactive`, `pending`
+- `sortBy` (optional) - Sort field: `createdAt`, `updatedAt`, `type`, `status` (default: `createdAt`)
+- `sortOrder` (optional) - Sort order: `asc` or `desc` (default: `desc`)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Compliance settings retrieved successfully",
+  "data": [
+    {
+      "_id": "compliance_id_1",
+      "type": "hipaa",
+      "title": "HIPAA Compliance",
+      "description": "All patient health information is encrypted and stored securely",
+      "status": "active",
+      "features": [
+        {
+          "name": "End-to-end encryption for data in transit",
+          "enabled": true
+        },
+        {
+          "name": "AES-256 encryption for data at rest",
+          "enabled": true
+        }
+      ],
+      "lastUpdatedBy": {
+        "_id": "admin_id",
+        "firstName": "Admin",
+        "lastName": "User",
+        "email": "admin@example.com"
+      },
+      "isActive": true,
+      "createdAt": "2025-01-01T10:00:00.000Z",
+      "updatedAt": "2025-01-15T14:30:00.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 4,
+    "pages": 1
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid query parameters
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+
+---
+
+### Get Compliance Setting by ID
+**GET** `/api/v1/admin/compliance-security/compliance-settings/:id`
+
+Get a specific compliance setting by ID.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Compliance setting ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Compliance setting retrieved successfully",
+  "data": {
+    "_id": "compliance_id_1",
+    "type": "hipaa",
+    "title": "HIPAA Compliance",
+    "description": "All patient health information is encrypted and stored securely",
+    "status": "active",
+    "features": [
+      {
+        "name": "End-to-end encryption for data in transit",
+        "enabled": true
+      },
+      {
+        "name": "AES-256 encryption for data at rest",
+        "enabled": true
+      },
+      {
+        "name": "Regular security audits",
+        "enabled": true
+      },
+      {
+        "name": "Business Associate Agreements in place",
+        "enabled": true
+      }
+    ],
+    "lastUpdatedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "isActive": true,
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-15T14:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid compliance setting ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Compliance setting not found
+
+---
+
+### Get Compliance Setting by Type
+**GET** `/api/v1/admin/compliance-security/compliance-settings/type/:type`
+
+Get a compliance setting by its type (hipaa, gdpr, rbac, or audit_trail).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `type` (path) - Compliance type: `hipaa`, `gdpr`, `rbac`, `audit_trail`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Compliance setting retrieved successfully",
+  "data": {
+    "_id": "compliance_id_1",
+    "type": "hipaa",
+    "title": "HIPAA Compliance",
+    "description": "All patient health information is encrypted and stored securely",
+    "status": "active",
+    "features": [
+      {
+        "name": "End-to-end encryption for data in transit",
+        "enabled": true
+      },
+      {
+        "name": "AES-256 encryption for data at rest",
+        "enabled": true
+      }
+    ],
+    "lastUpdatedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "isActive": true,
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-15T14:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid compliance type
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Compliance setting not found
+
+---
+
+### Create Compliance Setting
+**POST** `/api/v1/admin/compliance-security/compliance-settings`
+
+Create a new compliance setting. Each type (hipaa, gdpr, rbac, audit_trail) can only exist once.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Request Body:**
+```json
+{
+  "type": "hipaa",
+  "title": "HIPAA Compliance",
+  "description": "All patient health information is encrypted and stored securely",
+  "status": "active",
+  "features": [
+    {
+      "name": "End-to-end encryption for data in transit",
+      "enabled": true
+    },
+    {
+      "name": "AES-256 encryption for data at rest",
+      "enabled": true
+    },
+    {
+      "name": "Regular security audits",
+      "enabled": true
+    },
+    {
+      "name": "Business Associate Agreements in place",
+      "enabled": true
+    }
+  ]
+}
+```
+
+**Required Fields:**
+- `type` - Compliance type: `hipaa`, `gdpr`, `rbac`, `audit_trail` (must be unique)
+- `title` - Title (2-200 characters)
+- `description` - Description (10-1000 characters)
+
+**Optional Fields:**
+- `status` - Status: `active`, `inactive`, `pending` (default: `active`)
+- `features` - Array of feature objects with `name` (string) and `enabled` (boolean)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Compliance setting created successfully",
+  "data": {
+    "_id": "compliance_id_1",
+    "type": "hipaa",
+    "title": "HIPAA Compliance",
+    "description": "All patient health information is encrypted and stored securely",
+    "status": "active",
+    "features": [
+      {
+        "name": "End-to-end encryption for data in transit",
+        "enabled": true
+      },
+      {
+        "name": "AES-256 encryption for data at rest",
+        "enabled": true
+      }
+    ],
+    "lastUpdatedBy": "admin_id",
+    "isActive": true,
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2025-01-15T10:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed or invalid data
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `409` - Compliance setting with this type already exists
+
+---
+
+### Update Compliance Setting
+**PUT** `/api/v1/admin/compliance-security/compliance-settings/:id`
+
+Update an existing compliance setting. All fields are optional.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Compliance setting ID (MongoDB ObjectId)
+
+**Request Body:**
+```json
+{
+  "title": "HIPAA Compliance - Updated",
+  "description": "Updated description with enhanced security measures",
+  "status": "active",
+  "features": [
+    {
+      "name": "End-to-end encryption for data in transit",
+      "enabled": true
+    },
+    {
+      "name": "AES-256 encryption for data at rest",
+      "enabled": true
+    },
+    {
+      "name": "Regular security audits",
+      "enabled": false
+    },
+    {
+      "name": "Business Associate Agreements in place",
+      "enabled": true
+    }
+  ],
+  "isActive": true
+}
+```
+
+**Optional Fields:**
+- `title` - Title (2-200 characters)
+- `description` - Description (10-1000 characters)
+- `status` - Status: `active`, `inactive`, `pending`
+- `features` - Array of feature objects
+- `isActive` - Boolean to enable/disable
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Compliance setting updated successfully",
+  "data": {
+    "_id": "compliance_id_1",
+    "type": "hipaa",
+    "title": "HIPAA Compliance - Updated",
+    "description": "Updated description with enhanced security measures",
+    "status": "active",
+    "features": [
+      {
+        "name": "End-to-end encryption for data in transit",
+        "enabled": true
+      },
+      {
+        "name": "AES-256 encryption for data at rest",
+        "enabled": true
+      },
+      {
+        "name": "Regular security audits",
+        "enabled": false
+      },
+      {
+        "name": "Business Associate Agreements in place",
+        "enabled": true
+      }
+    ],
+    "lastUpdatedBy": {
+      "_id": "admin_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com"
+    },
+    "isActive": true,
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-01-15T14:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid compliance setting ID or validation failed
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Compliance setting not found
+
+---
+
+### Delete Compliance Setting (Soft Delete)
+**DELETE** `/api/v1/admin/compliance-security/compliance-settings/:id`
+
+Soft delete a compliance setting (sets `isActive` to `false`). The document remains in the database but is marked as inactive.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Compliance setting ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Compliance setting deleted successfully"
+}
+```
+
+**Error Responses:**
+- `400` - Invalid compliance setting ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Compliance setting not found
+
+**Notes:**
+- Soft delete sets `isActive` to `false`
+- Document remains in database and can be restored
+- Use hard delete endpoint for permanent removal
+
+---
+
+### Hard Delete Compliance Setting (Permanent Delete)
+**DELETE** `/api/v1/admin/compliance-security/compliance-settings/:id/hard`
+
+Permanently delete a compliance setting from the database. This action cannot be undone.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Compliance setting ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Compliance setting permanently deleted successfully"
+}
+```
+
+**Error Responses:**
+- `400` - Invalid compliance setting ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Compliance setting not found
+
+**Warning:**
+- ⚠️ This action is permanent and cannot be undone
+- The document will be completely removed from the database
+- Use with caution
+
+---
+
+### Get All Security Metrics
+**GET** `/api/v1/admin/compliance-security/security-metrics`
+
+Get a paginated list of all security metrics with filter and sort capabilities.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Query Parameters:**
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 10, max: 100)
+- `metricType` (optional) - Filter by type: `failed_login_attempts`, `active_sessions`, `data_export_requests`, `security_alerts`
+- `period` (optional) - Filter by period: `24h`, `7d`, `30d`, `all` (default: `24h`)
+- `sortBy` (optional) - Sort field: `date`, `count`, `metricType` (default: `date`)
+- `sortOrder` (optional) - Sort order: `asc` or `desc` (default: `desc`)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Security metrics retrieved successfully",
+  "data": [
+    {
+      "_id": "metric_id_1",
+      "metricType": "failed_login_attempts",
+      "count": 3,
+      "period": "24h",
+      "date": "2025-01-15T10:00:00.000Z",
+      "details": [
+        {
+          "userId": {
+            "_id": "user_id",
+            "firstName": "John",
+            "lastName": "Doe",
+            "email": "john@example.com"
+          },
+          "ipAddress": "192.168.1.1",
+          "userAgent": "Mozilla/5.0...",
+          "timestamp": "2025-01-15T09:30:00.000Z",
+          "metadata": {
+            "reason": "Invalid password"
+          }
+        }
+      ],
+      "isActive": true,
+      "createdAt": "2025-01-15T10:00:00.000Z",
+      "updatedAt": "2025-01-15T10:00:00.000Z"
+    },
+    {
+      "_id": "metric_id_2",
+      "metricType": "data_export_requests",
+      "count": 5,
+      "period": "24h",
+      "date": "2025-01-15T10:00:00.000Z",
+      "details": [
+        {
+          "userId": {
+            "_id": "admin_id",
+            "firstName": "Admin",
+            "lastName": "User",
+            "email": "admin@example.com"
+          },
+          "ipAddress": "192.168.1.2",
+          "userAgent": "Mozilla/5.0...",
+          "timestamp": "2025-01-15T08:00:00.000Z",
+          "metadata": {
+            "exportType": "patient_data",
+            "format": "csv"
+          }
+        }
+      ],
+      "isActive": true,
+      "createdAt": "2025-01-15T10:00:00.000Z",
+      "updatedAt": "2025-01-15T10:00:00.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 4,
+    "pages": 1
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid query parameters
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+
+**Notes:**
+- Metrics are automatically filtered by date based on the `period` parameter
+- `24h` shows metrics from last 24 hours
+- `7d` shows metrics from last 7 days
+- `30d` shows metrics from last 30 days
+- `all` shows all metrics regardless of date
+
+---
+
+### Get Security Metric by ID
+**GET** `/api/v1/admin/compliance-security/security-metrics/:id`
+
+Get a specific security metric by ID.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Security metric ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Security metric retrieved successfully",
+  "data": {
+    "_id": "metric_id_1",
+    "metricType": "failed_login_attempts",
+    "count": 3,
+    "period": "24h",
+    "date": "2025-01-15T10:00:00.000Z",
+    "details": [
+      {
+        "userId": {
+          "_id": "user_id",
+          "firstName": "John",
+          "lastName": "Doe",
+          "email": "john@example.com"
+        },
+        "ipAddress": "192.168.1.1",
+        "userAgent": "Mozilla/5.0...",
+        "timestamp": "2025-01-15T09:30:00.000Z",
+        "metadata": {
+          "reason": "Invalid password"
+        }
+      }
+    ],
+    "isActive": true,
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2025-01-15T10:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid security metric ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Security metric not found
+
+---
+
+### Create Security Metric
+**POST** `/api/v1/admin/compliance-security/security-metrics`
+
+Create a new security metric entry. Typically used for tracking data export requests and security alerts.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Request Body:**
+```json
+{
+  "metricType": "data_export_requests",
+  "count": 1,
+  "period": "24h",
+  "details": [
+    {
+      "userId": "user_id",
+      "ipAddress": "192.168.1.1",
+      "userAgent": "Mozilla/5.0...",
+      "metadata": {
+        "exportType": "patient_data",
+        "format": "csv"
+      }
+    }
+  ]
+}
+```
+
+**Required Fields:**
+- `metricType` - Metric type: `failed_login_attempts`, `active_sessions`, `data_export_requests`, `security_alerts`
+
+**Optional Fields:**
+- `count` - Count value (default: 0, min: 0)
+- `period` - Period: `24h`, `7d`, `30d`, `all` (default: `24h`)
+- `details` - Array of detail objects with `userId`, `ipAddress`, `userAgent`, `timestamp`, `metadata`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Security metric created successfully",
+  "data": {
+    "_id": "metric_id_1",
+    "metricType": "data_export_requests",
+    "count": 1,
+    "period": "24h",
+    "date": "2025-01-15T10:00:00.000Z",
+    "details": [
+      {
+        "userId": "user_id",
+        "ipAddress": "192.168.1.1",
+        "userAgent": "Mozilla/5.0...",
+        "timestamp": "2025-01-15T10:00:00.000Z",
+        "metadata": {
+          "exportType": "patient_data",
+          "format": "csv"
+        }
+      }
+    ],
+    "isActive": true,
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2025-01-15T10:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed or invalid data
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+
+**Notes:**
+- Failed login attempts are automatically tracked via LoginHistory model
+- Active sessions are calculated from successful logins in LoginHistory
+- This endpoint is primarily for manual tracking of data exports and security alerts
+
+---
+
+### Update Security Metric
+**PUT** `/api/v1/admin/compliance-security/security-metrics/:id`
+
+Update an existing security metric. All fields are optional.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Security metric ID (MongoDB ObjectId)
+
+**Request Body:**
+```json
+{
+  "count": 5,
+  "period": "24h",
+  "details": [
+    {
+      "userId": "user_id",
+      "ipAddress": "192.168.1.1",
+      "userAgent": "Mozilla/5.0...",
+      "timestamp": "2025-01-15T10:00:00.000Z",
+      "metadata": {
+        "exportType": "patient_data",
+        "format": "csv"
+      }
+    }
+  ]
+}
+```
+
+**Optional Fields:**
+- `count` - Count value (min: 0)
+- `period` - Period: `24h`, `7d`, `30d`, `all`
+- `details` - Array of detail objects
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Security metric updated successfully",
+  "data": {
+    "_id": "metric_id_1",
+    "metricType": "data_export_requests",
+    "count": 5,
+    "period": "24h",
+    "date": "2025-01-15T10:00:00.000Z",
+    "details": [
+      {
+        "userId": {
+          "_id": "user_id",
+          "firstName": "John",
+          "lastName": "Doe",
+          "email": "john@example.com"
+        },
+        "ipAddress": "192.168.1.1",
+        "userAgent": "Mozilla/5.0...",
+        "timestamp": "2025-01-15T10:00:00.000Z",
+        "metadata": {
+          "exportType": "patient_data",
+          "format": "csv"
+        }
+      }
+    ],
+    "isActive": true,
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2025-01-15T14:30:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid security metric ID or validation failed
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Security metric not found
+
+---
+
+### Delete Security Metric (Soft Delete)
+**DELETE** `/api/v1/admin/compliance-security/security-metrics/:id`
+
+Soft delete a security metric (sets `isActive` to `false`). The document remains in the database but is marked as inactive.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Security metric ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Security metric deleted successfully"
+}
+```
+
+**Error Responses:**
+- `400` - Invalid security metric ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Security metric not found
+
+**Notes:**
+- Soft delete sets `isActive` to `false`
+- Document remains in database and can be restored
+- Use hard delete endpoint for permanent removal
+
+---
+
+### Hard Delete Security Metric (Permanent Delete)
+**DELETE** `/api/v1/admin/compliance-security/security-metrics/:id/hard`
+
+Permanently delete a security metric from the database. This action cannot be undone.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Security metric ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Security metric permanently deleted successfully"
+}
+```
+
+**Error Responses:**
+- `400` - Invalid security metric ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Security metric not found
+
+**Warning:**
+- ⚠️ This action is permanent and cannot be undone
+- The document will be completely removed from the database
+- Use with caution
+
+---
+
+### Get Two-Factor Authentication Statistics
+**GET** `/api/v1/admin/compliance-security/2fa-statistics`
+
+Get statistics about two-factor authentication implementation across the system.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "2FA statistics retrieved successfully",
+  "data": {
+    "usersWith2FA": {
+      "value": "98%",
+      "label": "Users with 2FA Enabled",
+      "icon": "shield-lock",
+      "count": 98,
+      "total": 100
+    },
+    "adminsProtected": {
+      "value": "All",
+      "label": "Admins Protected",
+      "icon": "check-circle",
+      "count": 5,
+      "total": 5
+    },
+    "encryptionStandard": {
+      "value": "256-bit",
+      "label": "Encryption Standard",
+      "icon": "lock",
+      "description": "AES-256 encryption"
+    }
+  }
+}
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+
+**Notes:**
+- Currently, OTP-based login is considered as 2FA (since OTP is a form of two-factor authentication)
+- Verified users are counted as having 2FA enabled
+- Encryption standard is fixed at 256-bit (AES-256)
+
+---
+
+### Get All Audit Logs
+**GET** `/api/v1/admin/compliance-security/audit-logs`
+
+Get a paginated list of all audit logs with comprehensive filtering and sorting capabilities.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Query Parameters:**
+- `page` (optional) - Page number (default: 1)
+- `limit` (optional) - Items per page (default: 10, max: 100)
+- `userId` (optional) - Filter by user ID (MongoDB ObjectId)
+- `action` (optional) - Filter by action (partial match, case-insensitive)
+- `resource` (optional) - Filter by resource (partial match, case-insensitive)
+- `status` (optional) - Filter by status: `success`, `denied`, `failed`
+- `startDate` (optional) - Filter logs from this date (ISO 8601 format)
+- `endDate` (optional) - Filter logs until this date (ISO 8601 format)
+- `sortBy` (optional) - Sort field: `timestamp`, `action`, `resource`, `status` (default: `timestamp`)
+- `sortOrder` (optional) - Sort order: `asc` or `desc` (default: `desc`)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Audit logs retrieved successfully",
+  "data": [
+    {
+      "_id": "log_id_1",
+      "user": {
+        "_id": "user_id",
+        "firstName": "Admin",
+        "lastName": "User",
+        "email": "admin@example.com",
+        "role": "admin"
+      },
+      "action": "Accessed patient records",
+      "resource": "Patient ID: p1",
+      "resourceId": "p1",
+      "ipAddress": "192.168.1.100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+      "status": "success",
+      "metadata": {
+        "additionalInfo": "Patient data accessed"
+      },
+      "timestamp": "2024-12-24T10:30:15.000Z",
+      "createdAt": "2024-12-24T10:30:15.000Z",
+      "updatedAt": "2024-12-24T10:30:15.000Z"
+    },
+    {
+      "_id": "log_id_2",
+      "user": {
+        "_id": "doctor_id",
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john.smith@example.com",
+        "role": "doctor"
+      },
+      "action": "Created prescription",
+      "resource": "Prescription ID: rx1",
+      "resourceId": "rx1",
+      "ipAddress": "192.168.1.105",
+      "userAgent": "Mozilla/5.0...",
+      "status": "success",
+      "metadata": {},
+      "timestamp": "2024-12-24T10:25:42.000Z",
+      "createdAt": "2024-12-24T10:25:42.000Z",
+      "updatedAt": "2024-12-24T10:25:42.000Z"
+    },
+    {
+      "_id": "log_id_3",
+      "user": {
+        "_id": "subadmin_id",
+        "firstName": "SubAdmin",
+        "lastName": "User",
+        "email": "subadmin@example.com",
+        "role": "sub-admin"
+      },
+      "action": "Attempted to delete patient",
+      "resource": "Patient ID: p2",
+      "resourceId": "p2",
+      "ipAddress": "192.168.1.110",
+      "userAgent": "Mozilla/5.0...",
+      "status": "denied",
+      "metadata": {
+        "reason": "Insufficient permissions"
+      },
+      "timestamp": "2024-12-24T10:15:28.000Z",
+      "createdAt": "2024-12-24T10:15:28.000Z",
+      "updatedAt": "2024-12-24T10:15:28.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 150,
+    "pages": 15
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid query parameters
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+
+**Notes:**
+- Results are sorted by timestamp (most recent first) by default
+- Date filters support ISO 8601 format (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss.sssZ)
+- User information is automatically populated in the response
+
+---
+
+### Get Recent Audit Logs
+**GET** `/api/v1/admin/compliance-security/audit-logs/recent`
+
+Get the most recent audit logs for dashboard display. Returns the latest logs sorted by timestamp.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Query Parameters:**
+- `limit` (optional) - Number of recent logs to retrieve (default: 5, max: 50)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Recent audit logs retrieved successfully",
+  "data": [
+    {
+      "_id": "log_id_1",
+      "user": {
+        "_id": "user_id",
+        "firstName": "Admin",
+        "lastName": "User",
+        "email": "admin@example.com",
+        "role": "admin"
+      },
+      "action": "Accessed patient records",
+      "resource": "Patient ID: p1",
+      "resourceId": "p1",
+      "ipAddress": "192.168.1.100",
+      "userAgent": "Mozilla/5.0...",
+      "status": "success",
+      "metadata": {},
+      "timestamp": "2024-12-24T10:30:15.000Z",
+      "createdAt": "2024-12-24T10:30:15.000Z",
+      "updatedAt": "2024-12-24T10:30:15.000Z"
+    },
+    {
+      "_id": "log_id_2",
+      "user": {
+        "_id": "doctor_id",
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john.smith@example.com",
+        "role": "doctor"
+      },
+      "action": "Created prescription",
+      "resource": "Prescription ID: rx1",
+      "resourceId": "rx1",
+      "ipAddress": "192.168.1.105",
+      "userAgent": "Mozilla/5.0...",
+      "status": "success",
+      "metadata": {},
+      "timestamp": "2024-12-24T10:25:42.000Z",
+      "createdAt": "2024-12-24T10:25:42.000Z",
+      "updatedAt": "2024-12-24T10:25:42.000Z"
+    }
+  ]
+}
+```
+
+**Error Responses:**
+- `400` - Invalid limit parameter
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+
+**Notes:**
+- Default limit is 5 logs
+- Maximum limit is 50 logs
+- Results are always sorted by timestamp (most recent first)
+
+---
+
+### Get Audit Log by ID
+**GET** `/api/v1/admin/compliance-security/audit-logs/:id`
+
+Get a specific audit log by ID with complete details.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Audit log ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Audit log retrieved successfully",
+  "data": {
+    "_id": "log_id_1",
+    "user": {
+      "_id": "user_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com",
+      "role": "admin"
+    },
+    "action": "Accessed patient records",
+    "resource": "Patient ID: p1",
+    "resourceId": "p1",
+    "ipAddress": "192.168.1.100",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "status": "success",
+    "metadata": {
+      "additionalInfo": "Patient data accessed",
+      "patientId": "p1"
+    },
+    "timestamp": "2024-12-24T10:30:15.000Z",
+    "createdAt": "2024-12-24T10:30:15.000Z",
+    "updatedAt": "2024-12-24T10:30:15.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Invalid audit log ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Audit log not found
+
+---
+
+### Create Audit Log
+**POST** `/api/v1/admin/compliance-security/audit-logs`
+
+Create a new audit log entry to track system activities and user actions.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Request Body:**
+```json
+{
+  "action": "Accessed patient records",
+  "resource": "Patient ID: p1",
+  "resourceId": "p1",
+  "status": "success",
+  "metadata": {
+    "additionalInfo": "Patient data accessed",
+    "patientId": "p1"
+  }
+}
+```
+
+**Required Fields:**
+- `action` - Action description (2-200 characters)
+- `resource` - Resource description (2-200 characters)
+
+**Optional Fields:**
+- `userId` - User ID (if not provided, uses authenticated user from token)
+- `resourceId` - Resource identifier
+- `status` - Status: `success`, `denied`, `failed` (default: `success`)
+- `metadata` - Additional metadata object
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Audit log created successfully",
+  "data": {
+    "_id": "log_id_1",
+    "user": {
+      "_id": "user_id",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com",
+      "role": "admin"
+    },
+    "action": "Accessed patient records",
+    "resource": "Patient ID: p1",
+    "resourceId": "p1",
+    "ipAddress": "192.168.1.100",
+    "userAgent": "Mozilla/5.0...",
+    "status": "success",
+    "metadata": {
+      "additionalInfo": "Patient data accessed"
+    },
+    "timestamp": "2024-12-24T10:30:15.000Z",
+    "createdAt": "2024-12-24T10:30:15.000Z",
+    "updatedAt": "2024-12-24T10:30:15.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- `400` - Validation failed or invalid data
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+
+**Notes:**
+- IP address and user agent are automatically captured from the request
+- If `userId` is not provided, the authenticated user from the token is used
+- Timestamp is automatically set to current time if not provided
+
+---
+
+### Delete Audit Log
+**DELETE** `/api/v1/admin/compliance-security/audit-logs/:id`
+
+Permanently delete an audit log from the database.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Parameters:**
+- `id` (path) - Audit log ID (MongoDB ObjectId)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Audit log deleted successfully"
+}
+```
+
+**Error Responses:**
+- `400` - Invalid audit log ID
+- `401` - Unauthorized
+- `403` - Forbidden (admin/sub-admin only)
+- `404` - Audit log not found
+
+**Warning:**
+- ⚠️ This action is permanent and cannot be undone
+- The audit log will be completely removed from the database
+- Use with caution as audit logs are important for compliance and security tracking
 
 ---
 

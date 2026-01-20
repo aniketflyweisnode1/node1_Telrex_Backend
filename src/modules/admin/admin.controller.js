@@ -46,6 +46,10 @@ exports.adminLogin = async (req, res, next) => {
     const { identifier, password } = req.body;
     const result = await adminService.adminLogin(identifier, password);
 
+    // Track admin login in login history and audit log
+    const loginHistoryService = require('../auth/loginHistory.service');
+    await loginHistoryService.trackLogin(req, result.user, 'password');
+
     res.status(200).json({
       success: true,
       message: 'Admin logged in successfully',
@@ -56,6 +60,11 @@ exports.adminLogin = async (req, res, next) => {
       }
     });
   } catch (err) {
+    // Track failed admin login
+    if (err.statusCode === 401) {
+      const loginHistoryService = require('../auth/loginHistory.service');
+      await loginHistoryService.trackFailedLogin(req, req.body.identifier, 'password', 'Invalid credentials');
+    }
     next(err);
   }
 };

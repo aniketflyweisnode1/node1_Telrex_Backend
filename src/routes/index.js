@@ -59,6 +59,14 @@ router.use('/admin', require('../modules/medicine/medicine.routes'));
    Protected: All other routes require admin authentication
 ======================= */
 router.use('/admin/help', require('../modules/help-desk/help-desk.routes'));
+
+/* =======================
+   DOCTOR'S NOTE TEMPLATE ROUTES (Public GET, Admin/Sub-Admin for POST/PUT/DELETE)
+   MUST come BEFORE generic /admin route to avoid middleware conflicts
+   GET routes are public, POST/PUT/DELETE require authentication
+======================= */
+router.use('/admin/doctors-note-templates', require('../modules/doctors-note/doctors-note-admin.routes'));
+
 router.use('/admin', require('../modules/admin/admin.routes'));
 
 /* =======================
@@ -124,6 +132,11 @@ router.use('/admin', require('../modules/reports/reports.routes'));
    DASHBOARD ROUTES (Admin/Sub-Admin Only)
 ======================= */
 router.use('/admin', require('../modules/dashboard/dashboard.routes'));
+
+/* =======================
+   COMPLIANCE & SECURITY ROUTES (Admin/Sub-Admin Only)
+======================= */
+router.use('/admin/compliance-security', require('../modules/compliance-security/compliance-security.routes'));
 
 /* =======================
    DOCTOR DASHBOARD ROUTES (Doctor Only)
