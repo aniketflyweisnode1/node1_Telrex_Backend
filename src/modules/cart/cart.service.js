@@ -5,10 +5,14 @@ const SavedMedicine = require('../../models/SavedMedicine.model');
 const mongoose = require('mongoose');
 const AppError = require('../../utils/AppError');
 
-// Get patient from userId
+// Get patient from userId (auto-create if doesn't exist)
 const getPatient = async (userId) => {
-  const patient = await Patient.findOne({ user: userId });
-  if (!patient) throw new AppError('Patient profile not found', 404);
+  let patient = await Patient.findOne({ user: userId });
+  if (!patient) {
+    // Auto-create patient profile if doesn't exist
+    patient = await Patient.create({ user: userId, isActive: true });
+    console.log('Patient profile auto-created for userId:', userId);
+  }
   return patient;
 };
 
