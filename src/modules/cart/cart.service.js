@@ -54,9 +54,36 @@ exports.getCart = async (userId) => {
         }
       } else if (item.productType === 'doctors_note' && item.productId) {
         // Fetch doctor note template details
-        const template = await DoctorNoteTemplate.findById(item.productId)
-          .select('productName image price')
-          .lean();
+        let template = null;
+        
+        if (mongoose.Types.ObjectId.isValid(item.productId)) {
+          // First try DoctorNoteTemplate
+          template = await DoctorNoteTemplate.findById(item.productId)
+            .select('productName image price title description')
+            .lean();
+          
+          // If not found in templates, try DoctorsNote (purchased notes)
+          if (!template) {
+            const DoctorsNote = require('../../models/DoctorsNote.model');
+            const note = await DoctorsNote.findById(item.productId)
+              .select('type purpose price patientName')
+              .lean();
+            
+            if (note) {
+              // Return with DoctorsNote data
+              return {
+                ...item,
+                productImage: item.productImage || null,
+                productDetails: {
+                  type: note.type,
+                  purpose: note.purpose,
+                  price: note.price,
+                  patientName: note.patientName
+                }
+              };
+            }
+          }
+        }
         
         if (template) {
           return {
@@ -64,7 +91,9 @@ exports.getCart = async (userId) => {
             productImage: template.image?.url || item.productImage || null,
             productDetails: {
               image: template.image,
-              price: template.price
+              price: template.price,
+              title: template.title,
+              description: template.description
             }
           };
         }
