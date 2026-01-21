@@ -501,6 +501,126 @@ exports.loginWithGoogle = async (googleToken) => {
   }
 };
 
+// Google OAuth Login with Authorization Code (Server-side flow)
+exports.loginWithGoogleCode = async (code) => {
+  const { OAuth2Client } = require('google-auth-library');
+  
+  const client = new OAuth2Client(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.GOOGLE_REDIRECT_URI || 'http://localhost:5000/api/v1/auth/google/callback'
+  );
+  
+  try {
+    // Exchange authorization code for tokens
+    const { tokens } = await client.getToken(code);
+    client.setCredentials(tokens);
+    
+    // Get user info from Google
+    const axios = require('axios');
+    const userInfoResponse = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: { Authorization: `Bearer ${tokens.access_token}` }
+    });
+    
+    const { id: googleId, email, given_name: firstName, family_name: lastName, picture: profilePicture } = userInfoResponse.data;
+    
+    if (!email) {
+      throw new AppError('Email not provided by Google', 400);
+    }
+    
+    // Check if user exists with this Google ID
+    let user = await User.findOne({ googleId });
+    
+    if (user) {
+      // User exists with Google ID - update and login
+      user.email = email.toLowerCase();
+      user.firstName = firstName || user.firstName;
+      user.lastName = lastName || user.lastName;
+      user.isActive = true;
+      user.isVerified = true;
+      user.lastLoginAt = new Date();
+      user.authProvider = 'google';
+      await user.save();
+      
+      logger.info('Google login successful (code flow) - existing user', {
+        userId: user._id,
+        email: user.email,
+        googleId
+      });
+      
+      user.password = undefined;
+      return user;
+    }
+    
+    // Check if user exists with this email
+    user = await User.findOne({ email: email.toLowerCase() });
+    
+    if (user) {
+      // Link Google account
+      if (user.googleId && user.googleId !== googleId) {
+        throw new AppError('This email is already associated with another Google account', 409);
+      }
+      
+      user.googleId = googleId;
+      user.firstName = firstName || user.firstName;
+      user.lastName = lastName || user.lastName;
+      user.isActive = true;
+      user.isVerified = true;
+      user.lastLoginAt = new Date();
+      user.authProvider = 'google';
+      await user.save();
+      
+      logger.info('Google login successful (code flow) - linked account', {
+        userId: user._id,
+        email: user.email,
+        googleId
+      });
+      
+      user.password = undefined;
+      return user;
+    }
+    
+    // Create new user
+    const randomPassword = Math.random().toString(36).slice(-12) + Date.now().toString(36);
+    
+    user = await User.create({
+      firstName: firstName || 'User',
+      lastName: lastName || '',
+      email: email.toLowerCase(),
+      phoneNumber: `google_${googleId}`,
+      countryCode: '+1',
+      password: randomPassword,
+      googleId,
+      authProvider: 'google',
+      isVerified: true,
+      isActive: true,
+      agreeConfirmation: true,
+      lastLoginAt: new Date()
+    });
+    
+    logger.info('Google login successful (code flow) - new user created', {
+      userId: user._id,
+      email: user.email,
+      googleId
+    });
+    
+    user.password = undefined;
+    return user;
+    
+  } catch (err) {
+    if (err instanceof AppError) {
+      throw err;
+    }
+    
+    logger.error('Google login (code flow) failed', {
+      error: err.message,
+      stack: err.stack
+    });
+    
+    throw new AppError('Invalid authorization code or Google authentication failed', 401);
+  }
+};
+
 // Facebook OAuth Login
 exports.loginWithFacebook = async (facebookToken) => {
   try {

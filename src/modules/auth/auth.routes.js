@@ -31,7 +31,9 @@ router.post('/doctor/register', doctorValidation.doctorSignupValidation, validat
 router.post('/login', loginValidation, validate, controller.login);        // Email/Phone + Password
 router.post('/login-password', loginValidation, validate, controller.login); // Alias
 router.post('/login-otp', loginOtpValidation, validate, controller.loginWithOtp); // OTP login
-router.post('/login-google', googleLoginValidation, validate, controller.loginWithGoogle); // Google OAuth login
+router.post('/login-google', googleLoginValidation, validate, controller.loginWithGoogle); // Google OAuth login (token-based)
+router.get('/google', controller.googleRedirect); // Google OAuth redirect (server-side flow)
+router.get('/google/callback', controller.googleCallback); // Google OAuth callback (server-side flow)
 router.post('/login-facebook', facebookLoginValidation, validate, controller.loginWithFacebook); // Facebook OAuth login
 
 // Doctor Login

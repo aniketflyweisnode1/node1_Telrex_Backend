@@ -21,14 +21,67 @@ const getOrCreateCart = async (patientId) => {
   return cart;
 };
 
-// Get cart
+// Get cart with product details populated
 exports.getCart = async (userId) => {
   const patient = await getPatient(userId);
   const cart = await getOrCreateCart(patient._id);
-  return cart;
+  
+  // Convert to plain object for modification
+  const cartObj = cart.toObject();
+  
+  // Populate product details for each item
+  const DoctorNoteTemplate = require('../../models/DoctorNoteTemplate.model');
+  
+  const itemsWithDetails = await Promise.all(cartObj.items.map(async (item) => {
+    try {
+      if (item.productType === 'medication' && item.productId) {
+        // Fetch medicine details
+        const medicine = await Medicine.findById(item.productId)
+          .select('productName brand images salePrice originalPrice')
+          .lean();
+        
+        if (medicine) {
+          return {
+            ...item,
+            productImage: medicine.images?.thumbnail || item.productImage || null,
+            productDetails: {
+              brand: medicine.brand,
+              images: medicine.images,
+              salePrice: medicine.salePrice,
+              originalPrice: medicine.originalPrice
+            }
+          };
+        }
+      } else if (item.productType === 'doctors_note' && item.productId) {
+        // Fetch doctor note template details
+        const template = await DoctorNoteTemplate.findById(item.productId)
+          .select('productName image price')
+          .lean();
+        
+        if (template) {
+          return {
+            ...item,
+            productImage: template.image?.url || item.productImage || null,
+            productDetails: {
+              image: template.image,
+              price: template.price
+            }
+          };
+        }
+      }
+    } catch (error) {
+      // Log error but don't fail
+      console.error('Error fetching product details for cart item:', error.message);
+    }
+    
+    return item;
+  }));
+  
+  cartObj.items = itemsWithDetails;
+  return cartObj;
 };
 
-// Get saved items (saved for later)
+// Get saved items (saved for later) with product details
 exports.getSavedItems = async (userId) => {
   const patient = await getPatient(userId);
   const cart = await Cart.findOne({ patient: patient._id });
@@ -43,13 +96,59 @@ exports.getSavedItems = async (userId) => {
   // Filter only saved items
   const savedItems = cart.items.filter(item => item.isSaved === true);
   
+  // Populate product details for saved items
+  const DoctorNoteTemplate = require('../../models/DoctorNoteTemplate.model');
+  
+  const itemsWithDetails = await Promise.all(savedItems.map(async (item) => {
+    const itemObj = item.toObject ? item.toObject() : item;
+    try {
+      if (itemObj.productType === 'medication' && itemObj.productId) {
+        const medicine = await Medicine.findById(itemObj.productId)
+          .select('productName brand images salePrice originalPrice')
+          .lean();
+        
+        if (medicine) {
+          return {
+            ...itemObj,
+            productImage: medicine.images?.thumbnail || itemObj.productImage || null,
+            productDetails: {
+              brand: medicine.brand,
+              images: medicine.images,
+              salePrice: medicine.salePrice,
+              originalPrice: medicine.originalPrice
+            }
+          };
+        }
+      } else if (itemObj.productType === 'doctors_note' && itemObj.productId) {
+        const template = await DoctorNoteTemplate.findById(itemObj.productId)
+          .select('productName image price')
+          .lean();
+        
+        if (template) {
+          return {
+            ...itemObj,
+            productImage: template.image?.url || itemObj.productImage || null,
+            productDetails: {
+              image: template.image,
+              price: template.price
+            }
+          };
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching product details for saved item:', error.message);
+    }
+    
+    return itemObj;
+  }));
+  
   // Calculate total value of saved items
-  const totalSaved = savedItems.reduce((sum, item) => sum + item.totalPrice, 0);
+  const totalSaved = itemsWithDetails.reduce((sum, item) => sum + item.totalPrice, 0);
   
   return {
-    items: savedItems,
+    items: itemsWithDetails,
     totalSaved: totalSaved,
-    count: savedItems.length
+    count: itemsWithDetails.length
   };
 };
 

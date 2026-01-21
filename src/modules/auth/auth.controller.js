@@ -316,3 +316,77 @@ exports.loginWithFacebook = async (req, res, next) => {
     next(err);
   }
 };
+
+// Google OAuth Redirect (Server-side flow)
+exports.googleRedirect = async (req, res, next) => {
+  try {
+    const { OAuth2Client } = require('google-auth-library');
+    const client = new OAuth2Client(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      process.env.GOOGLE_REDIRECT_URI || 'http://localhost:5000/api/v1/auth/google/callback'
+    );
+    
+    const scopes = [
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'https://www.googleapis.com/auth/userinfo.email'
+    ];
+    
+    const authUrl = client.generateAuthUrl({
+      access_type: 'offline',
+      scope: scopes,
+      prompt: 'consent'
+    });
+    
+    res.redirect(authUrl);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Google OAuth Callback (Server-side flow)
+exports.googleCallback = async (req, res, next) => {
+  try {
+    const { code, error } = req.query;
+    
+    if (error) {
+      return res.redirect(`/login?error=${encodeURIComponent(error)}`);
+    }
+    
+    if (!code) {
+      return res.status(400).json({
+        success: false,
+        message: 'Authorization code is required'
+      });
+    }
+    
+    const user = await authService.loginWithGoogleCode(code);
+    
+    // Get fresh user data
+    const freshUser = await require('../../models/User.model').findById(user._id).select('-password');
+    const tokens = authService.generateTokens(freshUser, true);
+    
+    await loginHistoryService.trackLogin(req, freshUser, 'google');
+    
+    // Option 1: Return JSON (for API testing)
+    if (req.query.format === 'json') {
+      return res.status(200).json({
+        success: true,
+        message: 'Google login successful',
+        data: {
+          user: freshUser,
+          tokens
+        }
+      });
+    }
+    
+    // Option 2: Redirect to frontend with tokens (for web app)
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    res.redirect(`${frontendUrl}/auth/callback?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}`);
+    
+  } catch (err) {
+    console.error('Google callback error:', err);
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    res.redirect(`${frontendUrl}/login?error=${encodeURIComponent(err.message || 'Google login failed')}`);
+  }
+};
