@@ -1,18 +1,19 @@
-const adminService = require('./admin.service');
-const { validationResult } = require('express-validator');
-const AppError = require('../../utils/AppError');
-const logger = require('../../utils/logger');
+/**
+ * Admin Controller - Optimized
+ */
 
-// Admin registration
+const adminService = require('./admin.service');
+const loginHistoryService = require('../auth/loginHistory.service');
+const { validationResult } = require('express-validator');
+
+/**
+ * Admin registration
+ */
 exports.adminRegister = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
-        success: false,
-        message: 'Validation failed',
-        errors: errors.array()
-      });
+      return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
     }
 
     const result = await adminService.adminRegister(req.body);
@@ -26,29 +27,24 @@ exports.adminRegister = async (req, res, next) => {
         refreshToken: result.refreshToken
       }
     });
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 };
 
-// Admin login
+/**
+ * Admin login - OPTIMIZED (non-blocking tracking)
+ */
 exports.adminLogin = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
-        success: false,
-        message: 'Validation failed',
-        errors: errors.array()
-      });
+      return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
     }
 
     const { identifier, password } = req.body;
     const result = await adminService.adminLogin(identifier, password);
 
-    // Track admin login in login history and audit log
-    const loginHistoryService = require('../auth/loginHistory.service');
-    await loginHistoryService.trackLogin(req, result.user, 'password');
+    // Track login in background (non-blocking)
+    loginHistoryService.trackLogin(req, result.user, 'password');
 
     res.status(200).json({
       success: true,
@@ -60,25 +56,22 @@ exports.adminLogin = async (req, res, next) => {
       }
     });
   } catch (err) {
-    // Track failed admin login
+    // Track failed login in background (non-blocking)
     if (err.statusCode === 401) {
-      const loginHistoryService = require('../auth/loginHistory.service');
-      await loginHistoryService.trackFailedLogin(req, req.body.identifier, 'password', 'Invalid credentials');
+      loginHistoryService.trackFailedLogin(req, req.body.identifier, 'password', 'Invalid credentials');
     }
     next(err);
   }
 };
 
-// Create sub-admin
+/**
+ * Create sub-admin
+ */
 exports.createSubAdmin = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
-        success: false,
-        message: 'Validation failed',
-        errors: errors.array()
-      });
+      return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
     }
 
     const subAdmin = await adminService.createSubAdmin(req.user.id, req.body);
@@ -88,12 +81,12 @@ exports.createSubAdmin = async (req, res, next) => {
       message: 'Sub-admin created successfully',
       data: subAdmin
     });
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 };
 
-// Get all sub-admins
+/**
+ * Get all sub-admins
+ */
 exports.getAllSubAdmins = async (req, res, next) => {
   try {
     const result = await adminService.getAllSubAdmins(req.query);
@@ -104,12 +97,12 @@ exports.getAllSubAdmins = async (req, res, next) => {
       data: result.subAdmins,
       pagination: result.pagination
     });
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 };
 
-// Get sub-admin by ID
+/**
+ * Get sub-admin by ID
+ */
 exports.getSubAdminById = async (req, res, next) => {
   try {
     const subAdmin = await adminService.getSubAdminById(req.params.id);
@@ -119,21 +112,17 @@ exports.getSubAdminById = async (req, res, next) => {
       message: 'Sub-admin retrieved successfully',
       data: subAdmin
     });
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 };
 
-// Update sub-admin
+/**
+ * Update sub-admin
+ */
 exports.updateSubAdmin = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
-        success: false,
-        message: 'Validation failed',
-        errors: errors.array()
-      });
+      return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
     }
 
     const subAdmin = await adminService.updateSubAdmin(req.params.id, req.body);
@@ -143,12 +132,12 @@ exports.updateSubAdmin = async (req, res, next) => {
       message: 'Sub-admin updated successfully',
       data: subAdmin
     });
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 };
 
-// Delete sub-admin
+/**
+ * Delete sub-admin
+ */
 exports.deleteSubAdmin = async (req, res, next) => {
   try {
     const result = await adminService.deleteSubAdmin(req.params.id);
@@ -158,21 +147,17 @@ exports.deleteSubAdmin = async (req, res, next) => {
       message: result.message,
       data: result
     });
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 };
 
-// Set permissions for sub-admin
+/**
+ * Set permissions for sub-admin
+ */
 exports.setPermissions = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
-        success: false,
-        message: 'Validation failed',
-        errors: errors.array()
-      });
+      return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
     }
 
     const subAdmin = await adminService.setPermissions(req.params.id, req.body.permissions);
@@ -182,12 +167,12 @@ exports.setPermissions = async (req, res, next) => {
       message: 'Permissions updated successfully',
       data: subAdmin
     });
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 };
 
-// Get available modules
+/**
+ * Get available modules
+ */
 exports.getAvailableModules = async (req, res, next) => {
   try {
     const modules = await adminService.getAvailableModules();
@@ -197,8 +182,5 @@ exports.getAvailableModules = async (req, res, next) => {
       message: 'Available modules retrieved successfully',
       data: modules
     });
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 };
-

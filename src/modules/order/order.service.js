@@ -1,130 +1,67 @@
+/**
+ * Order Service
+ * Refactored to use shared helpers
+ */
+
 const Order = require('../../models/Order.model');
 const Prescription = require('../../models/Prescription.model');
-const Patient = require('../../models/Patient.model');
 const Address = require('../../models/Address.model');
+const Medicine = require('../../models/Medicine.model');
 const AppError = require('../../utils/AppError');
 const logger = require('../../utils/logger');
+const { 
+  getPatient, 
+  batchPopulateMedicinesForOrders: batchPopulateMedicines,
+  parsePagination,
+  buildPaginationResponse 
+} = require('../../helpers');
 
-// Get patient from userId (auto-create if doesn't exist)
-const getPatient = async (userId) => {
-  let patient = await Patient.findOne({ user: userId });
-  if (!patient) {
-    // Auto-create patient profile if doesn't exist
-    patient = await Patient.create({ user: userId });
-    logger.info('Patient profile auto-created', { userId, patientId: patient._id });
-  }
-  return patient;
-};
-
-// Get all orders
+// Get all orders - Using shared helpers
 exports.getOrders = async (userId, query = {}) => {
   const patient = await getPatient(userId);
-  const Medicine = require('../../models/Medicine.model');
+  const { page, limit, skip } = parsePagination(query);
   
+  // Build filter
   const filter = { patient: patient._id };
   if (query.status) filter.status = query.status;
   if (query.paymentStatus) filter.paymentStatus = query.paymentStatus;
   
-  // Date range filtering
   if (query.startDate || query.endDate) {
     filter.createdAt = {};
-    if (query.startDate) {
-      filter.createdAt.$gte = new Date(query.startDate);
-    }
-    if (query.endDate) {
-      filter.createdAt.$lte = new Date(query.endDate);
-    }
+    if (query.startDate) filter.createdAt.$gte = new Date(query.startDate);
+    if (query.endDate) filter.createdAt.$lte = new Date(query.endDate);
   }
   
-  // Pagination
-  const page = parseInt(query.page) || 1;
-  const limit = parseInt(query.limit) || 10;
-  const skip = (page - 1) * limit;
+  // Run count and find in parallel
+  const [total, orders] = await Promise.all([
+    Order.countDocuments(filter),
+    Order.find(filter)
+      .populate({
+        path: 'shippingAddress',
+        select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault'
+      })
+      .populate('prescription', 'medications status createdAt')
+      .populate('payment', 'status amount method')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean()
+  ]);
   
-  // Get total count for pagination
-  const total = await Order.countDocuments(filter);
-  
-  // Get orders with pagination
-  const orders = await Order.find(filter)
-    .populate({
-      path: 'shippingAddress',
-      select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault'
-    })
-    .populate('prescription')
-    .populate('payment')
-    .sort({ createdAt: -1 })
-    .skip(skip)
-    .limit(limit)
-    .lean();
-  
-  // Populate product details for each item
-  const ordersWithProducts = await Promise.all(orders.map(async (order) => {
-    if (!Array.isArray(order.items) || order.items.length === 0) {
-      return {
-        ...order,
-        items: [],
-        billingAddress: order.billingAddress || null,
-        billingAddressSameAsShipping: order.billingAddressSameAsShipping !== false
-      };
-    }
-    
-    // Fetch product details for all items
-    const itemsWithProducts = await Promise.all(order.items.map(async (item) => {
-      if (!item.productId || item.productType !== 'medication') {
-        return item; // Return as-is for non-medication items
-      }
-      
-      try {
-        const medicine = await Medicine.findById(item.productId)
-          .select('productName brand originalPrice salePrice images description generics dosageOptions quantityOptions category stock status visibility isActive')
-          .lean();
-        
-        if (medicine) {
-          return {
-            ...item,
-            product: medicine // Add full product details
-          };
-        }
-      } catch (error) {
-        logger.warn('Failed to fetch medicine for order item', {
-          productId: item.productId,
-          error: error.message
-        });
-      }
-      
-      return item; // Return original item if product not found
-    }));
-    
-    return {
-      ...order,
-      items: itemsWithProducts,
-      billingAddress: order.billingAddress || null,
-      billingAddressSameAsShipping: order.billingAddressSameAsShipping !== false
-    };
-  }));
+  // Batch populate medicines
+  const ordersWithProducts = await batchPopulateMedicines(orders);
   
   return {
     orders: ordersWithProducts,
-    pagination: {
-      total,
-      page,
-      limit,
-      pages: Math.ceil(total / limit),
-      hasNext: page < Math.ceil(total / limit),
-      hasPrev: page > 1
-    }
+    pagination: buildPaginationResponse(total, page, limit)
   };
 };
 
-// Get single order
+// Get single order - OPTIMIZED
 exports.getOrderById = async (userId, orderId) => {
   const patient = await getPatient(userId);
-  const Medicine = require('../../models/Medicine.model');
   
-  const order = await Order.findOne({
-    _id: orderId,
-    patient: patient._id
-  })
+  const order = await Order.findOne({ _id: orderId, patient: patient._id })
     .populate({
       path: 'shippingAddress',
       select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault'
@@ -135,335 +72,126 @@ exports.getOrderById = async (userId, orderId) => {
   
   if (!order) throw new AppError('Order not found', 404);
   
-  // Populate product details for each item
-  let itemsWithProducts = [];
-  if (Array.isArray(order.items) && order.items.length > 0) {
-    itemsWithProducts = await Promise.all(order.items.map(async (item) => {
-      if (!item.productId || item.productType !== 'medication') {
-        return item; // Return as-is for non-medication items
-      }
-      
-      try {
-        const medicine = await Medicine.findById(item.productId)
-          .select('productName brand originalPrice salePrice images description generics dosageOptions quantityOptions category stock status visibility isActive')
-          .lean();
-        
-        if (medicine) {
-          return {
-            ...item,
-            product: medicine // Add full product details
-          };
-        }
-      } catch (error) {
-        logger.warn('Failed to fetch medicine for order item', {
-          productId: item.productId,
-          error: error.message
-        });
-      }
-      
-      return item; // Return original item if product not found
-    }));
-  }
-  
-  // Format order with billing address and populated items
-  return {
-    ...order,
-    items: itemsWithProducts,
-    billingAddress: order.billingAddress || null,
-    billingAddressSameAsShipping: order.billingAddressSameAsShipping !== false
-  };
+  // Use batch helper for single order
+  const [enrichedOrder] = await batchPopulateMedicines([order]);
+  return enrichedOrder;
 };
 
-// Delete order item (only for pending orders)
+// Delete order item (only for pending orders) - OPTIMIZED
 exports.deleteOrderItem = async (userId, orderId, itemId) => {
   const patient = await getPatient(userId);
-  const Medicine = require('../../models/Medicine.model');
   
-  const order = await Order.findOne({
-    _id: orderId,
-    patient: patient._id
-  });
-  
+  const order = await Order.findOne({ _id: orderId, patient: patient._id });
   if (!order) throw new AppError('Order not found', 404);
-  
-  if (order.status !== 'pending') {
-    throw new AppError('Can only delete items from pending orders', 400);
-  }
+  if (order.status !== 'pending') throw new AppError('Can only delete items from pending orders', 400);
   
   const itemIndex = order.items.findIndex(item => item._id.toString() === itemId);
-  if (itemIndex === -1) {
-    throw new AppError('Order item not found', 404);
-  }
+  if (itemIndex === -1) throw new AppError('Order item not found', 404);
   
-  // Remove item
-  const removedItem = order.items[itemIndex];
   order.items.splice(itemIndex, 1);
+  if (order.items.length === 0) throw new AppError('Cannot delete last item. Cancel the order instead.', 400);
   
-  if (order.items.length === 0) {
-    throw new AppError('Cannot delete last item. Cancel the order instead.', 400);
-  }
-  
-  // Recalculate totals
+  // Recalculate and save
   order.subtotal = order.items.reduce((sum, item) => sum + item.totalPrice, 0);
-  order.tax = order.subtotal * 0.18; // 18% GST
+  order.tax = order.subtotal * 0.18;
   order.totalAmount = order.subtotal + order.shippingCharges + order.tax - order.discount;
-  
   await order.save();
   
-  // Populate and return updated order
+  // Return with batch populated medicines
   const updatedOrder = await Order.findById(order._id)
-    .populate({
-      path: 'shippingAddress',
-      select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault'
-    })
+    .populate({ path: 'shippingAddress', select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault' })
     .populate('prescription')
     .lean();
   
-  // Populate product details for items
-  if (Array.isArray(updatedOrder.items) && updatedOrder.items.length > 0) {
-    updatedOrder.items = await Promise.all(updatedOrder.items.map(async (item) => {
-      if (!item.productId || item.productType !== 'medication') {
-        return item;
-      }
-      try {
-        const medicine = await Medicine.findById(item.productId)
-          .select('productName brand originalPrice salePrice images description generics dosageOptions quantityOptions category stock status visibility isActive')
-          .lean();
-        if (medicine) {
-          return { ...item, product: medicine };
-        }
-      } catch (error) {
-        logger.warn('Failed to fetch medicine for order item', { productId: item.productId, error: error.message });
-      }
-      return item;
-    }));
-  }
-  
-  return {
-    ...updatedOrder,
-    billingAddress: updatedOrder.billingAddress || null,
-    billingAddressSameAsShipping: updatedOrder.billingAddressSameAsShipping !== false
-  };
+  const [enrichedOrder] = await batchPopulateMedicines([updatedOrder]);
+  return enrichedOrder;
 };
 
-// Save order item (mark as saved for later - only for pending orders)
+// Save order item - OPTIMIZED
 exports.saveOrderItem = async (userId, orderId, itemId) => {
   const patient = await getPatient(userId);
-  const Medicine = require('../../models/Medicine.model');
   
-  const order = await Order.findOne({
-    _id: orderId,
-    patient: patient._id
-  });
-  
+  const order = await Order.findOne({ _id: orderId, patient: patient._id });
   if (!order) throw new AppError('Order not found', 404);
-  
-  if (order.status !== 'pending') {
-    throw new AppError('Can only save items from pending orders', 400);
-  }
+  if (order.status !== 'pending') throw new AppError('Can only save items from pending orders', 400);
   
   const item = order.items.id(itemId);
-  if (!item) {
-    throw new AppError('Order item not found', 404);
-  }
+  if (!item) throw new AppError('Order item not found', 404);
+  if (item.isSaved) throw new AppError('Item is already saved', 400);
   
-  if (item.isSaved) {
-    throw new AppError('Item is already saved', 400);
-  }
-  
-  // Mark item as saved
   item.isSaved = true;
   item.status = 'saved';
   
-  // Recalculate totals (exclude saved items from totals)
-  order.subtotal = order.items
-    .filter(item => !item.isSaved)
-    .reduce((sum, item) => sum + item.totalPrice, 0);
-  order.tax = order.subtotal * 0.18; // 18% GST
+  order.subtotal = order.items.filter(i => !i.isSaved).reduce((sum, i) => sum + i.totalPrice, 0);
+  order.tax = order.subtotal * 0.18;
   order.totalAmount = order.subtotal + order.shippingCharges + order.tax - order.discount;
-  
   await order.save();
   
-  // Populate and return updated order
   const updatedOrder = await Order.findById(order._id)
-    .populate({
-      path: 'shippingAddress',
-      select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault'
-    })
+    .populate({ path: 'shippingAddress', select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault' })
     .populate('prescription')
     .lean();
   
-  // Populate product details for items
-  if (Array.isArray(updatedOrder.items) && updatedOrder.items.length > 0) {
-    updatedOrder.items = await Promise.all(updatedOrder.items.map(async (item) => {
-      if (!item.productId || item.productType !== 'medication') {
-        return item;
-      }
-      try {
-        const medicine = await Medicine.findById(item.productId)
-          .select('productName brand originalPrice salePrice images description generics dosageOptions quantityOptions category stock status visibility isActive')
-          .lean();
-        if (medicine) {
-          return { ...item, product: medicine };
-        }
-      } catch (error) {
-        logger.warn('Failed to fetch medicine for order item', { productId: item.productId, error: error.message });
-      }
-      return item;
-    }));
-  }
-  
-  return {
-    ...updatedOrder,
-    billingAddress: updatedOrder.billingAddress || null,
-    billingAddressSameAsShipping: updatedOrder.billingAddressSameAsShipping !== false
-  };
+  const [enrichedOrder] = await batchPopulateMedicines([updatedOrder]);
+  return enrichedOrder;
 };
 
-// Unsave order item (move back to active - only for pending orders)
+// Unsave order item - OPTIMIZED
 exports.unsaveOrderItem = async (userId, orderId, itemId) => {
   const patient = await getPatient(userId);
-  const Medicine = require('../../models/Medicine.model');
   
-  const order = await Order.findOne({
-    _id: orderId,
-    patient: patient._id
-  });
-  
+  const order = await Order.findOne({ _id: orderId, patient: patient._id });
   if (!order) throw new AppError('Order not found', 404);
-  
-  if (order.status !== 'pending') {
-    throw new AppError('Can only unsave items from pending orders', 400);
-  }
+  if (order.status !== 'pending') throw new AppError('Can only unsave items from pending orders', 400);
   
   const item = order.items.id(itemId);
-  if (!item) {
-    throw new AppError('Order item not found', 404);
-  }
+  if (!item) throw new AppError('Order item not found', 404);
+  if (!item.isSaved) throw new AppError('Item is not saved', 400);
   
-  if (!item.isSaved) {
-    throw new AppError('Item is not saved', 400);
-  }
-  
-  // Mark item as not saved
   item.isSaved = false;
   item.status = 'pending';
   
-  // Recalculate totals (include unsaved items in totals)
-  order.subtotal = order.items
-    .filter(item => !item.isSaved)
-    .reduce((sum, item) => sum + item.totalPrice, 0);
-  order.tax = order.subtotal * 0.18; // 18% GST
+  order.subtotal = order.items.filter(i => !i.isSaved).reduce((sum, i) => sum + i.totalPrice, 0);
+  order.tax = order.subtotal * 0.18;
   order.totalAmount = order.subtotal + order.shippingCharges + order.tax - order.discount;
-  
   await order.save();
   
-  // Populate and return updated order
   const updatedOrder = await Order.findById(order._id)
-    .populate({
-      path: 'shippingAddress',
-      select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault'
-    })
+    .populate({ path: 'shippingAddress', select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault' })
     .populate('prescription')
     .lean();
   
-  // Populate product details for items
-  if (Array.isArray(updatedOrder.items) && updatedOrder.items.length > 0) {
-    updatedOrder.items = await Promise.all(updatedOrder.items.map(async (item) => {
-      if (!item.productId || item.productType !== 'medication') {
-        return item;
-      }
-      try {
-        const medicine = await Medicine.findById(item.productId)
-          .select('productName brand originalPrice salePrice images description generics dosageOptions quantityOptions category stock status visibility isActive')
-          .lean();
-        if (medicine) {
-          return { ...item, product: medicine };
-        }
-      } catch (error) {
-        logger.warn('Failed to fetch medicine for order item', { productId: item.productId, error: error.message });
-      }
-      return item;
-    }));
-  }
-  
-  return {
-    ...updatedOrder,
-    billingAddress: updatedOrder.billingAddress || null,
-    billingAddressSameAsShipping: updatedOrder.billingAddressSameAsShipping !== false
-  };
+  const [enrichedOrder] = await batchPopulateMedicines([updatedOrder]);
+  return enrichedOrder;
 };
 
-// Update order item quantity (only for pending orders)
+// Update order item quantity - OPTIMIZED
 exports.updateOrderItemQuantity = async (userId, orderId, itemId, quantity) => {
+  if (quantity < 1) throw new AppError('Quantity must be at least 1', 400);
+  
   const patient = await getPatient(userId);
-  const Medicine = require('../../models/Medicine.model');
-  
-  if (quantity < 1) {
-    throw new AppError('Quantity must be at least 1', 400);
-  }
-  
-  const order = await Order.findOne({
-    _id: orderId,
-    patient: patient._id
-  });
-  
+  const order = await Order.findOne({ _id: orderId, patient: patient._id });
   if (!order) throw new AppError('Order not found', 404);
-  
-  if (order.status !== 'pending') {
-    throw new AppError('Can only update items in pending orders', 400);
-  }
+  if (order.status !== 'pending') throw new AppError('Can only update items in pending orders', 400);
   
   const item = order.items.id(itemId);
-  if (!item) {
-    throw new AppError('Order item not found', 404);
-  }
+  if (!item) throw new AppError('Order item not found', 404);
   
-  // Update quantity and recalculate prices
   item.quantity = quantity;
   item.totalPrice = item.unitPrice * quantity;
   
-  // Recalculate order totals
-  order.subtotal = order.items.reduce((sum, item) => sum + item.totalPrice, 0);
-  order.tax = order.subtotal * 0.18; // 18% GST
+  order.subtotal = order.items.reduce((sum, i) => sum + i.totalPrice, 0);
+  order.tax = order.subtotal * 0.18;
   order.totalAmount = order.subtotal + order.shippingCharges + order.tax - order.discount;
-  
   await order.save();
   
-  // Populate and return updated order
   const updatedOrder = await Order.findById(order._id)
-    .populate({
-      path: 'shippingAddress',
-      select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault'
-    })
+    .populate({ path: 'shippingAddress', select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault' })
     .populate('prescription')
     .lean();
   
-  // Populate product details for items
-  if (Array.isArray(updatedOrder.items) && updatedOrder.items.length > 0) {
-    updatedOrder.items = await Promise.all(updatedOrder.items.map(async (item) => {
-      if (!item.productId || item.productType !== 'medication') {
-        return item;
-      }
-      try {
-        const medicine = await Medicine.findById(item.productId)
-          .select('productName brand originalPrice salePrice images description generics dosageOptions quantityOptions category stock status visibility isActive')
-          .lean();
-        if (medicine) {
-          return { ...item, product: medicine };
-        }
-      } catch (error) {
-        logger.warn('Failed to fetch medicine for order item', { productId: item.productId, error: error.message });
-      }
-      return item;
-    }));
-  }
-  
-  return {
-    ...updatedOrder,
-    billingAddress: updatedOrder.billingAddress || null,
-    billingAddressSameAsShipping: updatedOrder.billingAddressSameAsShipping !== false
-  };
+  const [enrichedOrder] = await batchPopulateMedicines([updatedOrder]);
+  return enrichedOrder;
 };
 
 // Get order status
@@ -518,50 +246,24 @@ exports.getOrderTracking = async (userId, orderId) => {
   };
 };
 
-// Get order invoice
+// Get order invoice - OPTIMIZED
 exports.getOrderInvoice = async (userId, orderId) => {
   const patient = await getPatient(userId);
-  const Medicine = require('../../models/Medicine.model');
   const User = require('../../models/User.model');
   
-  const order = await Order.findOne({
-    _id: orderId,
-    patient: patient._id
-  })
-    .populate({
-      path: 'shippingAddress',
-      select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country'
-    })
-    .populate('prescription')
-    .lean();
+  // Fetch order and user in parallel
+  const [order, user] = await Promise.all([
+    Order.findOne({ _id: orderId, patient: patient._id })
+      .populate({ path: 'shippingAddress', select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country' })
+      .populate('prescription')
+      .lean(),
+    User.findById(patient.user).select('firstName lastName email phoneNumber').lean()
+  ]);
   
   if (!order) throw new AppError('Order not found', 404);
   
-  // Get user details
-  const user = await User.findById(patient.user)
-    .select('firstName lastName email phoneNumber')
-    .lean();
-  
-  // Populate product details for items
-  let itemsWithProducts = [];
-  if (Array.isArray(order.items) && order.items.length > 0) {
-    itemsWithProducts = await Promise.all(order.items.map(async (item) => {
-      if (!item.productId || item.productType !== 'medication') {
-        return item;
-      }
-      try {
-        const medicine = await Medicine.findById(item.productId)
-          .select('productName brand originalPrice salePrice images description generics category')
-          .lean();
-        if (medicine) {
-          return { ...item, product: medicine };
-        }
-      } catch (error) {
-        logger.warn('Failed to fetch medicine for invoice item', { productId: item.productId, error: error.message });
-      }
-      return item;
-    }));
-  }
+  // Batch populate medicines
+  const [enrichedOrder] = await batchPopulateMedicines([order]);
   
   return {
     invoiceNumber: `INV-${order.orderNumber}`,
@@ -574,7 +276,7 @@ exports.getOrderInvoice = async (userId, orderId) => {
     },
     shippingAddress: order.shippingAddress,
     billingAddress: order.billingAddress || order.shippingAddress,
-    items: itemsWithProducts,
+    items: enrichedOrder.items,
     subtotal: order.subtotal,
     shippingCharges: order.shippingCharges,
     tax: order.tax,
@@ -586,24 +288,16 @@ exports.getOrderInvoice = async (userId, orderId) => {
   };
 };
 
-// Cancel order (only for pending/confirmed orders)
+// Cancel order - OPTIMIZED
 exports.cancelOrder = async (userId, orderId, reason) => {
   const patient = await getPatient(userId);
-  const Medicine = require('../../models/Medicine.model');
   
-  const order = await Order.findOne({
-    _id: orderId,
-    patient: patient._id
-  });
-  
+  const order = await Order.findOne({ _id: orderId, patient: patient._id });
   if (!order) throw new AppError('Order not found', 404);
-  
-  // Only allow cancellation for pending or confirmed orders
   if (!['pending', 'confirmed'].includes(order.status)) {
     throw new AppError(`Cannot cancel order with status: ${order.status}`, 400);
   }
   
-  // Update order status
   order.status = 'cancelled';
   if (reason) {
     order.notes = order.notes ? `${order.notes}\nCancellation reason: ${reason}` : `Cancellation reason: ${reason}`;
@@ -612,58 +306,25 @@ exports.cancelOrder = async (userId, orderId, reason) => {
   
   logger.info('Order cancelled', { orderId: order._id, orderNumber: order.orderNumber, reason });
   
-  // Populate and return cancelled order
   const cancelledOrder = await Order.findById(order._id)
-    .populate({
-      path: 'shippingAddress',
-      select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault'
-    })
+    .populate({ path: 'shippingAddress', select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault' })
     .populate('prescription')
     .lean();
   
-  // Populate product details for items
-  if (Array.isArray(cancelledOrder.items) && cancelledOrder.items.length > 0) {
-    cancelledOrder.items = await Promise.all(cancelledOrder.items.map(async (item) => {
-      if (!item.productId || item.productType !== 'medication') {
-        return item;
-      }
-      try {
-        const medicine = await Medicine.findById(item.productId)
-          .select('productName brand originalPrice salePrice images description generics dosageOptions quantityOptions category stock status visibility isActive')
-          .lean();
-        if (medicine) {
-          return { ...item, product: medicine };
-        }
-      } catch (error) {
-        logger.warn('Failed to fetch medicine for order item', { productId: item.productId, error: error.message });
-      }
-      return item;
-    }));
-  }
-  
-  return {
-    ...cancelledOrder,
-    billingAddress: cancelledOrder.billingAddress || null,
-    billingAddressSameAsShipping: cancelledOrder.billingAddressSameAsShipping !== false
-  };
+  const [enrichedOrder] = await batchPopulateMedicines([cancelledOrder]);
+  return enrichedOrder;
 };
 
-// Reorder (create new order from existing order)
+// Reorder - OPTIMIZED
 exports.reorder = async (userId, orderId) => {
   const patient = await getPatient(userId);
-  const Medicine = require('../../models/Medicine.model');
   
-  // Get original order
-  const originalOrder = await Order.findOne({
-    _id: orderId,
-    patient: patient._id
-  })
+  const originalOrder = await Order.findOne({ _id: orderId, patient: patient._id })
     .populate('shippingAddress')
     .lean();
   
   if (!originalOrder) throw new AppError('Order not found', 404);
   
-  // Create new order items from original order
   const newItems = originalOrder.items.map(item => ({
     productId: item.productId,
     productType: item.productType || 'medication',
@@ -683,14 +344,11 @@ exports.reorder = async (userId, orderId) => {
     generics: item.generics || []
   }));
   
-  // Calculate totals
   const subtotal = newItems.reduce((sum, item) => sum + item.totalPrice, 0);
-  const tax = subtotal * 0.18; // 18% GST
+  const tax = subtotal * 0.18;
   const shippingCharges = originalOrder.shippingCharges || 10.00;
-  const discount = 0; // Reset discount for reorder
-  const totalAmount = subtotal + shippingCharges + tax - discount;
+  const totalAmount = subtotal + shippingCharges + tax;
   
-  // Create new order
   const newOrder = await Order.create({
     patient: patient._id,
     prescription: originalOrder.prescription || null,
@@ -698,102 +356,88 @@ exports.reorder = async (userId, orderId) => {
     shippingAddress: originalOrder.shippingAddress._id || originalOrder.shippingAddress,
     billingAddress: originalOrder.billingAddress || null,
     billingAddressSameAsShipping: originalOrder.billingAddressSameAsShipping !== false,
-    subtotal,
-    shippingCharges,
-    tax,
-    discount,
-    totalAmount,
+    subtotal, shippingCharges, tax, discount: 0, totalAmount,
     status: 'pending',
     notes: `Reordered from order ${originalOrder.orderNumber}`
   });
   
-  logger.info('Order recreated', {
-    originalOrderId: originalOrder._id,
-    newOrderId: newOrder._id,
-    orderNumber: newOrder.orderNumber
-  });
+  logger.info('Order recreated', { originalOrderId: originalOrder._id, newOrderId: newOrder._id, orderNumber: newOrder.orderNumber });
   
-  // Populate and return new order
   const savedOrder = await Order.findById(newOrder._id)
-    .populate({
-      path: 'shippingAddress',
-      select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault'
-    })
+    .populate({ path: 'shippingAddress', select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault' })
     .populate('prescription')
     .lean();
   
-  // Populate product details for items
-  if (Array.isArray(savedOrder.items) && savedOrder.items.length > 0) {
-    savedOrder.items = await Promise.all(savedOrder.items.map(async (item) => {
-      if (!item.productId || item.productType !== 'medication') {
-        return item;
-      }
-      try {
-        const medicine = await Medicine.findById(item.productId)
-          .select('productName brand originalPrice salePrice images description generics dosageOptions quantityOptions category stock status visibility isActive')
-          .lean();
-        if (medicine) {
-          return { ...item, product: medicine };
-        }
-      } catch (error) {
-        logger.warn('Failed to fetch medicine for order item', { productId: item.productId, error: error.message });
-      }
-      return item;
-    }));
-  }
-  
-  return {
-    ...savedOrder,
-    billingAddress: savedOrder.billingAddress || null,
-    billingAddressSameAsShipping: savedOrder.billingAddressSameAsShipping !== false
-  };
+  const [enrichedOrder] = await batchPopulateMedicines([savedOrder]);
+  return enrichedOrder;
 };
 
-// Get orders summary/stats
+// Get orders summary/stats - OPTIMIZED with aggregation
 exports.getOrdersSummary = async (userId) => {
   const patient = await getPatient(userId);
   
-  const orders = await Order.find({ patient: patient._id }).lean();
+  // Use MongoDB aggregation for efficient counting
+  const [summary] = await Order.aggregate([
+    { $match: { patient: patient._id } },
+    {
+      $group: {
+        _id: null,
+        total: { $sum: 1 },
+        totalAmount: { $sum: { $ifNull: ['$totalAmount', 0] } },
+        pending: { $sum: { $cond: [{ $eq: ['$status', 'pending'] }, 1, 0] } },
+        confirmed: { $sum: { $cond: [{ $eq: ['$status', 'confirmed'] }, 1, 0] } },
+        processing: { $sum: { $cond: [{ $eq: ['$status', 'processing'] }, 1, 0] } },
+        shipped: { $sum: { $cond: [{ $eq: ['$status', 'shipped'] }, 1, 0] } },
+        delivered: { $sum: { $cond: [{ $eq: ['$status', 'delivered'] }, 1, 0] } },
+        cancelled: { $sum: { $cond: [{ $eq: ['$status', 'cancelled'] }, 1, 0] } },
+        returned: { $sum: { $cond: [{ $eq: ['$status', 'returned'] }, 1, 0] } },
+        paymentPending: { $sum: { $cond: [{ $eq: ['$paymentStatus', 'pending'] }, 1, 0] } },
+        paymentPaid: { $sum: { $cond: [{ $eq: ['$paymentStatus', 'paid'] }, 1, 0] } },
+        paymentFailed: { $sum: { $cond: [{ $eq: ['$paymentStatus', 'failed'] }, 1, 0] } },
+        paymentRefunded: { $sum: { $cond: [{ $eq: ['$paymentStatus', 'refunded'] }, 1, 0] } },
+        totalPaid: { $sum: { $cond: [{ $eq: ['$paymentStatus', 'paid'] }, { $ifNull: ['$totalAmount', 0] }, 0] } }
+      }
+    }
+  ]);
   
-  const summary = {
-    total: orders.length,
+  if (!summary) {
+    return {
+      total: 0,
+      byStatus: { pending: 0, confirmed: 0, processing: 0, shipped: 0, delivered: 0, cancelled: 0, returned: 0 },
+      byPaymentStatus: { pending: 0, paid: 0, failed: 0, refunded: 0 },
+      totalAmount: 0,
+      totalPaid: 0
+    };
+  }
+  
+  return {
+    total: summary.total,
     byStatus: {
-      pending: orders.filter(o => o.status === 'pending').length,
-      confirmed: orders.filter(o => o.status === 'confirmed').length,
-      processing: orders.filter(o => o.status === 'processing').length,
-      shipped: orders.filter(o => o.status === 'shipped').length,
-      delivered: orders.filter(o => o.status === 'delivered').length,
-      cancelled: orders.filter(o => o.status === 'cancelled').length,
-      returned: orders.filter(o => o.status === 'returned').length
+      pending: summary.pending,
+      confirmed: summary.confirmed,
+      processing: summary.processing,
+      shipped: summary.shipped,
+      delivered: summary.delivered,
+      cancelled: summary.cancelled,
+      returned: summary.returned
     },
     byPaymentStatus: {
-      pending: orders.filter(o => o.paymentStatus === 'pending').length,
-      paid: orders.filter(o => o.paymentStatus === 'paid').length,
-      failed: orders.filter(o => o.paymentStatus === 'failed').length,
-      refunded: orders.filter(o => o.paymentStatus === 'refunded').length
+      pending: summary.paymentPending,
+      paid: summary.paymentPaid,
+      failed: summary.paymentFailed,
+      refunded: summary.paymentRefunded
     },
-    totalAmount: orders.reduce((sum, o) => sum + (o.totalAmount || 0), 0),
-    totalPaid: orders
-      .filter(o => o.paymentStatus === 'paid')
-      .reduce((sum, o) => sum + (o.totalAmount || 0), 0)
+    totalAmount: summary.totalAmount,
+    totalPaid: summary.totalPaid
   };
-  
-  return summary;
 };
 
-// Update order notes
+// Update order notes - OPTIMIZED
 exports.updateOrderNotes = async (userId, orderId, notes) => {
   const patient = await getPatient(userId);
-  const Medicine = require('../../models/Medicine.model');
   
-  const order = await Order.findOne({
-    _id: orderId,
-    patient: patient._id
-  });
-  
+  const order = await Order.findOne({ _id: orderId, patient: patient._id });
   if (!order) throw new AppError('Order not found', 404);
-  
-  // Only allow updating notes for pending/confirmed orders
   if (!['pending', 'confirmed'].includes(order.status)) {
     throw new AppError(`Cannot update notes for order with status: ${order.status}`, 400);
   }
@@ -801,40 +445,13 @@ exports.updateOrderNotes = async (userId, orderId, notes) => {
   order.notes = notes;
   await order.save();
   
-  // Populate and return updated order
   const updatedOrder = await Order.findById(order._id)
-    .populate({
-      path: 'shippingAddress',
-      select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault'
-    })
+    .populate({ path: 'shippingAddress', select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault' })
     .populate('prescription')
     .lean();
   
-  // Populate product details for items
-  if (Array.isArray(updatedOrder.items) && updatedOrder.items.length > 0) {
-    updatedOrder.items = await Promise.all(updatedOrder.items.map(async (item) => {
-      if (!item.productId || item.productType !== 'medication') {
-        return item;
-      }
-      try {
-        const medicine = await Medicine.findById(item.productId)
-          .select('productName brand originalPrice salePrice images description generics dosageOptions quantityOptions category stock status visibility isActive')
-          .lean();
-        if (medicine) {
-          return { ...item, product: medicine };
-        }
-      } catch (error) {
-        logger.warn('Failed to fetch medicine for order item', { productId: item.productId, error: error.message });
-      }
-      return item;
-    }));
-  }
-  
-  return {
-    ...updatedOrder,
-    billingAddress: updatedOrder.billingAddress || null,
-    billingAddressSameAsShipping: updatedOrder.billingAddressSameAsShipping !== false
-  };
+  const [enrichedOrder] = await batchPopulateMedicines([updatedOrder]);
+  return enrichedOrder;
 };
 
 // Create order (unified - handles cart, prescription, and custom items)

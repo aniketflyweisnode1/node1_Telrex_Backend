@@ -1,22 +1,18 @@
+/**
+ * Cart Service
+ * Refactored to use shared helpers
+ */
+
 const Cart = require('../../models/Cart.model');
-const Patient = require('../../models/Patient.model');
 const Medicine = require('../../models/Medicine.model');
 const SavedMedicine = require('../../models/SavedMedicine.model');
 const mongoose = require('mongoose');
 const AppError = require('../../utils/AppError');
+const { getPatient, batchPopulateProducts } = require('../../helpers');
 
-// Get patient from userId (auto-create if doesn't exist)
-const getPatient = async (userId) => {
-  let patient = await Patient.findOne({ user: userId });
-  if (!patient) {
-    // Auto-create patient profile if doesn't exist
-    patient = await Patient.create({ user: userId, isActive: true });
-    console.log('Patient profile auto-created for userId:', userId);
-  }
-  return patient;
-};
-
-// Get or create cart
+/**
+ * Get or create cart for patient
+ */
 const getOrCreateCart = async (patientId) => {
   let cart = await Cart.findOne({ patient: patientId });
   if (!cart) {
@@ -25,169 +21,84 @@ const getOrCreateCart = async (patientId) => {
   return cart;
 };
 
-// Get cart with product details populated
+/**
+ * Get cart with product details and patient info
+ */
 exports.getCart = async (userId) => {
-  const patient = await getPatient(userId);
-  const cart = await getOrCreateCart(patient._id);
+  const patient = await getPatient(userId, { lean: false, populate: true });
   
-  // Convert to plain object for modification
-  const cartObj = cart.toObject();
-  
-  // Populate product details for each item
-  const DoctorNoteTemplate = require('../../models/DoctorNoteTemplate.model');
-  
-  const itemsWithDetails = await Promise.all(cartObj.items.map(async (item) => {
-    try {
-      if (item.productType === 'medication' && item.productId) {
-        // Fetch medicine details
-        const medicine = await Medicine.findById(item.productId)
-          .select('productName brand images salePrice originalPrice')
-          .lean();
-        
-        if (medicine) {
-          return {
-            ...item,
-            productImage: medicine.images?.thumbnail || item.productImage || null,
-            productDetails: {
-              brand: medicine.brand,
-              images: medicine.images,
-              salePrice: medicine.salePrice,
-              originalPrice: medicine.originalPrice
-            }
-          };
-        }
-      } else if (item.productType === 'doctors_note' && item.productId) {
-        // Fetch doctor note template details
-        let template = null;
-        
-        if (mongoose.Types.ObjectId.isValid(item.productId)) {
-          // First try DoctorNoteTemplate
-          template = await DoctorNoteTemplate.findById(item.productId)
-            .select('productName image price title description')
-            .lean();
-          
-          // If not found in templates, try DoctorsNote (purchased notes)
-          if (!template) {
-            const DoctorsNote = require('../../models/DoctorsNote.model');
-            const note = await DoctorsNote.findById(item.productId)
-              .select('type purpose price patientName')
-              .lean();
-            
-            if (note) {
-              // Return with DoctorsNote data
-              return {
-                ...item,
-                productImage: item.productImage || null,
-                productDetails: {
-                  type: note.type,
-                  purpose: note.purpose,
-                  price: note.price,
-                  patientName: note.patientName
-                }
-              };
-            }
-          }
-        }
-        
-        if (template) {
-          return {
-            ...item,
-            productImage: template.image?.url || item.productImage || null,
-            productDetails: {
-              image: template.image,
-              price: template.price,
-              title: template.title,
-              description: template.description
-            }
-          };
-        }
+  // Get cart with patient populated
+  let cart = await Cart.findOne({ patient: patient._id })
+    .populate({
+      path: 'patient',
+      select: 'user dateOfBirth gender bloodGroup profilePicture',
+      populate: {
+        path: 'user',
+        select: 'firstName lastName email phoneNumber countryCode profilePicture'
       }
-    } catch (error) {
-      // Log error but don't fail
-      console.error('Error fetching product details for cart item:', error.message);
-    }
-    
-    return item;
-  }));
-  
-  cartObj.items = itemsWithDetails;
-  return cartObj;
-};
-
-// Get saved items (saved for later) with product details
-exports.getSavedItems = async (userId) => {
-  const patient = await getPatient(userId);
-  const cart = await Cart.findOne({ patient: patient._id });
+    })
+    .lean();
   
   if (!cart) {
-    return {
-      items: [],
-      totalSaved: 0
-    };
+    const newCart = await Cart.create({ patient: patient._id });
+    // Populate the new cart
+    cart = await Cart.findById(newCart._id)
+      .populate({
+        path: 'patient',
+        select: 'user dateOfBirth gender bloodGroup profilePicture',
+        populate: {
+          path: 'user',
+          select: 'firstName lastName email phoneNumber countryCode profilePicture'
+        }
+      })
+      .lean();
+    return cart;
+  }
+  
+  if (!cart.items || cart.items.length === 0) {
+    return cart;
+  }
+  
+  // Batch populate product details
+  cart.items = await batchPopulateProducts(cart.items);
+  
+  return cart;
+};
+
+/**
+ * Get saved items (saved for later)
+ */
+exports.getSavedItems = async (userId) => {
+  const patient = await getPatient(userId);
+  const cart = await Cart.findOne({ patient: patient._id }).lean();
+  
+  if (!cart || !cart.items) {
+    return { items: [], totalSaved: 0, count: 0 };
   }
   
   // Filter only saved items
   const savedItems = cart.items.filter(item => item.isSaved === true);
   
-  // Populate product details for saved items
-  const DoctorNoteTemplate = require('../../models/DoctorNoteTemplate.model');
+  if (savedItems.length === 0) {
+    return { items: [], totalSaved: 0, count: 0 };
+  }
   
-  const itemsWithDetails = await Promise.all(savedItems.map(async (item) => {
-    const itemObj = item.toObject ? item.toObject() : item;
-    try {
-      if (itemObj.productType === 'medication' && itemObj.productId) {
-        const medicine = await Medicine.findById(itemObj.productId)
-          .select('productName brand images salePrice originalPrice')
-          .lean();
-        
-        if (medicine) {
-          return {
-            ...itemObj,
-            productImage: medicine.images?.thumbnail || itemObj.productImage || null,
-            productDetails: {
-              brand: medicine.brand,
-              images: medicine.images,
-              salePrice: medicine.salePrice,
-              originalPrice: medicine.originalPrice
-            }
-          };
-        }
-      } else if (itemObj.productType === 'doctors_note' && itemObj.productId) {
-        const template = await DoctorNoteTemplate.findById(itemObj.productId)
-          .select('productName image price')
-          .lean();
-        
-        if (template) {
-          return {
-            ...itemObj,
-            productImage: template.image?.url || itemObj.productImage || null,
-            productDetails: {
-              image: template.image,
-              price: template.price
-            }
-          };
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching product details for saved item:', error.message);
-    }
-    
-    return itemObj;
-  }));
+  // Batch populate product details
+  const itemsWithDetails = await batchPopulateProducts(savedItems);
+  const totalSaved = itemsWithDetails.reduce((sum, item) => sum + (item.totalPrice || 0), 0);
   
-  // Calculate total value of saved items
-  const totalSaved = itemsWithDetails.reduce((sum, item) => sum + item.totalPrice, 0);
-  
-  return {
-    items: itemsWithDetails,
-    totalSaved: totalSaved,
-    count: itemsWithDetails.length
+  return { 
+    items: itemsWithDetails, 
+    totalSaved, 
+    count: itemsWithDetails.length 
   };
 };
 
-// Add item to cart
+/**
+ * Add item to cart
+ */
 exports.addToCart = async (userId, data) => {
-  const patient = await getPatient(userId);
+  const patient = await getPatient(userId, { lean: false });
   const cart = await getOrCreateCart(patient._id);
 
   const { productId, productName, productImage, productType, quantity, unitPrice } = data;
@@ -200,7 +111,8 @@ exports.addToCart = async (userId, data) => {
   if (existingItemIndex !== -1) {
     // Update quantity
     cart.items[existingItemIndex].quantity += quantity || 1;
-    cart.items[existingItemIndex].totalPrice = cart.items[existingItemIndex].quantity * cart.items[existingItemIndex].unitPrice;
+    cart.items[existingItemIndex].totalPrice = 
+      cart.items[existingItemIndex].quantity * cart.items[existingItemIndex].unitPrice;
   } else {
     // Add new item
     const totalPrice = (quantity || 1) * unitPrice;
@@ -219,7 +131,9 @@ exports.addToCart = async (userId, data) => {
   return cart;
 };
 
-// Remove item from cart
+/**
+ * Remove item from cart
+ */
 exports.removeFromCart = async (userId, itemId) => {
   const patient = await getPatient(userId);
   const cart = await Cart.findOne({ patient: patient._id });
@@ -228,18 +142,19 @@ exports.removeFromCart = async (userId, itemId) => {
   
   cart.items = cart.items.filter(item => item._id.toString() !== itemId);
   
-  // If cart becomes empty, clear coupon and discount
+  // Clear coupon if cart becomes empty
   if (cart.items.length === 0) {
     cart.couponCode = undefined;
     cart.discount = 0;
   }
   
   await cart.save();
-  
   return cart;
 };
 
-// Remove all items from cart
+/**
+ * Clear all items from cart
+ */
 exports.clearCart = async (userId) => {
   const patient = await getPatient(userId);
   const cart = await Cart.findOne({ patient: patient._id });
@@ -255,11 +170,12 @@ exports.clearCart = async (userId) => {
   cart.totalAmount = 0;
   
   await cart.save();
-  
   return cart;
 };
 
-// Update item quantity
+/**
+ * Update item quantity
+ */
 exports.updateItemQuantity = async (userId, itemId, quantity) => {
   const patient = await getPatient(userId);
   const cart = await Cart.findOne({ patient: patient._id });
@@ -270,8 +186,7 @@ exports.updateItemQuantity = async (userId, itemId, quantity) => {
   if (!item) throw new AppError('Item not found in cart', 404);
   
   if (quantity <= 0) {
-    cart.items = cart.items.filter(item => item._id.toString() !== itemId);
-    // If cart becomes empty, clear coupon and discount
+    cart.items = cart.items.filter(i => i._id.toString() !== itemId);
     if (cart.items.length === 0) {
       cart.couponCode = undefined;
       cart.discount = 0;
@@ -285,28 +200,24 @@ exports.updateItemQuantity = async (userId, itemId, quantity) => {
   return cart;
 };
 
-// Save item for later
+/**
+ * Save item for later
+ */
 exports.saveForLater = async (userId, itemId) => {
-  const patient = await getPatient(userId);
+  const patient = await getPatient(userId, { lean: false });
   const cart = await Cart.findOne({ patient: patient._id });
   
   if (!cart) throw new AppError('Cart not found', 404);
   
   const item = cart.items.id(itemId);
   if (!item) throw new AppError('Item not found in cart', 404);
+  if (item.isSaved) throw new AppError('Item is already saved for later', 400);
   
-  // Check if item is already saved
-  if (item.isSaved) {
-    throw new AppError('Item is already saved for later', 400);
-  }
-  
-  // Mark item as saved in cart
   item.isSaved = true;
   
-  // If productId matches a medicine, save it to SavedMedicine collection
+  // Also save to SavedMedicine collection if it's a medicine
   if (item.productId && mongoose.Types.ObjectId.isValid(item.productId)) {
     try {
-      // Check if medicine exists
       const medicine = await Medicine.findOne({
         _id: item.productId,
         isActive: true,
@@ -314,13 +225,11 @@ exports.saveForLater = async (userId, itemId) => {
       });
       
       if (medicine) {
-        // Check if already saved in SavedMedicine
         const existingSaved = await SavedMedicine.findOne({
           patient: patient._id,
           medicine: item.productId
         });
         
-        // If not already saved, save it
         if (!existingSaved) {
           await SavedMedicine.create({
             patient: patient._id,
@@ -329,17 +238,17 @@ exports.saveForLater = async (userId, itemId) => {
         }
       }
     } catch (error) {
-      // Log error but don't fail the cart save operation
       console.error('Error saving medicine to SavedMedicine:', error.message);
     }
   }
   
   await cart.save();
-  
   return cart;
 };
 
-// Unsave item (move back to active cart)
+/**
+ * Unsave item (move back to active cart)
+ */
 exports.unsaveItem = async (userId, itemId) => {
   const patient = await getPatient(userId);
   const cart = await Cart.findOne({ patient: patient._id });
@@ -348,25 +257,19 @@ exports.unsaveItem = async (userId, itemId) => {
   
   const item = cart.items.id(itemId);
   if (!item) throw new AppError('Item not found in cart', 404);
-  
-  if (!item.isSaved) {
-    throw new AppError('Item is not saved for later', 400);
-  }
+  if (!item.isSaved) throw new AppError('Item is not saved for later', 400);
   
   item.isSaved = false;
   
-  // Note: We don't remove from SavedMedicine collection when unsaving from cart
-  // because the user might want to keep it in their saved medicines list
-  // They can remove it separately using the unsave medicine API
-  
   await cart.save();
-  
   return cart;
 };
 
-// Apply coupon
+/**
+ * Apply coupon to cart
+ */
 exports.applyCoupon = async (userId, couponCode) => {
-  const patient = await getPatient(userId);
+  const patient = await getPatient(userId, { lean: false });
   const cart = await getOrCreateCart(patient._id);
   
   const Coupon = require('../../models/Coupon.model');
@@ -375,22 +278,18 @@ exports.applyCoupon = async (userId, couponCode) => {
     isActive: true
   });
   
-  if (!coupon) {
-    throw new AppError('Invalid or expired coupon code', 400);
-  }
+  if (!coupon) throw new AppError('Invalid or expired coupon code', 400);
   
-  // Check validity dates
+  // Validate coupon
   const now = new Date();
   if (now < coupon.validFrom || now > coupon.validUntil) {
     throw new AppError('Coupon has expired', 400);
   }
   
-  // Check usage limit
   if (coupon.usageLimit && coupon.usedCount >= coupon.usageLimit) {
     throw new AppError('Coupon usage limit reached', 400);
   }
   
-  // Check minimum purchase amount
   if (cart.subtotal < coupon.minPurchaseAmount) {
     throw new AppError(`Minimum purchase amount of ${coupon.minPurchaseAmount} required`, 400);
   }
@@ -416,12 +315,14 @@ exports.applyCoupon = async (userId, couponCode) => {
       code: coupon.code,
       discountType: coupon.discountType,
       discountValue: coupon.discountValue,
-      discount: discount
+      discount
     }
   };
 };
 
-// Remove coupon
+/**
+ * Remove coupon from cart
+ */
 exports.removeCoupon = async (userId) => {
   const patient = await getPatient(userId);
   const cart = await Cart.findOne({ patient: patient._id });
@@ -434,4 +335,3 @@ exports.removeCoupon = async (userId) => {
   
   return cart;
 };
-

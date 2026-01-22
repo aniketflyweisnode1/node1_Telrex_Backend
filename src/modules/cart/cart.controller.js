@@ -4,7 +4,11 @@ const cartService = require('./cart.service');
 exports.getCart = async (req, res, next) => {
   try {
     const cart = await cartService.getCart(req.user.id);
-    res.status(200).json({ success: true, data: cart });
+    res.status(200).json({ 
+      success: true, 
+      message: 'Cart retrieved successfully',
+      data: cart 
+    });
   } catch (err) { next(err); }
 };
 

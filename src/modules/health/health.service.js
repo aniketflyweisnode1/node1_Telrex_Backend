@@ -1,136 +1,105 @@
+/**
+ * Health Service - Refactored with helpers for optimized queries
+ * Maintains exact same API responses for backward compatibility
+ */
+
 const HealthCategory = require('../../models/HealthCategory.model');
 const Medicine = require('../../models/Medicine.model');
 const AppError = require('../../utils/AppError');
 const mongoose = require('mongoose');
 const logger = require('../../utils/logger');
+const {
+  CATEGORY_USER_POPULATE,
+  MEDICINE_HEALTH_CATEGORY_POPULATE,
+  MEDICINE_HEALTH_CATEGORY_FULL_POPULATE,
+  ensureValidObjectId,
+  isValidObjectId,
+  buildCategoryFilter,
+  buildMedicationFilter,
+  buildFeaturedMedicationFilter,
+  buildCategorySort,
+  buildMedicationSort,
+  filterActiveTypes,
+  filterActiveTypesForCategories,
+  sortTypesByOrder,
+  addDiscountAndSort,
+  extractCategorySummary,
+  updateMedicineFlag,
+  checkDuplicateCategory,
+  parsePagination,
+  buildPaginationResponse
+} = require('../../helpers/health.helper');
 
-// Get all health categories
+// ============ HEALTH CATEGORY CRUD ============
+
+/**
+ * Get all health categories (optimized with parallel queries)
+ */
 exports.getAllHealthCategories = async (query = {}) => {
-  const {
-    search,
-    isActive,
-    sortBy = 'order',
-    sortOrder = 'asc',
-    page = 1,
-    limit = 100
-  } = query;
+  const { page, limit, skip } = parsePagination(query, { page: 1, limit: 100 });
+  const filter = buildCategoryFilter(query);
+  const sort = buildCategorySort(query);
 
-  const filter = {};
+  // Parallel execution for better performance
+  const [categories, total] = await Promise.all([
+    HealthCategory.find(filter)
+      .populate(CATEGORY_USER_POPULATE[0])
+      .populate(CATEGORY_USER_POPULATE[1])
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    HealthCategory.countDocuments(filter)
+  ]);
 
-  // Search filter
-  if (search) {
-    filter.$or = [
-      { name: { $regex: search, $options: 'i' } },
-      { slug: { $regex: search, $options: 'i' } },
-      { description: { $regex: search, $options: 'i' } }
-    ];
-  }
-
-  // Active filter
-  if (isActive !== undefined) {
-    filter.isActive = isActive === 'true' || isActive === true;
-  } else {
-    // Default: only active categories
-    filter.isActive = true;
-  }
-
-  const sort = {};
-  sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
-
-  const skip = (parseInt(page) - 1) * parseInt(limit);
-
-  const categories = await HealthCategory.find(filter)
-    .populate({
-      path: 'createdBy',
-      select: 'firstName lastName email'
-    })
-    .populate({
-      path: 'updatedBy',
-      select: 'firstName lastName email'
-    })
-    .sort(sort)
-    .skip(skip)
-    .limit(parseInt(limit))
-    .lean();
-
-  // Filter active types within categories
-  const categoriesWithActiveTypes = categories.map(category => ({
-    ...category,
-    types: category.types ? category.types.filter(type => type.isActive !== false) : []
-  }));
-
-  const total = await HealthCategory.countDocuments(filter);
+  // Filter active types
+  const categoriesWithActiveTypes = filterActiveTypesForCategories(categories);
 
   return {
     categories: categoriesWithActiveTypes,
-    pagination: {
-      page: parseInt(page),
-      limit: parseInt(limit),
-      total,
-      pages: Math.ceil(total / parseInt(limit))
-    }
+    pagination: buildPaginationResponse(total, page, limit)
   };
 };
 
-// Get health category by ID
+/**
+ * Get health category by ID
+ */
 exports.getHealthCategoryById = async (categoryId) => {
-  if (!mongoose.Types.ObjectId.isValid(categoryId)) {
-    throw new AppError('Invalid health category ID', 400);
-  }
+  ensureValidObjectId(categoryId, 'health category ID');
 
   const category = await HealthCategory.findById(categoryId)
-    .populate({
-      path: 'createdBy',
-      select: 'firstName lastName email'
-    })
-    .populate({
-      path: 'updatedBy',
-      select: 'firstName lastName email'
-    })
+    .populate(CATEGORY_USER_POPULATE[0])
+    .populate(CATEGORY_USER_POPULATE[1])
     .lean();
 
   if (!category) {
     throw new AppError('Health category not found', 404);
   }
 
-  // Filter active types
-  if (category.types) {
-    category.types = category.types.filter(type => type.isActive !== false);
-  }
-
-  return category;
+  return filterActiveTypes(category);
 };
 
-// Get health category by slug
+/**
+ * Get health category by slug
+ */
 exports.getHealthCategoryBySlug = async (slug) => {
   const category = await HealthCategory.findOne({ slug, isActive: true })
-    .populate({
-      path: 'createdBy',
-      select: 'firstName lastName email'
-    })
-    .populate({
-      path: 'updatedBy',
-      select: 'firstName lastName email'
-    })
+    .populate(CATEGORY_USER_POPULATE[0])
+    .populate(CATEGORY_USER_POPULATE[1])
     .lean();
 
   if (!category) {
     throw new AppError('Health category not found', 404);
   }
 
-  // Filter active types
-  if (category.types) {
-    category.types = category.types.filter(type => type.isActive !== false);
-  }
-
-  return category;
+  return filterActiveTypes(category);
 };
 
-// Get types (chronic conditions) for a category
+/**
+ * Get types (chronic conditions) for a category
+ */
 exports.getCategoryTypes = async (categoryId) => {
-  if (!mongoose.Types.ObjectId.isValid(categoryId)) {
-    throw new AppError('Invalid health category ID', 400);
-  }
+  ensureValidObjectId(categoryId, 'health category ID');
 
   const category = await HealthCategory.findById(categoryId).lean();
 
@@ -138,334 +107,21 @@ exports.getCategoryTypes = async (categoryId) => {
     throw new AppError('Health category not found', 404);
   }
 
-  // Return only active types
-  const types = category.types ? category.types.filter(type => type.isActive !== false) : [];
+  // Filter active types and sort by order
+  const activeTypes = category.types ? category.types.filter(type => type.isActive !== false) : [];
+  const sortedTypes = sortTypesByOrder(activeTypes);
 
   return {
-    category: {
-      _id: category._id,
-      name: category.name,
-      slug: category.slug
-    },
-    types: types.sort((a, b) => (a.order || 0) - (b.order || 0))
+    category: extractCategorySummary(category),
+    types: sortedTypes
   };
 };
 
-// Get medications by health category ID
-exports.getMedicationsByCategoryId = async (categoryId, query = {}) => {
-  if (!mongoose.Types.ObjectId.isValid(categoryId)) {
-    throw new AppError('Invalid health category ID', 400);
-  }
-
-  // Verify category exists and is active
-  const category = await HealthCategory.findById(categoryId);
-  if (!category) {
-    throw new AppError('Health category not found', 404);
-  }
-
-  const {
-    search,
-    healthTypeSlug, // Chronic condition slug (e.g., 'asthma', 'dry-eye')
-    minPrice,
-    maxPrice,
-    status,
-    inStock,
-    sortBy = 'createdAt',
-    sortOrder = 'desc',
-    page = 1,
-    limit = 20
-  } = query;
-
-  const filter = {
-    isActive: true,
-    visibility: true,
-    healthCategory: categoryId // Filter by specific health category
-  };
-
-  // Search filter
-  if (search) {
-    filter.$or = [
-      { productName: { $regex: search, $options: 'i' } },
-      { brand: { $regex: search, $options: 'i' } },
-      { category: { $regex: search, $options: 'i' } },
-      { generics: { $in: [new RegExp(search, 'i')] } }
-    ];
-  }
-
-  // Health type filter (chronic condition)
-  if (healthTypeSlug) {
-    filter.healthTypeSlug = healthTypeSlug;
-  }
-
-  // Price filters
-  if (minPrice !== undefined) {
-    filter.salePrice = { $gte: parseFloat(minPrice) };
-  }
-  if (maxPrice !== undefined) {
-    filter.salePrice = { ...filter.salePrice, $lte: parseFloat(maxPrice) };
-  }
-
-  // Status filter
-  if (status) {
-    filter.status = status;
-  }
-
-  // Stock filter
-  if (inStock === 'true' || inStock === true) {
-    filter.$or = [
-      { status: 'in_stock' },
-      { status: 'low_stock' }
-    ];
-  }
-
-  const sort = {};
-  sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
-
-  const skip = (parseInt(page) - 1) * parseInt(limit);
-
-  const medications = await Medicine.find(filter)
-    .populate({
-      path: 'healthCategory',
-      select: 'name slug description icon',
-      match: { isActive: true }
-    })
-    .sort(sort)
-    .skip(skip)
-    .limit(parseInt(limit))
-    .lean();
-
-  const total = await Medicine.countDocuments(filter);
-
-  return {
-    category: {
-      _id: category._id,
-      name: category.name,
-      slug: category.slug,
-      description: category.description,
-      icon: category.icon
-    },
-    medications,
-    pagination: {
-      page: parseInt(page),
-      limit: parseInt(limit),
-      total,
-      pages: Math.ceil(total / parseInt(limit))
-    }
-  };
-};
-
-// Get medications with filters
-exports.getMedications = async (query = {}) => {
-  const {
-    search,
-    category,
-    healthCategoryId,
-    healthTypeSlug, // Chronic condition slug (e.g., 'asthma', 'dry-eye')
-    minPrice,
-    maxPrice,
-    status,
-    inStock,
-    sortBy = 'createdAt',
-    sortOrder = 'desc',
-    page = 1,
-    limit = 20
-  } = query;
-
-  const filter = {
-    isActive: true,
-    visibility: true
-  };
-
-  // Search filter
-  if (search) {
-    filter.$or = [
-      { productName: { $regex: search, $options: 'i' } },
-      { brand: { $regex: search, $options: 'i' } },
-      { category: { $regex: search, $options: 'i' } },
-      { generics: { $in: [new RegExp(search, 'i')] } }
-    ];
-  }
-
-  // Category filter (medicine category)
-  if (category) {
-    filter.category = { $regex: category, $options: 'i' };
-  }
-
-  // Health category filter (if healthCategoryId provided)
-  if (healthCategoryId && mongoose.Types.ObjectId.isValid(healthCategoryId)) {
-    filter.healthCategory = healthCategoryId;
-  }
-
-  // Health type filter (chronic condition)
-  if (healthTypeSlug) {
-    filter.healthTypeSlug = healthTypeSlug;
-  }
-
-  // Price filters
-  if (minPrice !== undefined) {
-    filter.salePrice = { $gte: parseFloat(minPrice) };
-  }
-  if (maxPrice !== undefined) {
-    filter.salePrice = { ...filter.salePrice, $lte: parseFloat(maxPrice) };
-  }
-
-  // Status filter
-  if (status) {
-    filter.status = status;
-  }
-
-  // Stock filter
-  if (inStock === 'true' || inStock === true) {
-    filter.$or = [
-      { status: 'in_stock' },
-      { status: 'low_stock' }
-    ];
-  }
-
-  const sort = {};
-  sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
-
-  const skip = (parseInt(page) - 1) * parseInt(limit);
-
-  const medications = await Medicine.find(filter)
-    .populate({
-      path: 'healthCategory',
-      select: 'name slug description icon',
-      match: { isActive: true }
-    })
-    .sort(sort)
-    .skip(skip)
-    .limit(parseInt(limit))
-    .lean();
-
-  const total = await Medicine.countDocuments(filter);
-
-  return {
-    medications,
-    pagination: {
-      page: parseInt(page),
-      limit: parseInt(limit),
-      total,
-      pages: Math.ceil(total / parseInt(limit))
-    }
-  };
-};
-
-// Get trendy medications (admin marked as trendy)
-exports.getTrendyMedications = async (query = {}) => {
-  const {
-    limit = 10,
-    category,
-    healthCategoryId
-  } = query;
-
-  const filter = {
-    isActive: true,
-    visibility: true,
-    status: { $in: ['in_stock', 'low_stock'] },
-    isTrendy: true // Only return admin-marked trendy medications
-  };
-
-  if (category) {
-    filter.category = { $regex: category, $options: 'i' };
-  }
-
-  if (healthCategoryId && mongoose.Types.ObjectId.isValid(healthCategoryId)) {
-    filter.healthCategory = healthCategoryId;
-  }
-
-  // Sort by views (popularity) or createdAt (newest trendy items)
-  const medications = await Medicine.find(filter)
-    .populate({
-      path: 'healthCategory',
-      select: 'name slug description icon',
-      match: { isActive: true }
-    })
-    .sort({ views: -1, createdAt: -1 })
-    .limit(parseInt(limit))
-    .lean();
-
-  return {
-    medications
-  };
-};
-
-// Get best offers (admin marked as best offer)
-exports.getBestOffers = async (query = {}) => {
-  const {
-    limit = 10,
-    category,
-    healthCategoryId
-  } = query;
-
-  const filter = {
-    isActive: true,
-    visibility: true,
-    status: { $in: ['in_stock', 'low_stock'] },
-    isBestOffer: true // Only return admin-marked best offer medications
-  };
-
-  if (category) {
-    filter.category = { $regex: category, $options: 'i' };
-  }
-
-  if (healthCategoryId && mongoose.Types.ObjectId.isValid(healthCategoryId)) {
-    filter.healthCategory = healthCategoryId;
-  }
-
-  // Get medications and calculate discount
-  const medications = await Medicine.find(filter)
-    .populate({
-      path: 'healthCategory',
-      select: 'name slug description icon',
-      match: { isActive: true }
-    })
-    .lean();
-
-  // Calculate discount for each medication
-  const medicationsWithDiscount = medications.map(med => {
-    // Use discountPercentage if set, otherwise calculate from prices
-    let discount = 0;
-    if (med.discountPercentage !== null && med.discountPercentage !== undefined) {
-      discount = med.discountPercentage;
-    } else if (med.originalPrice > 0) {
-      discount = ((med.originalPrice - med.salePrice) / med.originalPrice) * 100;
-    }
-    return {
-      ...med,
-      discount: Math.round(discount * 100) / 100 // Round to 2 decimal places
-    };
-  });
-
-  // Sort by discount (highest first), then by views
-  medicationsWithDiscount.sort((a, b) => {
-    if (b.discount !== a.discount) {
-      return b.discount - a.discount;
-    }
-    return b.views - a.views;
-  });
-
-  // Return top N
-  const topOffers = medicationsWithDiscount.slice(0, parseInt(limit));
-
-  return {
-    medications: topOffers
-  };
-};
-
-// Create health category
+/**
+ * Create health category
+ */
 exports.createHealthCategory = async (data, userId) => {
-  // Check if category with same name or slug already exists
-  const existingCategory = await HealthCategory.findOne({
-    $or: [
-      { name: data.name },
-      { slug: data.slug }
-    ]
-  });
-
-  if (existingCategory) {
-    throw new AppError('Health category with this name or slug already exists', 409);
-  }
+  await checkDuplicateCategory(HealthCategory, data.name, data.slug);
 
   const categoryData = {
     ...data,
@@ -482,22 +138,16 @@ exports.createHealthCategory = async (data, userId) => {
   });
 
   return await HealthCategory.findById(category._id)
-    .populate({
-      path: 'createdBy',
-      select: 'firstName lastName email'
-    })
-    .populate({
-      path: 'updatedBy',
-      select: 'firstName lastName email'
-    })
+    .populate(CATEGORY_USER_POPULATE[0])
+    .populate(CATEGORY_USER_POPULATE[1])
     .lean();
 };
 
-// Update health category
+/**
+ * Update health category
+ */
 exports.updateHealthCategory = async (categoryId, data, userId) => {
-  if (!mongoose.Types.ObjectId.isValid(categoryId)) {
-    throw new AppError('Invalid health category ID', 400);
-  }
+  ensureValidObjectId(categoryId, 'health category ID');
 
   const category = await HealthCategory.findById(categoryId);
   
@@ -505,22 +155,17 @@ exports.updateHealthCategory = async (categoryId, data, userId) => {
     throw new AppError('Health category not found', 404);
   }
 
-  // Check if name or slug is being changed and if it conflicts with existing
+  // Check for duplicates (excluding current category)
   if (data.name || data.slug) {
-    const existingCategory = await HealthCategory.findOne({
-      _id: { $ne: categoryId },
-      $or: [
-        { name: data.name || category.name },
-        { slug: data.slug || category.slug }
-      ]
-    });
-
-    if (existingCategory) {
-      throw new AppError('Health category with this name or slug already exists', 409);
-    }
+    await checkDuplicateCategory(
+      HealthCategory, 
+      data.name || category.name, 
+      data.slug || category.slug, 
+      categoryId
+    );
   }
 
-  // Update fields
+  // Update fields (exclude createdBy)
   Object.keys(data).forEach(key => {
     if (data[key] !== undefined && key !== 'createdBy') {
       category[key] = data[key];
@@ -537,22 +182,16 @@ exports.updateHealthCategory = async (categoryId, data, userId) => {
   });
 
   return await HealthCategory.findById(category._id)
-    .populate({
-      path: 'createdBy',
-      select: 'firstName lastName email'
-    })
-    .populate({
-      path: 'updatedBy',
-      select: 'firstName lastName email'
-    })
+    .populate(CATEGORY_USER_POPULATE[0])
+    .populate(CATEGORY_USER_POPULATE[1])
     .lean();
 };
 
-// Delete health category (soft delete)
+/**
+ * Delete health category (soft delete)
+ */
 exports.deleteHealthCategory = async (categoryId) => {
-  if (!mongoose.Types.ObjectId.isValid(categoryId)) {
-    throw new AppError('Invalid health category ID', 400);
-  }
+  ensureValidObjectId(categoryId, 'health category ID');
 
   const category = await HealthCategory.findById(categoryId);
   
@@ -571,11 +210,11 @@ exports.deleteHealthCategory = async (categoryId) => {
   return { message: 'Health category deleted successfully' };
 };
 
-// Activate health category
+/**
+ * Activate health category
+ */
 exports.activateHealthCategory = async (categoryId, userId) => {
-  if (!mongoose.Types.ObjectId.isValid(categoryId)) {
-    throw new AppError('Invalid health category ID', 400);
-  }
+  ensureValidObjectId(categoryId, 'health category ID');
 
   const category = await HealthCategory.findById(categoryId);
   
@@ -594,22 +233,16 @@ exports.activateHealthCategory = async (categoryId, userId) => {
   });
 
   return await HealthCategory.findById(category._id)
-    .populate({
-      path: 'createdBy',
-      select: 'firstName lastName email'
-    })
-    .populate({
-      path: 'updatedBy',
-      select: 'firstName lastName email'
-    })
+    .populate(CATEGORY_USER_POPULATE[0])
+    .populate(CATEGORY_USER_POPULATE[1])
     .lean();
 };
 
-// Deactivate health category
+/**
+ * Deactivate health category
+ */
 exports.deactivateHealthCategory = async (categoryId, userId) => {
-  if (!mongoose.Types.ObjectId.isValid(categoryId)) {
-    throw new AppError('Invalid health category ID', 400);
-  }
+  ensureValidObjectId(categoryId, 'health category ID');
 
   const category = await HealthCategory.findById(categoryId);
   
@@ -628,30 +261,117 @@ exports.deactivateHealthCategory = async (categoryId, userId) => {
   });
 
   return await HealthCategory.findById(category._id)
-    .populate({
-      path: 'createdBy',
-      select: 'firstName lastName email'
-    })
-    .populate({
-      path: 'updatedBy',
-      select: 'firstName lastName email'
-    })
+    .populate(CATEGORY_USER_POPULATE[0])
+    .populate(CATEGORY_USER_POPULATE[1])
     .lean();
 };
 
-// Mark medicine as trendy
-exports.markMedicineAsTrendy = async (medicineId, userId) => {
-  logger.info('Mark trendy request received', {
-    medicineId,
-    userId
-  });
+// ============ MEDICATIONS ============
 
-  if (!mongoose.Types.ObjectId.isValid(medicineId)) {
-    logger.warn('Invalid medicine ID format', { medicineId });
-    throw new AppError('Invalid medicine ID', 400);
+/**
+ * Get medications by health category ID (optimized)
+ */
+exports.getMedicationsByCategoryId = async (categoryId, query = {}) => {
+  ensureValidObjectId(categoryId, 'health category ID');
+
+  // Verify category exists
+  const category = await HealthCategory.findById(categoryId).lean();
+  if (!category) {
+    throw new AppError('Health category not found', 404);
   }
 
-  // Find medicine by ID
+  const { page, limit, skip } = parsePagination(query, { page: 1, limit: 20 });
+  const filter = buildMedicationFilter(query, { categoryId });
+  const sort = buildMedicationSort(query);
+
+  // Parallel queries
+  const [medications, total] = await Promise.all([
+    Medicine.find(filter)
+      .populate(MEDICINE_HEALTH_CATEGORY_POPULATE)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    Medicine.countDocuments(filter)
+  ]);
+
+  return {
+    category: extractCategorySummary(category),
+    medications,
+    pagination: buildPaginationResponse(total, page, limit)
+  };
+};
+
+/**
+ * Get medications with filters (optimized)
+ */
+exports.getMedications = async (query = {}) => {
+  const { page, limit, skip } = parsePagination(query, { page: 1, limit: 20 });
+  const filter = buildMedicationFilter(query);
+  const sort = buildMedicationSort(query);
+
+  // Parallel queries
+  const [medications, total] = await Promise.all([
+    Medicine.find(filter)
+      .populate(MEDICINE_HEALTH_CATEGORY_POPULATE)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    Medicine.countDocuments(filter)
+  ]);
+
+  return {
+    medications,
+    pagination: buildPaginationResponse(total, page, limit)
+  };
+};
+
+/**
+ * Get trendy medications
+ */
+exports.getTrendyMedications = async (query = {}) => {
+  const limit = parseInt(query.limit) || 10;
+  const filter = buildFeaturedMedicationFilter(query, 'isTrendy');
+
+  const medications = await Medicine.find(filter)
+    .populate(MEDICINE_HEALTH_CATEGORY_POPULATE)
+    .sort({ views: -1, createdAt: -1 })
+    .limit(limit)
+    .lean();
+
+  return { medications };
+};
+
+/**
+ * Get best offers (with discount calculation)
+ */
+exports.getBestOffers = async (query = {}) => {
+  const limit = parseInt(query.limit) || 10;
+  const filter = buildFeaturedMedicationFilter(query, 'isBestOffer');
+
+  const medications = await Medicine.find(filter)
+    .populate(MEDICINE_HEALTH_CATEGORY_POPULATE)
+    .lean();
+
+  // Calculate discount and sort
+  const sortedMedications = addDiscountAndSort(medications);
+
+  return {
+    medications: sortedMedications.slice(0, limit)
+  };
+};
+
+// ============ MEDICINE FLAGS ============
+
+/**
+ * Mark medicine as trendy
+ */
+exports.markMedicineAsTrendy = async (medicineId, userId) => {
+  logger.info('Mark trendy request received', { medicineId, userId });
+
+  ensureValidObjectId(medicineId, 'medicine ID');
+
   const medicine = await Medicine.findById(medicineId);
   
   if (!medicine) {
@@ -665,7 +385,6 @@ exports.markMedicineAsTrendy = async (medicineId, userId) => {
     currentIsTrendy: medicine.isTrendy
   });
 
-  // Mark as trendy
   medicine.isTrendy = true;
   await medicine.save();
 
@@ -676,33 +395,20 @@ exports.markMedicineAsTrendy = async (medicineId, userId) => {
   });
 
   const updatedMedicine = await Medicine.findById(medicine._id)
-    .populate({
-      path: 'healthCategory',
-      select: 'name slug description icon'
-    })
+    .populate(MEDICINE_HEALTH_CATEGORY_POPULATE)
     .lean();
-
-  logger.info('Medicine retrieved after update', {
-    medicineId: updatedMedicine._id,
-    isTrendy: updatedMedicine.isTrendy
-  });
 
   return updatedMedicine;
 };
 
-// Unmark medicine as trendy
+/**
+ * Unmark medicine as trendy
+ */
 exports.unmarkMedicineAsTrendy = async (medicineId, userId) => {
-  logger.info('Unmark trendy request received', {
-    medicineId,
-    userId
-  });
+  logger.info('Unmark trendy request received', { medicineId, userId });
 
-  if (!mongoose.Types.ObjectId.isValid(medicineId)) {
-    logger.warn('Invalid medicine ID format', { medicineId });
-    throw new AppError('Invalid medicine ID', 400);
-  }
+  ensureValidObjectId(medicineId, 'medicine ID');
 
-  // Find medicine by ID
   const medicine = await Medicine.findById(medicineId);
   
   if (!medicine) {
@@ -710,13 +416,6 @@ exports.unmarkMedicineAsTrendy = async (medicineId, userId) => {
     throw new AppError('Medicine not found', 404);
   }
 
-  logger.info('Medicine found', {
-    medicineId: medicine._id,
-    productName: medicine.productName,
-    currentIsTrendy: medicine.isTrendy
-  });
-
-  // Unmark as trendy
   medicine.isTrendy = false;
   await medicine.save();
 
@@ -726,22 +425,14 @@ exports.unmarkMedicineAsTrendy = async (medicineId, userId) => {
     updatedBy: userId
   });
 
-  const updatedMedicine = await Medicine.findById(medicine._id)
-    .populate({
-      path: 'healthCategory',
-      select: 'name slug description icon'
-    })
+  return await Medicine.findById(medicine._id)
+    .populate(MEDICINE_HEALTH_CATEGORY_POPULATE)
     .lean();
-
-  logger.info('Medicine retrieved after update', {
-    medicineId: updatedMedicine._id,
-    isTrendy: updatedMedicine.isTrendy
-  });
-
-  return updatedMedicine;
 };
 
-// Mark medicine as best offer
+/**
+ * Mark medicine as best offer
+ */
 exports.markMedicineAsBestOffer = async (medicineId, data, userId) => {
   logger.info('Mark best offer request received', {
     medicineId,
@@ -750,12 +441,8 @@ exports.markMedicineAsBestOffer = async (medicineId, data, userId) => {
     userId
   });
 
-  if (!mongoose.Types.ObjectId.isValid(medicineId)) {
-    logger.warn('Invalid medicine ID format', { medicineId });
-    throw new AppError('Invalid medicine ID', 400);
-  }
+  ensureValidObjectId(medicineId, 'medicine ID');
 
-  // Find medicine by ID
   const medicine = await Medicine.findById(medicineId);
   
   if (!medicine) {
@@ -763,25 +450,8 @@ exports.markMedicineAsBestOffer = async (medicineId, data, userId) => {
     throw new AppError('Medicine not found', 404);
   }
 
-  logger.info('Medicine found', {
-    medicineId: medicine._id,
-    productName: medicine.productName,
-    currentIsBestOffer: medicine.isBestOffer
-  });
-
-  // Mark as best offer
-  medicine.isBestOffer = true;
-  
-  // Set discount percentage if provided
-  if (data && data.discountPercentage !== undefined) {
-    if (data.discountPercentage < 0 || data.discountPercentage > 100) {
-      logger.warn('Invalid discount percentage', { discountPercentage: data.discountPercentage });
-      throw new AppError('Discount percentage must be between 0 and 100', 400);
-    }
-    medicine.discountPercentage = data.discountPercentage;
-    logger.info('Discount percentage set', { discountPercentage: data.discountPercentage });
-  }
-
+  // Update flag with optional discount
+  updateMedicineFlag(medicine, 'isBestOffer', true, data || {});
   await medicine.save();
 
   logger.info('Medicine marked as best offer successfully', {
@@ -791,34 +461,19 @@ exports.markMedicineAsBestOffer = async (medicineId, data, userId) => {
     updatedBy: userId
   });
 
-  const updatedMedicine = await Medicine.findById(medicine._id)
-    .populate({
-      path: 'healthCategory',
-      select: 'name slug description icon'
-    })
+  return await Medicine.findById(medicine._id)
+    .populate(MEDICINE_HEALTH_CATEGORY_POPULATE)
     .lean();
-
-  logger.info('Medicine retrieved after update', {
-    medicineId: updatedMedicine._id,
-    isBestOffer: updatedMedicine.isBestOffer
-  });
-
-  return updatedMedicine;
 };
 
-// Unmark medicine as best offer
+/**
+ * Unmark medicine as best offer
+ */
 exports.unmarkMedicineAsBestOffer = async (medicineId, userId) => {
-  logger.info('Unmark best offer request received', {
-    medicineId,
-    userId
-  });
+  logger.info('Unmark best offer request received', { medicineId, userId });
 
-  if (!mongoose.Types.ObjectId.isValid(medicineId)) {
-    logger.warn('Invalid medicine ID format', { medicineId });
-    throw new AppError('Invalid medicine ID', 400);
-  }
+  ensureValidObjectId(medicineId, 'medicine ID');
 
-  // Find medicine by ID
   const medicine = await Medicine.findById(medicineId);
   
   if (!medicine) {
@@ -826,13 +481,6 @@ exports.unmarkMedicineAsBestOffer = async (medicineId, userId) => {
     throw new AppError('Medicine not found', 404);
   }
 
-  logger.info('Medicine found', {
-    medicineId: medicine._id,
-    productName: medicine.productName,
-    currentIsBestOffer: medicine.isBestOffer
-  });
-
-  // Unmark as best offer
   medicine.isBestOffer = false;
   await medicine.save();
 
@@ -842,26 +490,16 @@ exports.unmarkMedicineAsBestOffer = async (medicineId, userId) => {
     updatedBy: userId
   });
 
-  const updatedMedicine = await Medicine.findById(medicine._id)
-    .populate({
-      path: 'healthCategory',
-      select: 'name slug description icon'
-    })
+  return await Medicine.findById(medicine._id)
+    .populate(MEDICINE_HEALTH_CATEGORY_POPULATE)
     .lean();
-
-  logger.info('Medicine retrieved after update', {
-    medicineId: updatedMedicine._id,
-    isBestOffer: updatedMedicine.isBestOffer
-  });
-
-  return updatedMedicine;
 };
 
-// Update medicine health category and type
+/**
+ * Update medicine health category and type
+ */
 exports.updateMedicineHealthRelation = async (medicineId, data, userId) => {
-  if (!mongoose.Types.ObjectId.isValid(medicineId)) {
-    throw new AppError('Invalid medicine ID', 400);
-  }
+  ensureValidObjectId(medicineId, 'medicine ID');
 
   const medicine = await Medicine.findById(medicineId);
   
@@ -871,9 +509,7 @@ exports.updateMedicineHealthRelation = async (medicineId, data, userId) => {
 
   // Validate healthCategory if provided
   if (data.healthCategory) {
-    if (!mongoose.Types.ObjectId.isValid(data.healthCategory)) {
-      throw new AppError('Invalid health category ID', 400);
-    }
+    ensureValidObjectId(data.healthCategory, 'health category ID');
 
     const healthCategory = await HealthCategory.findById(data.healthCategory);
     if (!healthCategory || !healthCategory.isActive) {
@@ -885,7 +521,6 @@ exports.updateMedicineHealthRelation = async (medicineId, data, userId) => {
 
   // Validate healthTypeSlug if provided
   if (data.healthTypeSlug) {
-    // Verify the type exists in the health category
     if (medicine.healthCategory) {
       const healthCategory = await HealthCategory.findById(medicine.healthCategory);
       if (healthCategory) {
@@ -911,9 +546,6 @@ exports.updateMedicineHealthRelation = async (medicineId, data, userId) => {
   });
 
   return await Medicine.findById(medicine._id)
-    .populate({
-      path: 'healthCategory',
-      select: 'name slug description icon types'
-    })
+    .populate(MEDICINE_HEALTH_CATEGORY_FULL_POPULATE)
     .lean();
 };

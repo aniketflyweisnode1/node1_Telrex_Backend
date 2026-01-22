@@ -1,95 +1,58 @@
-const Footer = require('../../models/Footer.model');
-const AppError = require('../../utils/AppError');
+/**
+ * Footer Service - Refactored with helpers for optimized queries
+ * Maintains exact same API responses for backward compatibility
+ * Uses optimized single-query operations for minimum response time
+ */
+
 const logger = require('../../utils/logger');
+const {
+  LAST_EDITED_BY_POPULATE,
+  checkDuplicateSection,
+  getAllSectionsOptimized,
+  getSectionByIdOptimized,
+  getSectionByNameOptimized,
+  findByIdAndUpdatePopulate,
+  findByNameAndUpdatePopulate,
+  updateSectionStatus,
+  createSectionWithPopulate,
+  deleteSectionById
+} = require('../../helpers/footer.helper');
 
-// Get all footer sections
+// ============ READ OPERATIONS (Optimized) ============
+
+/**
+ * Get all footer sections
+ * Uses single optimized query with filter, sort, and populate
+ */
 exports.getAllFooterSections = async (query = {}, isPublic = false) => {
-  const { status, sortBy = 'order', sortOrder = 'asc' } = query;
-
-  const filter = {};
-  
-  // For public access, only return published sections
-  if (isPublic) {
-    filter.status = 'published';
-  } else if (status) {
-    // For admin, allow filtering by status
-    filter.status = status;
-  }
-
-  const sort = {};
-  sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
-
-  const sections = await Footer.find(filter)
-    .populate({
-      path: 'lastEditedBy',
-      select: 'firstName lastName email'
-    })
-    .sort(sort)
-    .lean();
-
+  const sections = await getAllSectionsOptimized(query, isPublic);
   return sections;
 };
 
-// Get footer section by section name
+/**
+ * Get footer section by section name
+ * Returns null instead of throwing - allows frontend to handle gracefully
+ */
 exports.getFooterSectionBySection = async (sectionName, isPublic = false) => {
-  const filter = { section: sectionName };
-  
-  // For public access, only return published sections
-  if (isPublic) {
-    filter.status = 'published';
-  }
-  // For admin access, return section regardless of status (no status filter)
-
-  const section = await Footer.findOne(filter)
-    .populate({
-      path: 'lastEditedBy',
-      select: 'firstName lastName email'
-    })
-    .lean();
-
-  // Return null if section not found (instead of throwing error)
-  // This allows frontend to handle gracefully
-  return section || null;
+  return await getSectionByNameOptimized(sectionName, isPublic);
 };
 
-// Get footer section by ID
+/**
+ * Get footer section by ID
+ * Returns null instead of throwing - allows frontend to handle gracefully
+ */
 exports.getFooterSectionById = async (sectionId, isPublic = false) => {
-  const query = Footer.findById(sectionId);
-  
-  // For public access, only return published sections
-  if (isPublic) {
-    query.where('status').equals('published');
-  }
-
-  const section = await query
-    .populate({
-      path: 'lastEditedBy',
-      select: 'firstName lastName email'
-    })
-    .lean();
-
-  // Return null instead of throwing error - allows frontend to handle gracefully
-  if (!section) {
-    return null;
-  }
-
-  return section;
+  return await getSectionByIdOptimized(sectionId, isPublic);
 };
 
-// Create footer section
+// ============ CREATE OPERATION (Optimized) ============
+
+/**
+ * Create footer section
+ * Uses createSectionWithPopulate for single transaction
+ */
 exports.createFooterSection = async (data, userId) => {
-  // Check if section already exists
-  const existingSection = await Footer.findOne({ section: data.section });
-  if (existingSection) {
-    throw new AppError(`Footer section '${data.section}' already exists`, 409);
-  }
-
-  const sectionData = {
-    ...data,
-    lastEditedBy: userId
-  };
-
-  const section = await Footer.create(sectionData);
+  const section = await createSectionWithPopulate(data, userId);
 
   logger.info('Footer section created', {
     sectionId: section._id,
@@ -97,38 +60,22 @@ exports.createFooterSection = async (data, userId) => {
     createdBy: userId
   });
 
-  return await Footer.findById(section._id)
-    .populate({
-      path: 'lastEditedBy',
-      select: 'firstName lastName email'
-    })
-    .lean();
+  return section;
 };
 
-// Update footer section
+// ============ UPDATE OPERATIONS (Optimized) ============
+
+/**
+ * Update footer section by ID
+ * Uses findByIdAndUpdatePopulate for single query operation
+ */
 exports.updateFooterSection = async (sectionId, data, userId) => {
-  const section = await Footer.findById(sectionId);
-  if (!section) {
-    throw new AppError('Footer section not found', 404);
+  // Check duplicate if section name is being changed
+  if (data.section) {
+    await checkDuplicateSection(data.section, sectionId);
   }
 
-  // If section name is being changed, check for duplicates
-  if (data.section && data.section !== section.section) {
-    const existingSection = await Footer.findOne({ section: data.section });
-    if (existingSection) {
-      throw new AppError(`Footer section '${data.section}' already exists`, 409);
-    }
-  }
-
-  // Update fields
-  Object.keys(data).forEach(key => {
-    if (data[key] !== undefined) {
-      section[key] = data[key];
-    }
-  });
-
-  section.lastEditedBy = userId;
-  await section.save();
+  const section = await findByIdAndUpdatePopulate(sectionId, data, userId);
 
   logger.info('Footer section updated', {
     sectionId: section._id,
@@ -136,30 +83,15 @@ exports.updateFooterSection = async (sectionId, data, userId) => {
     updatedBy: userId
   });
 
-  return await Footer.findById(section._id)
-    .populate({
-      path: 'lastEditedBy',
-      select: 'firstName lastName email'
-    })
-    .lean();
+  return section;
 };
 
-// Update footer section by section name
+/**
+ * Update footer section by section name
+ * Uses findByNameAndUpdatePopulate for single query operation
+ */
 exports.updateFooterSectionBySection = async (sectionName, data, userId) => {
-  const section = await Footer.findOne({ section: sectionName });
-  if (!section) {
-    throw new AppError('Footer section not found', 404);
-  }
-
-  // Update fields
-  Object.keys(data).forEach(key => {
-    if (data[key] !== undefined && key !== 'section') {
-      section[key] = data[key];
-    }
-  });
-
-  section.lastEditedBy = userId;
-  await section.save();
+  const section = await findByNameAndUpdatePopulate(sectionName, data, userId);
 
   logger.info('Footer section updated by section name', {
     sectionId: section._id,
@@ -167,41 +99,33 @@ exports.updateFooterSectionBySection = async (sectionName, data, userId) => {
     updatedBy: userId
   });
 
-  return await Footer.findById(section._id)
-    .populate({
-      path: 'lastEditedBy',
-      select: 'firstName lastName email'
-    })
-    .lean();
+  return section;
 };
 
-// Delete footer section
-exports.deleteFooterSection = async (sectionId) => {
-  const section = await Footer.findById(sectionId);
-  if (!section) {
-    throw new AppError('Footer section not found', 404);
-  }
+// ============ DELETE OPERATION (Optimized) ============
 
-  await Footer.findByIdAndDelete(sectionId);
+/**
+ * Delete footer section
+ * Uses findByIdAndDelete for single query operation
+ */
+exports.deleteFooterSection = async (sectionId) => {
+  const result = await deleteSectionById(sectionId);
 
   logger.info('Footer section deleted', {
-    sectionId: section._id,
-    section: section.section
+    deletedSection: result.deletedSection
   });
 
-  return { message: 'Footer section deleted successfully' };
+  return result;
 };
 
-// Publish footer section
-exports.publishFooterSection = async (sectionId, userId) => {
-  const section = await Footer.findById(sectionId);
-  if (!section) {
-    throw new AppError('Footer section not found', 404);
-  }
+// ============ STATUS OPERATIONS (Optimized) ============
 
-  section.status = 'published';
-  section.lastEditedBy = userId;
-  await section.save();
+/**
+ * Publish footer section
+ * Uses updateSectionStatus for single query operation
+ */
+exports.publishFooterSection = async (sectionId, userId) => {
+  const section = await updateSectionStatus(sectionId, 'published', userId);
 
   logger.info('Footer section published', {
     sectionId: section._id,
@@ -209,24 +133,15 @@ exports.publishFooterSection = async (sectionId, userId) => {
     publishedBy: userId
   });
 
-  return await Footer.findById(section._id)
-    .populate({
-      path: 'lastEditedBy',
-      select: 'firstName lastName email'
-    })
-    .lean();
+  return section;
 };
 
-// Save as draft
+/**
+ * Save as draft
+ * Uses updateSectionStatus for single query operation
+ */
 exports.saveAsDraft = async (sectionId, userId) => {
-  const section = await Footer.findById(sectionId);
-  if (!section) {
-    throw new AppError('Footer section not found', 404);
-  }
-
-  section.status = 'draft';
-  section.lastEditedBy = userId;
-  await section.save();
+  const section = await updateSectionStatus(sectionId, 'draft', userId);
 
   logger.info('Footer section saved as draft', {
     sectionId: section._id,
@@ -234,11 +149,5 @@ exports.saveAsDraft = async (sectionId, userId) => {
     savedBy: userId
   });
 
-  return await Footer.findById(section._id)
-    .populate({
-      path: 'lastEditedBy',
-      select: 'firstName lastName email'
-    })
-    .lean();
+  return section;
 };
-

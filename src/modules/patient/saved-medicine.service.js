@@ -1,130 +1,110 @@
+/**
+ * Saved Medicine Service
+ * Refactored to use shared helpers
+ */
+
 const SavedMedicine = require('../../models/SavedMedicine.model');
 const Medicine = require('../../models/Medicine.model');
-const Patient = require('../../models/Patient.model');
 const AppError = require('../../utils/AppError');
+const { getPatient, parsePagination, buildPaginationResponse } = require('../../helpers');
 
-// Helper function to get or create patient
-async function getPatient(userId) {
-  const patient = await Patient.findOne({ user: userId });
-  if (!patient) {
-    throw new AppError('Patient profile not found', 404);
+// Medicine populate options
+const MEDICINE_POPULATE = {
+  path: 'medicine',
+  select: 'productName brand originalPrice salePrice images description generics dosageOptions quantityOptions category stock status visibility isActive healthCategory healthTypeSlug isTrendy isBestOffer discountPercentage views',
+  populate: {
+    path: 'healthCategory',
+    select: 'name slug description icon types',
+    match: { isActive: true }
   }
-  return patient;
-}
+};
 
-// Save medicine
+/**
+ * Save medicine to favorites
+ */
 exports.saveMedicine = async (userId, medicineId) => {
   const patient = await getPatient(userId);
   
-  // Check if medicine exists and is active
-  const medicine = await Medicine.findOne({
-    _id: medicineId,
-    isActive: true,
-    visibility: true
-  });
+  // Check medicine exists AND not already saved in parallel
+  const [medicine, existingSaved] = await Promise.all([
+    Medicine.findOne({ _id: medicineId, isActive: true, visibility: true })
+      .select('_id')
+      .lean(),
+    SavedMedicine.exists({ patient: patient._id, medicine: medicineId })
+  ]);
   
-  if (!medicine) {
-    throw new AppError('Medicine not found or not available', 404);
-  }
+  if (!medicine) throw new AppError('Medicine not found or not available', 404);
+  if (existingSaved) throw new AppError('Medicine is already saved', 409);
   
-  // Check if already saved
-  const existingSaved = await SavedMedicine.findOne({
-    patient: patient._id,
-    medicine: medicineId
-  });
-  
-  if (existingSaved) {
-    throw new AppError('Medicine is already saved', 409);
-  }
-  
-  // Save medicine
+  // Create and return with populated data
   const savedMedicine = await SavedMedicine.create({
     patient: patient._id,
     medicine: medicineId
   });
   
-  // Populate and return
   return await SavedMedicine.findById(savedMedicine._id)
-    .populate({
-      path: 'medicine',
-      select: 'productName brand originalPrice salePrice images description generics dosageOptions quantityOptions category stock status visibility isActive healthCategory healthTypeSlug isTrendy isBestOffer discountPercentage',
-      populate: {
-        path: 'healthCategory',
-        select: 'name slug description icon types',
-        match: { isActive: true }
-      }
-    })
+    .populate(MEDICINE_POPULATE)
     .lean();
 };
 
-// Unsave medicine (remove from saved)
+/**
+ * Remove medicine from favorites
+ */
 exports.unsaveMedicine = async (userId, medicineId) => {
   const patient = await getPatient(userId);
   
-  const savedMedicine = await SavedMedicine.findOneAndDelete({
+  const result = await SavedMedicine.findOneAndDelete({
     patient: patient._id,
     medicine: medicineId
   });
   
-  if (!savedMedicine) {
-    throw new AppError('Saved medicine not found', 404);
-  }
+  if (!result) throw new AppError('Saved medicine not found', 404);
   
   return { message: 'Medicine removed from saved list successfully' };
 };
 
-// Get all saved medicines for patient
+/**
+ * Get all saved medicines with pagination
+ */
 exports.getSavedMedicines = async (userId, query = {}) => {
   const patient = await getPatient(userId);
-  
-  const page = parseInt(query.page) || 1;
-  const limit = parseInt(query.limit) || 20;
-  const skip = (page - 1) * limit;
+  const { page, limit, skip } = parsePagination(query, { limit: 20 });
   
   const filter = { patient: patient._id };
   
-  // Find saved medicines with pagination
-  const savedMedicines = await SavedMedicine.find(filter)
-    .populate({
-      path: 'medicine',
-      select: 'productName brand originalPrice salePrice images description generics dosageOptions quantityOptions category stock status visibility isActive healthCategory healthTypeSlug isTrendy isBestOffer discountPercentage views',
-      populate: {
-        path: 'healthCategory',
-        select: 'name slug description icon types',
-        match: { isActive: true }
-      },
-      match: { isActive: true, visibility: true }
-    })
-    .sort({ createdAt: -1 })
-    .skip(skip)
-    .limit(limit)
-    .lean();
+  // Run count and find in parallel
+  const [total, savedMedicines] = await Promise.all([
+    SavedMedicine.countDocuments(filter),
+    SavedMedicine.find(filter)
+      .populate({
+        ...MEDICINE_POPULATE,
+        match: { isActive: true, visibility: true }
+      })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean()
+  ]);
   
-  // Filter out null medicines (if medicine was deleted or made inactive)
+  // Filter out null medicines (deleted/inactive)
   const validSavedMedicines = savedMedicines.filter(item => item.medicine !== null);
-  
-  const total = await SavedMedicine.countDocuments(filter);
   
   return {
     savedMedicines: validSavedMedicines,
-    pagination: {
-      page,
-      limit,
-      total,
-      pages: Math.ceil(total / limit)
-    }
+    pagination: buildPaginationResponse(total, page, limit)
   };
 };
 
-// Check if medicine is saved
+/**
+ * Check if medicine is saved
+ */
 exports.isMedicineSaved = async (userId, medicineId) => {
   const patient = await getPatient(userId);
   
-  const savedMedicine = await SavedMedicine.findOne({
+  const isSaved = await SavedMedicine.exists({
     patient: patient._id,
     medicine: medicineId
   });
   
-  return { isSaved: !!savedMedicine };
+  return { isSaved: !!isSaved };
 };
-

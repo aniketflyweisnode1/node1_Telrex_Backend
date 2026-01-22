@@ -1,48 +1,41 @@
+/**
+ * Doctor Consultations Service
+ * Refactored to use shared helpers
+ */
+
 const IntakeForm = require('../../models/IntakeForm.model');
 const Patient = require('../../models/Patient.model');
 const User = require('../../models/User.model');
-const Doctor = require('../../models/Doctor.model');
 const mongoose = require('mongoose');
 const AppError = require('../../utils/AppError');
+const {
+  getDoctor,
+  getDoctorById,
+  ensureObjectId,
+  formatConsultation,
+  parsePagination,
+  buildPaginationResponse,
+  calculateAge
+} = require('../../helpers');
 
-// Get doctor from userId
-const getDoctor = async (userId) => {
-  const doctor = await Doctor.findOne({ user: userId });
-  if (!doctor) {
-    throw new AppError('Doctor profile not found. Please contact an administrator to create your doctor profile.', 404);
-  }
-  return doctor;
-};
-
-// Get all consultations (no doctor filter - for admin)
+/**
+ * Get all consultations (no doctor filter - for admin)
+ */
 exports.getAllConsultations = async (query = {}) => {
-  const page = parseInt(query.page) || 1;
-  const limit = parseInt(query.limit) || 10;
-  const skip = (page - 1) * limit;
-
-  // Build filter - no doctor filter, show all consultations
+  const { page, limit, skip } = parsePagination(query);
   const filter = {};
 
   // Filter by doctor if provided
-  if (query.doctorId) {
-    filter.doctor = query.doctorId;
-  }
+  if (query.doctorId) filter.doctor = query.doctorId;
 
   // Filter by status
   if (query.status) {
-    if (query.status === 'pending') {
-      filter.status = 'submitted'; // Pending = submitted but not reviewed
-    } else {
-      filter.status = query.status;
-    }
+    filter.status = query.status === 'pending' ? 'submitted' : query.status;
   }
-  // No default status filter for admin - show all consultations
 
-  // Search by patient name or condition/symptoms
+  // Search
   if (query.search) {
     const searchRegex = new RegExp(query.search, 'i');
-    
-    // Get users matching the search
     const matchingUsers = await User.find({
       $or: [
         { firstName: searchRegex },
@@ -51,130 +44,44 @@ exports.getAllConsultations = async (query = {}) => {
       ]
     }).distinct('_id');
 
-    // Get patients for matching users
-    const patients = await Patient.find({
-      user: { $in: matchingUsers }
-    }).distinct('_id');
-
-    // Also search in medical questions (symptoms, conditions) and basic information
+    const patients = await Patient.find({ user: { $in: matchingUsers } }).distinct('_id');
+    
     const intakeFormsByMedical = await IntakeForm.find({
-      ...(query.doctorId ? { doctor: query.doctorId } : {}), // Doctor filter only if provided
+      ...(query.doctorId ? { doctor: query.doctorId } : {}),
       $or: [
         { 'medicalQuestions.pastMedicalHistory': searchRegex },
         { 'medicalQuestions.currentMedications': searchRegex },
         { 'basicInformation.firstName': searchRegex },
-        { 'basicInformation.lastName': searchRegex },
-        { 'basicInformation.email': searchRegex }
+        { 'basicInformation.lastName': searchRegex }
       ]
     }).distinct('patient');
 
-    // Combine all patient IDs
     const allPatientIds = [...new Set([...patients, ...intakeFormsByMedical])];
-    
-    if (allPatientIds.length > 0) {
-      filter.patient = { $in: allPatientIds };
-    } else {
-      // If no matches, return empty result
-      filter.patient = { $in: [] };
-    }
+    filter.patient = allPatientIds.length > 0 ? { $in: allPatientIds } : { $in: [] };
   }
 
-  // Get consultations with patient and doctor information
+  // Query with populations
   const consultations = await IntakeForm.find(filter)
     .populate({
       path: 'patient',
-      select: 'user dateOfBirth gender bloodGroup height weight medicalHistory allergies emergencyContact profilePicture',
-      populate: {
-        path: 'user',
-        select: 'firstName lastName email phoneNumber countryCode profilePicture'
-      }
+      select: 'user dateOfBirth gender bloodGroup profilePicture',
+      populate: { path: 'user', select: 'firstName lastName email phoneNumber countryCode profilePicture' }
     })
     .populate({
       path: 'doctor',
       select: 'user specialty',
-      populate: {
-        path: 'user',
-        select: 'firstName lastName'
-      }
+      populate: { path: 'user', select: 'firstName lastName' }
     })
     .sort({ createdAt: -1 })
-    .limit(limit)
     .skip(skip)
+    .limit(limit)
     .lean();
 
   // Format consultations
   const formattedConsultations = consultations.map(form => {
-    const patient = form.patient?.user;
-    const patientName = patient 
-      ? `${patient.firstName || ''} ${patient.lastName || ''}`.trim() 
-      : 'Unknown Patient';
-    
-    // Calculate age from dateOfBirth (check both patient model and basicInformation)
-    let age = null;
-    const dateOfBirth = form.patient?.dateOfBirth || form.basicInformation?.dateOfBirth;
-    if (dateOfBirth) {
-      const birthDate = new Date(dateOfBirth);
-      const today = new Date();
-      age = today.getFullYear() - birthDate.getFullYear();
-      const monthDiff = today.getMonth() - birthDate.getMonth();
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
-    }
-
-    // Get condition/symptoms from medical questions
-    const condition = form.medicalQuestions?.pastMedicalHistory?.join(', ') || 
-                     form.medicalQuestions?.currentMedications?.join(', ') || 
-                     'Not specified';
-    
-    const symptoms = form.medicalQuestions?.pastMedicalHistory?.slice(0, 2).join(', ') || 
-                    'No symptoms listed';
-
-    // Format submitted date
-    const submittedDate = new Date(form.createdAt);
-    const formattedDate = submittedDate.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    });
-    const formattedTime = submittedDate.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    });
-
-    return {
-      id: form._id,
-      patient: {
-        id: form.patient?._id,
-        name: patientName,
-        age: age,
-        gender: form.patient?.gender || form.basicInformation?.sex || 'Not specified',
-        email: patient?.email || form.basicInformation?.email,
-        phone: patient?.phoneNumber || form.basicInformation?.phone,
-        countryCode: patient?.countryCode || '+91',
-        profilePicture: patient?.profilePicture || null
-      },
-      condition: condition,
-      symptoms: symptoms,
-      status: form.status === 'submitted' ? 'pending' : form.status,
-      submittedAt: `${formattedDate} ${formattedTime}`,
-      submittedDate: form.createdAt,
-      intakeForm: {
-        basicInfoComplete: form.basicInformation?.isBasicInfoComplete || false,
-        emergencyContactComplete: form.emergencyContact?.isEmergencyContactComplete || false,
-        medicalQuestionsComplete: form.medicalQuestions?.isMedicalQuestionsComplete || false
-      }
-    };
-  });
-
-  const total = await IntakeForm.countDocuments(filter);
-
-  // Add doctor information to formatted consultations
-  formattedConsultations.forEach((consultation, index) => {
-    const form = consultations[index];
-    if (form?.doctor) {
-      consultation.doctor = {
+    const formatted = formatConsultation(form);
+    if (form.doctor) {
+      formatted.doctor = {
         id: form.doctor._id,
         name: form.doctor.user 
           ? `${form.doctor.user.firstName || ''} ${form.doctor.user.lastName || ''}`.trim()
@@ -182,456 +89,133 @@ exports.getAllConsultations = async (query = {}) => {
         specialty: form.doctor.specialty
       };
     }
+    return formatted;
   });
+
+  const total = await IntakeForm.countDocuments(filter);
 
   return {
     consultations: formattedConsultations,
-    pagination: {
-      page,
-      limit,
-      total,
-      pages: Math.ceil(total / limit)
-    }
+    pagination: buildPaginationResponse(total, page, limit)
   };
 };
 
-// Get consultations by doctor ID (path parameter - public access)
+/**
+ * Get consultations by doctor ID (path parameter)
+ */
 exports.getConsultationsByDoctorId = async (doctorId, query = {}) => {
-  // Convert doctorId to ObjectId if valid
-  let doctorObjectId = null;
-  if (mongoose.Types.ObjectId.isValid(doctorId)) {
-    doctorObjectId = new mongoose.Types.ObjectId(doctorId);
-  } else {
-    throw new AppError('Invalid doctor ID', 400);
-  }
-
+  const doctorObjectId = ensureObjectId(doctorId);
+  
   // Verify doctor exists
-  const doctor = await Doctor.findById(doctorObjectId);
-  if (!doctor) {
-    throw new AppError('Doctor not found', 404);
-  }
+  await getDoctorById(doctorId);
 
-  const page = parseInt(query.page) || 1;
-  const limit = parseInt(query.limit) || 10;
-  const skip = (page - 1) * limit;
+  const { page, limit, skip } = parsePagination(query);
+  const filter = { doctor: doctorObjectId };
 
-  // Build filter - sirf us doctor ke consultations dikhao
-  const filter = {
-    doctor: doctorObjectId // Is doctor ke saath linked consultations
-  };
+  // Status filter
+  filter.status = query.status === 'pending' || !query.status ? 'submitted' : query.status;
 
-  // Filter by status
-  if (query.status) {
-    if (query.status === 'pending') {
-      filter.status = 'submitted'; // Pending = submitted but not reviewed
-    } else {
-      filter.status = query.status;
-    }
-  } else {
-    // Default: show submitted (pending) consultations
-    filter.status = 'submitted';
-  }
-
-  // Search by patient name or condition/symptoms
+  // Search
   if (query.search) {
     const searchRegex = new RegExp(query.search, 'i');
-    
-    // Get users matching the search
     const matchingUsers = await User.find({
-      $or: [
-        { firstName: searchRegex },
-        { lastName: searchRegex },
-        { email: searchRegex }
-      ]
+      $or: [{ firstName: searchRegex }, { lastName: searchRegex }, { email: searchRegex }]
     }).distinct('_id');
 
-    // Get patients for matching users
-    const patients = await Patient.find({
-      user: { $in: matchingUsers }
-    }).distinct('_id');
-
-    // Also search in medical questions (symptoms, conditions) and basic information
+    const patients = await Patient.find({ user: { $in: matchingUsers } }).distinct('_id');
+    
     const intakeFormsByMedical = await IntakeForm.find({
-      doctor: doctorObjectId, // Doctor filter bhi lagao
+      doctor: doctorObjectId,
       $or: [
         { 'medicalQuestions.pastMedicalHistory': searchRegex },
-        { 'medicalQuestions.currentMedications': searchRegex },
         { 'basicInformation.firstName': searchRegex },
-        { 'basicInformation.lastName': searchRegex },
-        { 'basicInformation.email': searchRegex }
+        { 'basicInformation.lastName': searchRegex }
       ]
     }).distinct('patient');
 
-    // Combine all patient IDs
     const allPatientIds = [...new Set([...patients, ...intakeFormsByMedical])];
-    
-    if (allPatientIds.length > 0) {
-      filter.patient = { $in: allPatientIds };
-    } else {
-      // If no matches, return empty result
-      filter.patient = { $in: [] };
-    }
+    filter.patient = allPatientIds.length > 0 ? { $in: allPatientIds } : { $in: [] };
   }
 
-  // Get consultations with patient and doctor information
   const consultations = await IntakeForm.find(filter)
     .populate({
       path: 'patient',
-      select: 'user dateOfBirth gender bloodGroup height weight medicalHistory allergies emergencyContact profilePicture',
-      populate: {
-        path: 'user',
-        select: 'firstName lastName email phoneNumber countryCode profilePicture'
-      }
+      select: 'user dateOfBirth gender profilePicture',
+      populate: { path: 'user', select: 'firstName lastName email phoneNumber countryCode profilePicture' }
     })
     .populate({
       path: 'doctor',
       select: 'user specialty',
-      populate: {
-        path: 'user',
-        select: 'firstName lastName'
-      }
+      populate: { path: 'user', select: 'firstName lastName' }
     })
     .sort({ createdAt: -1 })
-    .limit(limit)
     .skip(skip)
+    .limit(limit)
     .lean();
 
-  // Format consultations (same formatting logic as other methods)
   const formattedConsultations = consultations.map(form => {
-    const patient = form.patient?.user;
-    const patientName = patient 
-      ? `${patient.firstName || ''} ${patient.lastName || ''}`.trim() 
-      : 'Unknown Patient';
-    
-    // Calculate age from dateOfBirth (check both patient model and basicInformation)
-    let age = null;
-    const dateOfBirth = form.patient?.dateOfBirth || form.basicInformation?.dateOfBirth;
-    if (dateOfBirth) {
-      const birthDate = new Date(dateOfBirth);
-      const today = new Date();
-      age = today.getFullYear() - birthDate.getFullYear();
-      const monthDiff = today.getMonth() - birthDate.getMonth();
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
+    const formatted = formatConsultation(form);
+    if (form.doctor) {
+      formatted.doctor = {
+        id: form.doctor._id,
+        name: form.doctor.user ? `${form.doctor.user.firstName || ''} ${form.doctor.user.lastName || ''}`.trim() : 'Unknown',
+        specialty: form.doctor.specialty
+      };
     }
-
-    // Get condition/symptoms from medical questions
-    const condition = form.medicalQuestions?.pastMedicalHistory?.join(', ') || 
-                     form.medicalQuestions?.currentMedications?.join(', ') || 
-                     'Not specified';
-    
-    const symptoms = form.medicalQuestions?.pastMedicalHistory?.slice(0, 2).join(', ') || 
-                    'No symptoms listed';
-
-    // Format submitted date
-    const submittedDate = new Date(form.createdAt);
-    const formattedDate = submittedDate.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    });
-    const formattedTime = submittedDate.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    });
-
-    return {
-      id: form._id,
-      patient: {
-        id: form.patient?._id,
-        name: patientName,
-        age: age,
-        gender: form.patient?.gender || form.basicInformation?.sex || 'Not specified',
-        email: patient?.email || form.basicInformation?.email,
-        phone: patient?.phoneNumber || form.basicInformation?.phone,
-        countryCode: patient?.countryCode || '+91',
-        profilePicture: patient?.profilePicture || null
-      },
-      condition: condition,
-      symptoms: symptoms,
-      status: form.status === 'submitted' ? 'pending' : form.status,
-      submittedAt: `${formattedDate} ${formattedTime}`,
-      submittedDate: form.createdAt,
-      intakeForm: {
-        basicInfoComplete: form.basicInformation?.isBasicInfoComplete || false,
-        emergencyContactComplete: form.emergencyContact?.isEmergencyContactComplete || false,
-        medicalQuestionsComplete: form.medicalQuestions?.isMedicalQuestionsComplete || false
-      }
-    };
+    return formatted;
   });
 
   const total = await IntakeForm.countDocuments(filter);
 
-  // Add doctor information to formatted consultations
-  formattedConsultations.forEach((consultation, index) => {
-    const form = consultations[index];
-    if (form?.doctor) {
-      consultation.doctor = {
-        id: form.doctor._id,
-        name: form.doctor.user 
-          ? `${form.doctor.user.firstName || ''} ${form.doctor.user.lastName || ''}`.trim()
-          : 'Unknown Doctor',
-        specialty: form.doctor.specialty
-      };
-    }
-  });
-
   return {
     consultations: formattedConsultations,
-    pagination: {
-      page,
-      limit,
-      total,
-      pages: Math.ceil(total / limit)
-    }
+    pagination: buildPaginationResponse(total, page, limit)
   };
 };
 
-// Get consultations by doctor (filters by specific doctor)
+/**
+ * Get consultations by logged-in doctor
+ */
 exports.getConsultationsByDoctor = async (userId, query = {}) => {
-  // Token se doctor ko identify karo
-  const doctor = await getDoctor(userId); // Verify doctor exists and get doctor ID
-  const doctorId = doctor._id; // Doctor ka ObjectId
-
-  const page = parseInt(query.page) || 1;
-  const limit = parseInt(query.limit) || 10;
-  const skip = (page - 1) * limit;
-
-  // Build filter - sirf us doctor ke consultations dikhao jinke paas intake form aaya hai
-  const filter = {
-    doctor: doctorId // Is doctor ke saath linked consultations
-  };
-
-  // Filter by status
-  if (query.status) {
-    if (query.status === 'pending') {
-      filter.status = 'submitted'; // Pending = submitted but not reviewed
-    } else {
-      filter.status = query.status;
-    }
-  } else {
-    // Default: show submitted (pending) consultations
-    filter.status = 'submitted';
-  }
-
-  // Search by patient name or condition/symptoms
-  if (query.search) {
-    const searchRegex = new RegExp(query.search, 'i');
-    
-    // Get users matching the search
-    const matchingUsers = await User.find({
-      $or: [
-        { firstName: searchRegex },
-        { lastName: searchRegex },
-        { email: searchRegex }
-      ]
-    }).distinct('_id');
-
-    // Get patients for matching users
-    const patients = await Patient.find({
-      user: { $in: matchingUsers }
-    }).distinct('_id');
-
-    // Also search in medical questions (symptoms, conditions) and basic information
-    // Important: Search me bhi doctor filter lagao taaki sirf is doctor ke consultations search ho
-    const intakeFormsByMedical = await IntakeForm.find({
-      doctor: doctorId, // Doctor filter bhi lagao
-      $or: [
-        { 'medicalQuestions.pastMedicalHistory': searchRegex },
-        { 'medicalQuestions.currentMedications': searchRegex },
-        { 'basicInformation.firstName': searchRegex },
-        { 'basicInformation.lastName': searchRegex },
-        { 'basicInformation.email': searchRegex }
-      ]
-    }).distinct('patient');
-
-    // Combine all patient IDs
-    const allPatientIds = [...new Set([...patients, ...intakeFormsByMedical])];
-    
-    if (allPatientIds.length > 0) {
-      filter.patient = { $in: allPatientIds };
-    } else {
-      // If no matches, return empty result
-      filter.patient = { $in: [] };
-    }
-  }
-
-  // Get consultations with patient and doctor information
-  const consultations = await IntakeForm.find(filter)
-    .populate({
-      path: 'patient',
-      select: 'user dateOfBirth gender bloodGroup height weight medicalHistory allergies emergencyContact profilePicture',
-      populate: {
-        path: 'user',
-        select: 'firstName lastName email phoneNumber countryCode profilePicture'
-      }
-    })
-    .populate({
-      path: 'doctor',
-      select: 'user specialty',
-      populate: {
-        path: 'user',
-        select: 'firstName lastName'
-      }
-    })
-    .sort({ createdAt: -1 })
-    .limit(limit)
-    .skip(skip)
-    .lean();
-
-  // Format consultations (same formatting logic as getAllConsultations)
-  const formattedConsultations = consultations.map(form => {
-    const patient = form.patient?.user;
-    const patientName = patient 
-      ? `${patient.firstName || ''} ${patient.lastName || ''}`.trim() 
-      : 'Unknown Patient';
-    
-    // Calculate age from dateOfBirth (check both patient model and basicInformation)
-    let age = null;
-    const dateOfBirth = form.patient?.dateOfBirth || form.basicInformation?.dateOfBirth;
-    if (dateOfBirth) {
-      const birthDate = new Date(dateOfBirth);
-      const today = new Date();
-      age = today.getFullYear() - birthDate.getFullYear();
-      const monthDiff = today.getMonth() - birthDate.getMonth();
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
-    }
-
-    // Get condition/symptoms from medical questions
-    const condition = form.medicalQuestions?.pastMedicalHistory?.join(', ') || 
-                     form.medicalQuestions?.currentMedications?.join(', ') || 
-                     'Not specified';
-    
-    const symptoms = form.medicalQuestions?.pastMedicalHistory?.slice(0, 2).join(', ') || 
-                    'No symptoms listed';
-
-    // Format submitted date
-    const submittedDate = new Date(form.createdAt);
-    const formattedDate = submittedDate.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    });
-    const formattedTime = submittedDate.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    });
-
-    return {
-      id: form._id,
-      patient: {
-        id: form.patient?._id,
-        name: patientName,
-        age: age,
-        gender: form.patient?.gender || form.basicInformation?.sex || 'Not specified',
-        email: patient?.email || form.basicInformation?.email,
-        phone: patient?.phoneNumber || form.basicInformation?.phone,
-        countryCode: patient?.countryCode || '+91',
-        profilePicture: patient?.profilePicture || null
-      },
-      condition: condition,
-      symptoms: symptoms,
-      status: form.status === 'submitted' ? 'pending' : form.status,
-      submittedAt: `${formattedDate} ${formattedTime}`,
-      submittedDate: form.createdAt,
-      intakeForm: {
-        basicInfoComplete: form.basicInformation?.isBasicInfoComplete || false,
-        emergencyContactComplete: form.emergencyContact?.isEmergencyContactComplete || false,
-        medicalQuestionsComplete: form.medicalQuestions?.isMedicalQuestionsComplete || false
-      }
-    };
-  });
-
-  const total = await IntakeForm.countDocuments(filter);
-
-  // Add doctor information to formatted consultations
-  formattedConsultations.forEach((consultation, index) => {
-    const form = consultations[index];
-    if (form?.doctor) {
-      consultation.doctor = {
-        id: form.doctor._id,
-        name: form.doctor.user 
-          ? `${form.doctor.user.firstName || ''} ${form.doctor.user.lastName || ''}`.trim()
-          : 'Unknown Doctor',
-        specialty: form.doctor.specialty
-      };
-    }
-  });
-
-  return {
-    consultations: formattedConsultations,
-    pagination: {
-      page,
-      limit,
-      total,
-      pages: Math.ceil(total / limit)
-    }
-  };
+  const doctor = await getDoctor(userId);
+  return this.getConsultationsByDoctorId(doctor._id, query);
 };
 
-// Get consultation by ID (detailed intake form)
+/**
+ * Get consultation by ID
+ */
 exports.getConsultationById = async (userId, consultationId, doctorIdFromQuery = null) => {
   let doctorId = null;
   
-  // If userId provided, verify doctor and get doctor ID
   if (userId) {
-    const doctor = await getDoctor(userId); // Verify doctor exists and get doctor ID
+    const doctor = await getDoctor(userId);
     doctorId = doctor._id;
   } else if (doctorIdFromQuery) {
-    // If doctorId provided in query params, convert to ObjectId
     doctorId = mongoose.Types.ObjectId.isValid(doctorIdFromQuery) 
       ? new mongoose.Types.ObjectId(doctorIdFromQuery)
       : doctorIdFromQuery;
   }
 
-  // Consultation ko find karo
-  // If doctorId is provided, verify consultation belongs to this doctor
-  // If not, return consultation directly (public access - no doctor filter)
-  const filter = {};
-  
-  // Convert consultationId to ObjectId if valid
-  if (mongoose.Types.ObjectId.isValid(consultationId)) {
-    filter._id = new mongoose.Types.ObjectId(consultationId);
-  } else {
-    filter._id = consultationId;
-  }
-  
-  // Add doctor filter only if doctorId is provided
-  if (doctorId) {
-    filter.doctor = doctorId; // Important: Verify consultation belongs to this doctor
-  }
-  
+  const filter = { _id: consultationId };
+  if (doctorId) filter.doctor = doctorId;
+
   const intakeForm = await IntakeForm.findOne(filter)
     .populate({
       path: 'patient',
       select: 'user dateOfBirth gender bloodGroup height weight medicalHistory allergies emergencyContact profilePicture',
-      populate: {
-        path: 'user',
-        select: 'firstName lastName email phoneNumber countryCode profilePicture'
-      }
+      populate: { path: 'user', select: 'firstName lastName email phoneNumber countryCode profilePicture' }
     })
     .populate({
       path: 'doctor',
-      select: 'user specialty licenseNumber consultationFee status rating experience education certifications languages availability address',
-      populate: {
-        path: 'user',
-        select: 'firstName lastName email phoneNumber countryCode profilePicture'
-      }
+      select: 'user specialty licenseNumber consultationFee status rating experience',
+      populate: { path: 'user', select: 'firstName lastName email phoneNumber profilePicture' }
     })
     .lean();
 
   if (!intakeForm) {
-    // More specific error message
-    if (doctorId) {
-      throw new AppError(`Consultation not found or does not belong to the specified doctor (doctorId: ${doctorId})`, 404);
-    } else {
-      throw new AppError(`Consultation not found with ID: ${consultationId}`, 404);
-    }
+    throw new AppError(doctorId 
+      ? `Consultation not found or does not belong to the specified doctor`
+      : `Consultation not found with ID: ${consultationId}`, 404);
   }
 
   const patient = intakeForm.patient?.user;
@@ -639,31 +223,11 @@ exports.getConsultationById = async (userId, consultationId, doctorIdFromQuery =
     ? `${patient.firstName || ''} ${patient.lastName || ''}`.trim() 
     : 'Unknown Patient';
 
-  // Calculate age (check both patient model and basicInformation)
-  let age = null;
+  // Calculate age
   const dateOfBirth = intakeForm.patient?.dateOfBirth || intakeForm.basicInformation?.dateOfBirth;
-  if (dateOfBirth) {
-    const birthDate = new Date(dateOfBirth);
-    const today = new Date();
-    age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-  }
+  const age = calculateAge(dateOfBirth);
 
-  // Format submitted date
   const submittedDate = new Date(intakeForm.createdAt);
-  const formattedDate = submittedDate.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  });
-  const formattedTime = submittedDate.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true
-  });
 
   return {
     id: intakeForm._id,
@@ -672,9 +236,9 @@ exports.getConsultationById = async (userId, consultationId, doctorIdFromQuery =
       name: patientName,
       firstName: patient?.firstName || intakeForm.basicInformation?.firstName,
       lastName: patient?.lastName || intakeForm.basicInformation?.lastName,
-      age: age,
+      age,
       gender: intakeForm.patient?.gender || intakeForm.basicInformation?.sex || 'Not specified',
-      dateOfBirth: intakeForm.patient?.dateOfBirth || intakeForm.basicInformation?.dateOfBirth,
+      dateOfBirth,
       email: patient?.email || intakeForm.basicInformation?.email,
       phone: patient?.phoneNumber || intakeForm.basicInformation?.phone,
       countryCode: patient?.countryCode || '+91',
@@ -701,16 +265,17 @@ exports.getConsultationById = async (userId, consultationId, doctorIdFromQuery =
       experience: intakeForm.doctor.experience
     } : null,
     status: intakeForm.status === 'submitted' ? 'pending' : intakeForm.status,
-    submittedAt: `${formattedDate} ${formattedTime}`,
+    submittedAt: `${submittedDate.toLocaleDateString('en-US')} ${submittedDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}`,
     submittedDate: intakeForm.createdAt,
     updatedAt: intakeForm.updatedAt
   };
 };
 
-// Update consultation status
+/**
+ * Update consultation status
+ */
 exports.updateConsultationStatus = async (userId, consultationId, status) => {
-  // Token se doctor ko identify karo
-  const doctor = await getDoctor(userId); // Verify doctor exists and get doctor ID
+  const doctor = await getDoctor(userId);
   const doctorId = doctor._id;
 
   const validStatuses = ['draft', 'submitted', 'reviewed'];
@@ -718,30 +283,15 @@ exports.updateConsultationStatus = async (userId, consultationId, status) => {
     throw new AppError('Invalid status. Must be one of: draft, submitted, reviewed', 400);
   }
 
-  // Update karte waqt verify karo ki consultation is doctor ki hai
   const intakeForm = await IntakeForm.findOneAndUpdate(
-    {
-      _id: consultationId,
-      doctor: doctorId // Important: Only update if consultation belongs to this doctor
-    },
+    { _id: consultationId, doctor: doctorId },
     { status },
     { new: true, runValidators: true }
   )
     .populate({
       path: 'patient',
       select: 'user',
-      populate: {
-        path: 'user',
-        select: 'firstName lastName email'
-      }
-    })
-    .populate({
-      path: 'doctor',
-      select: 'user specialty',
-      populate: {
-        path: 'user',
-        select: 'firstName lastName'
-      }
+      populate: { path: 'user', select: 'firstName lastName email' }
     });
 
   if (!intakeForm) {
@@ -754,4 +304,3 @@ exports.updateConsultationStatus = async (userId, consultationId, status) => {
     updatedAt: intakeForm.updatedAt
   };
 };
-

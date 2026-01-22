@@ -1,89 +1,85 @@
+/**
+ * Login History Service - Optimized for non-blocking operations
+ */
+
 const LoginHistory = require('../../models/LoginHistory.model');
 const AuditLog = require('../../models/AuditLog.model');
+const User = require('../../models/User.model');
 const { getClientInfo } = require('../../utils/getClientInfo');
+const { buildIdentifierOrQuery } = require('../../helpers');
 
 /**
- * Track successful login
+ * Track successful login (NON-BLOCKING)
  */
-exports.trackLogin = async (req, user, loginMethod = 'password') => {
-  try {
-    const clientInfo = getClientInfo(req);
-    const userId = user._id || user.id;
-
-    // Create login history
-    await LoginHistory.create({
-      user: userId,
-      loginMethod,
-      ipAddress: clientInfo.ipAddress,
-      userAgent: clientInfo.userAgent,
-      device: clientInfo.device,
-      browser: clientInfo.browser,
-      os: clientInfo.os,
-      status: 'success',
-      loginAt: new Date()
-    });
-
-    // Create audit log for login
+exports.trackLogin = (req, user, loginMethod = 'password') => {
+  setImmediate(async () => {
     try {
-      await AuditLog.create({
-        user: userId,
-        action: `Logged in via ${loginMethod}`,
-        resource: 'Authentication System',
-        resourceId: userId.toString(),
-        ipAddress: clientInfo.ipAddress,
-        userAgent: clientInfo.userAgent,
-        status: 'success',
-        metadata: {
-          loginMethod: loginMethod,
+      const clientInfo = getClientInfo(req);
+      const userId = user._id || user.id;
+
+      // Create both records in parallel
+      await Promise.all([
+        LoginHistory.create({
+          user: userId,
+          loginMethod,
+          ipAddress: clientInfo.ipAddress,
+          userAgent: clientInfo.userAgent,
           device: clientInfo.device,
           browser: clientInfo.browser,
           os: clientInfo.os,
-          role: user.role
-        },
-        timestamp: new Date()
-      });
-    } catch (auditError) {
-      // Don't break login flow if audit log creation fails
-      console.error('Failed to create audit log for login:', auditError.message);
+          status: 'success',
+          loginAt: new Date()
+        }),
+        AuditLog.create({
+          user: userId,
+          action: `Logged in via ${loginMethod}`,
+          resource: 'Authentication System',
+          resourceId: userId.toString(),
+          ipAddress: clientInfo.ipAddress,
+          userAgent: clientInfo.userAgent,
+          status: 'success',
+          metadata: {
+            loginMethod,
+            device: clientInfo.device,
+            browser: clientInfo.browser,
+            os: clientInfo.os,
+            role: user.role
+          },
+          timestamp: new Date()
+        })
+      ]);
+    } catch (error) {
+      console.error('Failed to track login:', error.message);
     }
-  } catch (error) {
-    // Don't throw error - login tracking should not break login flow
-    console.error('Failed to track login:', error.message);
-  }
+  });
 };
 
 /**
- * Track failed login attempt
+ * Track failed login attempt (NON-BLOCKING)
  */
-exports.trackFailedLogin = async (req, identifier, loginMethod = 'password', failureReason = 'Invalid credentials') => {
-  try {
-    const clientInfo = getClientInfo(req);
-
-    // Create login history
-    await LoginHistory.create({
-      user: null, // No user for failed logins
-      loginMethod,
-      ipAddress: clientInfo.ipAddress,
-      userAgent: clientInfo.userAgent,
-      device: clientInfo.device,
-      browser: clientInfo.browser,
-      os: clientInfo.os,
-      status: 'failed',
-      failureReason,
-      loginAt: new Date()
-    });
-
-    // Create audit log for failed login attempt
+exports.trackFailedLogin = (req, identifier, loginMethod = 'password', failureReason = 'Invalid credentials') => {
+  setImmediate(async () => {
     try {
-      // Try to find user by identifier for audit log
-      const User = require('../../models/User.model');
-      const user = await User.findOne({
-        $or: [
-          { email: identifier.toLowerCase() },
-          { phoneNumber: identifier }
-        ]
-      });
+      const clientInfo = getClientInfo(req);
 
+      // Create login history immediately (no user lookup needed)
+      const loginHistoryPromise = LoginHistory.create({
+        user: null,
+        loginMethod,
+        ipAddress: clientInfo.ipAddress,
+        userAgent: clientInfo.userAgent,
+        device: clientInfo.device,
+        browser: clientInfo.browser,
+        os: clientInfo.os,
+        status: 'failed',
+        failureReason,
+        loginAt: new Date()
+      }).catch(err => console.error('LoginHistory create failed:', err.message));
+
+      // Try to find user for audit log (optional)
+      const user = await User.findOne(buildIdentifierOrQuery(identifier)).select('_id').lean();
+
+      // Create audit log
       await AuditLog.create({
         user: user?._id || null,
         action: `Failed login attempt via ${loginMethod}`,
@@ -93,22 +89,21 @@ exports.trackFailedLogin = async (req, identifier, loginMethod = 'password', fai
         userAgent: clientInfo.userAgent,
         status: 'denied',
         metadata: {
-          loginMethod: loginMethod,
-          identifier: identifier,
-          failureReason: failureReason,
+          loginMethod,
+          identifier,
+          failureReason,
           device: clientInfo.device,
           browser: clientInfo.browser,
           os: clientInfo.os
         },
         timestamp: new Date()
-      });
-    } catch (auditError) {
-      // Don't break login flow if audit log creation fails
-      console.error('Failed to create audit log for failed login:', auditError.message);
+      }).catch(err => console.error('AuditLog create failed:', err.message));
+
+      await loginHistoryPromise;
+    } catch (error) {
+      console.error('Failed to track failed login:', error.message);
     }
-  } catch (error) {
-    console.error('Failed to track failed login:', error.message);
-  }
+  });
 };
 
 /**
@@ -132,4 +127,3 @@ exports.getLoginsByIp = async (ipAddress, limit = 20) => {
     .limit(limit)
     .lean();
 };
-

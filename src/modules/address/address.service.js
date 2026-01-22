@@ -1,42 +1,46 @@
+/**
+ * Address Service
+ * Refactored to use shared helpers
+ */
+
 const Address = require('../../models/Address.model');
-const Patient = require('../../models/Patient.model');
 const AppError = require('../../utils/AppError');
+const { getPatient } = require('../../helpers');
 
-// Get patient from userId
-const getPatient = async (userId) => {
-  const patient = await Patient.findOne({ user: userId });
-  if (!patient) throw new AppError('Patient profile not found', 404);
-  return patient;
-};
-
-// Get all addresses
+/**
+ * Get all addresses for user
+ */
 exports.getAddresses = async (userId) => {
   const patient = await getPatient(userId);
-  const addresses = await Address.find({ patient: patient._id }).sort({ isDefault: -1, createdAt: -1 });
-  return addresses;
+  
+  return await Address.find({ patient: patient._id })
+    .sort({ isDefault: -1, createdAt: -1 })
+    .lean();
 };
 
-// Get single address by ID
+/**
+ * Get single address by ID
+ */
 exports.getAddressById = async (userId, addressId) => {
   const patient = await getPatient(userId);
   
-  const address = await Address.findOne({
-    _id: addressId,
-    patient: patient._id
-  });
+  const address = await Address.findOne({ 
+    _id: addressId, 
+    patient: patient._id 
+  }).lean();
   
-  if (!address) {
-    throw new AppError('Address not found', 404);
-  }
+  if (!address) throw new AppError('Address not found', 404);
   
   return address;
 };
 
-// Create address
+/**
+ * Create new address
+ */
 exports.createAddress = async (userId, data) => {
   const patient = await getPatient(userId);
   
-  // If this is set as default, unset other defaults
+  // If setting as default, unset others first
   if (data.isDefault) {
     await Address.updateMany(
       { patient: patient._id },
@@ -44,40 +48,49 @@ exports.createAddress = async (userId, data) => {
     );
   }
   
-  const address = await Address.create({
+  return await Address.create({
     patient: patient._id,
     ...data
   });
-  
-  return address;
 };
 
-// Update address
+/**
+ * Update existing address
+ */
 exports.updateAddress = async (userId, addressId, data) => {
   const patient = await getPatient(userId);
   
-  const address = await Address.findOne({
-    _id: addressId,
-    patient: patient._id
-  });
-  
-  if (!address) throw new AppError('Address not found', 404);
-  
-  // If setting as default, unset other defaults
+  // If setting as default, unset others and update in parallel
   if (data.isDefault) {
-    await Address.updateMany(
-      { patient: patient._id, _id: { $ne: addressId } },
-      { $set: { isDefault: false } }
-    );
+    const [, address] = await Promise.all([
+      Address.updateMany(
+        { patient: patient._id, _id: { $ne: addressId } },
+        { $set: { isDefault: false } }
+      ),
+      Address.findOneAndUpdate(
+        { _id: addressId, patient: patient._id },
+        { $set: data },
+        { new: true, runValidators: true }
+      ).lean()
+    ]);
+    
+    if (!address) throw new AppError('Address not found', 404);
+    return address;
   }
   
-  Object.assign(address, data);
-  await address.save();
+  const address = await Address.findOneAndUpdate(
+    { _id: addressId, patient: patient._id },
+    { $set: data },
+    { new: true, runValidators: true }
+  ).lean();
   
+  if (!address) throw new AppError('Address not found', 404);
   return address;
 };
 
-// Delete address
+/**
+ * Delete address
+ */
 exports.deleteAddress = async (userId, addressId) => {
   const patient = await getPatient(userId);
   
@@ -90,4 +103,3 @@ exports.deleteAddress = async (userId, addressId) => {
   
   return { message: 'Address deleted successfully' };
 };
-
