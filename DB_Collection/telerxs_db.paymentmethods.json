@@ -1,0 +1,214 @@
+[{
+  "_id": {
+    "$oid": "6963a5367ae45da5433e3c04"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "type": "netbanking",
+  "bankAccountNumber": "1234567890123456",
+  "ifscCode": "SBIN0001234",
+  "isDefault": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-11T13:27:18.054Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T10:57:12.475Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6963a56e7ae45da5433e3c10"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "type": "card",
+  "cardType": "credit",
+  "bankName": "SBI",
+  "cardNumber": "****3456",
+  "cardLast4": "3456",
+  "expiryDate": "12/25",
+  "cardHolderName": "John Doe",
+  "cardBrand": "other",
+  "securityCode": "123",
+  "isDefault": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-11T13:28:14.534Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T10:57:12.475Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696483c3c40a155136c921fc"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "type": "upi",
+  "upiId": "test@test.com",
+  "isDefault": false,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-12T05:16:51.370Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T10:57:12.475Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964869fc40a155136c92295"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "type": "card",
+  "cardType": "credit",
+  "bankName": "BOI",
+  "cardNumber": "****1212",
+  "cardLast4": "1212",
+  "expiryDate": "12/21",
+  "cardHolderName": "test",
+  "cardBrand": "other",
+  "securityCode": "221",
+  "isDefault": false,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-12T05:29:03.445Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T10:57:12.475Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696486bfc40a155136c922a8"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "type": "upi",
+  "upiId": "test@test.om",
+  "isDefault": false,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-12T05:29:35.235Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T10:57:12.475Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69648b04c40a155136c922da"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "type": "card",
+  "cardType": "credit",
+  "bankName": "SBI",
+  "cardNumber": "****1111",
+  "cardLast4": "1111",
+  "expiryDate": "12/12",
+  "cardHolderName": "qwqwqw qwwqwq",
+  "cardBrand": "other",
+  "securityCode": "1212",
+  "isDefault": false,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-12T05:47:48.062Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T10:57:12.475Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69649db2c40a155136c9262b"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "type": "card",
+  "cardType": "credit",
+  "bankName": "11212qwewe",
+  "cardNumber": "****1212",
+  "cardLast4": "1212",
+  "expiryDate": "12/12",
+  "cardHolderName": "qqq",
+  "cardBrand": "other",
+  "securityCode": "1212",
+  "isDefault": false,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-12T07:07:30.748Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T14:21:05.428Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69649e3fc40a155136c92638"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "type": "card",
+  "cardType": "credit",
+  "bankName": "1212",
+  "cardNumber": "****1221",
+  "cardLast4": "1221",
+  "expiryDate": "12/12",
+  "cardHolderName": "qwqw",
+  "cardBrand": "other",
+  "securityCode": "1212",
+  "isDefault": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-12T07:09:51.890Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T10:57:12.475Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6968c80833a228f1c1edf902"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "type": "card",
+  "cardType": "credit",
+  "bankName": "test",
+  "cardNumber": "****1211",
+  "cardLast4": "1211",
+  "expiryDate": "12/12",
+  "cardHolderName": "test",
+  "cardBrand": "other",
+  "securityCode": "1212",
+  "isDefault": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-15T10:57:12.474Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T10:57:12.474Z"
+  },
+  "__v": 0
+}]

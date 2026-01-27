@@ -1,0 +1,79 @@
+[{
+  "_id": {
+    "$oid": "695fbf06e53a3b2d28b34606"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "doctor": "v2",
+  "issueDate": {
+    "$date": "2026-01-08T00:00:00.000Z"
+  },
+  "prescribedMedications": [
+    "one medicine"
+  ],
+  "clinic": "new clicnic",
+  "diagnosedCondition": "No",
+  "note": "this is testing",
+  "createdAt": {
+    "$date": "2026-01-08T14:28:22.794Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-08T14:28:22.794Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "695fc06de53a3b2d28b3461b"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "doctor": "v3",
+  "issueDate": {
+    "$date": "2026-01-08T00:00:00.000Z"
+  },
+  "prescribedMedications": [
+    "1",
+    "1",
+    "1"
+  ],
+  "clinic": "1",
+  "diagnosedCondition": "1",
+  "note": "1",
+  "createdAt": {
+    "$date": "2026-01-08T14:34:21.205Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-08T14:34:21.205Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964939cc40a155136c92495"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "doctor": "2",
+  "issueDate": {
+    "$date": "2026-01-12T00:00:00.000Z"
+  },
+  "prescribedMedications": [
+    "2",
+    "2",
+    "2"
+  ],
+  "clinic": "2",
+  "diagnosedCondition": "2",
+  "note": "2",
+  "createdAt": {
+    "$date": "2026-01-12T06:24:28.874Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T06:24:28.874Z"
+  },
+  "__v": 0
+}]

@@ -1,0 +1,163 @@
+[{
+  "_id": {
+    "$oid": "69678f7640ac23b89b751824"
+  },
+  "patient": {
+    "$oid": "695c6a639a68d7a23530f880"
+  },
+  "doctor": {
+    "$oid": "6960fdb8e3ca876e9295ece7"
+  },
+  "diagnosis": "Common Cold",
+  "medications": [
+    {
+      "name": "Paracetamol",
+      "dosage": "500mg",
+      "frequency": "Twice daily",
+      "duration": "7 days",
+      "quantity": 14,
+      "instructions": "Take after meals",
+      "isAvailable": true,
+      "_id": {
+        "$oid": "69678f7640ac23b89b751825"
+      }
+    },
+    {
+      "name": "Cough Syrup",
+      "dosage": "10ml",
+      "frequency": "Three times daily",
+      "duration": "5 days",
+      "quantity": 1,
+      "instructions": "Take before meals",
+      "isAvailable": true,
+      "_id": {
+        "$oid": "69678f7640ac23b89b751826"
+      }
+    }
+  ],
+  "instructions": "Rest and drink plenty of fluids. Follow up after 1 week if symptoms persist.",
+  "followUpDate": {
+    "$date": "2026-01-20T00:00:00.000Z"
+  },
+  "status": "active",
+  "isOrdered": false,
+  "createdAt": {
+    "$date": "2026-01-14T12:43:34.792Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-14T12:43:34.792Z"
+  },
+  "prescriptionNumber": "PRES17683946148700001",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69679270bf4542fd4736e674"
+  },
+  "prescriptionNumber": "PRES17683953761127174",
+  "patient": {
+    "$oid": "695c6a639a68d7a23530f880"
+  },
+  "doctor": {
+    "$oid": "6960fdb8e3ca876e9295ece7"
+  },
+  "medicine": "Paracetamol",
+  "brand": "Crocin",
+  "description": "Take 500mg twice daily after meals for 7 days. Rest and drink plenty of fluids. Follow up after 1 week if symptoms persist.",
+  "status": "active",
+  "isOrdered": false,
+  "createdAt": {
+    "$date": "2026-01-14T12:56:16.206Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-14T12:56:16.206Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696793c7a9a2ee810fa95198"
+  },
+  "prescriptionNumber": "PRES17683957192023372",
+  "patient": {
+    "$oid": "695c6a639a68d7a23530f880"
+  },
+  "medicine": "Paracetamol",
+  "brand": "Crocin",
+  "description": "Updated Patient visited for regular checkup. Blood pressure normal. Prescribed medication for minor symptoms. updated",
+  "status": "active",
+  "isOrdered": false,
+  "createdAt": {
+    "$date": "2026-01-14T13:01:59.296Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-14T13:04:22.305Z"
+  },
+  "__v": 0,
+  "doctor": {
+    "$oid": "69649b9cc40a155136c925f0"
+  }
+},
+{
+  "_id": {
+    "$oid": "6968de32c8bc798fae730cb9"
+  },
+  "prescriptionNumber": "PRES17684803065907375",
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "medicine": "6964a30504786ad4c5d83cb8",
+  "brand": "Cetaphill",
+  "description": "take 2 medicine daily",
+  "status": "active",
+  "isOrdered": false,
+  "createdAt": {
+    "$date": "2026-01-15T12:31:46.824Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T12:31:46.824Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6968e44cc8bc798fae730d76"
+  },
+  "prescriptionNumber": "PRES17684818678856113",
+  "patient": {
+    "$oid": "6964ac4919f5baedf62e4843"
+  },
+  "medicine": "6964a93819f5baedf62e47df",
+  "brand": "Cetaphill",
+  "description": "2 dose daily",
+  "status": "active",
+  "isOrdered": false,
+  "createdAt": {
+    "$date": "2026-01-15T12:57:48.119Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T12:57:48.119Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696fac2f57de1410392f2aa4"
+  },
+  "prescriptionNumber": "PRES17689262553563273",
+  "patient": {
+    "$oid": "6964ac4919f5baedf62e4843"
+  },
+  "medicine": "696f6833899c704778730c20",
+  "brand": "unknown",
+  "description": "use twice a day",
+  "status": "active",
+  "isOrdered": false,
+  "createdAt": {
+    "$date": "2026-01-20T16:24:15.582Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T16:24:15.582Z"
+  },
+  "__v": 0
+}]

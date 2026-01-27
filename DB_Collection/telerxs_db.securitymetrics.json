@@ -1,0 +1,152 @@
+[{
+  "_id": {
+    "$oid": "696f986aab16943c1be89298"
+  },
+  "metricType": "data_export_requests",
+  "count": 1,
+  "period": "24h",
+  "details": [
+    {
+      "userId": {
+        "$oid": "695b6dd43413de05573c6dff"
+      },
+      "ipAddress": "192.168.1.1",
+      "userAgent": "Mozilla/5.0...",
+      "metadata": {
+        "exportType": "patient_data",
+        "format": "csv"
+      },
+      "_id": {
+        "$oid": "696f986aab16943c1be89299"
+      },
+      "timestamp": {
+        "$date": "2026-01-20T14:59:54.037Z"
+      }
+    }
+  ],
+  "isActive": true,
+  "date": {
+    "$date": "2026-01-20T14:59:54.039Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-20T14:59:54.042Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T14:59:54.042Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f98f0ab16943c1be892a5"
+  },
+  "metricType": "data_export_requests",
+  "count": 1,
+  "period": "24h",
+  "details": [
+    {
+      "userId": {
+        "$oid": "695b6dd43413de05573c6dff"
+      },
+      "ipAddress": "192.168.1.1",
+      "userAgent": "Mozilla/5.0...",
+      "metadata": {
+        "exportType": "patient_data",
+        "format": "csv"
+      },
+      "_id": {
+        "$oid": "696f98f0ab16943c1be892a6"
+      },
+      "timestamp": {
+        "$date": "2026-01-20T15:02:08.048Z"
+      }
+    }
+  ],
+  "isActive": true,
+  "date": {
+    "$date": "2026-01-20T15:02:08.048Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-20T15:02:08.050Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T15:02:08.050Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f99ff431fc45c325fde8d"
+  },
+  "metricType": "data_export_requests",
+  "count": 1,
+  "period": "24h",
+  "details": [
+    {
+      "userId": {
+        "$oid": "695b6dd43413de05573c6dff"
+      },
+      "ipAddress": "192.168.1.1",
+      "userAgent": "Mozilla/5.0...",
+      "metadata": {
+        "exportType": "patient_data",
+        "format": "csv"
+      },
+      "_id": {
+        "$oid": "696f99ff431fc45c325fde8e"
+      },
+      "timestamp": {
+        "$date": "2026-01-20T15:06:39.155Z"
+      }
+    }
+  ],
+  "isActive": true,
+  "date": {
+    "$date": "2026-01-20T15:06:39.157Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-20T15:06:39.160Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T15:06:39.160Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696fb459b86309384875cb45"
+  },
+  "metricType": "data_export_requests",
+  "count": 1,
+  "period": "24h",
+  "details": [
+    {
+      "userId": {
+        "$oid": "695b6dd43413de05573c6dff"
+      },
+      "ipAddress": "192.168.1.1",
+      "userAgent": "Mozilla/5.0...",
+      "metadata": {
+        "exportType": "patient_data",
+        "format": "csv"
+      },
+      "_id": {
+        "$oid": "696fb459b86309384875cb46"
+      },
+      "timestamp": {
+        "$date": "2026-01-20T16:59:05.389Z"
+      }
+    }
+  ],
+  "isActive": true,
+  "date": {
+    "$date": "2026-01-20T16:59:05.391Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-20T16:59:05.395Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T16:59:05.395Z"
+  },
+  "__v": 0
+}]

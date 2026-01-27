@@ -1,0 +1,2475 @@
+[{
+  "_id": {
+    "$oid": "695b795186d9ec317242a48c"
+  },
+  "productName": "Amoxicillin",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "productImages": [],
+  "usage": [
+    "For Bacterial Infections: Take as prescribed by your doctor",
+    "Dosage Instructions: Usually taken 2-3 times daily"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "695b795186d9ec317242a48f"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "695b795186d9ec317242a490"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "695b795186d9ec317242a491"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "695b795186d9ec317242a492"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "Antibiotics",
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": false,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-05T08:41:53.151Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T05:31:28.958Z"
+  },
+  "__v": 1,
+  "images": {
+    "gallery": []
+  },
+  "isBestOffer": false,
+  "isTrendy": false,
+  "markup": 0,
+  "views": 0
+},
+{
+  "_id": {
+    "$oid": "695b8d07e061e87cb25b7d5b"
+  },
+  "productName": "Amoxicillin",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "productImages": [],
+  "usage": [
+    "For Bacterial Infections: Take as prescribed by your doctor",
+    "Dosage Instructions: Usually taken 2-3 times daily"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "695b8d07e061e87cb25b7d5e"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "695b8d07e061e87cb25b7d5f"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "695b8d07e061e87cb25b7d60"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "695b8d07e061e87cb25b7d61"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "Antibiotics",
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-05T10:05:59.565Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T14:57:01.830Z"
+  },
+  "__v": 1,
+  "images": {
+    "gallery": []
+  },
+  "isBestOffer": false,
+  "isTrendy": false,
+  "markup": 0,
+  "views": 0
+},
+{
+  "_id": {
+    "$oid": "695b8da9eb0086d3f97812eb"
+  },
+  "productName": "Amoxicillin",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "https://yourcdn.com/medicines/amoxicillin-thumb.jpg",
+    "gallery": [
+      "https://yourcdn.com/medicines/amoxicillin-1.jpg",
+      "https://yourcdn.com/medicines/amoxicillin-2.jpg",
+      "https://yourcdn.com/medicines/amoxicillin-3.jpg"
+    ]
+  },
+  "usage": [
+    "For Bacterial Infections: Use as prescribed by your doctor.",
+    "Dosage Instructions: Usually taken 2–3 times daily after meals."
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections.",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls.",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "695b8da9eb0086d3f97812ee"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "695b8da9eb0086d3f97812ef"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "695b8da9eb0086d3f97812f0"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "695b8da9eb0086d3f97812f1"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult your doctor before use during pregnancy.",
+  "sideEffects": "Nausea, diarrhea, headache, and skin rash may occur.",
+  "drugInteractions": "May reduce effectiveness of oral contraceptives. Avoid with warfarin.",
+  "indications": "Used to treat respiratory, urinary tract, skin, and other bacterial infections.",
+  "category": "Antibiotics",
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": false,
+  "isActive": true,
+  "productImages": [],
+  "createdAt": {
+    "$date": "2026-01-05T10:08:41.271Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T09:43:18.260Z"
+  },
+  "__v": 1,
+  "isBestOffer": false,
+  "isTrendy": false,
+  "markup": 0,
+  "views": 0
+},
+{
+  "_id": {
+    "$oid": "695b8ef0063964c3262cd86c"
+  },
+  "productName": "Amoxicillin",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "https://cdn.yoursite.com/medicines/amoxicillin-thumb.jpg",
+    "gallery": [
+      "https://cdn.yoursite.com/medicines/amoxicillin-1.jpg",
+      "https://cdn.yoursite.com/medicines/amoxicillin-2.jpg",
+      "https://cdn.yoursite.com/medicines/amoxicillin-3.jpg"
+    ]
+  },
+  "usage": [
+    "For Bacterial Infections: Take this medicine exactly as prescribed by your doctor.",
+    "Dosage Instructions: Usually taken 2 to 3 times daily after meals."
+  ],
+  "description": "Amoxicillin is an antibiotic used to treat a wide range of bacterial infections.",
+  "howItWorks": "It works by stopping the growth of bacteria by preventing the formation of their cell walls.",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "695b8ef1063964c3262cd86f"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "695b8ef1063964c3262cd870"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "695b8ef1063964c3262cd871"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "695b8ef1063964c3262cd872"
+      }
+    }
+  ],
+  "precautions": "Do not use if you are allergic to penicillin. Consult a doctor before use during pregnancy.",
+  "sideEffects": "Common side effects include nausea, diarrhea, headache, and skin rash.",
+  "drugInteractions": "May interact with oral contraceptives and blood thinners such as warfarin.",
+  "indications": "Used to treat respiratory tract infections, urinary tract infections, skin infections, and other bacterial diseases.",
+  "category": "Antibiotics",
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-05T10:14:09.033Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T14:48:45.990Z"
+  },
+  "__v": 1,
+  "isBestOffer": false,
+  "isTrendy": false,
+  "markup": 0,
+  "views": 0
+},
+{
+  "_id": {
+    "$oid": "6960f4c7ed53ae9c2467d5fe"
+  },
+  "productName": "Amoxicillin",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections: Take as prescribed by your doctor",
+    "Dosage Instructions: Usually taken 2-3 times daily"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 5.5,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "6960f4c7ed53ae9c2467d5ff"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "6960f4c7ed53ae9c2467d600"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "6960f4c7ed53ae9c2467d601"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "6960f4c7ed53ae9c2467d602"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "Antibiotics",
+  "healthCategory": {
+    "$oid": "6960f453ed53ae9c2467d5f2"
+  },
+  "healthTypeSlug": "acidity",
+  "isTrendy": true,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T12:29:59.146Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T12:30:47.925Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6960f8a6e9fc16c719815ba5"
+  },
+  "productName": "Testing Product",
+  "brand": "Test",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections: Take as prescribed by your doctor",
+    "Dosage Instructions: Usually taken 2-3 times daily"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 0,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "6960f8a6e9fc16c719815ba6"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "6960f8a6e9fc16c719815ba7"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "6960f8a6e9fc16c719815ba8"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "6960f8a6e9fc16c719815ba9"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "Digestive Health",
+  "healthCategory": {
+    "$oid": "6960f139ed53ae9c2467d5cd"
+  },
+  "healthTypeSlug": "acidity",
+  "isTrendy": true,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-09T12:46:30.539Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T14:46:16.066Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69610ad9b8c266a7835c0b50"
+  },
+  "productName": "Amoxicillin Update",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections",
+    "For Bacterial Infections"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 5,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "69610ad9b8c266a7835c0b51"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "69610ad9b8c266a7835c0b52"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "69610ad9b8c266a7835c0b53"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "69610ad9b8c266a7835c0b54"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "Antibiotics",
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T14:04:09.765Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T14:04:09.765Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69610b1eb8c266a7835c0b56"
+  },
+  "productName": "Amoxicillin Update",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "url",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections",
+    "For Bacterial Infections"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 5,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "69610b1eb8c266a7835c0b57"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "69610b1eb8c266a7835c0b58"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "69610b1eb8c266a7835c0b59"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "69610b1eb8c266a7835c0b5a"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "Antibiotics",
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T14:05:18.747Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T14:05:18.747Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69610bb9b8c266a7835c0b70"
+  },
+  "productName": "Dummy Medicine",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "http://res.cloudinary.com/dnkvlbwqk/image/upload/v1767967647/qfsu7blanfggbfsfga0b.jpg",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections",
+    "For Bacterial Infections"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 5,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "69610bb9b8c266a7835c0b71"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "69610bb9b8c266a7835c0b72"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "69610bb9b8c266a7835c0b73"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "69610bb9b8c266a7835c0b74"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "Antibiotics",
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T14:07:53.461Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T14:07:53.461Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69610d8bb8c266a7835c0beb"
+  },
+  "productName": "Dummy Medicine",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "http://res.cloudinary.com/dnkvlbwqk/image/upload/v1767967647/qfsu7blanfggbfsfga0b.jpg",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections",
+    "For Bacterial Infections"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 5,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "69610d8bb8c266a7835c0bec"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "69610d8bb8c266a7835c0bed"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "69610d8bb8c266a7835c0bee"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "69610d8bb8c266a7835c0bef"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "Antibiotics",
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T14:15:39.244Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T14:15:39.244Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69610f80b8c266a7835c0bf7"
+  },
+  "productName": "Medicine",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "http://res.cloudinary.com/dnkvlbwqk/image/upload/v1767967647/qfsu7blanfggbfsfga0b.jpg",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections",
+    "For Bacterial Infections"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 5,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "69610f80b8c266a7835c0bf8"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "69610f80b8c266a7835c0bf9"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "69610f80b8c266a7835c0bfa"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "69610f80b8c266a7835c0bfb"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "Antibiotics",
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T14:24:00.471Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T14:24:00.471Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696111bbb8c266a7835c0c00"
+  },
+  "productName": "Medicine",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "http://res.cloudinary.com/dnkvlbwqk/image/upload/v1767967647/qfsu7blanfggbfsfga0b.jpg",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections",
+    "For Bacterial Infections"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 5,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "696111bbb8c266a7835c0c01"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "696111bbb8c266a7835c0c02"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "696111bbb8c266a7835c0c03"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "696111bbb8c266a7835c0c04"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "Antibiotics",
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": false,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-09T14:33:31.596Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T14:34:54.037Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696120244ab58e676257ba0f"
+  },
+  "productName": "Testing Product two",
+  "brand": "Test",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections: Take as prescribed by your doctor",
+    "Dosage Instructions: Usually taken 2-3 times daily"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 0,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "696120244ab58e676257ba10"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "696120244ab58e676257ba11"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "696120244ab58e676257ba12"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "696120244ab58e676257ba13"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "Digestive Health",
+  "healthCategory": {
+    "$oid": "6960f139ed53ae9c2467d5cd"
+  },
+  "healthTypeSlug": "acidity",
+  "isTrendy": true,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-09T15:35:00.575Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T15:55:51.899Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696122004ab58e676257ba74"
+  },
+  "productName": "Paracetamol",
+  "brand": "mankind",
+  "originalPrice": 49,
+  "salePrice": 59,
+  "images": {
+    "thumbnail": "",
+    "gallery": []
+  },
+  "usage": [],
+  "description": "",
+  "howItWorks": "it works",
+  "generics": [],
+  "markup": 5,
+  "dosageOptions": [],
+  "quantityOptions": [],
+  "precautions": "",
+  "sideEffects": "jojojojo",
+  "drugInteractions": "googoogoggoogoog",
+  "indications": "ggogoog",
+  "category": "",
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 2,
+  "status": "low_stock",
+  "visibility": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-09T15:42:56.665Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T15:54:06.136Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696124324ab58e676257bb3b"
+  },
+  "productName": "Amoxicillin Update",
+  "brand": "Cetaphill",
+  "originalPrice": 296,
+  "salePrice": 21,
+  "images": {
+    "thumbnail": "",
+    "gallery": [
+      "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1767973896/yvqvndnzmfffizb8885w.jpg"
+    ]
+  },
+  "usage": [],
+  "description": "",
+  "howItWorks": "moxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [],
+  "markup": 0,
+  "dosageOptions": [],
+  "quantityOptions": [],
+  "precautions": "",
+  "sideEffects": "moxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "drugInteractions": "moxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "indications": "moxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "category": "Antibiotics",
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 2,
+  "status": "low_stock",
+  "visibility": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T15:52:18.887Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T15:52:18.887Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696125894ab58e676257bbe5"
+  },
+  "productName": "Testing Product two",
+  "brand": "Test",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections: Take as prescribed by your doctor",
+    "Dosage Instructions: Usually taken 2-3 times daily"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 0,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "696125894ab58e676257bbe6"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "696125894ab58e676257bbe7"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "696125894ab58e676257bbe8"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "696125894ab58e676257bbe9"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "Digestive Health",
+  "healthCategory": {
+    "$oid": "6960f139ed53ae9c2467d5cd"
+  },
+  "healthTypeSlug": "acidity",
+  "isTrendy": true,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 500,
+  "status": "low_stock",
+  "visibility": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-09T15:58:01.410Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T06:02:17.140Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6961259a4ab58e676257bbef"
+  },
+  "productName": "Cuff Syrup",
+  "brand": "mankind",
+  "originalPrice": 29,
+  "salePrice": 19,
+  "images": {
+    "thumbnail": "",
+    "gallery": [
+      "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1767974255/yynzdnrdc0fqwgzztrdg.png"
+    ]
+  },
+  "usage": [],
+  "description": "",
+  "howItWorks": "ok",
+  "generics": [],
+  "markup": 5,
+  "dosageOptions": [],
+  "quantityOptions": [],
+  "precautions": "",
+  "sideEffects": "ok",
+  "drugInteractions": "ok",
+  "indications": "ok",
+  "category": "syrup",
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 10,
+  "status": "low_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T15:58:18.240Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T09:51:03.463Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696125ec4ab58e676257bc29"
+  },
+  "productName": "Testing prod",
+  "brand": "Test",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections: Take as prescribed by your doctor",
+    "Dosage Instructions: Usually taken 2-3 times daily"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 0,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "696125ec4ab58e676257bc2a"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "696125ec4ab58e676257bc2b"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "696125ec4ab58e676257bc2c"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "696125ec4ab58e676257bc2d"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "Digestive Health",
+  "healthCategory": {
+    "$oid": "6960f139ed53ae9c2467d5cd"
+  },
+  "healthTypeSlug": "indigestion",
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T15:59:40.020Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T07:56:44.204Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6961261e4ab58e676257bc37"
+  },
+  "productName": "Testing prod",
+  "brand": "Test",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections: Take as prescribed by your doctor",
+    "Dosage Instructions: Usually taken 2-3 times daily"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 0,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "6961261e4ab58e676257bc38"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "6961261e4ab58e676257bc39"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "6961261e4ab58e676257bc3a"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "6961261e4ab58e676257bc3b"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "Digestive Health",
+  "healthCategory": {
+    "$oid": "6960f139ed53ae9c2467d5cd"
+  },
+  "healthTypeSlug": "indigestion",
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T16:00:30.273Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T09:05:43.027Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69613ebd4ab58e676257bd6e"
+  },
+  "productName": "cough syrup",
+  "brand": "humankind",
+  "originalPrice": 49,
+  "salePrice": 39,
+  "images": {
+    "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1767980697/a2ebllraklzvcoonbph4.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1767980697/a2ebllraklzvcoonbph4.jpg"
+    ]
+  },
+  "usage": [],
+  "description": "",
+  "howItWorks": "ok",
+  "generics": [],
+  "markup": 5,
+  "dosageOptions": [
+    {
+      "name": "ok",
+      "priceAdjustment": 2,
+      "_id": {
+        "$oid": "69613ebd4ab58e676257bd6f"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "okkk",
+      "priceAdjustment": 1,
+      "_id": {
+        "$oid": "69613ebd4ab58e676257bd70"
+      }
+    }
+  ],
+  "precautions": "",
+  "sideEffects": "ok",
+  "drugInteractions": "ok",
+  "indications": "ojj",
+  "category": "syrup",
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 2,
+  "status": "low_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T17:45:33.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T08:55:13.516Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964a30504786ad4c5d83cb8"
+  },
+  "productName": "Amoxicillin",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections: Take as prescribed by your doctor",
+    "Dosage Instructions: Usually taken 2-3 times daily"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 5.5,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "6964a30504786ad4c5d83cb9"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "6964a30504786ad4c5d83cba"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "6964a30504786ad4c5d83cbb"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "6964a30504786ad4c5d83cbc"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "Antibiotics",
+  "healthCategory": {
+    "$oid": "6960f453ed53ae9c2467d5f2"
+  },
+  "healthTypeSlug": "acidity",
+  "isTrendy": true,
+  "isBestOffer": true,
+  "discountPercentage": 25.5,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-12T07:30:13.520Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T08:49:50.457Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964a93819f5baedf62e47df"
+  },
+  "productName": "Amoxicillin",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections: Take as prescribed by your doctor",
+    "Dosage Instructions: Usually taken 2-3 times daily"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 5.5,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "6964a93819f5baedf62e47e0"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "6964a93819f5baedf62e47e1"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "6964a93819f5baedf62e47e2"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "6964a93819f5baedf62e47e3"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness.",
+  "indications": "Used for treating bacterial infections, respiratory tract infections, and urinary tract infections.",
+  "category": "Antibiotics",
+  "healthCategory": {
+    "$oid": "6960f453ed53ae9c2467d5f2"
+  },
+  "healthTypeSlug": "constipation",
+  "isTrendy": false,
+  "isBestOffer": true,
+  "discountPercentage": 25.5,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-12T07:56:40.097Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-19T15:14:09.664Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964de97b91fb90fb35ed7da"
+  },
+  "productName": "Amoxicillin",
+  "brand": "Cetaphill",
+  "originalPrice": 100,
+  "salePrice": 30,
+  "images": {
+    "thumbnail": "https://imgs.search.brave.com/RZ7bEFrg2-wsPFQHS2baTFyDfNt5dWDHaBB6m_7WKvo/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/c2h1dHRlcnN0b2Nr/LmNvbS9pbWFnZS1w/aG90by9jb2xvcmZ1/bC1waWxscy1tZWRp/Y2luZXMtaGFuZC0y/NjBudy02NzI2MzIw/NDcuanBn",
+    "gallery": [
+      "https://cdn.yoursite.com/medicines/amoxicillin-1.jpg",
+      "https://cdn.yoursite.com/medicines/amoxicillin-2.jpg",
+      "https://cdn.yoursite.com/medicines/amoxicillin-3.jpg"
+    ]
+  },
+  "usage": [
+    "Take as prescribed by your doctor"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 0,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "6964de97b91fb90fb35ed7db"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "6964de97b91fb90fb35ed7dc"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "6964de97b91fb90fb35ed7dd"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "6964de97b91fb90fb35ed7de"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache.",
+  "drugInteractions": "May interact with oral contraceptives and blood thinners such as warfarin.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, and skin infections.",
+  "category": "Antibiotics",
+  "healthCategory": {
+    "$oid": "6960f139ed53ae9c2467d5cd"
+  },
+  "healthTypeSlug": "acidity",
+  "isTrendy": false,
+  "isBestOffer": true,
+  "discountPercentage": 70,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-12T11:44:23.927Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-19T15:13:50.008Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f3e3276ca82af21d558a8"
+  },
+  "productName": "Elestat",
+  "brand": "unknown",
+  "originalPrice": 299,
+  "salePrice": 123,
+  "images": {
+    "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768897966/gpbnjbha39cirdxdfj72.webp",
+    "gallery": [
+      "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768897966/gpbnjbha39cirdxdfj72.webp"
+    ]
+  },
+  "usage": [],
+  "description": "",
+  "howItWorks": "ok",
+  "generics": [],
+  "markup": 5,
+  "dosageOptions": [],
+  "quantityOptions": [],
+  "precautions": "",
+  "sideEffects": "no",
+  "drugInteractions": "no",
+  "indications": "no",
+  "category": "Chronic Conditions > Allergies, Chronic Conditions",
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 10,
+  "status": "low_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-20T08:34:58.389Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T08:48:08.107Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f49029704c0fb31160906"
+  },
+  "productName": "Wegovy® - 2.4MG Injection",
+  "brand": "unknown",
+  "originalPrice": 1399.99,
+  "salePrice": 1398,
+  "images": {
+    "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768900828/uvbmgfbytwuy3pafx2w8.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768900828/uvbmgfbytwuy3pafx2w8.jpg"
+    ]
+  },
+  "usage": [],
+  "description": "",
+  "howItWorks": "ok",
+  "generics": [],
+  "markup": 5,
+  "dosageOptions": [],
+  "quantityOptions": [],
+  "precautions": "",
+  "sideEffects": "",
+  "drugInteractions": "",
+  "indications": "",
+  "category": "6960f139ed53ae9c2467d5cd",
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 10,
+  "status": "low_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-20T09:21:06.422Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T09:38:13.567Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f5bd4fc91127edde0ed47"
+  },
+  "productName": "Amoxicillin",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections: Take as prescribed by your doctor",
+    "Dosage Instructions: Usually taken 2-3 times daily"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 5.5,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "696f5bd4fc91127edde0ed48"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "696f5bd4fc91127edde0ed49"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "696f5bd4fc91127edde0ed4a"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "696f5bd4fc91127edde0ed4b"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "Antibiotics",
+  "healthCategory": {
+    "$oid": "6960f453ed53ae9c2467d5f2"
+  },
+  "healthTypeSlug": "acidity",
+  "isTrendy": true,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-20T10:41:24.803Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T10:47:39.178Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f5c08fc91127edde0ed55"
+  },
+  "productName": "Amoxicillin",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections: Take as prescribed by your doctor",
+    "Dosage Instructions: Usually taken 2-3 times daily"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 5.5,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "696f5c08fc91127edde0ed56"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "696f5c08fc91127edde0ed57"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "696f5c08fc91127edde0ed58"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "696f5c08fc91127edde0ed59"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "",
+  "healthCategory": {
+    "$oid": "6960f453ed53ae9c2467d5f2"
+  },
+  "healthTypeSlug": "acidity",
+  "isTrendy": true,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": false,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-20T10:42:16.174Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T10:47:31.200Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f62558e2f2682f970e225"
+  },
+  "productName": "Amoxicillin",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections: Take as prescribed by your doctor",
+    "Dosage Instructions: Usually taken 2-3 times daily"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 5.5,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "696f62558e2f2682f970e226"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "696f62558e2f2682f970e227"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "696f62558e2f2682f970e228"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "696f62558e2f2682f970e229"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "6960f139ed53ae9c2467d5cd",
+  "healthCategory": {
+    "$oid": "6960f139ed53ae9c2467d5cd"
+  },
+  "healthTypeSlug": "6960f139ed53ae9c2467d5ce",
+  "healthTypeId": {
+    "$oid": "6960f139ed53ae9c2467d5ce"
+  },
+  "isTrendy": true,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-20T11:09:09.393Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T06:02:05.796Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f637b710c369bf9ce32c3"
+  },
+  "productName": "Amoxicillin",
+  "brand": "Cetaphill",
+  "originalPrice": 20.99,
+  "salePrice": 15.99,
+  "images": {
+    "thumbnail": "",
+    "gallery": []
+  },
+  "usage": [
+    "For Bacterial Infections: Take as prescribed by your doctor",
+    "Dosage Instructions: Usually taken 2-3 times daily"
+  ],
+  "description": "Antibiotic medication used to treat various bacterial infections",
+  "howItWorks": "Amoxicillin works by inhibiting the synthesis of bacterial cell walls",
+  "generics": [
+    "Amoxicillin Trihydrate",
+    "Amoxicillin Sodium"
+  ],
+  "markup": 5.5,
+  "dosageOptions": [
+    {
+      "name": "Capsule - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "696f637c710c369bf9ce32c4"
+      }
+    },
+    {
+      "name": "Capsule - 250mg",
+      "priceAdjustment": -2,
+      "_id": {
+        "$oid": "696f637c710c369bf9ce32c5"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 Tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "696f637c710c369bf9ce32c6"
+      }
+    },
+    {
+      "name": "40 Tablets",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "696f637c710c369bf9ce32c7"
+      }
+    }
+  ],
+  "precautions": "Do not use if allergic to penicillin. Consult doctor before use during pregnancy. Complete the full course of medication as prescribed by your doctor.",
+  "sideEffects": "Common side effects include nausea, diarrhea, skin rash, and headache. If you experience severe side effects such as difficulty breathing or severe allergic reactions, contact your doctor immediately.",
+  "drugInteractions": "May interact with oral contraceptives and reduce their effectiveness. Avoid with blood thinners such as warfarin. Consult your doctor before taking with other medications to avoid potential interactions.",
+  "indications": "Used for treating bacterial infections including respiratory tract infections, urinary tract infections, skin infections, and other bacterial conditions as prescribed by a healthcare professional.",
+  "category": "6960f139ed53ae9c2467d5cd",
+  "healthCategory": {
+    "$oid": "6960f139ed53ae9c2467d5cd"
+  },
+  "healthTypeSlug": "acidity",
+  "healthTypeId": {
+    "$oid": "6960f139ed53ae9c2467d5ce"
+  },
+  "isTrendy": true,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 450,
+  "status": "in_stock",
+  "visibility": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-20T11:14:04.036Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T06:01:53.784Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f65f0899c704778730be4"
+  },
+  "productName": "Uloric® - 40MG Tablet",
+  "brand": "unknown",
+  "originalPrice": 49.99,
+  "salePrice": 49,
+  "images": {
+    "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768908242/g4yiqbw09j9mjjzfq2k4.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768908242/g4yiqbw09j9mjjzfq2k4.jpg"
+    ]
+  },
+  "usage": [],
+  "description": "",
+  "howItWorks": "digest",
+  "generics": [],
+  "markup": 5,
+  "dosageOptions": [],
+  "quantityOptions": [],
+  "precautions": "",
+  "sideEffects": "digest",
+  "drugInteractions": "digest",
+  "indications": "digest",
+  "category": "6960f139ed53ae9c2467d5cd",
+  "healthCategory": {
+    "$oid": "6960f139ed53ae9c2467d5cd"
+  },
+  "healthTypeId": null,
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 120,
+  "status": "in_stock",
+  "visibility": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-20T11:24:32.939Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T11:24:32.939Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f66b5899c704778730bf5"
+  },
+  "productName": "Wegovy® - 2.4MG Injection",
+  "brand": "unknown",
+  "originalPrice": 30,
+  "salePrice": 29,
+  "images": {
+    "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768908439/k9uwfj1xs1bibha10gav.webp",
+    "gallery": [
+      "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768908439/k9uwfj1xs1bibha10gav.webp"
+    ]
+  },
+  "usage": [],
+  "description": "",
+  "howItWorks": "health",
+  "generics": [],
+  "markup": 5,
+  "dosageOptions": [],
+  "quantityOptions": [],
+  "precautions": "",
+  "sideEffects": "health",
+  "drugInteractions": "health",
+  "indications": "health",
+  "category": "6960f453ed53ae9c2467d5f2",
+  "healthCategory": {
+    "$oid": "6960f453ed53ae9c2467d5f2"
+  },
+  "healthTypeSlug": "constipation",
+  "healthTypeId": {
+    "$oid": "6960f453ed53ae9c2467d5f4"
+  },
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 230,
+  "status": "in_stock",
+  "visibility": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-20T11:27:49.298Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T11:27:49.298Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f6833899c704778730c20"
+  },
+  "productName": "Uloric® - 80MG Tablet +$10.00",
+  "brand": "unknown",
+  "originalPrice": 30,
+  "salePrice": 29,
+  "images": {
+    "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768908684/y8khpycay90xjjwnwcgn.webp",
+    "gallery": [
+      "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768908684/y8khpycay90xjjwnwcgn.webp"
+    ]
+  },
+  "usage": [],
+  "description": "",
+  "howItWorks": "Uloric® - 80MG Tablet +$10.00",
+  "generics": [],
+  "markup": 5,
+  "dosageOptions": [],
+  "quantityOptions": [],
+  "precautions": "",
+  "sideEffects": "no",
+  "drugInteractions": "no",
+  "indications": "no",
+  "category": "6960f453ed53ae9c2467d5f2",
+  "healthCategory": {
+    "$oid": "6960f453ed53ae9c2467d5f2"
+  },
+  "healthTypeSlug": "indigestion",
+  "healthTypeId": {
+    "$oid": "6960f453ed53ae9c2467d5f5"
+  },
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 23,
+  "status": "in_stock",
+  "visibility": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-20T11:34:11.209Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T11:34:11.209Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f6efe2ffa439d4c46c549"
+  },
+  "productName": "Pred Forte - 1% Eye",
+  "brand": "unknown",
+  "originalPrice": 40,
+  "salePrice": 39,
+  "images": {
+    "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768910486/c2rl5syw7ybhcqjtdvmw.webp",
+    "gallery": [
+      "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768910486/c2rl5syw7ybhcqjtdvmw.webp"
+    ]
+  },
+  "usage": [],
+  "description": "",
+  "howItWorks": "The appropriate dosage and frequency of Pred Forte eye drops should be determined by a doctor. \nTo apply the drops: Shake the bottle well as it is a suspension, tilt your head back, pull down your lower eyelid to create a small pocket, instill the prescribed number of drops, and avoid touching the tip of the dropper to your eye or any other surface to prevent contamination.",
+  "generics": [],
+  "markup": 5,
+  "dosageOptions": [
+    {
+      "name": "0.05%",
+      "priceAdjustment": 2,
+      "_id": {
+        "$oid": "696f6efe2ffa439d4c46c54a"
+      }
+    },
+    {
+      "name": "2 drop",
+      "priceAdjustment": 2,
+      "_id": {
+        "$oid": "696f6efe2ffa439d4c46c54b"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "20 gram",
+      "priceAdjustment": 1,
+      "_id": {
+        "$oid": "696f6efe2ffa439d4c46c54c"
+      }
+    }
+  ],
+  "precautions": "",
+  "sideEffects": "Common (usually temporary): Stinging/burning, blurred vision, eye discomfort, feeling like something's in your eye, bad taste.\nSerious (Contact Doctor Immediately):\nIncreased Eye Pressure (Glaucoma): Blurred vision, halos, eye pain, redness.\nCataracts: Cloudy vision, dim vision, or eye pain.\nInfection: Worsening redness, pain, light sensitivity, discharge (bacterial, fungal, viral).\nAllergic Reaction: Rash, hives, facial swelling, difficulty breathing.\nDelayed Healing: Slower recovery from eye injuries.",
+  "drugInteractions": "Inform your doctor about all existing eye conditions, including herpes, glaucoma, asthma, or recent eye surgery.\nWhile no specific drug interactions are listed, consult your doctor about using Pred Forte with other eye drops.",
+  "indications": "Inform your doctor about all existing eye conditions, including herpes, glaucoma, asthma, or recent eye surgery.",
+  "category": "696f6001b5741ad11065b917",
+  "healthCategory": {
+    "$oid": "696f6001b5741ad11065b917"
+  },
+  "healthTypeSlug": "allergies",
+  "healthTypeId": {
+    "$oid": "696f6001b5741ad11065b918"
+  },
+  "isTrendy": false,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 234,
+  "status": "in_stock",
+  "visibility": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-20T12:03:10.054Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T11:01:11.909Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970cba4a1d7bfb46383d199"
+  },
+  "productName": "Cuff Syrup",
+  "brand": "unknown",
+  "originalPrice": 23,
+  "salePrice": 19,
+  "images": {
+    "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768999789/oc05llmwvxleowhpdwfc.webp",
+    "gallery": [
+      "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768999789/oc05llmwvxleowhpdwfc.webp"
+    ]
+  },
+  "usage": [],
+  "description": "",
+  "howItWorks": "health",
+  "generics": [],
+  "markup": 5,
+  "dosageOptions": [],
+  "quantityOptions": [],
+  "precautions": "",
+  "sideEffects": "health",
+  "drugInteractions": "health",
+  "indications": "health",
+  "category": "696f6001b5741ad11065b917",
+  "healthCategory": {
+    "$oid": "696f6001b5741ad11065b917"
+  },
+  "healthTypeSlug": "allergies",
+  "healthTypeId": {
+    "$oid": "696f6001b5741ad11065b918"
+  },
+  "isTrendy": true,
+  "isBestOffer": false,
+  "discountPercentage": 5,
+  "views": 0,
+  "stock": 10,
+  "status": "low_stock",
+  "visibility": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-21T12:50:44.857Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T12:50:44.857Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970ccfda1d7bfb46383d326"
+  },
+  "productName": "Wegovy® - 2.4MG Injection",
+  "brand": "unknown",
+  "originalPrice": 39,
+  "salePrice": 29,
+  "images": {
+    "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769000160/xokbggur3wsffpbra9ai.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769000160/xokbggur3wsffpbra9ai.jpg"
+    ]
+  },
+  "usage": [],
+  "description": "",
+  "howItWorks": "okay",
+  "generics": [],
+  "markup": 5,
+  "dosageOptions": [],
+  "quantityOptions": [],
+  "precautions": "",
+  "sideEffects": "okay",
+  "drugInteractions": "okay",
+  "indications": "okay",
+  "category": "696f6001b5741ad11065b917",
+  "healthCategory": {
+    "$oid": "696f6001b5741ad11065b917"
+  },
+  "healthTypeSlug": "allergies",
+  "healthTypeId": {
+    "$oid": "696f6001b5741ad11065b918"
+  },
+  "isTrendy": true,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 5,
+  "status": "low_stock",
+  "visibility": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-21T12:56:29.167Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T12:56:29.167Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6971025d4127f0ca8999afc5"
+  },
+  "productName": "Metformin Hydrochloride",
+  "brand": "\"Metformin Hydrochloride",
+  "originalPrice": 85,
+  "salePrice": 68,
+  "images": {
+    "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769013624/x8eiqvjiqgibleti8qbl.webp",
+    "gallery": [
+      "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769013624/x8eiqvjiqgibleti8qbl.webp"
+    ]
+  },
+  "usage": [],
+  "description": "",
+  "howItWorks": "Metformin works by decreasing glucose production in the liver, increasing insulin sensitivity in muscle cells, and improving glucose uptake by the body.",
+  "generics": [
+    "Do not stop medication without consulting your healthcare provider"
+  ],
+  "markup": 5,
+  "dosageOptions": [
+    {
+      "name": "Tablet - 500mg",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "6971025d4127f0ca8999afc6"
+      }
+    },
+    {
+      "name": "Tablet - 850mg",
+      "priceAdjustment": 5,
+      "_id": {
+        "$oid": "6971025d4127f0ca8999afc7"
+      }
+    }
+  ],
+  "quantityOptions": [
+    {
+      "name": "30 tablets",
+      "priceAdjustment": 0,
+      "_id": {
+        "$oid": "6971025d4127f0ca8999afc8"
+      }
+    },
+    {
+      "name": "20 tablets",
+      "priceAdjustment": 1,
+      "_id": {
+        "$oid": "6971025d4127f0ca8999afc9"
+      }
+    }
+  ],
+  "precautions": "",
+  "sideEffects": "Common side effects include nausea, diarrhea, abdominal discomfort, and loss of appetite. Rare but serious side effects include lactic acidosis.",
+  "drugInteractions": "May interact with insulin, contrast dyes used in imaging tests, and certain blood pressure medications. Inform your doctor about all medicines you are taking",
+  "indications": "Indicated for the treatment of type 2 diabetes mellitus to help control blood glucose levels and reduce the risk of diabetes-related complications.",
+  "category": "696f6001b5741ad11065b917",
+  "healthCategory": {
+    "$oid": "696f6001b5741ad11065b917"
+  },
+  "healthTypeSlug": "diabetes-care",
+  "healthTypeId": {
+    "$oid": "696f6001b5741ad11065b918"
+  },
+  "isTrendy": true,
+  "isBestOffer": false,
+  "discountPercentage": null,
+  "views": 0,
+  "stock": 193,
+  "status": "in_stock",
+  "visibility": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-21T16:44:13.218Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T16:19:57.658Z"
+  },
+  "__v": 0
+}]

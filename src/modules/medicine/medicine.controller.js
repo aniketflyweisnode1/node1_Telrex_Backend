@@ -2,6 +2,22 @@ const medicineService = require('./medicine.service');
 const healthService = require('../health/health.service');
 const path = require('path');
 
+// Bulk add medicines from JSON payload
+exports.bulkUploadMedicinesFromJson = async (req, res, next) => {
+  try {
+    const medicinesPayload = req.body.medicines || req.body.data || req.body.items || [];
+    const medicines = await medicineService.bulkAddMedicinesFromJson(medicinesPayload);
+
+    res.status(201).json({
+      success: true,
+      message: 'Medicines added successfully from JSON payload',
+      data: medicines
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Add new medicine
 exports.addMedicine = async (req, res, next) => {
   try {

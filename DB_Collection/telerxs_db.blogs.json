@@ -1,0 +1,55 @@
+[{
+  "_id": {
+    "$oid": "696b487d89cc4f3f0bb227b0"
+  },
+  "title": "Tips grow for Better",
+  "category": {
+    "$oid": "696b486489cc4f3f0bb227a9"
+  },
+  "author": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "featuredImage": {
+    "url": "https://example.com/images/blog-featured.jpg",
+    "alt": "Health Tips"
+  },
+  "excerpt": "Discover 10 simple tips to improve your health and wellness",
+  "content": "Full blog content here... (minimum 100 characters)",
+  "media": [
+    {
+      "type": "image",
+      "url": "https://example.com/images/blog-1.jpg",
+      "alt": "Image 1",
+      "_id": {
+        "$oid": "696b487d89cc4f3f0bb227b1"
+      }
+    }
+  ],
+  "tags": [
+    "health",
+    "wellness",
+    "tips"
+  ],
+  "metaTitle": "10 Tips for Better Health",
+  "metaDescription": "Discover 10 simple tips to improve your health and wellness",
+  "status": "published",
+  "views": 0,
+  "isFeatured": false,
+  "seoKeywords": [
+    "health",
+    "wellness",
+    "tips"
+  ],
+  "readingTime": 1,
+  "createdAt": {
+    "$date": "2026-01-17T08:29:49.945Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T08:31:48.243Z"
+  },
+  "slug": "tips-grow-for-better",
+  "__v": 0,
+  "publishedAt": {
+    "$date": "2026-01-17T08:31:48.242Z"
+  }
+}]

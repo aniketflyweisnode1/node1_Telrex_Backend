@@ -7,6 +7,14 @@ const validate = require('../../middlewares/validate.middleware');
 
 // ==================== PUBLIC ROUTES (No Authentication Required) ====================
 
+// Bulk add medicines from JSON payload (no file uploads)
+router.post(
+  '/medicines/json-upload',
+  medicineValidation.bulkJsonUploadValidation,
+  validate,
+  medicineController.bulkUploadMedicinesFromJson
+);
+
 // Get all medicines
 router.get(
   '/medicines',

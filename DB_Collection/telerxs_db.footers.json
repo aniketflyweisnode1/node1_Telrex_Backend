@@ -1,0 +1,553 @@
+[{
+  "_id": {
+    "$oid": "696b3e6e9b386eb88f3150f0"
+  },
+  "section": "faq",
+  "title": "FAQs updated",
+  "faqs": [
+    {
+      "question": "Loreal Ipsum",
+      "answer": "Our service allows you to consult with licensed doctors online and receive prescriptions delivered to your home.",
+      "order": 0,
+      "_id": {
+        "$oid": "696f76ab8b1b6bc014d59cde"
+      }
+    }
+  ],
+  "contact": {
+    "primaryMobileCountryCode": "+91",
+    "secondaryMobileCountryCode": "+91"
+  },
+  "address": {
+    "country": "United States"
+  },
+  "status": "published",
+  "order": 2,
+  "lastEditedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "media": [],
+  "blogLinks": [],
+  "createdAt": {
+    "$date": "2026-01-17T07:46:54.535Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T14:26:06.951Z"
+  },
+  "__v": 3
+},
+{
+  "_id": {
+    "$oid": "696b471989cc4f3f0bb22785"
+  },
+  "section": "careers",
+  "title": "carreer section",
+  "content": "<h2>Careers</h2><p>(Company Name) is a modern, technology-enabled telehealth and online pharmacy service dedicated to making prescription medications accessible, affordable, and hassle-free.</p>",
+  "media": [
+    {
+      "type": "image",
+      "url": "https://example.com/about-image.jpg",
+      "alt": "Ocareers",
+      "caption": "Our careers team",
+      "_id": {
+        "$oid": "696b471989cc4f3f0bb22786"
+      }
+    }
+  ],
+  "contact": {
+    "primaryMobileCountryCode": "+91",
+    "secondaryMobileCountryCode": "+91"
+  },
+  "address": {
+    "country": "United States"
+  },
+  "status": "draft",
+  "order": 1,
+  "lastEditedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "faqs": [],
+  "blogLinks": [],
+  "createdAt": {
+    "$date": "2026-01-17T08:23:53.325Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T09:38:58.124Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696b475e89cc4f3f0bb22796"
+  },
+  "section": "support",
+  "title": "support section updated",
+  "content": "<h2>Who We Are</h2><p>(Company Name) is a modern, technology-enabled telehealth and online pharmacy service dedicated to making prescription medications accessible, affordable, and hassle-free.</p>",
+  "media": [
+    {
+      "type": "image",
+      "url": "https://example.com/about-image.jpg",
+      "alt": "support",
+      "caption": "Our support team",
+      "_id": {
+        "$oid": "696b475e89cc4f3f0bb22797"
+      }
+    }
+  ],
+  "contact": {
+    "primaryMobileCountryCode": "+91",
+    "secondaryMobileCountryCode": "+91"
+  },
+  "address": {
+    "country": "United States"
+  },
+  "status": "published",
+  "order": 1,
+  "lastEditedBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "faqs": [],
+  "blogLinks": [],
+  "createdAt": {
+    "$date": "2026-01-17T08:25:02.717Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T08:25:25.115Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696b491889cc4f3f0bb227c1"
+  },
+  "section": "shipping-returns",
+  "title": "shipping returnss",
+  "content": "<div style=\"\n  font-family: Arial, sans-serif;\n  background-color: #ffffff;\n  padding: 20px;\n  color: #334155;\n  line-height: 1.7;\n\">\n\n  <h2 style=\"\n    font-size: 22px;\n    font-weight: 600;\n    margin-bottom: 12px;\n    color: #00598D;\n  \">\n    Shipping & Returns\n  </h2>\n\n  <p style=\"font-size: 14px;\">\n    Processing Time: Orders are processed within 24 hours of receiving the order,\n    excluding weekends and public holidays. The company is not responsible for\n    shipping delays caused by courier services.\n  </p>\n\n  <h3 style=\"color:#00598D; font-size: 16px; font-weight: 600; margin-top: 24px; color:#00598D;\">\n    Shipping Methods\n  </h3>\n\n  <ul style=\"padding-left: 18px;\">\n    <li><strong>$9.99 Ground Delivery:</strong> 3–5 business days.</li>\n    <li><strong>$14.99 Two-Business Days:</strong> Delivered within 2 business days if ordered before 2:00 PM EST.</li>\n    <li><strong>$27.99 Next Business Day:</strong> Delivered next business day if ordered before 2:00 PM EST.</li>\n  </ul>\n\n  <h3 style=\"color:#00598D; color:#00598D; font-size: 16px; font-weight: 600; margin-top: 24px;\">\n    General Shipping Information\n  </h3>\n\n  <ul style=\"padding-left: 18px;\">\n    <li>Shipping charges are calculated at checkout.</li>\n    <li>Delivery timelines depend on shipping method and destination.</li>\n    <li>Business days exclude weekends and public holidays.</li>\n  </ul>\n\n  <h3 style=\"color:#00598D; font-size: 16px; font-weight: 600; margin-top: 24px;\">\n    Important Notes on Shipping Times\n  </h3>\n\n  <ul style=\"padding-left: 18px;\">\n    <li>Express shipping options do not include Saturdays.</li>\n    <li>Orders placed after 2:00 PM EST are processed the next business day.</li>\n    <li>Friday orders with next-day shipping are delivered on Monday.</li>\n    <li>Saturday delivery may be available in select locations.</li>\n  </ul>\n\n  <h3 style=\"color:#00598D; font-size: 16px; font-weight: 600; margin-top: 24px;\">\n    For Shipments to Hawaii\n  </h3>\n\n  <ul style=\"padding-left: 18px;\">\n    <li>Shipping options may be limited.</li>\n    <li>Transit times may be longer than mainland deliveries.</li>\n    <li>USPS Express shipments may take up to 3 business days.</li>\n  </ul>\n\n  <h3 style=\"font-size: 16px; font-weight: 600; margin-top: 24px;\">\n    Customs, Duties & Taxes\n  </h3>\n\n  <p style=\"font-size: 14px;\">\n    Customers are responsible for all customs duties, taxes, and import fees.\n    These charges are not included in product prices or shipping costs.\n  </p>\n\n  <h3 style=\"color:#00598D; font-size: 16px; font-weight: 600; margin-top: 24px;\">\n    Damages\n  </h3>\n\n  <p style=\"font-size: 14px;\">\n    If your order arrives damaged, contact customer support immediately with\n    photos of the product and packaging.\n  </p>\n\n  <h3 style=\"color:#00598D; font-size: 16px; font-weight: 600; margin-top: 24px;\">\n    Returns & Refunds\n  </h3>\n\n  <p style=\"font-size: 14px;\">\n    Due to health and safety regulations, opened or used products cannot be\n    returned. Refunds are issued only for damaged or incorrect orders.\n  </p>\n\n</div>",
+  "media": [
+    {
+      "type": "image",
+      "url": "https://example.com/about-image.jpg",
+      "alt": "Our Team",
+      "caption": "shipping-returns",
+      "_id": {
+        "$oid": "696b491889cc4f3f0bb227c2"
+      }
+    }
+  ],
+  "contact": {
+    "primaryMobileCountryCode": "+91",
+    "secondaryMobileCountryCode": "+91"
+  },
+  "address": {
+    "country": "United States"
+  },
+  "status": "published",
+  "order": 1,
+  "lastEditedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "faqs": [],
+  "blogLinks": [],
+  "createdAt": {
+    "$date": "2026-01-17T08:32:24.994Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T14:58:02.046Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696b494f89cc4f3f0bb227d8"
+  },
+  "section": "privacy-policy",
+  "title": "privacy policy",
+  "content": "<h1>Privacy Policy</h1>\n\n<div style=\"font-family: Inter, Arial, sans-serif; color: #1f2937; line-height: 1.7; max-width: 900px; margin: auto;\">\n\n  <h2 style=\"font-size: 20px; font-weight: 600; margin-bottom: 8px;\">Introduction</h2>\n  <ul style=\"padding-left: 20px; margin-bottom: 20px;\">\n    <li>This platform provides secure and reliable healthcare-related services.</li>\n    <li>By accessing or using the platform, users agree to comply with all applicable terms and conditions.</li>\n    <li>These terms ensure transparency, safety, and a smooth user experience.</li>\n  </ul>\n\n  <h2 style=\"font-size: 20px; font-weight: 600; margin-bottom: 8px;\">User Responsibilities</h2>\n  <ul style=\"padding-left: 20px; margin-bottom: 20px;\">\n    <li>Provide accurate, complete, and up-to-date personal and medical information.</li>\n    <li>Maintain confidentiality of login credentials and account access.</li>\n    <li>Use the platform responsibly and in compliance with the law.</li>\n    <li>Avoid misuse, unauthorized access, or fraudulent activities.</li>\n    <li>Violations may result in account suspension or termination.</li>\n  </ul>\n\n  <h2 style=\"font-size: 20px; font-weight: 600; margin-bottom: 8px;\">Booking Appointments</h2>\n  <ul style=\"padding-left: 20px; margin-bottom: 20px;\">\n    <li>Appointment bookings are subject to availability and provider confirmation.</li>\n    <li>Users must verify appointment details before final submission.</li>\n    <li>Rescheduling or cancellations must be done within the allowed timeframe.</li>\n    <li>Late cancellations may incur penalties or loss of booking fees.</li>\n  </ul>\n\n  <h2 style=\"font-size: 20px; font-weight: 600; margin-bottom: 8px;\">Medical Disclaimer</h2>\n  <ul style=\"padding-left: 20px; margin-bottom: 20px;\">\n    <li>Content provided is for informational purposes only.</li>\n    <li>The platform does not replace professional medical consultation.</li>\n    <li>Users should consult qualified healthcare professionals for medical decisions.</li>\n    <li>The platform is not responsible for outcomes based on self-diagnosis.</li>\n  </ul>\n\n  <h2 style=\"font-size: 20px; font-weight: 600; margin-bottom: 8px;\">Payment & Fees</h2>\n  <ul style=\"padding-left: 20px; margin-bottom: 20px;\">\n    <li>Payments must be made using supported payment methods.</li>\n    <li>All charges, including applicable taxes, are displayed before confirmation.</li>\n    <li>Payments are non-refundable unless explicitly stated otherwise.</li>\n    <li>Payment issues or disputes should be reported immediately.</li>\n  </ul>\n\n  <h2 style=\"font-size: 20px; font-weight: 600; margin-bottom: 8px;\">Changes to Terms & Conditions</h2>\n  <ul style=\"padding-left: 20px;\">\n    <li>Terms may be updated or modified at any time.</li>\n    <li>Users will be notified of significant changes where applicable.</li>\n    <li>Continued use of the platform implies acceptance of updated terms.</li>\n    <li>Users are encouraged to review terms periodically.</li>\n  </ul>\n\n</div>",
+  "media": [
+    {
+      "type": "image",
+      "url": "https://example.com/about-image.jpg",
+      "alt": "Our Team",
+      "caption": "privacy-policy",
+      "_id": {
+        "$oid": "696b494f89cc4f3f0bb227d9"
+      }
+    },
+    {
+      "type": "image",
+      "url": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769006410/wck8yvba3kjocptvphe4.png",
+      "alt": "image",
+      "caption": "uploaded-media",
+      "_id": {
+        "$oid": "6970e6254127f0ca8999a7a5"
+      }
+    }
+  ],
+  "contact": {
+    "primaryMobileCountryCode": "+91",
+    "secondaryMobileCountryCode": "+91"
+  },
+  "address": {
+    "country": "United States"
+  },
+  "status": "published",
+  "order": 1,
+  "lastEditedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "faqs": [],
+  "blogLinks": [],
+  "createdAt": {
+    "$date": "2026-01-17T08:33:19.340Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T14:43:49.901Z"
+  },
+  "__v": 3
+},
+{
+  "_id": {
+    "$oid": "696b49c189cc4f3f0bb227e7"
+  },
+  "section": "terms-conditions",
+  "title": "terms  conditions",
+  "content": "<div style=\"font-family: Inter, Arial, sans-serif; color: #1f2937; line-height: 1.7; max-width: 900px;\">\n\n  <h2 style=\"font-size: 20px; font-weight: 600; margin-bottom: 8px;\">Introduction</h2>\n  <ul style=\"padding-left: 20px; margin-bottom: 20px;\">\n    <li>This platform provides secure and reliable healthcare-related services.</li>\n    <li>By accessing or using the platform, users agree to comply with all applicable terms and conditions.</li>\n    <li>These terms ensure transparency, safety, and a smooth user experience.</li>\n  </ul>\n\n  <h2 style=\"font-size: 20px; font-weight: 600; margin-bottom: 8px;\">User Responsibilities</h2>\n  <ul style=\"padding-left: 20px; margin-bottom: 20px;\">\n    <li>Provide accurate, complete, and up-to-date personal and medical information.</li>\n    <li>Maintain confidentiality of login credentials and account access.</li>\n    <li>Use the platform responsibly and in compliance with the law.</li>\n    <li>Avoid misuse, unauthorized access, or fraudulent activities.</li>\n    <li>Violations may result in account suspension or termination.</li>\n  </ul>\n\n  <h2 style=\"font-size: 20px; font-weight: 600; margin-bottom: 8px;\">Booking Appointments</h2>\n  <ul style=\"padding-left: 20px; margin-bottom: 20px;\">\n    <li>Appointment bookings are subject to availability and provider confirmation.</li>\n    <li>Users must verify appointment details before final submission.</li>\n    <li>Rescheduling or cancellations must be done within the allowed timeframe.</li>\n    <li>Late cancellations may incur penalties or loss of booking fees.</li>\n  </ul>\n\n  <h2 style=\"font-size: 20px; font-weight: 600; margin-bottom: 8px;\">Medical Disclaimer</h2>\n  <ul style=\"padding-left: 20px; margin-bottom: 20px;\">\n    <li>Content provided is for informational purposes only.</li>\n    <li>The platform does not replace professional medical consultation.</li>\n    <li>Users should consult qualified healthcare professionals for medical decisions.</li>\n    <li>The platform is not responsible for outcomes based on self-diagnosis.</li>\n  </ul>\n\n  <h2 style=\"font-size: 20px; font-weight: 600; margin-bottom: 8px;\">Payment & Fees</h2>\n  <ul style=\"padding-left: 20px; margin-bottom: 20px;\">\n    <li>Payments must be made using supported payment methods.</li>\n    <li>All charges, including applicable taxes, are displayed before confirmation.</li>\n    <li>Payments are non-refundable unless explicitly stated otherwise.</li>\n    <li>Payment issues or disputes should be reported immediately.</li>\n  </ul>\n\n  <h2 style=\"font-size: 20px; font-weight: 600; margin-bottom: 8px;\">Changes to Terms & Conditions</h2>\n  <ul style=\"padding-left: 20px;\">\n    <li>Terms may be updated or modified at any time.</li>\n    <li>Users will be notified of significant changes where applicable.</li>\n    <li>Continued use of the platform implies acceptance of updated terms.</li>\n    <li>Users are encouraged to review terms periodically.</li>\n  </ul>\n\n</div>",
+  "media": [
+    {
+      "type": "image",
+      "url": "https://example.com/about-image.jpg",
+      "alt": "Our Team",
+      "caption": "terms-conditions",
+      "_id": {
+        "$oid": "696b49c189cc4f3f0bb227e8"
+      }
+    },
+    {
+      "type": "image",
+      "url": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769006249/zpxlgpwdw3osvkb94nxw.png",
+      "alt": "image",
+      "caption": "uploaded-media",
+      "_id": {
+        "$oid": "6970e4c24127f0ca8999a6f6"
+      }
+    }
+  ],
+  "contact": {
+    "primaryMobileCountryCode": "+91",
+    "secondaryMobileCountryCode": "+91"
+  },
+  "address": {
+    "country": "United States"
+  },
+  "status": "published",
+  "order": 1,
+  "lastEditedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "faqs": [],
+  "blogLinks": [],
+  "createdAt": {
+    "$date": "2026-01-17T08:35:13.259Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T14:55:15.971Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "696b4a2689cc4f3f0bb227f8"
+  },
+  "section": "consent-telehealth",
+  "title": "consent  consent-telehealth telehealth",
+  "content": "<h2>Who We Are</h2><p>pterms-conditions is a modern, technology-enabled telehealth and online pharmacy service dedicated to making prescription medications accessible, affordable, and hassle-free.</p>",
+  "media": [
+    {
+      "type": "image",
+      "url": "https://example.com/about-image.jpg",
+      "alt": "Our Team",
+      "caption": "consent-telehealth",
+      "_id": {
+        "$oid": "696b4a2689cc4f3f0bb227f9"
+      }
+    }
+  ],
+  "contact": {
+    "primaryMobileCountryCode": "+91",
+    "secondaryMobileCountryCode": "+91"
+  },
+  "address": {
+    "country": "United States"
+  },
+  "status": "published",
+  "order": 1,
+  "lastEditedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "faqs": [],
+  "blogLinks": [],
+  "createdAt": {
+    "$date": "2026-01-17T08:36:54.918Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-19T13:26:57.260Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696b4a7189cc4f3f0bb22807"
+  },
+  "section": "contact",
+  "title": "Contact Us",
+  "contact": {
+    "primaryMobile": "9876543210",
+    "primaryMobileCountryCode": "+91",
+    "secondaryMobile": "9876123459",
+    "secondaryMobileCountryCode": "+91",
+    "email": "telerxs@example.com"
+  },
+  "address": {
+    "country": "United States"
+  },
+  "status": "draft",
+  "order": 2,
+  "lastEditedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "media": [],
+  "faqs": [],
+  "blogLinks": [],
+  "createdAt": {
+    "$date": "2026-01-17T08:38:09.091Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T10:18:41.160Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696b4b0489cc4f3f0bb22815"
+  },
+  "section": "address",
+  "title": "Our Address",
+  "contact": {
+    "primaryMobileCountryCode": "+91",
+    "secondaryMobileCountryCode": "+91"
+  },
+  "address": {
+    "location": "24761 US Hwy 19 N | Clearwater, Florida 33763",
+    "street": "24761 US Hwy 19 N",
+    "city": "Clearwater",
+    "state": "Florida",
+    "zipCode": "33763",
+    "country": "United States"
+  },
+  "status": "draft",
+  "order": 3,
+  "lastEditedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "media": [],
+  "faqs": [],
+  "blogLinks": [],
+  "createdAt": {
+    "$date": "2026-01-17T08:40:36.525Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-19T14:52:15.952Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696b4c8489cc4f3f0bb22826"
+  },
+  "section": "social-media",
+  "title": "Follow Us",
+  "contact": {
+    "primaryMobileCountryCode": "+91",
+    "secondaryMobileCountryCode": "+91"
+  },
+  "address": {
+    "country": "United States"
+  },
+  "socialMedia": {
+    "facebook": "https://www.facebook.com/telerxs",
+    "instagram": "https://www.instagram.com/yourpage",
+    "linkedin": "https://www.linkedin.com/company/telerxs",
+    "youtube": "https://www.youtube.com/@yourchannel",
+    "twitter": "https://www.twitter.com/yourhandle",
+    "tiktok": "https://www.tiktok.com/@yourhandle"
+  },
+  "status": "draft",
+  "order": 0,
+  "lastEditedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "media": [],
+  "faqs": [],
+  "blogLinks": [],
+  "createdAt": {
+    "$date": "2026-01-17T08:47:00.929Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T10:20:31.137Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696b534389cc4f3f0bb22848"
+  },
+  "section": "about-us",
+  "title": "About Us",
+  "content": "<h2>About Us Telerxs</h2>\n<p>We are a growing pharmaceutical company committed to improving health and well-being through high-quality, affordable, and innovative healthcare solutions. With a strong focus on patient safety, efficacy, and ethical practices, we strive to make reliable medicines accessible to communities across diverse regions.</p>\n<p>Our operations are guided by stringent quality standards and regulatory compliance at every stage — from research and development to manufacturing and distribution. By leveraging advanced technology, skilled professionals, and robust quality control systems, we ensure that each product meets international benchmarks for safety and effectiveness.</p>\n<p>We believe in continuous innovation and responsible growth. Our research-driven approach allows us to develop formulations that address real medical needs while adapting to the evolving demands of modern healthcare. Collaboration with healthcare professionals, partners, and stakeholders enables us to deliver solutions that create long-term value.</p>\n\n<p>At the core of our company lies a commitment to integrity, transparency, and patient-centric care. We aim not only to treat illnesses but also to contribute positively to global health outcomes by building trust, maintaining excellence, and delivering medicines that improve lives.</p>",
+  "media": [
+    {
+      "type": "image",
+      "url": "https://example.com/about-image.jpg",
+      "alt": "Our Team",
+      "caption": "Our leadership team",
+      "_id": {
+        "$oid": "696b534389cc4f3f0bb22849"
+      }
+    }
+  ],
+  "contact": {
+    "primaryMobileCountryCode": "+91",
+    "secondaryMobileCountryCode": "+91"
+  },
+  "address": {
+    "country": "United States"
+  },
+  "status": "draft",
+  "order": 1,
+  "lastEditedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "faqs": [],
+  "blogLinks": [],
+  "createdAt": {
+    "$date": "2026-01-17T09:15:47.737Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T16:23:14.290Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696b537f89cc4f3f0bb22859"
+  },
+  "section": "logo",
+  "title": "Logo",
+  "logo": {
+    "url": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768986719/vv3h3gvjgdewd3zuv7fn.png",
+    "alt": "company-logo"
+  },
+  "companyDescription": "Experience personalized medical care from the comfort of your home.",
+  "contact": {
+    "primaryMobileCountryCode": "+91",
+    "secondaryMobileCountryCode": "+91"
+  },
+  "address": {
+    "country": "United States"
+  },
+  "status": "published",
+  "order": 0,
+  "lastEditedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "media": [],
+  "faqs": [],
+  "blogLinks": [],
+  "createdAt": {
+    "$date": "2026-01-17T09:16:47.758Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T16:28:30.445Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696b542189cc4f3f0bb22873"
+  },
+  "section": "how-works",
+  "title": "how works",
+  "content": "<h2>Who We Are</h2><p>(Company Name) is a modern, technology-enabled telehealth and online pharmacy service dedicated to making prescription medications accessible, affordable, and hassle-free.</p>",
+  "media": [
+    {
+      "type": "image",
+      "url": "https://example.com/about-image.jpg",
+      "alt": "Our Team",
+      "caption": "Our leadership team",
+      "_id": {
+        "$oid": "696b542189cc4f3f0bb22874"
+      }
+    }
+  ],
+  "contact": {
+    "primaryMobileCountryCode": "+91",
+    "secondaryMobileCountryCode": "+91"
+  },
+  "address": {
+    "country": "United States"
+  },
+  "status": "published",
+  "order": 1,
+  "lastEditedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "faqs": [],
+  "blogLinks": [],
+  "createdAt": {
+    "$date": "2026-01-17T09:19:29.495Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T16:21:27.870Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696b546d89cc4f3f0bb22884"
+  },
+  "section": "leadership",
+  "title": "leadership section",
+  "content": "<h2>Leadership</h2><p>(Company Name) is a modern, technology-enabled telehealth and online pharmacy service dedicated to making prescription medications accessible, affordable, and hassle-free.</p>",
+  "media": [
+    {
+      "type": "image",
+      "url": "https://example.com/about-image.jpg",
+      "alt": "Our Team",
+      "caption": "Our leadership team",
+      "_id": {
+        "$oid": "696b546d89cc4f3f0bb22885"
+      }
+    }
+  ],
+  "contact": {
+    "primaryMobileCountryCode": "+91",
+    "secondaryMobileCountryCode": "+91"
+  },
+  "address": {
+    "country": "United States"
+  },
+  "status": "draft",
+  "order": 1,
+  "lastEditedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "faqs": [],
+  "blogLinks": [],
+  "createdAt": {
+    "$date": "2026-01-17T09:20:45.613Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T09:34:14.849Z"
+  },
+  "__v": 0
+}]

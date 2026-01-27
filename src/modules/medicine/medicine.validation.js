@@ -1,5 +1,17 @@
 const { body, query } = require('express-validator');
 
+// Bulk JSON upload validation
+exports.bulkJsonUploadValidation = [
+  body('medicines')
+    .if(body('data').not().exists())
+    .if(body('items').not().exists())
+    .exists()
+    .withMessage('medicines field is required')
+    .bail()
+    .isArray({ min: 1 })
+    .withMessage('medicines must be a non-empty array')
+];
+
 // Add Medicine Validation
 exports.addMedicineValidation = [
   // Basic Information

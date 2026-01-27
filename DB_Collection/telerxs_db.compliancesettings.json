@@ -1,0 +1,100 @@
+[{
+  "_id": {
+    "$oid": "696f90a06c43199fa46768ea"
+  },
+  "type": "hipaa",
+  "title": "HIPAA Compliance",
+  "description": "All patient health information is encrypted and stored securely",
+  "status": "active",
+  "features": [
+    {
+      "name": "End-to-end encryption for data in transit",
+      "enabled": true,
+      "_id": {
+        "$oid": "696f90a06c43199fa46768eb"
+      }
+    },
+    {
+      "name": "AES-256 encryption for data at rest",
+      "enabled": true,
+      "_id": {
+        "$oid": "696f90a06c43199fa46768ec"
+      }
+    },
+    {
+      "name": "Regular security audits",
+      "enabled": true,
+      "_id": {
+        "$oid": "696f90a06c43199fa46768ed"
+      }
+    },
+    {
+      "name": "Business Associate Agreements in place",
+      "enabled": true,
+      "_id": {
+        "$oid": "696f90a06c43199fa46768ee"
+      }
+    }
+  ],
+  "lastUpdatedBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-20T14:26:40.727Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T14:26:40.727Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f9371ab16943c1be89222"
+  },
+  "type": "gdpr",
+  "title": "gdpr Compliance",
+  "description": "All patient health information is encrypted and stored securely",
+  "status": "active",
+  "features": [
+    {
+      "name": "End-to-end encryption for data in transit",
+      "enabled": true,
+      "_id": {
+        "$oid": "696f9371ab16943c1be89223"
+      }
+    },
+    {
+      "name": "AES-256 encryption for data at rest",
+      "enabled": true,
+      "_id": {
+        "$oid": "696f9371ab16943c1be89224"
+      }
+    },
+    {
+      "name": "Regular security audits",
+      "enabled": true,
+      "_id": {
+        "$oid": "696f9371ab16943c1be89225"
+      }
+    },
+    {
+      "name": "Business Associate Agreements in place",
+      "enabled": true,
+      "_id": {
+        "$oid": "696f9371ab16943c1be89226"
+      }
+    }
+  ],
+  "lastUpdatedBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-20T14:38:41.699Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T14:38:41.699Z"
+  },
+  "__v": 0
+}]

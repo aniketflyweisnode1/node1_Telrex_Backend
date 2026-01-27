@@ -1,0 +1,23 @@
+[{
+  "_id": {
+    "$oid": "696b486489cc4f3f0bb227a9"
+  },
+  "name": "categort create",
+  "slug": "health-create",
+  "description": "Articles about health and wellness topics",
+  "isActive": true,
+  "order": 0,
+  "createdBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "updatedBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "createdAt": {
+    "$date": "2026-01-17T08:29:24.446Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T08:29:24.446Z"
+  },
+  "__v": 0
+}]

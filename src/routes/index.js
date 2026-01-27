@@ -112,7 +112,8 @@ router.use('/admin', require('../modules/intake-form-field/intake-form-field.rou
    Unified API for Email, SMS, and Push Notifications
 ======================= */
 router.use('/admin', require('../modules/notification-campaign/notification-campaign.routes'));
-
+router.use('/admin', require('../modules/sms-campaign/sms-campaign.routes'));
+router.use('/admin', require('../modules/email-campaign/email-campaign.routes'));
 /* =======================
    ADMIN PATIENT MANAGEMENT ROUTES (Admin/Sub-Admin Only)
 ======================= */

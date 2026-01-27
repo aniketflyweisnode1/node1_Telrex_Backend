@@ -132,6 +132,21 @@ exports.createHealthCategory = async (req, res, next) => {
   }
 };
 
+// Bulk create health categories
+exports.bulkCreateHealthCategories = async (req, res, next) => {
+  try {
+    const categoriesPayload = req.body.categories || req.body.data || req.body.items || [];
+    const categories = await healthService.bulkCreateHealthCategories(categoriesPayload, req.user.id);
+    res.status(201).json({
+      success: true,
+      message: 'Health categories created successfully',
+      data: categories
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Update health category
 exports.updateHealthCategory = async (req, res, next) => {
   try {

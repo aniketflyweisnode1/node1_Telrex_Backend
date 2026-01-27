@@ -1,0 +1,1246 @@
+[{
+  "_id": {
+    "$oid": "695b6dd43413de05573c6dff"
+  },
+  "firstName": "Suresh",
+  "lastName": "Singh",
+  "countryCode": "+91",
+  "phoneNumber": "6265987549",
+  "email": "john@example.com",
+  "password": "$2b$10$ge2Y3E/ui9zBsAIwYq/ax.qNrzZK/YhnenaQJi58IuwbdER4j8y/O",
+  "role": "patient",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-05T07:52:52.510Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-19T13:35:49.765Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-19T12:48:18.119Z"
+  },
+  "authProvider": "local"
+},
+{
+  "_id": {
+    "$oid": "695b6fe46609e9b520276a79"
+  },
+  "firstName": "Ramesh",
+  "lastName": "Singh",
+  "countryCode": "+91",
+  "phoneNumber": "6265987541",
+  "email": "suresh1@gmail.com",
+  "password": "$2b$10$KpTtS.icJedQ7VhHSOFynuFQVvUkvjWzrewx26MHR1wITp5tkhpfm",
+  "role": "patient",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-05T08:01:40.166Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T08:01:40.166Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "695b702d6609e9b520276a81"
+  },
+  "firstName": "Ramesh",
+  "lastName": "Singh",
+  "countryCode": "+91",
+  "phoneNumber": "6225987549",
+  "email": "sure2sh@gmail.com",
+  "password": "$2b$10$VdbE/4ONi/.OjOEuqpFyGugK6n3KzSAbEjfJdNYRCJOpQ6FbZs.j.",
+  "role": "patient",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-05T08:02:53.670Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T08:02:53.670Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "695b70cb47baabd7e2a1e16d"
+  },
+  "firstName": "Ramesh",
+  "lastName": "Singh",
+  "countryCode": "+91",
+  "phoneNumber": "6265987543",
+  "email": "suresh2@gmail.com",
+  "password": "$2b$10$KSmX38aEIaE5w6P95DkK/eKN/1SZMUBp2QQS51bnEtmkVNIdMLwPu",
+  "role": "patient",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-05T08:05:31.268Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T08:05:31.268Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "695b74d386d9ec317242a451"
+  },
+  "firstName": "Ramesh",
+  "lastName": "Singh",
+  "countryCode": "+91",
+  "phoneNumber": "6225907549",
+  "email": "sure2soh@gmail.com",
+  "password": "$2b$10$SZ5YGuwt7pQsarkaRCDyweZ32hEShJN4YsTrk7GHbNQfhGap6tfai",
+  "role": "patient",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-05T08:22:43.196Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-06T10:21:50.481Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-06T10:21:50.481Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "695b78d886d9ec317242a475"
+  },
+  "firstName": "Admin",
+  "lastName": "User",
+  "countryCode": "+91",
+  "phoneNumber": "1234567890",
+  "email": "admin@example.com",
+  "password": "$2b$10$WbMRS/.KsAdrLKQPFzeWJeOroLGMeZY7FJrOBeWc40EDPDf68mfGC",
+  "role": "admin",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-05T08:39:52.312Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T08:39:52.312Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "695b8cc6e061e87cb25b7d49"
+  },
+  "firstName": "Ramesh",
+  "lastName": "Singh",
+  "countryCode": "+91",
+  "phoneNumber": "6265987540",
+  "email": "dmin2@gmail.com",
+  "password": "$2b$10$KqPpfmvIW3jRnHpJBNgPq.9xxISWKGFj0WTXkhhd40I6xXpp497fW",
+  "role": "admin",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-05T10:04:54.523Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T10:05:10.314Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-05T10:05:10.313Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "695c63b49a68d7a23530f827"
+  },
+  "firstName": "Ramesh",
+  "lastName": "Singh",
+  "countryCode": "+91",
+  "phoneNumber": "6225107549",
+  "email": "sure2dsoh@gmail.com",
+  "password": "$2b$10$xmIcBpP5hntjLNLGNTQWA.uH3uRtYDT7H9593PQv67Zt6djkQ5ONm",
+  "role": "patient",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-06T01:21:56.762Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-06T01:23:00.409Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-06T01:23:00.409Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "695c69ea9a68d7a23530f86f"
+  },
+  "firstName": "fdf",
+  "lastName": "dd",
+  "countryCode": "+91",
+  "phoneNumber": "1234067890",
+  "email": "email2@gmail.com",
+  "password": "$2b$10$tl6q4EadzOwGJZUC7vlg9u10VShEL331C8ecyz0g86M65jstD23D6",
+  "role": "patient",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-06T01:48:26.834Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-06T01:49:04.219Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-06T01:49:04.219Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "695c6b9e9a68d7a23530f889"
+  },
+  "firstName": "ww",
+  "lastName": "ii",
+  "countryCode": "+91",
+  "phoneNumber": "4535453456",
+  "email": "f@gmail.com",
+  "password": "$2b$10$j56qKF7HxNeG3RsWZtLs1.zG0zNJVIIVSqCTaj0d8Uv2BUUzCgqLu",
+  "role": "patient",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-06T01:55:42.007Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-06T01:55:42.007Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "695c6ee09a68d7a23530f891"
+  },
+  "firstName": "ddd",
+  "lastName": "ddq",
+  "countryCode": "+91",
+  "phoneNumber": "5435654345",
+  "email": "usesr1@gmail.com",
+  "password": "$2b$10$Of4AHuSFMrOf2sQVtkSzUOarlfIaDeO1RwUhbNUBJQk9F5wR1FC3a",
+  "role": "patient",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-06T02:09:36.162Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-06T02:09:36.162Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "695c725d9a68d7a23530f8a8"
+  },
+  "firstName": "ewe",
+  "lastName": "w22",
+  "countryCode": "+91",
+  "phoneNumber": "5432345322",
+  "email": "fw@gmail.com",
+  "password": "$2b$10$u54ig0EGgHU4feCV3FIozul1NeCOi/XOwxLVGjDCg1fLAFmvI1Lk6",
+  "role": "patient",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-06T02:24:29.369Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-06T02:24:29.369Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "695c73189a68d7a23530f8b0"
+  },
+  "firstName": "ewe",
+  "lastName": "w22d",
+  "countryCode": "+91",
+  "phoneNumber": "5432145322",
+  "email": "fwd@gmail.com",
+  "password": "$2b$10$.aLcX7KHEsWswu6TwEdb6.qPL.fdCUBVvAF6TDkMJTzqC8A5ytTX2",
+  "role": "patient",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-06T02:27:36.260Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-06T02:27:36.260Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "695c744e9a68d7a23530f8b7"
+  },
+  "firstName": "fdsds",
+  "lastName": "ekek",
+  "countryCode": "+91",
+  "phoneNumber": "3738879433",
+  "email": "l@gmail.com",
+  "password": "$2b$10$KMHgcpTnJl2K0LmGbEQZIOELkKKxcOPuZ8cGPWuVcibxIUnyYRed2",
+  "role": "patient",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-06T02:32:46.169Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-14T15:00:12.565Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-06T02:33:26.420Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "695c758e9a68d7a23530f8df"
+  },
+  "firstName": "wq1",
+  "lastName": "kkk",
+  "countryCode": "+91",
+  "phoneNumber": "7483948392",
+  "email": "ndnn@gmail.com",
+  "password": "$2b$10$mxkJLpeseF5aEFKTABgjgOk3RzNvVHcwNg0a5W5llPYtvS21mndmu",
+  "role": "patient",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-06T02:38:06.619Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-06T02:38:06.619Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "firstName": "Vipin",
+  "lastName": "Test",
+  "countryCode": "+91",
+  "phoneNumber": "9999999999",
+  "email": "test@test.com",
+  "password": "$2b$10$q5LDQnAowvrqzSjtXaLYeuNa9xkDj1eC.lFk9Z8heA4pXiUNZxhy.",
+  "role": "patient",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-07T07:49:55.587Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-23T09:13:03.770Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-23T09:13:03.770Z"
+  },
+  "authProvider": "local"
+},
+{
+  "_id": {
+    "$oid": "695f92483ca546737a217833"
+  },
+  "firstName": "Vipin",
+  "lastName": "Test2",
+  "countryCode": "+91",
+  "phoneNumber": "8888888888",
+  "email": "test2@test.com",
+  "password": "$2b$10$k5Zj3FyKsfQKq9qW8zJtQuTZRE/z2thnndiHOKNYOnOwq0nqdcUVG",
+  "role": "patient",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-08T11:17:28.505Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T12:47:28.000Z"
+  },
+  "__v": 0,
+  "authProvider": "local",
+  "lastLoginAt": {
+    "$date": "2026-01-12T12:47:27.999Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "695fddfae2169315936e2762"
+  },
+  "firstName": "Karan",
+  "lastName": "Singh",
+  "countryCode": "+91",
+  "phoneNumber": "2222222222",
+  "email": "gevoijoicima-1859@yopmail.com",
+  "password": "$2b$10$GAhTc0yu7onYV6vvxuxw5e5kAmQHhP17NziYg2qG8KCAmZl.HS4nK",
+  "role": "patient",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-08T16:40:26.108Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T05:01:40.529Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-09T05:01:40.528Z"
+  },
+  "authProvider": "local"
+},
+{
+  "_id": {
+    "$oid": "695ff2e77b2a819fa1a8da11"
+  },
+  "firstName": "Karan",
+  "lastName": "Singh",
+  "countryCode": "+91",
+  "phoneNumber": "789811791",
+  "email": "gevoijoicima-1859@yopmail.com",
+  "password": "$2b$10$dgXE6AtLSIB7DK2dB1ahOuT/JA4p/gQ3OlJkdh2VmvgoObJbE70xu",
+  "authProvider": "local",
+  "role": "patient",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-08T18:09:43.436Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-08T18:09:43.436Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "695ff3187b2a819fa1a8da19"
+  },
+  "firstName": "Karan",
+  "lastName": "Singh",
+  "countryCode": "+91",
+  "phoneNumber": "7898711791",
+  "email": "gevoijoicima-1859@yopmail.com",
+  "password": "$2b$10$00bMjbZsqpnrgwKfuFxv/.2DTNhZKXrFjzThjB.0MQBcLUWYfoWHy",
+  "authProvider": "local",
+  "role": "patient",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-08T18:10:32.307Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T13:35:17.332Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-09T13:35:17.332Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69603596b48c24fc56a43558"
+  },
+  "firstName": "Ayesha",
+  "lastName": "Malhotra",
+  "countryCode": "+91",
+  "phoneNumber": "9319682826",
+  "email": "janvi@flyweis.technology",
+  "password": "$2b$10$rQ4f05b3Hvzs51UqWQrgxOop7GuH2d4Kvsjdxj9OrjfPey58W/1hC",
+  "authProvider": "local",
+  "role": "patient",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-08T22:54:14.281Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-08T22:54:14.281Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "firstName": "Admin1",
+  "lastName": "User1",
+  "countryCode": "+91",
+  "phoneNumber": "1234567891",
+  "email": "admin1@example.com",
+  "password": "$2b$10$zpeiWZ/bVHhNuCplddUWIeKmhhO4KMJKb8bA.miAUkB/hzZ0Es34u",
+  "authProvider": "local",
+  "role": "admin",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T12:13:34.572Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T09:23:47.579Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-22T09:23:47.573Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6960f258e9fc16c719815af2"
+  },
+  "firstName": "Aditya",
+  "lastName": "Jain",
+  "countryCode": "+91",
+  "phoneNumber": "7898711792",
+  "email": "neddanneuffiddu-4442@yopmail.com",
+  "password": "$2b$10$cPupGlKt7PIFyxCDX3MxEeggAJdet/kh6m.303gai1gE90/9oUqEa",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-09T12:19:36.804Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T12:19:36.804Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6960f294ed53ae9c2467d5db"
+  },
+  "firstName": "John",
+  "lastName": "Doe",
+  "countryCode": "+91",
+  "phoneNumber": "9876543212",
+  "email": "johndoe1@gmail.com",
+  "password": "$2b$10$I1WqJ4vfb5tr6bCkqdlWHOk1kOeEuC65gCqrAQ9mY9PjCqiFLIHw6",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-09T12:20:36.637Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T12:20:36.637Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "firstName": "Admin",
+  "lastName": "User",
+  "countryCode": "+91",
+  "phoneNumber": "7878787889",
+  "email": "admin@yopmail.com",
+  "password": "$2b$10$BjTlwHuG/eGYgsn..qD0w.BZ/CXrMYXuLhoBiKDj56dC80f4N0g8e",
+  "authProvider": "local",
+  "role": "admin",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T12:22:36.035Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T16:19:14.964Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-22T16:19:14.960Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6960f458e9fc16c719815b5b"
+  },
+  "firstName": "Aditya",
+  "lastName": "Jain",
+  "countryCode": "+91",
+  "phoneNumber": "9876543210",
+  "email": "kattomunuzeu-5144@yopmail.com",
+  "password": "$2b$10$ykTYcpZtVo81wJAoXSQIYeBvtprkM4KLE0BICWv2.82Igst0RL6vO",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-09T12:28:08.395Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T12:28:08.395Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6960f5a5ed53ae9c2467d615"
+  },
+  "firstName": "Doctor",
+  "lastName": "fever",
+  "countryCode": "+91",
+  "phoneNumber": "9876543219",
+  "email": "doctor@gmail.com",
+  "password": "$2b$10$1RtcwmFgwc3g7cgXjejGI.CO/zpy8ZmQMsxTiQbZRMETPlOdmhaqy",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-09T12:33:41.867Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T12:33:41.867Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6960fb01e9fc16c719815bdd"
+  },
+  "firstName": "John",
+  "lastName": "Doe",
+  "countryCode": "+91",
+  "phoneNumber": "9876543213",
+  "email": "johndoe11@gmail.com",
+  "password": "$2b$10$86RN2jESvX7y56KFZLotneSRKWC8BIN4oBeh2c4uDMQwLnlxRhKIe",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-09T12:56:33.104Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T12:56:33.104Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6960fdb7e3ca876e9295ece5"
+  },
+  "firstName": "Doctor2",
+  "lastName": "fever",
+  "countryCode": "+91",
+  "phoneNumber": "9876543215",
+  "email": "doctor2@gmail.com",
+  "password": "$2b$10$1Hs.ZQPeXBn1AA3WxyipG.2JMHoXMpJaugZT6h1W/i.v0kfU2Rw6K",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T13:08:07.751Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T13:34:32.173Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-09T13:34:32.171Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6961068ebb2871297b25e796"
+  },
+  "firstName": "Sarah",
+  "lastName": "Smith",
+  "countryCode": "+91",
+  "phoneNumber": "6666666666",
+  "email": "sarah.smith@mediprime.com",
+  "password": "$2b$10$B0dKl.JxL8c3If/t1KF3DO3M9LpHrW/EMbHfE0Cqtdm6IsOFA8VFK",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T13:45:50.012Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-14T10:30:56.709Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-12T06:59:37.650Z"
+  },
+  "dateOfBirth": {
+    "$date": "1990-01-15T00:00:00.000Z"
+  },
+  "gender": "male"
+},
+{
+  "_id": {
+    "$oid": "69611414b8c266a7835c0c18"
+  },
+  "firstName": "aditya",
+  "lastName": "jain",
+  "countryCode": "+91",
+  "phoneNumber": "9876543211",
+  "email": "faprappetoukau-5884@yopmail.com",
+  "password": "$2b$10$LNCYSCpclv9cfn.LLcURtu95aFIWsyBsHGmsVG96/0haF4l5OBQIO",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T14:43:32.216Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T11:12:07.926Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-15T11:52:14.495Z"
+  },
+  "dateOfBirth": {
+    "$date": "2026-01-14T18:30:00.000Z"
+  },
+  "gender": "male"
+},
+{
+  "_id": {
+    "$oid": "696142474ab58e676257bd9f"
+  },
+  "firstName": "asdfg",
+  "lastName": "sdfgh",
+  "countryCode": "+91",
+  "phoneNumber": "9876543220",
+  "email": "dimaleddassi-9628@yopmail.com",
+  "password": "$2b$10$plnxnZZgDyh1kSuZfbXH5ezmyOE.X8LUeZXflA/HSQyyzr0zhVEJm",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-09T18:00:39.101Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T18:08:32.173Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-09T18:08:32.172Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69649b9bc40a155136c925ee"
+  },
+  "firstName": "Doctor6",
+  "lastName": "fever",
+  "countryCode": "+91",
+  "phoneNumber": "9123456789",
+  "email": "doctor7@gmail.com",
+  "password": "$2b$10$VVNTnkCrXhsv.yiuypj8xOrSGF8B2ZCArH3vEGJ0eqbfA48S/MNBe",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-12T06:58:35.911Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T06:58:35.911Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964d1a5b91fb90fb35ed43d"
+  },
+  "firstName": "test3",
+  "lastName": "test3",
+  "countryCode": "+91",
+  "phoneNumber": "7777777777",
+  "email": "test3@test.com",
+  "password": "$2b$10$2v6Eahff56RnTnd06.xWRuNdvGoUsBpyCE12m8b5FPgODy8r9IBE6",
+  "authProvider": "local",
+  "role": "patient",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-12T10:49:09.024Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T10:49:09.024Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964d1ccb91fb90fb35ed445"
+  },
+  "firstName": "test4",
+  "lastName": "test4",
+  "countryCode": "+91",
+  "phoneNumber": "7777777774",
+  "email": "test3@test.com",
+  "password": "$2b$10$QOkAmZO1.9orFGE5YClwTeFV.tS192.mAdr7xW9RhcIkDoToCFtZe",
+  "authProvider": "local",
+  "role": "patient",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-12T10:49:48.570Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T10:49:48.570Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964f87f550480cfd7ecc983"
+  },
+  "firstName": "John",
+  "lastName": "Doe",
+  "countryCode": "+91",
+  "phoneNumber": "7878789898",
+  "email": "johndoe@yopmail.com",
+  "password": "$2b$10$LYdhWGN6yFUwkRjVlLX.P.ojHNWmgi4A4vfqp2iLF0JjfbCEKpVY.",
+  "authProvider": "local",
+  "role": "sub-admin",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-12T13:34:55.103Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T13:34:55.103Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6965050f550480cfd7ecc9da"
+  },
+  "firstName": "Sarah",
+  "lastName": "Jenkins",
+  "countryCode": "+91",
+  "phoneNumber": "9876543218",
+  "email": "sarah.j@mediprime8.com",
+  "password": "$2b$10$M/brL/BkYCNfKqr4z1oBd.2x8rCBGlXi0MoEM6vAaAtrY8iQ8W8l6",
+  "authProvider": "local",
+  "role": "sub-admin",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-12T14:28:31.245Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T14:28:31.245Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6967ab6948e1fd499bd041c4"
+  },
+  "firstName": "testing",
+  "lastName": "testing",
+  "countryCode": "+91",
+  "phoneNumber": "9898989898",
+  "email": "testing@gmail.com",
+  "password": "$2b$10$jM4osD.G9nrtN5tZAyV8KuV.1rPa0JJzpNS00nFboA6gbtDozs0uG",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "gender": "male",
+  "dateOfBirth": {
+    "$date": "2026-01-14T00:00:00.000Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-14T14:42:49.314Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-14T14:50:05.948Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-14T14:43:13.694Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6967ad9748e1fd499bd0425e"
+  },
+  "firstName": "123",
+  "lastName": "123",
+  "countryCode": "+91",
+  "phoneNumber": "9876987698",
+  "email": "asd@gmail.com",
+  "password": "$2b$10$WjVGSms/.EaodiqWrsXBeelVNefPeR/UXJvI4rLkHLuG0ShkZ78fu",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "gender": "male",
+  "dateOfBirth": {
+    "$date": "2026-01-14T00:00:00.000Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-14T14:52:07.214Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-14T14:52:23.534Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-14T14:52:23.534Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6968b2bea945b98cb929b9ba"
+  },
+  "firstName": "testing",
+  "lastName": "test",
+  "countryCode": "+91",
+  "phoneNumber": "9879879879",
+  "email": "testingggggggg@gmail.com",
+  "password": "$2b$10$JWcMXBPB2kHunu13n0XbpO5.ZZy3m/1LCPMstPZKo.NunZTae8diu",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "gender": "female",
+  "dateOfBirth": {
+    "$date": "1995-01-15T00:00:00.000Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-15T09:26:22.697Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-19T06:04:46.595Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-19T06:04:46.591Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6968b495c0c4644b10c0e2c1"
+  },
+  "firstName": "Ram",
+  "lastName": "Lal",
+  "countryCode": "+91",
+  "phoneNumber": "9816543119",
+  "email": "ramlal1.j@mediprime.com",
+  "password": "$2b$10$/3LHw0J8Mb1Sst5J5px8huIjvqEB/0KZ2RspR6/uea9HlTeND7tKu",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-15T09:34:13.784Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T09:34:13.784Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6968fe0281dfab5ac49d9a07"
+  },
+  "firstName": "Sarah",
+  "lastName": "Malhotra",
+  "countryCode": "+91",
+  "phoneNumber": "2342345678",
+  "email": "john@example.com",
+  "password": "$2b$10$b06Jy/bDPkNEgAkTB48Uf.42Goq/j/k0kXf4TPJHmW6fYVycQxSAW",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-15T14:47:30.096Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T14:47:30.096Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6969583294a6c8c1e9384e8b"
+  },
+  "firstName": "test",
+  "lastName": "test",
+  "countryCode": "+91",
+  "phoneNumber": "9090909090",
+  "email": "test90@gmail.com",
+  "password": "$2b$10$0gG0NF88exQkoU2EYT/f2eX23ry3j37XWrPOXh7EjbFwGCBTq8aHa",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": false,
+  "gender": "male",
+  "dateOfBirth": {
+    "$date": "2026-01-14T00:00:00.000Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-15T21:12:18.896Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T10:20:50.381Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-15T21:24:19.440Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6969597e94a6c8c1e9384ee4"
+  },
+  "firstName": "test",
+  "lastName": "test",
+  "countryCode": "+91",
+  "phoneNumber": "8989898989",
+  "email": "test12@gmial.com",
+  "password": "$2b$10$7rqMEG9Z0m00rMWgwAVqi.soIFxIgTn1sUtFDCZTrjUJytjoHM1yy",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": false,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "gender": "male",
+  "dateOfBirth": {
+    "$date": "2026-01-06T00:00:00.000Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-15T21:17:50.289Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T04:06:32.507Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696b08f4f4ce3614cee1e4ce"
+  },
+  "firstName": "Doctor 1",
+  "lastName": "General",
+  "countryCode": "+91",
+  "phoneNumber": "9816543191",
+  "email": "doctor0@gmail.com",
+  "password": "$2b$10$.rzybqf.nk2gd0qr/FNEC.p/kvMKbo0ZUBhWwJJsxFQstn8bNSQd2",
+  "authProvider": "local",
+  "role": "doctor",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-17T03:58:44.974Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T09:13:13.322Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-22T09:13:13.317Z"
+  },
+  "dateOfBirth": {
+    "$date": "1990-01-15T00:00:00.000Z"
+  },
+  "gender": "male"
+},
+{
+  "_id": {
+    "$oid": "696b7eb4937ff2f0e9936b1d"
+  },
+  "firstName": "latest ",
+  "lastName": "patient",
+  "countryCode": "+91",
+  "phoneNumber": "6265987559",
+  "email": "patient@gmail.com",
+  "password": "$2b$10$.BIKDmvwOjwmngg2UnqtIOuORlxNm5nYRNELSGJELDIxX0SS3Yr2q",
+  "authProvider": "local",
+  "role": "patient",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-17T12:21:08.393Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T12:31:45.058Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-17T12:31:45.056Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "696f472d8c9217cda7063789"
+  },
+  "firstName": "Vipin Test 1 ",
+  "lastName": "Frontend",
+  "countryCode": "+91",
+  "phoneNumber": "6265987553",
+  "email": "vipin@gmail.com",
+  "password": "$2b$10$mFr/nutiBQQ2OQvT9QfsYOPRiwNzc8e1vA.z/AnKPzh4CnSp0yjvm",
+  "authProvider": "local",
+  "role": "patient",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-20T09:13:17.428Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T09:13:47.309Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-20T09:13:47.308Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "696f6935899c704778730c40"
+  },
+  "firstName": "no",
+  "lastName": "no",
+  "countryCode": "+91",
+  "phoneNumber": "8899298999",
+  "email": "john@example.com",
+  "password": "$2b$10$IeQu425BQZcqvelgFEfqfeNvllyHFJ5MxWltFPRiUFUGL25uc09eW",
+  "authProvider": "local",
+  "role": "patient",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-20T11:38:29.049Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T11:38:48.255Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-20T11:38:48.254Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6970779be388aaaedbdeaafc"
+  },
+  "firstName": "Priya",
+  "lastName": "Chaudhary",
+  "countryCode": "+91",
+  "phoneNumber": "6265987514",
+  "email": "priya@gmail.com",
+  "password": "$2b$10$4iShzlyU4U7rK0s0WxVibub6odMn7q8mgr8JUVhhRO5dxTYnSuJM.",
+  "authProvider": "local",
+  "role": "patient",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-21T06:52:11.913Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T06:52:25.732Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-21T06:52:25.731Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6970cc00a1d7bfb46383d1a9"
+  },
+  "firstName": "Ayesha",
+  "lastName": "Test1",
+  "countryCode": "+1",
+  "phoneNumber": "9319682825",
+  "email": "ayesha@flyweis.technology",
+  "password": "$2b$10$FdVoYQ1rBDA2FCMMwT2ZfOBvh8.Qy1uDqIluWpEYML.Ic4/GSVWNa",
+  "authProvider": "local",
+  "role": "patient",
+  "isVerified": true,
+  "agreeConfirmation": true,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-21T12:52:16.629Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T13:29:57.978Z"
+  },
+  "__v": 0,
+  "lastLoginAt": {
+    "$date": "2026-01-21T13:29:57.977Z"
+  }
+}]

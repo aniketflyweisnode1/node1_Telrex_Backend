@@ -1,0 +1,170 @@
+[{
+  "_id": {
+    "$oid": "6964f880550480cfd7ecc985"
+  },
+  "user": {
+    "$oid": "6964f87f550480cfd7ecc983"
+  },
+  "designation": "Sub-Admin",
+  "permissions": [
+    {
+      "module": "dashboard",
+      "canView": true,
+      "canCreate": true,
+      "canUpdate": true,
+      "canDelete": true
+    },
+    {
+      "module": "provider-management",
+      "canView": true,
+      "canCreate": true,
+      "canUpdate": true,
+      "canDelete": true
+    },
+    {
+      "module": "medicine-management",
+      "canView": true,
+      "canCreate": true,
+      "canUpdate": true,
+      "canDelete": true
+    },
+    {
+      "module": "patient-management",
+      "canView": true,
+      "canCreate": true,
+      "canUpdate": true,
+      "canDelete": true
+    },
+    {
+      "module": "prescription-order-management",
+      "canView": true,
+      "canCreate": true,
+      "canUpdate": true,
+      "canDelete": false
+    },
+    {
+      "module": "financial-overview",
+      "canView": false,
+      "canCreate": true,
+      "canUpdate": false,
+      "canDelete": false
+    },
+    {
+      "module": "compliance-security",
+      "canView": false,
+      "canCreate": false,
+      "canUpdate": false,
+      "canDelete": false
+    },
+    {
+      "module": "marketing-notifications",
+      "canView": false,
+      "canCreate": false,
+      "canUpdate": false,
+      "canDelete": false
+    },
+    {
+      "module": "reports-exports",
+      "canView": false,
+      "canCreate": false,
+      "canUpdate": false,
+      "canDelete": false
+    }
+  ],
+  "isActive": true,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-12T13:34:56.077Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T15:33:40.737Z"
+  },
+  "__v": 14
+},
+{
+  "_id": {
+    "$oid": "6965050f550480cfd7ecc9dc"
+  },
+  "user": {
+    "$oid": "6965050f550480cfd7ecc9da"
+  },
+  "designation": "Medicine Manager",
+  "permissions": [
+    {
+      "module": "dashboard",
+      "canView": true,
+      "canCreate": true,
+      "canUpdate": true,
+      "canDelete": true
+    },
+    {
+      "module": "provider-management",
+      "canView": true,
+      "canCreate": false,
+      "canUpdate": false,
+      "canDelete": false
+    },
+    {
+      "module": "medicine-management",
+      "canView": false,
+      "canCreate": false,
+      "canUpdate": false,
+      "canDelete": false
+    },
+    {
+      "module": "patient-management",
+      "canView": false,
+      "canCreate": false,
+      "canUpdate": false,
+      "canDelete": false
+    },
+    {
+      "module": "prescription-order-management",
+      "canView": false,
+      "canCreate": false,
+      "canUpdate": false,
+      "canDelete": false
+    },
+    {
+      "module": "financial-overview",
+      "canView": false,
+      "canCreate": false,
+      "canUpdate": false,
+      "canDelete": false
+    },
+    {
+      "module": "compliance-security",
+      "canView": false,
+      "canCreate": false,
+      "canUpdate": false,
+      "canDelete": false
+    },
+    {
+      "module": "marketing-notifications",
+      "canView": false,
+      "canCreate": false,
+      "canUpdate": false,
+      "canDelete": false
+    },
+    {
+      "module": "reports-exports",
+      "canView": false,
+      "canCreate": false,
+      "canUpdate": false,
+      "canDelete": false
+    }
+  ],
+  "isActive": true,
+  "createdBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "createdAt": {
+    "$date": "2026-01-12T14:28:31.970Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T15:31:37.215Z"
+  },
+  "__v": 2
+}]

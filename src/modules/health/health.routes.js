@@ -186,6 +186,14 @@ router.post(
   healthController.createHealthCategory
 );
 
+// Bulk create health categories
+router.post(
+  '/categories/bulk',
+  healthValidation.bulkCreateHealthCategoriesValidation,
+  validate,
+  healthController.bulkCreateHealthCategories
+);
+
 // Update health category
 router.put(
   '/categories/:id',

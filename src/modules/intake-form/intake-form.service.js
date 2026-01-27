@@ -315,3 +315,152 @@ exports.saveIntakeForm = async (userId, data) => {
     });
 };
 
+// exports.submitFullIntakeForm = async (userId, payload) => {
+//   const patient = await getPatient(userId);
+
+//   let intakeForm = await IntakeForm.findOne({ patient: patient._id });
+
+//   const {
+//     basicInformation,
+//     emergencyContact,
+//     medicalQuestions,
+//     doctorId
+//   } = payload;
+
+//   /* =========================
+//      BASIC INFO VALIDATION
+//   ========================= */
+//   const basicRequired = [
+//     'firstName',
+//     'lastName',
+//     'sex',
+//     'dateOfBirth',
+//     'email',
+//     'phone',
+//     'address',
+//     'city',
+//     'state',
+//     'zip'
+//   ];
+
+//   const isBasicInfoComplete = basicRequired.every(
+//     (f) => basicInformation?.[f]
+//   );
+
+//   /* =========================
+//      EMERGENCY CONTACT VALIDATION
+//   ========================= */
+//   const emergencyRequired = [
+//     'relationship',
+//     'firstName',
+//     'lastName',
+//     'phone',
+//     'address',
+//     'city',
+//     'state',
+//     'zip'
+//   ];
+
+//   const isEmergencyContactComplete = emergencyRequired.every(
+//     (f) => emergencyContact?.[f]
+//   );
+
+//   /* =========================
+//      MEDICAL QUESTIONS VALIDATION
+//   ========================= */
+//   const hasMedicalData =
+//     (medicalQuestions?.pastMedicalHistory?.length > 0) ||
+//     (medicalQuestions?.currentMedications?.length > 0) ||
+//     (medicalQuestions?.medicationAllergies?.length > 0) ||
+//     (medicalQuestions?.preferredPharmacy?.pharmacyName) ||
+//     medicalQuestions?.howDidYouHearAboutUs;
+
+//   const isMedicalQuestionsComplete = !!hasMedicalData;
+
+//   /* =========================
+//      FINAL CHECK
+//   ========================= */
+//   if (
+//     !isBasicInfoComplete ||
+//     !isEmergencyContactComplete ||
+//     !isMedicalQuestionsComplete
+//   ) {
+//     throw new AppError(
+//       'Please complete all sections before submitting.',
+//       400
+//     );
+//   }
+
+//   /* =========================
+//      VERIFY DOCTOR (OPTIONAL)
+//   ========================= */
+//   if (doctorId) {
+//     const doctor = await Doctor.findById(doctorId);
+//     if (!doctor || !doctor.isActive || doctor.status !== 'active') {
+//       throw new AppError('Doctor not available.', 400);
+//     }
+//   }
+
+//   /* =========================
+//      CREATE / UPDATE FORM
+//   ========================= */
+//   if (!intakeForm) {
+//     intakeForm = await IntakeForm.create({
+//       patient: patient._id,
+//       basicInformation: {
+//         ...basicInformation,
+//         isBasicInfoComplete
+//       },
+//       emergencyContact: {
+//         ...emergencyContact,
+//         isEmergencyContactComplete
+//       },
+//       medicalQuestions: {
+//         ...medicalQuestions,
+//         isMedicalQuestionsComplete
+//       },
+//       doctor: doctorId || null,
+//       status: 'submitted'
+//     });
+//   } else {
+//     intakeForm.basicInformation = {
+//       ...basicInformation,
+//       isBasicInfoComplete
+//     };
+//     intakeForm.emergencyContact = {
+//       ...emergencyContact,
+//       isEmergencyContactComplete
+//     };
+//     intakeForm.medicalQuestions = {
+//       ...medicalQuestions,
+//       isMedicalQuestionsComplete
+//     };
+//     intakeForm.status = 'submitted';
+//     if (doctorId) intakeForm.doctor = doctorId;
+
+//     await intakeForm.save();
+//   }
+
+//   /* =========================
+//      RETURN POPULATED DATA
+//   ========================= */
+//   return await IntakeForm.findById(intakeForm._id)
+//     .populate({
+//       path: 'doctor',
+//       select:
+//         'user specialty licenseNumber consultationFee status rating experience education certifications languages availability address',
+//       populate: {
+//         path: 'user',
+//         select:
+//           'firstName lastName email phoneNumber countryCode profilePicture'
+//       }
+//     })
+//     .populate({
+//       path: 'patient',
+//       select: 'user dateOfBirth gender',
+//       populate: {
+//         path: 'user',
+//         select: 'firstName lastName email phoneNumber'
+//       }
+//     });
+// };

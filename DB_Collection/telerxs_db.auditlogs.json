@@ -1,0 +1,1395 @@
+[{
+  "_id": {
+    "$oid": "696fa1c99e10cff9ab2299d0"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "::1",
+  "userAgent": "PostmanRuntime/7.51.0",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "unknown",
+    "os": "unknown",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-20T15:39:53.837Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-20T15:39:53.840Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T15:39:53.840Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697077aae388aaaedbdeab0a"
+  },
+  "user": {
+    "$oid": "6970779be388aaaedbdeaafc"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "6970779be388aaaedbdeaafc",
+  "ipAddress": "152.59.27.127",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "Windows",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T06:52:26.412Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T06:52:26.413Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T06:52:26.413Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69707f017d18b5eb824c771d"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "106.215.183.153",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T07:23:45.854Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T07:23:45.855Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T07:23:45.855Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970c4177d18b5eb824c9455"
+  },
+  "user": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "6960f0eeed53ae9c2467d5c7",
+  "ipAddress": "152.59.27.187",
+  "userAgent": "PostmanRuntime/7.51.0",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "unknown",
+    "os": "unknown",
+    "role": "admin"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T12:18:31.297Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T12:18:31.298Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T12:18:31.298Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970c4467d18b5eb824c949e"
+  },
+  "user": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "6960f30ce9fc16c719815b37",
+  "ipAddress": "171.79.38.66",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "Windows",
+    "role": "admin"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T12:19:18.556Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T12:19:18.557Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T12:19:18.557Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970c4697d18b5eb824c9515"
+  },
+  "user": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "6960f30ce9fc16c719815b37",
+  "ipAddress": "171.79.38.66",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "Windows",
+    "role": "admin"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T12:19:53.655Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T12:19:53.656Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T12:19:53.656Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970c73d7d18b5eb824c95e1"
+  },
+  "user": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "6960f30ce9fc16c719815b37",
+  "ipAddress": "106.215.183.153",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "admin"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T12:31:57.867Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T12:31:57.868Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T12:31:57.868Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970cc15a1d7bfb46383d1b7"
+  },
+  "user": {
+    "$oid": "6970cc00a1d7bfb46383d1a9"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "6970cc00a1d7bfb46383d1a9",
+  "ipAddress": "106.215.183.153",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T12:52:37.341Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T12:52:37.342Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T12:52:37.342Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970cc9fa1d7bfb46383d217"
+  },
+  "user": {
+    "$oid": "6970cc00a1d7bfb46383d1a9"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "6970cc00a1d7bfb46383d1a9",
+  "ipAddress": "106.215.183.153",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T12:54:55.017Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T12:54:55.017Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T12:54:55.017Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970ce04d48a45272d60dc43"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "::1",
+  "userAgent": "PostmanRuntime/7.51.0",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "unknown",
+    "os": "unknown",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T13:00:52.475Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T13:00:52.480Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T13:00:52.480Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970cf26a1d7bfb46383d3e5"
+  },
+  "user": {
+    "$oid": "6970cc00a1d7bfb46383d1a9"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "6970cc00a1d7bfb46383d1a9",
+  "ipAddress": "106.215.183.153",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T13:05:42.725Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T13:05:42.725Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T13:05:42.725Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970cf96d48a45272d60dc5b"
+  },
+  "user": {
+    "$oid": "6970cc00a1d7bfb46383d1a9"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "6970cc00a1d7bfb46383d1a9",
+  "ipAddress": "::1",
+  "userAgent": "PostmanRuntime/7.51.0",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "unknown",
+    "os": "unknown",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T13:07:34.819Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T13:07:34.820Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T13:07:34.820Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970d4d64127f0ca8999a258"
+  },
+  "user": {
+    "$oid": "6970cc00a1d7bfb46383d1a9"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "6970cc00a1d7bfb46383d1a9",
+  "ipAddress": "106.215.183.153",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T13:29:58.659Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T13:29:58.660Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T13:29:58.660Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970f5da4127f0ca8999ab2e"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "103.183.91.89",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T15:50:50.840Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T15:50:50.841Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T15:50:50.841Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970f6db4127f0ca8999abaf"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "103.183.91.89",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T15:55:07.163Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T15:55:07.164Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T15:55:07.164Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970f7574127f0ca8999ac4f"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "103.183.91.89",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T15:57:11.307Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T15:57:11.308Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T15:57:11.308Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970f7ed4127f0ca8999ace9"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "103.183.91.89",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T15:59:41.211Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T15:59:41.212Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T15:59:41.212Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970fafa4127f0ca8999aece"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "103.183.91.89",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T16:12:42.656Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T16:12:42.657Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T16:12:42.657Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6971437d1654bdc1caa9dc74"
+  },
+  "user": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "6960f30ce9fc16c719815b37",
+  "ipAddress": "122.161.53.167",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "admin"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T21:22:05.361Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T21:22:05.362Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T21:22:05.362Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6971437e1654bdc1caa9dc81"
+  },
+  "user": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "6960f30ce9fc16c719815b37",
+  "ipAddress": "122.161.53.167",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "admin"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T21:22:06.262Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T21:22:06.263Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T21:22:06.263Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6971437f1654bdc1caa9dc9b"
+  },
+  "user": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "6960f30ce9fc16c719815b37",
+  "ipAddress": "122.161.53.167",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "admin"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T21:22:07.566Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T21:22:07.567Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T21:22:07.567Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6971437f1654bdc1caa9dc9e"
+  },
+  "user": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "6960f30ce9fc16c719815b37",
+  "ipAddress": "122.161.53.167",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "admin"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T21:22:07.863Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T21:22:07.864Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T21:22:07.864Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697143801654bdc1caa9dcbc"
+  },
+  "user": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "6960f30ce9fc16c719815b37",
+  "ipAddress": "122.161.53.167",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "admin"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T21:22:08.684Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T21:22:08.685Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T21:22:08.685Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697143801654bdc1caa9dcbe"
+  },
+  "user": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "6960f30ce9fc16c719815b37",
+  "ipAddress": "122.161.53.167",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "admin"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T21:22:08.687Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T21:22:08.687Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T21:22:08.687Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697144231654bdc1caa9dd5d"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "122.161.53.167",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-21T21:24:51.574Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T21:24:51.575Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T21:24:51.575Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6971d1d9ecde070c3f635011"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "106.215.176.71",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T07:29:29.078Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T07:29:29.080Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T07:29:29.080Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6971dfa8c31387641cf3e7f8"
+  },
+  "user": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "6960f0eeed53ae9c2467d5c7",
+  "ipAddress": "152.56.254.222",
+  "userAgent": "PostmanRuntime/7.51.0",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "unknown",
+    "os": "unknown",
+    "role": "admin"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T08:28:24.823Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T08:28:24.824Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T08:28:24.824Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6971e76e8456197c3d15c228"
+  },
+  "user": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "6960f0eeed53ae9c2467d5c7",
+  "ipAddress": "::1",
+  "userAgent": "PostmanRuntime/7.51.0",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "unknown",
+    "os": "unknown",
+    "role": "admin"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T09:01:34.795Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T09:01:34.821Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T09:01:34.821Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6971e77a8456197c3d15c22e"
+  },
+  "user": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "6960f0eeed53ae9c2467d5c7",
+  "ipAddress": "::1",
+  "userAgent": "PostmanRuntime/7.51.0",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "unknown",
+    "os": "unknown",
+    "role": "admin"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T09:01:46.632Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T09:01:46.658Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T09:01:46.658Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6971ea2a4908383cc49c717f"
+  },
+  "user": {
+    "$oid": "696b08f4f4ce3614cee1e4ce"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "696b08f4f4ce3614cee1e4ce",
+  "ipAddress": "::1",
+  "userAgent": "PostmanRuntime/7.51.0",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "unknown",
+    "os": "unknown",
+    "role": "doctor"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T09:13:14.129Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T09:13:14.155Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T09:13:14.155Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6971eb03c99da8b8eb7e820f"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "106.216.247.146",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T09:16:51.677Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T09:16:51.679Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T09:16:51.679Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6971eca3e80f30e706590817"
+  },
+  "user": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "6960f0eeed53ae9c2467d5c7",
+  "ipAddress": "::1",
+  "userAgent": "PostmanRuntime/7.51.0",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "unknown",
+    "os": "unknown",
+    "role": "admin"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T09:23:47.672Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T09:23:47.682Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T09:23:47.682Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6971ed30c99da8b8eb7e82b6"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "106.216.247.146",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T09:26:08.357Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T09:26:08.358Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T09:26:08.358Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6971f08fc21f2c1257aa122f"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "106.215.176.71",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T09:40:31.839Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T09:40:31.840Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T09:40:31.840Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697203dbc21f2c1257aa18e3"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "106.215.176.71",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T11:02:51.251Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T11:02:51.251Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T11:02:51.251Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697204d5c21f2c1257aa190d"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "106.215.176.71",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T11:07:01.355Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T11:07:01.356Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T11:07:01.356Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697205e9c21f2c1257aa19a0"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "106.215.176.71",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T11:11:37.331Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T11:11:37.332Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T11:11:37.332Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69722b40183082bfbb0a76f1"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "106.215.176.71",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T13:50:56.986Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T13:50:56.989Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T13:50:56.989Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69722cdf183082bfbb0a7899"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "106.215.176.71",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T13:57:51.604Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T13:57:51.605Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T13:57:51.605Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697231ae183082bfbb0a7d9f"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "106.215.176.71",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T14:18:22.488Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T14:18:22.489Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T14:18:22.489Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697234a2183082bfbb0a8202"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "106.215.176.71",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T14:30:58.477Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T14:30:58.478Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T14:30:58.478Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69724e048f91ae83c304d39f"
+  },
+  "user": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "action": "Logged in via password",
+  "resource": "Authentication System",
+  "resourceId": "6960f30ce9fc16c719815b37",
+  "ipAddress": "198.145.121.235",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "password",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "Windows",
+    "role": "admin"
+  },
+  "timestamp": {
+    "$date": "2026-01-22T16:19:16.858Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-22T16:19:16.861Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T16:19:16.861Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697323518f1219e4e02389c2"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "106.215.176.71",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-23T07:29:21.855Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-23T07:29:21.859Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-23T07:29:21.859Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697339f28f1219e4e02392ec"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "106.215.176.71",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-23T09:05:54.013Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-23T09:05:54.014Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-23T09:05:54.014Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69733b9f8f1219e4e023935f"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "action": "Logged in via otp",
+  "resource": "Authentication System",
+  "resourceId": "695e1023063c5adb28c99937",
+  "ipAddress": "106.215.176.71",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+  "status": "success",
+  "metadata": {
+    "loginMethod": "otp",
+    "device": "desktop",
+    "browser": "Chrome",
+    "os": "macOS",
+    "role": "patient"
+  },
+  "timestamp": {
+    "$date": "2026-01-23T09:13:03.998Z"
+  },
+  "createdAt": {
+    "$date": "2026-01-23T09:13:03.999Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-23T09:13:03.999Z"
+  },
+  "__v": 0
+}]

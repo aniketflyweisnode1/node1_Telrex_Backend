@@ -1,0 +1,212 @@
+[{
+  "_id": {
+    "$oid": "696fa9f9703f94ba020c46ee"
+  },
+  "title": "Doctor's Note",
+  "productName": "Excuse Note",
+  "price": 49.99,
+  "description": "Our Excuse Notes for Injury or Illness provide essential documentation to verify your absence from work, school due to a medical condition, with coverage for up to 3 days. You can quickly obtain an Excuse Note for your short-term recovery. Please note, this is a simple doctor's note and cannot be used for FMLA or other extended absences. We do not fill out additional forms or offer further doctor verification for your employer.",
+  "shortDescription": "Get your Excuse Note from Company name and focus on getting better. Once you submit your request, a doctor will review it; please allow up to 12 hours for E-delivery.",
+  "coverageDays": 3,
+  "image": {
+    "url": "https://example.com/image.jpg",
+    "alt": "Doctor's Note"
+  },
+  "isActive": true,
+  "visibility": true,
+  "createdBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "order": 0,
+  "createdAt": {
+    "$date": "2026-01-20T16:14:49.763Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T16:14:49.763Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696fac389140731f983a9dd4"
+  },
+  "title": "Doctor's Note",
+  "productName": "Excuse Note",
+  "price": 49.99,
+  "description": "Our Excuse Notes for Injury or Illness provide essential documentation to verify your absence from work, school due to a medical condition, with coverage for up to 3 days. You can quickly obtain an Excuse Note for your short-term recovery. Please note, this is a simple doctor's note and cannot be used for FMLA or other extended absences. We do not fill out additional forms or offer further doctor verification for your employer.",
+  "shortDescription": "Get your Excuse Note from Company name and focus on getting better. Once you submit your request, a doctor will review it; please allow up to 12 hours for E-delivery.",
+  "coverageDays": 3,
+  "image": {
+    "url": "https://example.com/image.jpg",
+    "alt": "Doctor's Note"
+  },
+  "isActive": true,
+  "visibility": true,
+  "createdBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "order": 0,
+  "createdAt": {
+    "$date": "2026-01-20T16:24:24.888Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T16:24:24.888Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696fac569140731f983a9dd8"
+  },
+  "title": "Doctor's Note updated",
+  "productName": "Excuse Note",
+  "price": 49.99,
+  "description": "Our Excuse Notes for Injury or Illness provide essential documentation to verify your absence from work, school due to a medical condition, with coverage for up to 3 days. You can quickly obtain an Excuse Note for your short-term recovery. Please note, this is a simple doctor's note and cannot be used for FMLA or other extended absences. We do not fill out additional forms or offer further doctor verification for your employer.",
+  "shortDescription": "Get your Excuse Note from Company name and focus on getting better. Once you submit your request, a doctor will review it; please allow up to 12 hours for E-delivery.",
+  "coverageDays": 3,
+  "image": {
+    "url": "https://example.com/image.jpg",
+    "alt": "Doctor's Note"
+  },
+  "isActive": true,
+  "visibility": true,
+  "createdBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "order": 0,
+  "createdAt": {
+    "$date": "2026-01-20T16:24:54.439Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T16:24:54.439Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696fae7bcc6e6242545906f5"
+  },
+  "title": "Doctor's Note updated",
+  "productName": "Excuse Note",
+  "price": 49.99,
+  "description": "Our Excuse Notes for Injury or Illness provide essential documentation to verify your absence from work, school due to a medical condition, with coverage for up to 3 days. You can quickly obtain an Excuse Note for your short-term recovery. Please note, this is a simple doctor's note and cannot be used for FMLA or other extended absences. We do not fill out additional forms or offer further doctor verification for your employer.",
+  "shortDescription": "Get your Excuse Note from Company name and focus on getting better. Once you submit your request, a doctor will review it; please allow up to 12 hours for E-delivery.",
+  "coverageDays": 3,
+  "image": {
+    "url": "https://example.com/image.jpg",
+    "alt": "Doctor's Note"
+  },
+  "isActive": true,
+  "visibility": true,
+  "createdBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "order": 0,
+  "isDeleted": true,
+  "createdAt": {
+    "$date": "2026-01-20T16:34:03.846Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T16:37:55.712Z"
+  },
+  "__v": 0,
+  "deletedAt": {
+    "$date": "2026-01-20T16:37:55.710Z"
+  },
+  "deletedBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "updatedBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  }
+},
+{
+  "_id": {
+    "$oid": "696fafabcc6e624254590710"
+  },
+  "title": "Doctor's Note",
+  "productName": "Excuse Note",
+  "price": 49.99,
+  "description": "Our Excuse Notes for Injury or Illness provide essential documentation to verify your absence from work, school due to a medical condition, with coverage for up to 3 days. You can quickly obtain an Excuse Note for your short-term recovery. Please note, this is a simple doctor's note and cannot be used for FMLA or other extended absences. We do not fill out additional forms or offer further doctor verification for your employer.",
+  "shortDescription": "Get your Excuse Note from Company name and focus on getting better. Once you submit your request, a doctor will review it; please allow up to 12 hours for E-delivery.",
+  "coverageDays": 3,
+  "image": {
+    "url": "https://example.com/image.jpg",
+    "alt": "Doctor's Note"
+  },
+  "isActive": false,
+  "visibility": false,
+  "createdBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "order": 0,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2026-01-20T16:39:07.078Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T16:53:31.850Z"
+  },
+  "__v": 0,
+  "updatedBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  }
+},
+{
+  "_id": {
+    "$oid": "696fb0b6cc6e624254590720"
+  },
+  "title": "Doctor's Note",
+  "productName": "Excuse Note",
+  "price": 49.99,
+  "description": "Our Excuse Notes for Injury or Illness provide essential documentation to verify your absence from work, school due to a medical condition, with coverage for up to 3 days. You can quickly obtain an Excuse Note for your short-term recovery. Please note, this is a simple doctor's note and cannot be used for FMLA or other extended absences. We do not fill out additional forms or offer further doctor verification for your employer.",
+  "shortDescription": "Get your Excuse Note from Company name and focus on getting better. Once you submit your request, a doctor will review it; please allow up to 12 hours for E-delivery.",
+  "coverageDays": 3,
+  "image": {
+    "url": "https://example.com/image.jpg",
+    "alt": "Doctor's Note"
+  },
+  "isActive": true,
+  "visibility": true,
+  "createdBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "order": 0,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2026-01-20T16:43:34.751Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T16:43:34.751Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696fb6efb86309384875cb9a"
+  },
+  "title": "Doctor's Note",
+  "productName": "Excuse Note",
+  "price": 49.99,
+  "description": "Our Excuse Notes for Injury or Illness provide essential documentation to verify your absence from work, school due to a medical condition, with coverage for up to 3 days. You can quickly obtain an Excuse Note for your short-term recovery. Please note, this is a simple doctor's note and cannot be used for FMLA or other extended absences. We do not fill out additional forms or offer further doctor verification for your employer.",
+  "shortDescription": "Get your Excuse Note from Company name and focus on getting better. Once you submit your request, a doctor will review it; please allow up to 12 hours for E-delivery.",
+  "coverageDays": 3,
+  "image": {
+    "url": "https://example.com/image.jpg",
+    "alt": "Doctor's Note"
+  },
+  "isActive": true,
+  "visibility": true,
+  "createdBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "order": 0,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2026-01-20T17:10:07.941Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T17:10:07.941Z"
+  },
+  "__v": 0
+}]

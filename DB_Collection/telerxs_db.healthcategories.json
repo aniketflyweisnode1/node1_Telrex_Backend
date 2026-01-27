@@ -1,0 +1,730 @@
+[{
+  "_id": {
+    "$oid": "6960f139ed53ae9c2467d5cd"
+  },
+  "name": "Digestive Health",
+  "slug": "digestive-health",
+  "description": "Medications and treatments for digestive system related conditions",
+  "icon": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769002427/r9sbp2tiswazqzogqnv4.svg",
+  "types": [
+    {
+      "name": "Acidity",
+      "slug": "acidity",
+      "description": "Medications for acidity and heartburn",
+      "icon": "https://example.com/icons/acidity.svg",
+      "order": 0,
+      "isActive": true,
+      "_id": {
+        "$oid": "6960f139ed53ae9c2467d5ce"
+      }
+    },
+    {
+      "name": "Constipation",
+      "slug": "constipation",
+      "description": "Medications for constipation relief",
+      "icon": "https://example.com/icons/constipation.svg",
+      "order": 1,
+      "isActive": true,
+      "_id": {
+        "$oid": "6960f139ed53ae9c2467d5cf"
+      }
+    }
+  ],
+  "order": 1,
+  "isActive": true,
+  "createdBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "updatedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-09T12:14:49.203Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T13:33:57.960Z"
+  },
+  "__v": 2
+},
+{
+  "_id": {
+    "$oid": "6960f453ed53ae9c2467d5f2"
+  },
+  "name": "Skin & Hair",
+  "slug": "skin-hair",
+  "description": "Medications and treatments for digestive system related conditions",
+  "icon": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769002507/afinjsjx1urdlsrhwdq3.svg",
+  "types": [
+    {
+      "name": "Acidity",
+      "slug": "acidity",
+      "description": "Medications for acidity and heartburn",
+      "icon": "https://example.com/icons/acidity.svg",
+      "order": 0,
+      "isActive": true,
+      "_id": {
+        "$oid": "6960f453ed53ae9c2467d5f3"
+      }
+    },
+    {
+      "name": "Constipation",
+      "slug": "constipation",
+      "description": "Medications for constipation relief",
+      "icon": "https://example.com/icons/constipation.svg",
+      "order": 1,
+      "isActive": true,
+      "_id": {
+        "$oid": "6960f453ed53ae9c2467d5f4"
+      }
+    },
+    {
+      "name": "Indigestion",
+      "slug": "indigestion",
+      "description": "Medications for indigestion and bloating",
+      "icon": "https://example.com/icons/indigestion.svg",
+      "order": 2,
+      "isActive": true,
+      "_id": {
+        "$oid": "6960f453ed53ae9c2467d5f5"
+      }
+    }
+  ],
+  "order": 1,
+  "isActive": false,
+  "createdBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "updatedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-09T12:28:03.007Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-23T10:24:45.056Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964e6b97a68e63382f2c883"
+  },
+  "name": "Digestive Health 12",
+  "slug": "digestive-health-checkup-12",
+  "description": "Medications and treatments for digestive system related conditions",
+  "icon": "https://example.com/icons/digestive.svg",
+  "types": [
+    {
+      "name": "Acidity",
+      "slug": "acidity",
+      "description": "Medications for acidity and heartburn",
+      "icon": "https://example.com/icons/acidity.svg",
+      "order": 0,
+      "isActive": true,
+      "_id": {
+        "$oid": "6964e6b97a68e63382f2c884"
+      }
+    },
+    {
+      "name": "Constipation",
+      "slug": "constipation",
+      "description": "Medications for constipation relief",
+      "icon": "https://example.com/icons/constipation.svg",
+      "order": 1,
+      "isActive": true,
+      "_id": {
+        "$oid": "6964e6b97a68e63382f2c885"
+      }
+    },
+    {
+      "name": "Indigestion",
+      "slug": "indigestion",
+      "description": "Medications for indigestion and bloating",
+      "icon": "https://example.com/icons/indigestion.svg",
+      "order": 2,
+      "isActive": true,
+      "_id": {
+        "$oid": "6964e6b97a68e63382f2c886"
+      }
+    }
+  ],
+  "order": 1,
+  "isActive": false,
+  "createdBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "updatedBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "createdAt": {
+    "$date": "2026-01-12T12:19:05.686Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T13:21:03.219Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f6001b5741ad11065b917"
+  },
+  "name": "Chronic Condition",
+  "slug": "chronic-condition",
+  "description": "Medicines used for long-term treatment and management of chronic health conditions such as diabetes, hypertension, asthma, and thyroid disorders.",
+  "icon": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769002367/n8nkn4qf4qg6xfwciobv.svg",
+  "types": [
+    {
+      "name": "Diabetes Care",
+      "slug": "diabetes-care",
+      "description": "Medicines and supplements used to manage blood sugar levels and diabetes-related complications.",
+      "icon": "",
+      "order": 0,
+      "isActive": true,
+      "_id": {
+        "$oid": "696f6001b5741ad11065b918"
+      }
+    }
+  ],
+  "order": 0,
+  "isActive": false,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "updatedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-20T10:59:13.413Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-23T10:14:40.923Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "697100f54127f0ca8999afa1"
+  },
+  "name": "Women's Health",
+  "slug": "womens-health",
+  "description": "Medicines and healthcare products designed to support women’s health needs including menstrual care, pregnancy, fertility, hormonal balance, and overall wellness.",
+  "types": [
+    {
+      "name": "Menstrual Care",
+      "slug": "menstrual-care",
+      "description": "Medicines and supplements used for menstrual pain relief, cycle regulation, and menstrual discomfort.",
+      "icon": "",
+      "order": 0,
+      "isActive": true,
+      "_id": {
+        "$oid": "697100f54127f0ca8999afa2"
+      }
+    }
+  ],
+  "order": 0,
+  "isActive": true,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "updatedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T16:38:13.897Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T16:38:56.224Z"
+  },
+  "__v": 0,
+  "icon": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769013523/zijs7btme4oaf7tpatup.svg"
+},
+{
+  "_id": {
+    "$oid": "69734a697771d70610b96763"
+  },
+  "name": "Chronic Conditions",
+  "slug": "chronic-conditions",
+  "description": "Medicines and treatments used for long-term management of chronic health conditions such as allergies, diabetes, high blood pressure, thyroid disorders, and more.",
+  "types": [
+    {
+      "name": "Allergies",
+      "slug": "allergies",
+      "description": "Medications and supplements to manage and relieve symptoms of allergic reactions, including seasonal allergies and sensitivities.",
+      "order": 0,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734a697771d70610b96764"
+      }
+    },
+    {
+      "name": "Diabetes",
+      "slug": "diabetes",
+      "description": "Medicines and supplements used to manage blood sugar levels and prevent diabetes-related complications.",
+      "order": 1,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734a697771d70610b96765"
+      }
+    },
+    {
+      "name": "Dry Eye",
+      "slug": "dry-eye",
+      "description": "Treatments to relieve dry eye symptoms, improve eye lubrication, and prevent discomfort or irritation.",
+      "order": 2,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734a697771d70610b96766"
+      }
+    },
+    {
+      "name": "Gingivitis",
+      "slug": "gingivitis",
+      "description": "Medications and oral care products to prevent and treat gum inflammation and maintain oral health.",
+      "order": 3,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734a697771d70610b96767"
+      }
+    },
+    {
+      "name": "Hemorrhoids",
+      "slug": "hemorrhoids",
+      "description": "Topical and oral treatments to reduce pain, swelling, and discomfort caused by hemorrhoids.",
+      "order": 4,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734a697771d70610b96768"
+      }
+    },
+    {
+      "name": "High Blood Pressure",
+      "slug": "high-blood-pressure",
+      "description": "Medications to control blood pressure and reduce the risk of cardiovascular diseases.",
+      "order": 5,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734a697771d70610b96769"
+      }
+    },
+    {
+      "name": "High Cholesterol",
+      "slug": "high-cholesterol",
+      "description": "Medicines and supplements to manage cholesterol levels and support heart health.",
+      "order": 6,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734a697771d70610b9676a"
+      }
+    },
+    {
+      "name": "Migraine",
+      "slug": "migraine",
+      "description": "Treatments to prevent and relieve migraine attacks, reduce pain, and manage triggers.",
+      "order": 7,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734a697771d70610b9676b"
+      }
+    },
+    {
+      "name": "Osteoporosis",
+      "slug": "osteoporosis",
+      "description": "Medications and supplements to strengthen bones, prevent fractures, and manage osteoporosis.",
+      "order": 8,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734a697771d70610b9676c"
+      }
+    },
+    {
+      "name": "Pain",
+      "slug": "pain",
+      "description": "Medications for managing chronic pain conditions including muscular, joint, or nerve pain.",
+      "order": 9,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734a697771d70610b9676d"
+      }
+    },
+    {
+      "name": "Prescription Vitamins",
+      "slug": "prescription-vitamins",
+      "description": "Vitamins and supplements prescribed to support overall health and manage deficiencies.",
+      "order": 10,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734a697771d70610b9676e"
+      }
+    },
+    {
+      "name": "Thyroid",
+      "slug": "thyroid",
+      "description": "Medicines and supplements to manage thyroid hormone levels and related disorders.",
+      "order": 11,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734a697771d70610b9676f"
+      }
+    }
+  ],
+  "order": 0,
+  "isActive": true,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "updatedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-23T10:16:09.246Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-23T10:16:09.246Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69734b337771d70610b9677a"
+  },
+  "name": "Flu & Infections",
+  "slug": "flu-infections",
+  "description": "Medicines and treatments to prevent, manage, and treat common infections including viral, bacterial, and fungal infections.",
+  "types": [
+    {
+      "name": "Anti-Fungal",
+      "slug": "anti-fungal",
+      "description": "Medications used to treat fungal infections affecting the skin, nails, or internal organs.",
+      "order": 0,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734b337771d70610b9677b"
+      }
+    },
+    {
+      "name": "Cold & Flu",
+      "slug": "cold-flu",
+      "description": "Medicines and remedies to relieve symptoms of cold and flu, such as congestion, fever, and cough.",
+      "order": 1,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734b337771d70610b9677c"
+      }
+    },
+    {
+      "name": "Cold Sores",
+      "slug": "cold-sores",
+      "description": "Medications and topical treatments to manage herpes simplex virus outbreaks and reduce discomfort.",
+      "order": 2,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734b337771d70610b9677d"
+      }
+    },
+    {
+      "name": "Ear & Eye Infections",
+      "slug": "ear-eye-infections",
+      "description": "Medications and drops to treat bacterial or viral infections affecting the ear or eye.",
+      "order": 3,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734b337771d70610b9677e"
+      }
+    },
+    {
+      "name": "Gingivitis",
+      "slug": "gingivitis",
+      "description": "Oral care products and medicines to prevent and treat gum inflammation and maintain oral hygiene.",
+      "order": 4,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734b337771d70610b9677f"
+      }
+    },
+    {
+      "name": "Herpes",
+      "slug": "herpes",
+      "description": "Medications to manage herpes virus infections and reduce outbreaks.",
+      "order": 5,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734b337771d70610b96780"
+      }
+    },
+    {
+      "name": "HIV PrEP",
+      "slug": "hiv-prep",
+      "description": "Medications used as pre-exposure prophylaxis to prevent HIV infection in high-risk individuals.",
+      "order": 6,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734b337771d70610b96781"
+      }
+    },
+    {
+      "name": "Sexually Transmitted Diseases (STD)",
+      "slug": "sexually-transmitted-diseases",
+      "description": "Medications and treatments to manage and treat sexually transmitted infections.",
+      "order": 7,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734b337771d70610b96782"
+      }
+    },
+    {
+      "name": "Urinary Tract Infections",
+      "slug": "urinary-tract-infections",
+      "description": "Medications to treat and prevent infections of the urinary tract.",
+      "order": 8,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734b337771d70610b96783"
+      }
+    }
+  ],
+  "order": 0,
+  "isActive": true,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "updatedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-23T10:19:31.701Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-23T10:19:31.701Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69734b667771d70610b9678a"
+  },
+  "name": "Digestive & Travel",
+  "slug": "digestive-travel",
+  "description": "Medicines and supplements to support digestive health, manage gastrointestinal disorders, and ensure safe travel.",
+  "types": [
+    {
+      "name": "Heartburn",
+      "slug": "heartburn",
+      "description": "Medications to relieve acid reflux, heartburn, and related stomach discomfort.",
+      "order": 0,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734b667771d70610b9678b"
+      }
+    },
+    {
+      "name": "Irritable Bowel Syndrome (IBS)",
+      "slug": "irritable-bowel-syndrome",
+      "description": "Treatments and dietary supplements to manage IBS symptoms including bloating, abdominal pain, and irregular bowel movements.",
+      "order": 1,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734b667771d70610b9678c"
+      }
+    },
+    {
+      "name": "Nausea",
+      "slug": "nausea",
+      "description": "Medications to prevent and relieve nausea, vomiting, and motion sickness.",
+      "order": 2,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734b667771d70610b9678d"
+      }
+    },
+    {
+      "name": "Travel",
+      "slug": "travel",
+      "description": "Supplements and medications to prevent travel-related illnesses, motion sickness, and digestive disturbances.",
+      "order": 3,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734b667771d70610b9678e"
+      }
+    }
+  ],
+  "order": 1,
+  "isActive": true,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "updatedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-23T10:20:22.651Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-23T10:20:22.651Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69734d057771d70610b967d6"
+  },
+  "name": "Skin & Hairs",
+  "slug": "skin-hairs",
+  "description": "Medicines, treatments, and care products for maintaining healthy skin and hair, managing conditions like acne, hair loss, eczema, and wound care.",
+  "types": [
+    {
+      "name": "Acne",
+      "slug": "acne",
+      "description": "Medications and topical treatments to manage and prevent acne, reduce inflammation, and promote clearer skin.",
+      "order": 0,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734d057771d70610b967d7"
+      }
+    },
+    {
+      "name": "Anti-Aging",
+      "slug": "anti-aging",
+      "description": "Products and supplements designed to reduce signs of aging, improve skin elasticity, and maintain youthful skin.",
+      "order": 1,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734d057771d70610b967d8"
+      }
+    },
+    {
+      "name": "Canker Sores",
+      "slug": "canker-sores",
+      "description": "Treatments to relieve pain and accelerate healing of mouth ulcers and canker sores.",
+      "order": 2,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734d057771d70610b967d9"
+      }
+    },
+    {
+      "name": "Dermatitis",
+      "slug": "dermatitis",
+      "description": "Medications and topical treatments to manage skin inflammation, irritation, and allergic reactions.",
+      "order": 3,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734d057771d70610b967da"
+      }
+    },
+    {
+      "name": "Eczema",
+      "slug": "eczema",
+      "description": "Treatments and creams to reduce itching, redness, and inflammation associated with eczema.",
+      "order": 4,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734d057771d70610b967db"
+      }
+    },
+    {
+      "name": "Eyelash Growth",
+      "slug": "eyelash-growth",
+      "description": "Serums and treatments to promote healthier, longer, and thicker eyelashes.",
+      "order": 5,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734d057771d70610b967dc"
+      }
+    },
+    {
+      "name": "Hair Loss",
+      "slug": "hair-loss",
+      "description": "Medications, supplements, and topical solutions to prevent hair loss and stimulate hair regrowth.",
+      "order": 6,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734d057771d70610b967dd"
+      }
+    },
+    {
+      "name": "Infections",
+      "slug": "skin-hair-infections",
+      "description": "Treatments for bacterial, fungal, or viral infections affecting skin and hair.",
+      "order": 7,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734d057771d70610b967de"
+      }
+    },
+    {
+      "name": "Itching",
+      "slug": "itching",
+      "description": "Medications and creams to relieve itching caused by skin conditions or allergies.",
+      "order": 8,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734d057771d70610b967df"
+      }
+    },
+    {
+      "name": "Lice & Scabies",
+      "slug": "lice-scabies",
+      "description": "Topical treatments to eliminate lice and scabies infestations and prevent recurrence.",
+      "order": 9,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734d057771d70610b967e0"
+      }
+    },
+    {
+      "name": "Nail Fungus",
+      "slug": "nail-fungus",
+      "description": "Medications and topical treatments to treat fungal infections of the nails and improve nail health.",
+      "order": 10,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734d057771d70610b967e1"
+      }
+    },
+    {
+      "name": "Psoriasis",
+      "slug": "psoriasis",
+      "description": "Treatments and topical therapies to manage psoriasis symptoms including scaling, redness, and inflammation.",
+      "order": 11,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734d057771d70610b967e2"
+      }
+    },
+    {
+      "name": "Rosacea",
+      "slug": "rosacea",
+      "description": "Medications and topical care to reduce redness, inflammation, and breakouts associated with rosacea.",
+      "order": 12,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734d057771d70610b967e3"
+      }
+    },
+    {
+      "name": "Wound Care",
+      "slug": "wound-care",
+      "description": "Medications and dressings to promote healing of cuts, scrapes, and minor wounds while preventing infections.",
+      "order": 13,
+      "isActive": true,
+      "_id": {
+        "$oid": "69734d057771d70610b967e4"
+      }
+    }
+  ],
+  "order": 0,
+  "isActive": true,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "updatedBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-23T10:27:17.841Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-23T10:27:17.841Z"
+  },
+  "__v": 0
+}]

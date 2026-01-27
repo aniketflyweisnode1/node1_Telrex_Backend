@@ -1,0 +1,1021 @@
+[{
+  "_id": {
+    "$oid": "696486a2c40a155136c922a2"
+  },
+  "paymentId": "PAY-1768195746183-7694",
+  "order": {
+    "$oid": "69648646c40a155136c92277"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 150.361,
+  "currency": "INR",
+  "paymentMethod": "card",
+  "paymentStatus": "pending",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-12T05:29:06.184Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T05:29:06.184Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964acda19f5baedf62e4859"
+  },
+  "paymentId": "PAY-1768205530377-8583",
+  "order": {
+    "$oid": "6964ac4a19f5baedf62e4849"
+  },
+  "patient": {
+    "$oid": "6964ac4919f5baedf62e4843"
+  },
+  "amount": 769.46,
+  "currency": "INR",
+  "paymentMethod": "card",
+  "paymentStatus": "failed",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-12T08:12:10.379Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T08:19:32.539Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "id": "pi_3SogGvEpdUBHuw6Y17KygRMa",
+    "object": "payment_intent",
+    "amount": 76946,
+    "amount_capturable": 0,
+    "amount_received": 0,
+    "application": null,
+    "application_fee_amount": null,
+    "automatic_payment_methods": {
+      "allow_redirects": "always",
+      "enabled": true
+    },
+    "canceled_at": null,
+    "cancellation_reason": null,
+    "capture_method": "automatic",
+    "client_secret": "pi_3SogGvEpdUBHuw6Y17KygRMa_secret_7cX6NS4s8PbHLPHE1fFR2je3k",
+    "confirmation_method": "automatic",
+    "created": 1768205685,
+    "currency": "inr",
+    "customer": null,
+    "customer_account": null,
+    "description": null,
+    "excluded_payment_method_types": null,
+    "invoice": null,
+    "last_payment_error": null,
+    "latest_charge": null,
+    "livemode": false,
+    "metadata": {
+      "orderId": "6964ac4a19f5baedf62e4849",
+      "orderNumber": "ORD-1768205386156-8818",
+      "patientId": "6964ac4919f5baedf62e4843",
+      "paymentId": "6964acda19f5baedf62e4859"
+    },
+    "next_action": null,
+    "on_behalf_of": null,
+    "payment_method": null,
+    "payment_method_configuration_details": {
+      "id": "pmc_1SQCn9EpdUBHuw6Ynr55oGjk",
+      "parent": null
+    },
+    "payment_method_options": {
+      "card": {
+        "installments": null,
+        "mandate_options": null,
+        "network": null,
+        "request_three_d_secure": "automatic"
+      },
+      "link": {
+        "persistent_token": null
+      }
+    },
+    "payment_method_types": [
+      "card",
+      "link"
+    ],
+    "processing": null,
+    "receipt_email": null,
+    "review": null,
+    "setup_future_usage": null,
+    "shipping": null,
+    "source": null,
+    "statement_descriptor": null,
+    "statement_descriptor_suffix": null,
+    "status": "requires_payment_method",
+    "transfer_data": null,
+    "transfer_group": null
+  },
+  "stripeClientSecret": "pi_3SogGvEpdUBHuw6Y17KygRMa_secret_7cX6NS4s8PbHLPHE1fFR2je3k",
+  "stripePaymentIntentId": "pi_3SogGvEpdUBHuw6Y17KygRMa",
+  "failedAt": {
+    "$date": "2026-01-12T08:19:32.457Z"
+  },
+  "failureReason": "Payment failed"
+},
+{
+  "_id": {
+    "$oid": "6964b358cebbeb1c90c2b37f"
+  },
+  "paymentId": "PAY-1768207192571-3238",
+  "order": {
+    "$oid": "6964ac4a19f5baedf62e4849"
+  },
+  "patient": {
+    "$oid": "6964ac4919f5baedf62e4843"
+  },
+  "amount": 769.46,
+  "currency": "INR",
+  "paymentMethod": "card",
+  "paymentStatus": "failed",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-12T08:39:52.591Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T08:42:51.420Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "id": "pi_3SoghcEpdUBHuw6Y1vNcLUqD",
+    "object": "payment_intent",
+    "amount": 76946,
+    "amount_capturable": 0,
+    "amount_received": 0,
+    "application": null,
+    "application_fee_amount": null,
+    "automatic_payment_methods": {
+      "allow_redirects": "always",
+      "enabled": true
+    },
+    "canceled_at": null,
+    "cancellation_reason": null,
+    "capture_method": "automatic",
+    "client_secret": "pi_3SoghcEpdUBHuw6Y1vNcLUqD_secret_SNNMwma0MxM2bRigdQ78Y3P2z",
+    "confirmation_method": "automatic",
+    "created": 1768207340,
+    "currency": "inr",
+    "customer": null,
+    "customer_account": null,
+    "description": null,
+    "excluded_payment_method_types": null,
+    "invoice": null,
+    "last_payment_error": null,
+    "latest_charge": null,
+    "livemode": false,
+    "metadata": {
+      "orderId": "6964ac4a19f5baedf62e4849",
+      "orderNumber": "ORD-1768205386156-8818",
+      "patientId": "6964ac4919f5baedf62e4843",
+      "paymentId": "6964b358cebbeb1c90c2b37f"
+    },
+    "next_action": null,
+    "on_behalf_of": null,
+    "payment_method": null,
+    "payment_method_configuration_details": {
+      "id": "pmc_1SQCn9EpdUBHuw6Ynr55oGjk",
+      "parent": null
+    },
+    "payment_method_options": {
+      "card": {
+        "installments": null,
+        "mandate_options": null,
+        "network": null,
+        "request_three_d_secure": "automatic"
+      },
+      "link": {
+        "persistent_token": null
+      }
+    },
+    "payment_method_types": [
+      "card",
+      "link"
+    ],
+    "processing": null,
+    "receipt_email": null,
+    "review": null,
+    "setup_future_usage": null,
+    "shipping": null,
+    "source": null,
+    "statement_descriptor": null,
+    "statement_descriptor_suffix": null,
+    "status": "requires_payment_method",
+    "transfer_data": null,
+    "transfer_group": null
+  },
+  "stripeClientSecret": "pi_3SoghcEpdUBHuw6Y1vNcLUqD_secret_SNNMwma0MxM2bRigdQ78Y3P2z",
+  "stripePaymentIntentId": "pi_3SoghcEpdUBHuw6Y1vNcLUqD",
+  "failedAt": {
+    "$date": "2026-01-12T08:42:51.352Z"
+  },
+  "failureReason": "Payment failed"
+},
+{
+  "_id": {
+    "$oid": "69689998c81fbf5b55cf2e22"
+  },
+  "paymentId": "PAY-1768462744296-7622",
+  "order": {
+    "$oid": "69689942c81fbf5b55cf2e12"
+  },
+  "patient": {
+    "$oid": "6964ac4919f5baedf62e4843"
+  },
+  "amount": 769.46,
+  "currency": "INR",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-15T07:39:04.299Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T07:39:07.064Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3Spl94EpdUBHuw6Y1cwDp2e9",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3Spl94EpdUBHuw6Y1cwDp2e9_secret_AtFjwCgEAkyVB2KBB0daO9zDf",
+  "stripePaymentIntentId": "pi_3Spl94EpdUBHuw6Y1cwDp2e9"
+},
+{
+  "_id": {
+    "$oid": "6968c80b33a228f1c1edf910"
+  },
+  "paymentId": "PAY-1768474635273-8276",
+  "order": {
+    "$oid": "6968c6cc33a228f1c1edf8d3"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 236.4184,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-15T10:57:15.274Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T10:57:16.225Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SpoEqEpdUBHuw6Y0a8RlQXy",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SpoEqEpdUBHuw6Y0a8RlQXy_secret_pXE1CW9vGiNOs1fqY8TH3hEp4",
+  "stripePaymentIntentId": "pi_3SpoEqEpdUBHuw6Y0a8RlQXy"
+},
+{
+  "_id": {
+    "$oid": "696a3aea827f9749ddacf6fa"
+  },
+  "paymentId": "PAY-1768569578420-3560",
+  "order": {
+    "$oid": "696a39b5827f9749ddacf6e9"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 28.8682,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-16T13:19:38.421Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T13:23:04.565Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SqCzUEpdUBHuw6Y1jDUMsuc",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SqCzUEpdUBHuw6Y1jDUMsuc_secret_gFZxkumlhloRfkK0cV86R2H3J",
+  "stripePaymentIntentId": "pi_3SqCzUEpdUBHuw6Y1jDUMsuc"
+},
+{
+  "_id": {
+    "$oid": "696a3c14827f9749ddacf749"
+  },
+  "paymentId": "PAY-1768569876908-5543",
+  "order": {
+    "$oid": "696a3c0a827f9749ddacf738"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 28.8682,
+  "currency": "USD",
+  "paymentMethod": "upi",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-16T13:24:36.909Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T13:24:37.366Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SqD0zEpdUBHuw6Y18nkZgi7",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SqD0zEpdUBHuw6Y18nkZgi7_secret_FtqtK57nNafjIljBFb2oU4JW7",
+  "stripePaymentIntentId": "pi_3SqD0zEpdUBHuw6Y18nkZgi7"
+},
+{
+  "_id": {
+    "$oid": "696a3c6c827f9749ddacf77e"
+  },
+  "paymentId": "PAY-1768569964877-0864",
+  "order": {
+    "$oid": "696a3c66827f9749ddacf76d"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 28.8682,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-16T13:26:04.878Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T13:26:05.269Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SqD2PEpdUBHuw6Y0jnZJhYZ",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SqD2PEpdUBHuw6Y0jnZJhYZ_secret_stMUfODlDmcsQOjsI1g39LnqT",
+  "stripePaymentIntentId": "pi_3SqD2PEpdUBHuw6Y0jnZJhYZ"
+},
+{
+  "_id": {
+    "$oid": "696a3fa3827f9749ddacf7f5"
+  },
+  "paymentId": "PAY-1768570787766-0152",
+  "order": {
+    "$oid": "696a3f97827f9749ddacf7e4"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 28.8682,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-16T13:39:47.767Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T13:40:07.500Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SqDFzEpdUBHuw6Y0gl10Wmz",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SqDFzEpdUBHuw6Y0gl10Wmz_secret_3U8yhmXIoP8TH9BCmbUrJO8dc",
+  "stripePaymentIntentId": "pi_3SqDFzEpdUBHuw6Y0gl10Wmz"
+},
+{
+  "_id": {
+    "$oid": "696a40cb827f9749ddacf832"
+  },
+  "paymentId": "PAY-1768571083598-3453",
+  "order": {
+    "$oid": "696a4045827f9749ddacf821"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 28.8682,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-16T13:44:43.599Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T13:44:44.093Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SqDKSEpdUBHuw6Y0mhTNddE",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SqDKSEpdUBHuw6Y0mhTNddE_secret_n9HmQ2XmwUxLXL91BvwbMwGot",
+  "stripePaymentIntentId": "pi_3SqDKSEpdUBHuw6Y0mhTNddE"
+},
+{
+  "_id": {
+    "$oid": "696a41f7827f9749ddacf867"
+  },
+  "paymentId": "PAY-1768571383949-2751",
+  "order": {
+    "$oid": "696a41ed827f9749ddacf856"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 28.8682,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-16T13:49:43.950Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T13:49:44.458Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SqDPIEpdUBHuw6Y1p6nLV15",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SqDPIEpdUBHuw6Y1p6nLV15_secret_f9bSJ0fNXBGSN7SY87thY3cTj",
+  "stripePaymentIntentId": "pi_3SqDPIEpdUBHuw6Y1p6nLV15"
+},
+{
+  "_id": {
+    "$oid": "696a4384827f9749ddacf89c"
+  },
+  "paymentId": "PAY-1768571780526-3404",
+  "order": {
+    "$oid": "696a4221827f9749ddacf88b"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 28.8682,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-16T13:56:20.527Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T13:56:20.941Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SqDVgEpdUBHuw6Y14tTCMN6",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SqDVgEpdUBHuw6Y14tTCMN6_secret_oBjqylhU7FVy3NenqTw7yBIWz",
+  "stripePaymentIntentId": "pi_3SqDVgEpdUBHuw6Y14tTCMN6"
+},
+{
+  "_id": {
+    "$oid": "696a45b0827f9749ddacf930"
+  },
+  "paymentId": "PAY-1768572336389-6963",
+  "order": {
+    "$oid": "696a4563827f9749ddacf912"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 198.68200000000002,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-16T14:05:36.389Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T14:20:41.842Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SqDtFEpdUBHuw6Y1M9eemio",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SqDtFEpdUBHuw6Y1M9eemio_secret_PnhNmSljKyINu60WpXZjEly8Z",
+  "stripePaymentIntentId": "pi_3SqDtFEpdUBHuw6Y1M9eemio"
+},
+{
+  "_id": {
+    "$oid": "696a4955827f9749ddacf995"
+  },
+  "paymentId": "PAY-1768573269429-9876",
+  "order": {
+    "$oid": "696a494f827f9749ddacf984"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 198.68200000000002,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-16T14:21:09.430Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T14:26:58.333Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SqDzKEpdUBHuw6Y1jK1QSP1",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SqDzKEpdUBHuw6Y1jK1QSP1_secret_OkCJLCOC9xCEzaLO1i8tsqUZR",
+  "stripePaymentIntentId": "pi_3SqDzKEpdUBHuw6Y1jK1QSP1"
+},
+{
+  "_id": {
+    "$oid": "696de2a05a43be0bc9e64684"
+  },
+  "paymentId": "PAY-1768809120022-3350",
+  "order": {
+    "$oid": "696de2965a43be0bc9e64673"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 198.68200000000002,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-19T07:52:00.023Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-19T07:52:15.152Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SrDFzEpdUBHuw6Y0l4SOyyB",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SrDFzEpdUBHuw6Y0l4SOyyB_secret_vdC1EmJ1Ac6Y5Agy5KWSvIs5K",
+  "stripePaymentIntentId": "pi_3SrDFzEpdUBHuw6Y0l4SOyyB"
+},
+{
+  "_id": {
+    "$oid": "696e112089cc328a86769014"
+  },
+  "paymentId": "PAY-1768821024339-3589",
+  "order": {
+    "$oid": "696e111789cc328a86769003"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 45.4,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-19T11:10:24.340Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-19T11:10:24.801Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SrGLkEpdUBHuw6Y0GQG3X52",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SrGLkEpdUBHuw6Y0GQG3X52_secret_fjmbVLZIOhOGbk5cgR1E2bjN1",
+  "stripePaymentIntentId": "pi_3SrGLkEpdUBHuw6Y0GQG3X52"
+},
+{
+  "_id": {
+    "$oid": "696e143c89cc328a86769121"
+  },
+  "paymentId": "PAY-1768821820532-6905",
+  "order": {
+    "$oid": "696e143489cc328a86769110"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 45.4,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-19T11:23:40.533Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-19T11:23:41.028Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SrGYaEpdUBHuw6Y1riTRgD1",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SrGYaEpdUBHuw6Y1riTRgD1_secret_ANCgOxOZlSFQHJ7wDpWfMlDYw",
+  "stripePaymentIntentId": "pi_3SrGYaEpdUBHuw6Y1riTRgD1"
+},
+{
+  "_id": {
+    "$oid": "6970833e7d18b5eb824c7b5d"
+  },
+  "paymentId": "PAY-1768981310176-5573",
+  "order": {
+    "$oid": "697083207d18b5eb824c7b3e"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 102.03999999999999,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-21T07:41:50.177Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T07:44:27.720Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3Srw5XEpdUBHuw6Y1tb9mPhP",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3Srw5XEpdUBHuw6Y1tb9mPhP_secret_XMHfoWEvR8zNjC1yYlWtVNOVb",
+  "stripePaymentIntentId": "pi_3Srw5XEpdUBHuw6Y1tb9mPhP"
+},
+{
+  "_id": {
+    "$oid": "6970846a7d18b5eb824c7c00"
+  },
+  "paymentId": "PAY-1768981610112-6307",
+  "order": {
+    "$oid": "697084157d18b5eb824c7be0"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 102.03999999999999,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-21T07:46:50.113Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T07:48:22.683Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3Srw9KEpdUBHuw6Y0NoqzIoJ",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3Srw9KEpdUBHuw6Y0NoqzIoJ_secret_POqbCUTrvXJ4Mo0Bx4AcSx7r6",
+  "stripePaymentIntentId": "pi_3Srw9KEpdUBHuw6Y0NoqzIoJ"
+},
+{
+  "_id": {
+    "$oid": "697084fd7d18b5eb824c7c76"
+  },
+  "paymentId": "PAY-1768981757514-0175",
+  "order": {
+    "$oid": "697084f37d18b5eb824c7c57"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 102.03999999999999,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-21T07:49:17.514Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T07:49:17.937Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SrwADEpdUBHuw6Y1NGyYp9r",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SrwADEpdUBHuw6Y1NGyYp9r_secret_aqKGD8ATYXFanmQOILqheslX6",
+  "stripePaymentIntentId": "pi_3SrwADEpdUBHuw6Y1NGyYp9r"
+},
+{
+  "_id": {
+    "$oid": "6970854a7d18b5eb824c7cd1"
+  },
+  "paymentId": "PAY-1768981834739-4374",
+  "order": {
+    "$oid": "697085437d18b5eb824c7cb2"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 102.03999999999999,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-21T07:50:34.740Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T07:50:35.145Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SrwBTEpdUBHuw6Y0gSOHC56",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SrwBTEpdUBHuw6Y0gSOHC56_secret_9mx3AxdO61WunQsbLpQBJltdT",
+  "stripePaymentIntentId": "pi_3SrwBTEpdUBHuw6Y0gSOHC56"
+},
+{
+  "_id": {
+    "$oid": "6970865e7d18b5eb824c7d60"
+  },
+  "paymentId": "PAY-1768982110729-5676",
+  "order": {
+    "$oid": "697086567d18b5eb824c7d3c"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 102.03999999999999,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-21T07:55:10.729Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T07:55:11.161Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SrwFvEpdUBHuw6Y1jIz3G7X",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SrwFvEpdUBHuw6Y1jIz3G7X_secret_sZu2VVvpKUalNXAEMljFUPRLB",
+  "stripePaymentIntentId": "pi_3SrwFvEpdUBHuw6Y1jIz3G7X"
+},
+{
+  "_id": {
+    "$oid": "6970e7e84127f0ca8999a8d0"
+  },
+  "paymentId": "PAY-1769007080250-0002",
+  "order": {
+    "$oid": "6970e7df4127f0ca8999a8b3"
+  },
+  "patient": {
+    "$oid": "6970d06e7a196725262b55cf"
+  },
+  "amount": 44.22,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-21T14:51:20.251Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T14:51:20.800Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3Ss2keEpdUBHuw6Y0bjXWgYB",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3Ss2keEpdUBHuw6Y0bjXWgYB_secret_J7o7XqXEfeNVkSnowio8Rb6b2",
+  "stripePaymentIntentId": "pi_3Ss2keEpdUBHuw6Y0bjXWgYB"
+},
+{
+  "_id": {
+    "$oid": "6970f8894127f0ca8999ad7d"
+  },
+  "paymentId": "PAY-1769011337774-2365",
+  "order": {
+    "$oid": "6970f84e4127f0ca8999ad60"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 194.07999999999998,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-21T16:02:17.775Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T16:02:18.269Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3Ss3rKEpdUBHuw6Y1LoqRgnw",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3Ss3rKEpdUBHuw6Y1LoqRgnw_secret_DtNK4hQrRi9qav5s4xKY3nCAw",
+  "stripePaymentIntentId": "pi_3Ss3rKEpdUBHuw6Y1LoqRgnw"
+},
+{
+  "_id": {
+    "$oid": "697145091654bdc1caa9ddc8"
+  },
+  "paymentId": "PAY-1769030921315-1538",
+  "order": {
+    "$oid": "697144ff1654bdc1caa9dda7"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 274.32,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-21T21:28:41.316Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T21:28:49.575Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3Ss8xJEpdUBHuw6Y1SSfwI8f",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3Ss8xJEpdUBHuw6Y1SSfwI8f_secret_iTAuHdhht7IOp2Kdysfejrjcw",
+  "stripePaymentIntentId": "pi_3Ss8xJEpdUBHuw6Y1SSfwI8f"
+},
+{
+  "_id": {
+    "$oid": "6971ef31c21f2c1257aa11dd"
+  },
+  "paymentId": "PAY-1769074481576-2712",
+  "order": {
+    "$oid": "6971eeeec99da8b8eb7e834b"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 102.03999999999999,
+  "currency": "USD",
+  "paymentMethod": "upi",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-22T09:34:41.583Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T09:39:45.809Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SsKMfEpdUBHuw6Y1IKUvy4Z",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SsKMfEpdUBHuw6Y1IKUvy4Z_secret_bUBvlImZSqCVbzzuSj1GegzuF",
+  "stripePaymentIntentId": "pi_3SsKMfEpdUBHuw6Y1IKUvy4Z"
+},
+{
+  "_id": {
+    "$oid": "6971f136c21f2c1257aa1363"
+  },
+  "paymentId": "PAY-1769074998049-6637",
+  "order": {
+    "$oid": "6971f12bc21f2c1257aa1340"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 146.88,
+  "currency": "USD",
+  "paymentMethod": "upi",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-22T09:43:18.050Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T09:44:47.194Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SsKRXEpdUBHuw6Y1B2M8792",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SsKRXEpdUBHuw6Y1B2M8792_secret_XjvXGtBODv7MQ34B17EoXypje",
+  "stripePaymentIntentId": "pi_3SsKRXEpdUBHuw6Y1B2M8792"
+},
+{
+  "_id": {
+    "$oid": "6972334a183082bfbb0a800e"
+  },
+  "paymentId": "PAY-1769091914662-2602",
+  "order": {
+    "$oid": "6972331d183082bfbb0a7ff1"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "amount": 296.74,
+  "currency": "USD",
+  "paymentMethod": "card",
+  "paymentStatus": "processing",
+  "paymentGateway": "stripe",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2026-01-22T14:25:14.664Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T14:25:15.722Z"
+  },
+  "__v": 0,
+  "gatewayResponse": {
+    "paymentIntentId": "pi_3SsOoxEpdUBHuw6Y00FmUBh6",
+    "status": "requires_payment_method",
+    "paymentMethodId": null
+  },
+  "stripeClientSecret": "pi_3SsOoxEpdUBHuw6Y00FmUBh6_secret_JgsoQDDbVnVbUHY6IBHEv9uU8",
+  "stripePaymentIntentId": "pi_3SsOoxEpdUBHuw6Y00FmUBh6"
+}]

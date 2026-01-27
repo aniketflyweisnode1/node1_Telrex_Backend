@@ -29,6 +29,51 @@ const {
   HEALTH_CATEGORY_POPULATE_ALL
 } = require('../../helpers/medicine.helper');
 
+// ============ BULK CREATE (JSON UPLOAD) ============
+
+/**
+ * Bulk add medicines from JSON payload (no file uploads)
+ * Expects an array of medicine objects in the correct format
+ */
+exports.bulkAddMedicinesFromJson = async (medicinesPayload = []) => {
+  if (!Array.isArray(medicinesPayload) || medicinesPayload.length === 0) {
+    throw new AppError('medicines array is required and cannot be empty', 400);
+  }
+
+  const createdMedicines = [];
+
+  for (const data of medicinesPayload) {
+    // Map category/subCategory to healthCategory/healthTypeSlug
+    const healthCategoryId = data.category || data.healthCategory;
+    const healthTypeSlugValue = data.subCategory || data.healthTypeSlug;
+
+    // Validate health category relationship
+    const healthCategoryData = await validateHealthCategory(healthCategoryId, healthTypeSlugValue);
+
+    // Process images from JSON body only (no file uploads here)
+    const images = processImages(data, [], null);
+
+    // Build medicine data
+    const medicineData = buildMedicineData(data, images, healthCategoryData);
+
+    // Create medicine
+    const medicine = await Medicine.create(medicineData);
+
+    // Populate healthCategory if exists
+    if (medicine.healthCategory) {
+      await medicine.populate(HEALTH_CATEGORY_POPULATE_ALL);
+    }
+
+    // Convert to plain object and populate subCategory
+    let medicineObj = medicine.toObject();
+    medicineObj = await populateSubCategory(medicineObj);
+
+    createdMedicines.push(medicineObj);
+  }
+
+  return createdMedicines;
+};
+
 // ============ CREATE ============
 
 /**

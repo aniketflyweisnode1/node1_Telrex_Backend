@@ -1,0 +1,456 @@
+[{
+  "_id": {
+    "$oid": "69708d677d18b5eb824c8104"
+  },
+  "user": {
+    "$oid": "695b74d386d9ec317242a451"
+  },
+  "type": "system",
+  "title": "Sale",
+  "message": "Buy 1 get 2 free",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:25:11.036Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:25:11.036Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69708d677d18b5eb824c8106"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "type": "system",
+  "title": "Sale",
+  "message": "Buy 1 get 2 free",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:25:11.271Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:25:11.271Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69708d677d18b5eb824c8108"
+  },
+  "user": {
+    "$oid": "695b6dd43413de05573c6dff"
+  },
+  "type": "system",
+  "title": "Sale",
+  "message": "Buy 1 get 2 free",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:25:11.496Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:25:11.496Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69708d677d18b5eb824c810a"
+  },
+  "user": {
+    "$oid": "695f92483ca546737a217833"
+  },
+  "type": "system",
+  "title": "Sale",
+  "message": "Buy 1 get 2 free",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:25:11.720Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:25:11.720Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69708d677d18b5eb824c810c"
+  },
+  "user": {
+    "$oid": "69611414b8c266a7835c0c18"
+  },
+  "type": "system",
+  "title": "Sale",
+  "message": "Buy 1 get 2 free",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:25:11.946Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:25:11.946Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69708d687d18b5eb824c810e"
+  },
+  "user": {
+    "$oid": "696b7eb4937ff2f0e9936b1d"
+  },
+  "type": "system",
+  "title": "Sale",
+  "message": "Buy 1 get 2 free",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:25:12.170Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:25:12.170Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69708d687d18b5eb824c8110"
+  },
+  "user": {
+    "$oid": "696f472d8c9217cda7063789"
+  },
+  "type": "system",
+  "title": "Sale",
+  "message": "Buy 1 get 2 free",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:25:12.395Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:25:12.395Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69708d687d18b5eb824c8112"
+  },
+  "user": {
+    "$oid": "6970779be388aaaedbdeaafc"
+  },
+  "type": "system",
+  "title": "Sale",
+  "message": "Buy 1 get 2 free",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:25:12.620Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:25:12.620Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697090ec7d18b5eb824c81ac"
+  },
+  "user": {
+    "$oid": "695b74d386d9ec317242a451"
+  },
+  "type": "system",
+  "title": "Test sale",
+  "message": "Sale",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:40:12.778Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:40:12.778Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697090ed7d18b5eb824c81ae"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "type": "system",
+  "title": "Test sale",
+  "message": "Sale",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:40:13.004Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:40:13.004Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697090ed7d18b5eb824c81b0"
+  },
+  "user": {
+    "$oid": "695b6dd43413de05573c6dff"
+  },
+  "type": "system",
+  "title": "Test sale",
+  "message": "Sale",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:40:13.227Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:40:13.227Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697090ed7d18b5eb824c81b2"
+  },
+  "user": {
+    "$oid": "695f92483ca546737a217833"
+  },
+  "type": "system",
+  "title": "Test sale",
+  "message": "Sale",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:40:13.451Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:40:13.451Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697090ed7d18b5eb824c81b4"
+  },
+  "user": {
+    "$oid": "69611414b8c266a7835c0c18"
+  },
+  "type": "system",
+  "title": "Test sale",
+  "message": "Sale",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:40:13.689Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:40:13.689Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697090ed7d18b5eb824c81b6"
+  },
+  "user": {
+    "$oid": "696b7eb4937ff2f0e9936b1d"
+  },
+  "type": "system",
+  "title": "Test sale",
+  "message": "Sale",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:40:13.913Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:40:13.913Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697090ee7d18b5eb824c81b8"
+  },
+  "user": {
+    "$oid": "696f472d8c9217cda7063789"
+  },
+  "type": "system",
+  "title": "Test sale",
+  "message": "Sale",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:40:14.138Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:40:14.138Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697090ee7d18b5eb824c81ba"
+  },
+  "user": {
+    "$oid": "6970779be388aaaedbdeaafc"
+  },
+  "type": "system",
+  "title": "Test sale",
+  "message": "Sale",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:40:14.362Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:40:14.362Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697092987d18b5eb824c8239"
+  },
+  "user": {
+    "$oid": "695b74d386d9ec317242a451"
+  },
+  "type": "system",
+  "title": "ok",
+  "message": "But 1 get 10 free ",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:47:20.044Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:47:20.044Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697092987d18b5eb824c823b"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "type": "system",
+  "title": "ok",
+  "message": "But 1 get 10 free ",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:47:20.269Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:47:20.269Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697092987d18b5eb824c823d"
+  },
+  "user": {
+    "$oid": "695b6dd43413de05573c6dff"
+  },
+  "type": "system",
+  "title": "ok",
+  "message": "But 1 get 10 free ",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:47:20.494Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:47:20.494Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697092987d18b5eb824c823f"
+  },
+  "user": {
+    "$oid": "695f92483ca546737a217833"
+  },
+  "type": "system",
+  "title": "ok",
+  "message": "But 1 get 10 free ",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:47:20.718Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:47:20.718Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697092987d18b5eb824c8241"
+  },
+  "user": {
+    "$oid": "69611414b8c266a7835c0c18"
+  },
+  "type": "system",
+  "title": "ok",
+  "message": "But 1 get 10 free ",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:47:20.946Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:47:20.946Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697092997d18b5eb824c8243"
+  },
+  "user": {
+    "$oid": "696b7eb4937ff2f0e9936b1d"
+  },
+  "type": "system",
+  "title": "ok",
+  "message": "But 1 get 10 free ",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:47:21.172Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:47:21.172Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697092997d18b5eb824c8245"
+  },
+  "user": {
+    "$oid": "696f472d8c9217cda7063789"
+  },
+  "type": "system",
+  "title": "ok",
+  "message": "But 1 get 10 free ",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:47:21.397Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:47:21.397Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697092997d18b5eb824c8247"
+  },
+  "user": {
+    "$oid": "6970779be388aaaedbdeaafc"
+  },
+  "type": "system",
+  "title": "ok",
+  "message": "But 1 get 10 free ",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-21T08:47:21.622Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:47:21.622Z"
+  },
+  "__v": 0
+}]

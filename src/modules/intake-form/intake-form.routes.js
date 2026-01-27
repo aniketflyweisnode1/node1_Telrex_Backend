@@ -23,6 +23,10 @@ router.post('/intake-form/submit', auth, submitConsultationValidation, validate,
 // Legacy endpoints (for backward compatibility)
 router.post('/intake-form', auth, controller.createIntakeForm);
 router.put('/intake-form', auth, controller.updateIntakeForm);
-
+// router.post(
+//   '/submit-full-intake',
+//   auth,
+//   intakeController.submitFullIntakeForm
+// );
 module.exports = router;
 

@@ -1,0 +1,23 @@
+[{
+  "_id": {
+    "$oid": "696b4d4089cc4f3f0bb22842"
+  },
+  "email": "user@example.com",
+  "status": "unsubscribed",
+  "subscribedAt": {
+    "$date": "2026-01-17T08:50:08.781Z"
+  },
+  "source": "website",
+  "ipAddress": "::1",
+  "userAgent": "PostmanRuntime/7.51.0",
+  "createdAt": {
+    "$date": "2026-01-17T08:50:08.783Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T08:51:58.582Z"
+  },
+  "__v": 0,
+  "unsubscribedAt": {
+    "$date": "2026-01-17T08:51:58.581Z"
+  }
+}]

@@ -1,0 +1,203 @@
+[{
+  "_id": {
+    "$oid": "6960a6e447b426c60e072c0a"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "discount": 0,
+  "subtotal": 0,
+  "tax": 0,
+  "shippingCharges": 0,
+  "totalAmount": 0,
+  "items": [],
+  "createdAt": {
+    "$date": "2026-01-09T06:57:40.774Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-23T09:51:48.439Z"
+  },
+  "__v": 92
+},
+{
+  "_id": {
+    "$oid": "6964d7cfb91fb90fb35ed621"
+  },
+  "patient": {
+    "$oid": "6964d7bfb91fb90fb35ed5ff"
+  },
+  "discount": 0,
+  "subtotal": 175.89000000000001,
+  "tax": 5.2767,
+  "shippingCharges": 10,
+  "totalAmount": 191.16670000000002,
+  "items": [
+    {
+      "productId": "6964a30504786ad4c5d83cb8",
+      "productName": "Amoxicillin",
+      "productType": "medication",
+      "quantity": 10,
+      "unitPrice": 15.99,
+      "totalPrice": 159.9,
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964d9beb91fb90fb35ed6e2"
+      }
+    },
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productName": "Testing Product two",
+      "productType": "medication",
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964d9c0b91fb90fb35ed6ea"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-12T11:15:27.781Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T11:23:44.345Z"
+  },
+  "__v": 2
+},
+{
+  "_id": {
+    "$oid": "6968bef68994429433066d8e"
+  },
+  "patient": {
+    "$oid": "6964ac4919f5baedf62e4843"
+  },
+  "discount": 0,
+  "subtotal": 39,
+  "tax": 1.17,
+  "shippingCharges": 10,
+  "totalAmount": 50.17,
+  "items": [
+    {
+      "productId": "6968bef68994429433066d8a",
+      "productName": "Doctor's Note - Excuse Note",
+      "productType": "doctors_note",
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "isSaved": false,
+      "_id": {
+        "$oid": "6968bef78994429433066d90"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-15T10:18:30.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T10:18:31.104Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "697077e8e388aaaedbdeab21"
+  },
+  "patient": {
+    "$oid": "697077e7e388aaaedbdeab17"
+  },
+  "discount": 0,
+  "subtotal": 0,
+  "tax": 0,
+  "shippingCharges": 0,
+  "totalAmount": 0,
+  "items": [
+    {
+      "productId": "696f65f0899c704778730be4",
+      "productName": "Uloric® - 40MG Tablet",
+      "productType": "medication",
+      "quantity": 1,
+      "unitPrice": 49,
+      "totalPrice": 49,
+      "isSaved": true,
+      "_id": {
+        "$oid": "697086837d18b5eb824c7d81"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-21T06:53:28.192Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T07:55:56.469Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "6970d06e7a196725262b55df"
+  },
+  "patient": {
+    "$oid": "6970d06e7a196725262b55cf"
+  },
+  "discount": 0,
+  "subtotal": 60.980000000000004,
+  "tax": 1.8294000000000001,
+  "shippingCharges": 10,
+  "totalAmount": 72.80940000000001,
+  "items": [
+    {
+      "productId": "6970ccfda1d7bfb46383d326",
+      "productName": "Wegovy® - 2.4MG Injection",
+      "productType": "medication",
+      "quantity": 1,
+      "unitPrice": 29,
+      "totalPrice": 29,
+      "isSaved": false,
+      "_id": {
+        "$oid": "6970e7d84127f0ca8999a895"
+      }
+    },
+    {
+      "productId": "65a1b2c3d4e5f6789012345c",
+      "productName": "Amoxicillin",
+      "productImage": "https://example.com/images/amoxicillin-thumb.jpg",
+      "productType": "medication",
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "isSaved": false,
+      "_id": {
+        "$oid": "6971ed05c99da8b8eb7e828c"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-21T13:11:10.888Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T09:25:25.732Z"
+  },
+  "__v": 14
+},
+{
+  "_id": {
+    "$oid": "697103db4127f0ca8999b06a"
+  },
+  "patient": {
+    "$oid": "697103db4127f0ca8999b065"
+  },
+  "discount": 0,
+  "subtotal": 0,
+  "tax": 0,
+  "shippingCharges": 0,
+  "totalAmount": 0,
+  "items": [],
+  "createdAt": {
+    "$date": "2026-01-21T16:50:35.543Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T16:50:35.543Z"
+  },
+  "__v": 0
+}]

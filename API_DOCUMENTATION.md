@@ -12017,6 +12017,132 @@ POST /api/v1/patient/checkout
 
 ## Medicine Management APIs (Admin/Sub-Admin Only)
 
+### Bulk Upload Medicines via JSON
+**POST** `/api/v1/admin/medicines/json-upload`
+
+Upload multiple medicines in a **single JSON request** (no file uploads). This is useful for seeding data or importing from Excel/CSV (after converting to JSON).
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Content-Type:** `application/json`
+
+**Request Body:**
+```json
+{
+  "medicines": [
+    {
+      "productName": "Paracetamol 500mg",
+      "brand": "Sample Brand",
+      "originalPrice": 100,
+      "salePrice": 80,
+      "description": "Pain reliever and fever reducer",
+      "howItWorks": "Works as an analgesic and antipyretic",
+      "category": "Pain Relief",
+      "stock": 100,
+
+      // Health Category Integration (optional)
+      "healthCategory": "64f1c7c0b4d1d5b123456789",
+      "healthTypeSlug": "fever-and-pain",
+
+      // Flags (optional)
+      "isTrendy": false,
+      "isBestOffer": false,
+      "discountPercentage": 10,
+
+      // Arrays
+      "usage": [
+        "Take after food",
+        "Do not exceed 4g per day"
+      ],
+      "generics": ["Paracetamol"],
+      "dosageOptions": [],
+      "quantityOptions": [],
+
+      // Medical info (optional)
+      "precautions": "Avoid alcohol. Consult doctor in liver disease.",
+      "sideEffects": "Nausea, vomiting (rare)",
+      "drugInteractions": "",
+      "indications": "Fever and mild to moderate pain",
+
+      // Images from JSON (optional)
+      "images": {
+        "thumbnail": "/uploads/paracetamol-thumb.jpg",
+        "gallery": [
+          "/uploads/paracetamol-1.jpg",
+          "/uploads/paracetamol-2.jpg"
+        ]
+      },
+
+      // Status & visibility
+      "status": "in_stock",
+      "visibility": true
+    }
+  ]
+}
+```
+
+**Notes:**
+- `medicines` must be a **non-empty array**.
+- Backend also accepts alternative keys `data` or `items` (for flexibility), but `medicines` is recommended.
+- Each item uses the **same fields and rules** as **Add Medicine** JSON request.
+- If `status` is not provided, it is auto-calculated from `stock` (same logic as single add).
+- Images are **not uploaded** here; only URLs/paths from JSON are stored.
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Medicines added successfully from JSON payload",
+  "data": [
+    {
+      "_id": "medicine_id_1",
+      "productName": "Paracetamol 500mg",
+      "brand": "Sample Brand",
+      "originalPrice": 100,
+      "salePrice": 80,
+      "images": {
+        "thumbnail": "/uploads/paracetamol-thumb.jpg",
+        "gallery": ["/uploads/paracetamol-1.jpg", "/uploads/paracetamol-2.jpg"]
+      },
+      "usage": [
+        "Take after food",
+        "Do not exceed 4g per day"
+      ],
+      "generics": ["Paracetamol"],
+      "healthCategory": {
+        "_id": "64f1c7c0b4d1d5b123456789",
+        "name": "Pain & Fever",
+        "slug": "pain-and-fever",
+        "description": "Medicines for pain and fever",
+        "icon": "https://example.com/icons/pain-fever.svg",
+        "types": [
+          {
+            "name": "Fever & Pain",
+            "slug": "fever-and-pain",
+            "description": "General pain and fever management",
+            "icon": "https://example.com/icons/fever-pain.svg",
+            "order": 0,
+            "isActive": true
+          }
+        ]
+      },
+      "healthTypeSlug": "fever-and-pain",
+      "isTrendy": false,
+      "isBestOffer": false,
+      "discountPercentage": 10,
+      "stock": 100,
+      "status": "in_stock",
+      "visibility": true,
+      "isActive": true,
+      "createdAt": "2026-01-27T10:30:00.000Z",
+      "updatedAt": "2026-01-27T10:30:00.000Z"
+    }
+  ]
+}
+```
+
+---
+
 ### Add Medicine
 **POST** `/api/v1/admin/medicines`
 
@@ -15466,6 +15592,96 @@ Get medications with highest discount percentage (best offers).
 ## Health Category Management APIs (Admin/Sub-Admin Only)
 
 APIs for managing health categories and their types (chronic conditions). These endpoints require admin or sub-admin authentication.
+
+### Bulk Create Health Categories
+
+**POST** `/api/v1/health/categories/bulk`
+
+Create multiple health categories in a single JSON request (no file uploads). Supports the same fields as single create. Useful for CSV/Excel imports converted to JSON.
+
+**Headers:** `Authorization: Bearer <admin_token>`
+
+**Content-Type:** `application/json`
+
+**Request Body:**
+```json
+{
+  "categories": [
+    {
+      "name": "Respiratory Health",
+      "slug": "respiratory-health",
+      "description": "Medications and treatments for respiratory conditions",
+      "icon": "https://example.com/icons/respiratory.svg",
+      "types": [
+        {
+          "name": "Asthma",
+          "slug": "asthma",
+          "description": "Medications for asthma management",
+          "icon": "https://example.com/icons/asthma.svg",
+          "order": 0,
+          "isActive": true
+        },
+        {
+          "name": "COPD",
+          "slug": "copd",
+          "description": "Medications for chronic obstructive pulmonary disease",
+          "icon": "https://example.com/icons/copd.svg",
+          "order": 1,
+          "isActive": true
+        }
+      ],
+      "order": 0,
+      "isActive": true
+    }
+  ]
+}
+```
+
+**Notes:**
+- `categories` must be a non-empty array; `data` or `items` keys are also accepted but `categories` is recommended.
+- Duplicate names/slugs within the same payload or existing in DB will return an error.
+- Fields per item mirror single create (`name`, optional `slug`, `description`, `icon`, `types`, `order`, `isActive`).
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Health categories created successfully",
+  "data": [
+    {
+      "_id": "64f1c7c0b4d1d5b123456789",
+      "name": "Respiratory Health",
+      "slug": "respiratory-health",
+      "description": "Medications and treatments for respiratory conditions",
+      "icon": "https://example.com/icons/respiratory.svg",
+      "types": [
+        {
+          "name": "Asthma",
+          "slug": "asthma",
+          "description": "Medications for asthma management",
+          "icon": "https://example.com/icons/asthma.svg",
+          "order": 0,
+          "isActive": true
+        },
+        {
+          "name": "COPD",
+          "slug": "copd",
+          "description": "Medications for chronic obstructive pulmonary disease",
+          "icon": "https://example.com/icons/copd.svg",
+          "order": 1,
+          "isActive": true
+        }
+      ],
+      "order": 0,
+      "isActive": true,
+      "createdAt": "2026-01-27T10:30:00.000Z",
+      "updatedAt": "2026-01-27T10:30:00.000Z"
+    }
+  ]
+}
+```
+
+---
 
 ### Create Health Category
 

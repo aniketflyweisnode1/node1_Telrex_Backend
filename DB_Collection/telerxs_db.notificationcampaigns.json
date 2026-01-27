@@ -1,0 +1,440 @@
+[{
+  "_id": {
+    "$oid": "696b85be72976761007b7d95"
+  },
+  "campaignName": "New Year Health Checkup Promo",
+  "campaignType": "email",
+  "images": [],
+  "subject": "Important Health Update",
+  "title": null,
+  "message": "Dear patients, we have an important update regarding your health services...",
+  "audience": "all_patients",
+  "customRecipients": [],
+  "scheduleType": "scheduled",
+  "scheduledAt": {
+    "$date": "2026-01-19T10:00:00.000Z"
+  },
+  "status": "scheduled",
+  "totalRecipients": 0,
+  "sentCount": 0,
+  "failedCount": 0,
+  "openedCount": 0,
+  "openedRate": 0,
+  "clickedCount": 0,
+  "clickedRate": 0,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-17T12:51:10.094Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T12:51:10.094Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696b8ea272976761007b7e6e"
+  },
+  "campaignName": "Mega Sale",
+  "campaignType": "email",
+  "images": [],
+  "subject": "Mega Sale",
+  "title": null,
+  "message": "Mega Sale",
+  "audience": "all_patients",
+  "customRecipients": [],
+  "scheduleType": "send_now",
+  "scheduledAt": null,
+  "status": "draft",
+  "totalRecipients": 6,
+  "sentCount": 0,
+  "failedCount": 0,
+  "openedCount": 0,
+  "openedRate": 0,
+  "clickedCount": 0,
+  "clickedRate": 0,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-17T13:29:06.579Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T13:29:06.579Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696b93d872976761007b7ed2"
+  },
+  "campaignName": "Mega Sale",
+  "campaignType": "sms",
+  "images": [],
+  "subject": null,
+  "title": null,
+  "message": "ok",
+  "audience": "all_patients",
+  "customRecipients": [],
+  "scheduleType": "send_now",
+  "scheduledAt": null,
+  "status": "draft",
+  "totalRecipients": 6,
+  "sentCount": 0,
+  "failedCount": 0,
+  "openedCount": 0,
+  "openedRate": 0,
+  "clickedCount": 0,
+  "clickedRate": 0,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-17T13:51:20.862Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T13:51:20.862Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696b95e572976761007b7ef5"
+  },
+  "campaignName": "Mega Sale",
+  "campaignType": "push_notification",
+  "images": [],
+  "subject": null,
+  "title": "mega",
+  "message": "helo",
+  "audience": "all_mobile_users",
+  "customRecipients": [],
+  "scheduleType": "send_now",
+  "scheduledAt": null,
+  "status": "draft",
+  "totalRecipients": 6,
+  "sentCount": 0,
+  "failedCount": 0,
+  "openedCount": 0,
+  "openedRate": 0,
+  "clickedCount": 0,
+  "clickedRate": 0,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-17T14:00:05.746Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T14:00:05.746Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69708d137d18b5eb824c80c2"
+  },
+  "campaignName": "Mega Sale",
+  "campaignType": "push_notification",
+  "images": [],
+  "subject": null,
+  "title": "Maha Mega Sale",
+  "message": "But 1 get 10 free ",
+  "audience": "all_patients",
+  "customRecipients": [],
+  "scheduleType": "send_now",
+  "scheduledAt": null,
+  "status": "draft",
+  "totalRecipients": 8,
+  "sentCount": 0,
+  "failedCount": 0,
+  "openedCount": 0,
+  "openedRate": 0,
+  "clickedCount": 0,
+  "clickedRate": 0,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T08:23:47.593Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:23:47.593Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69708d637d18b5eb824c80f1"
+  },
+  "campaignName": "Maha Mega Indian Sale",
+  "campaignType": "push_notification",
+  "images": [],
+  "subject": null,
+  "title": "Sale",
+  "message": "Buy 1 get 2 free",
+  "audience": "all_patients",
+  "customRecipients": [],
+  "scheduleType": "send_now",
+  "scheduledAt": null,
+  "status": "sent",
+  "totalRecipients": 8,
+  "sentCount": 8,
+  "failedCount": 0,
+  "openedCount": 0,
+  "openedRate": 0,
+  "clickedCount": 0,
+  "clickedRate": 0,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T08:25:07.761Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:25:12.845Z"
+  },
+  "__v": 0,
+  "sentAt": {
+    "$date": "2026-01-21T08:25:10.798Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "697090567d18b5eb824c8165"
+  },
+  "campaignName": "Maha Mega Indian Sale SMS",
+  "campaignType": "sms",
+  "images": [],
+  "subject": null,
+  "title": null,
+  "message": "SALE",
+  "audience": "all_patients",
+  "customRecipients": [],
+  "scheduleType": "send_now",
+  "scheduledAt": null,
+  "status": "draft",
+  "totalRecipients": 8,
+  "sentCount": 0,
+  "failedCount": 0,
+  "openedCount": 0,
+  "openedRate": 0,
+  "clickedCount": 0,
+  "clickedRate": 0,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T08:37:42.159Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:37:42.159Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697090aa7d18b5eb824c817f"
+  },
+  "campaignName": "Maha Mega Indian Sale eMail",
+  "campaignType": "email",
+  "images": [],
+  "subject": "Email Sale",
+  "title": null,
+  "message": "Sale",
+  "audience": "all_patients",
+  "customRecipients": [],
+  "scheduleType": "send_now",
+  "scheduledAt": null,
+  "status": "draft",
+  "totalRecipients": 8,
+  "sentCount": 0,
+  "failedCount": 0,
+  "openedCount": 0,
+  "openedRate": 0,
+  "clickedCount": 0,
+  "clickedRate": 0,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T08:39:06.285Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:39:06.285Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697090e97d18b5eb824c8199"
+  },
+  "campaignName": "push notification test",
+  "campaignType": "push_notification",
+  "images": [],
+  "subject": null,
+  "title": "Test sale",
+  "message": "Sale",
+  "audience": "all_patients",
+  "customRecipients": [],
+  "scheduleType": "send_now",
+  "scheduledAt": null,
+  "status": "sent",
+  "totalRecipients": 8,
+  "sentCount": 8,
+  "failedCount": 0,
+  "openedCount": 0,
+  "openedRate": 0,
+  "clickedCount": 0,
+  "clickedRate": 0,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T08:40:09.831Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:40:14.585Z"
+  },
+  "__v": 0,
+  "sentAt": {
+    "$date": "2026-01-21T08:40:12.553Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "697091bf7d18b5eb824c81dc"
+  },
+  "campaignName": "send now sms",
+  "campaignType": "sms",
+  "images": [],
+  "subject": null,
+  "title": null,
+  "message": "Send now ",
+  "audience": "all_patients",
+  "customRecipients": [],
+  "scheduleType": "send_now",
+  "scheduledAt": null,
+  "status": "draft",
+  "totalRecipients": 8,
+  "sentCount": 0,
+  "failedCount": 0,
+  "openedCount": 0,
+  "openedRate": 0,
+  "clickedCount": 0,
+  "clickedRate": 0,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T08:43:43.993Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:43:43.993Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970925e7d18b5eb824c81f4"
+  },
+  "campaignName": "Mega Sale",
+  "campaignType": "email",
+  "images": [],
+  "subject": "schedule",
+  "title": null,
+  "message": "schedule",
+  "audience": "all_patients",
+  "customRecipients": [],
+  "scheduleType": "scheduled",
+  "scheduledAt": null,
+  "status": "scheduled",
+  "totalRecipients": 0,
+  "sentCount": 0,
+  "failedCount": 0,
+  "openedCount": 0,
+  "openedRate": 0,
+  "clickedCount": 0,
+  "clickedRate": 0,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T08:46:22.266Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:46:22.266Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970927c7d18b5eb824c820c"
+  },
+  "campaignName": "Mega Sale",
+  "campaignType": "sms",
+  "images": [],
+  "subject": null,
+  "title": null,
+  "message": "ok",
+  "audience": "all_patients",
+  "customRecipients": [],
+  "scheduleType": "scheduled",
+  "scheduledAt": null,
+  "status": "scheduled",
+  "totalRecipients": 0,
+  "sentCount": 0,
+  "failedCount": 0,
+  "openedCount": 0,
+  "openedRate": 0,
+  "clickedCount": 0,
+  "clickedRate": 0,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T08:46:52.066Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:46:52.066Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697092957d18b5eb824c8226"
+  },
+  "campaignName": "Sale",
+  "campaignType": "push_notification",
+  "images": [],
+  "subject": null,
+  "title": "ok",
+  "message": "But 1 get 10 free ",
+  "audience": "all_patients",
+  "customRecipients": [],
+  "scheduleType": "send_now",
+  "scheduledAt": null,
+  "status": "sent",
+  "totalRecipients": 8,
+  "sentCount": 8,
+  "failedCount": 0,
+  "openedCount": 0,
+  "openedRate": 0,
+  "clickedCount": 0,
+  "clickedRate": 0,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "createdAt": {
+    "$date": "2026-01-21T08:47:17.081Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T08:47:21.849Z"
+  },
+  "__v": 0,
+  "sentAt": {
+    "$date": "2026-01-21T08:47:19.817Z"
+  }
+}]

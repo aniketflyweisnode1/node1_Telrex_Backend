@@ -1,0 +1,54 @@
+[{
+  "_id": {
+    "$oid": "6968b3ccc0c4644b10c0e2b6"
+  },
+  "name": "General Practice",
+  "description": "General medical practice covering common health issues",
+  "isActive": true,
+  "createdBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "createdAt": {
+    "$date": "2026-01-15T09:30:52.306Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T09:30:52.306Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6968b731c0c4644b10c0e2e1"
+  },
+  "name": "General Practice best",
+  "description": "General medical practice covering common health issues",
+  "isActive": false,
+  "createdBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "createdAt": {
+    "$date": "2026-01-15T09:45:21.524Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T10:00:52.881Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6968c9cf33a228f1c1edf96b"
+  },
+  "name": "orthopaedic",
+  "description": "a medical specialist who diagnoses, treats, and helps prevent conditions and injuries affecting the body's musculoskeletal system",
+  "isActive": true,
+  "createdBy": {
+    "$oid": "6968b2bea945b98cb929b9ba"
+  },
+  "createdAt": {
+    "$date": "2026-01-15T11:04:47.582Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T11:04:47.582Z"
+  },
+  "__v": 0
+}]

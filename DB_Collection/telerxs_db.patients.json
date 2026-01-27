@@ -1,0 +1,214 @@
+[{
+  "_id": {
+    "$oid": "695c6a639a68d7a23530f880"
+  },
+  "user": {
+    "$oid": "695b74d386d9ec317242a451"
+  },
+  "medicalHistory": [],
+  "allergies": [],
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-06T01:50:27.834Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-06T01:50:27.834Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "695c74789a68d7a23530f8ca"
+  },
+  "user": {
+    "$oid": "695c744e9a68d7a23530f8b7"
+  },
+  "medicalHistory": [],
+  "allergies": [],
+  "isActive": false,
+  "createdAt": {
+    "$date": "2026-01-06T02:33:28.685Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-14T15:00:12.324Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "user": {
+    "$oid": "695e1023063c5adb28c99937"
+  },
+  "medicalHistory": [],
+  "allergies": [],
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-08T10:01:09.647Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T14:19:18.648Z"
+  },
+  "__v": 0,
+  "bloodGroup": "O+",
+  "dateOfBirth": {
+    "$date": "1990-01-01T00:00:00.000Z"
+  },
+  "gender": "male",
+  "height": 175,
+  "weight": 60,
+  "profilePicture": "https://res.cloudinary.com/dzfjosx9l/image/upload/v1768836435/profile-images/rlukp38sy4ojrsvvjitg.jpg"
+},
+{
+  "_id": {
+    "$oid": "6964ac4919f5baedf62e4843"
+  },
+  "user": {
+    "$oid": "695b6dd43413de05573c6dff"
+  },
+  "medicalHistory": [],
+  "allergies": [],
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-12T08:09:45.947Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-19T13:35:49.935Z"
+  },
+  "__v": 0,
+  "bloodGroup": "O+",
+  "dateOfBirth": {
+    "$date": "1990-01-01T00:00:00.000Z"
+  },
+  "gender": "male",
+  "height": 175,
+  "weight": 70,
+  "profilePicture": "url of image"
+},
+{
+  "_id": {
+    "$oid": "6964d7bfb91fb90fb35ed5ff"
+  },
+  "user": {
+    "$oid": "695f92483ca546737a217833"
+  },
+  "medicalHistory": [],
+  "allergies": [],
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-12T11:15:11.757Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T11:15:11.757Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6966787c3206017e58ea369e"
+  },
+  "user": {
+    "$oid": "69611414b8c266a7835c0c18"
+  },
+  "medicalHistory": [],
+  "allergies": [],
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-13T16:53:16.763Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T11:12:07.685Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696b830a2c31ae24c97dc030"
+  },
+  "user": {
+    "$oid": "696b7eb4937ff2f0e9936b1d"
+  },
+  "medicalHistory": [],
+  "allergies": [],
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-17T12:39:38.491Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T12:39:38.491Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f47838c9217cda706379a"
+  },
+  "user": {
+    "$oid": "696f472d8c9217cda7063789"
+  },
+  "medicalHistory": [],
+  "allergies": [],
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-20T09:14:43.639Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T09:14:43.639Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697077e7e388aaaedbdeab17"
+  },
+  "user": {
+    "$oid": "6970779be388aaaedbdeaafc"
+  },
+  "medicalHistory": [],
+  "allergies": [],
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-21T06:53:27.260Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T06:53:27.260Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970d06e7a196725262b55cf"
+  },
+  "user": {
+    "$oid": "6970cc00a1d7bfb46383d1a9"
+  },
+  "medicalHistory": [],
+  "allergies": [],
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-21T13:11:10.660Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T13:11:10.660Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697103db4127f0ca8999b065"
+  },
+  "user": {
+    "$oid": "696f6935899c704778730c40"
+  },
+  "medicalHistory": [],
+  "allergies": [],
+  "isActive": true,
+  "createdAt": {
+    "$date": "2026-01-21T16:50:35.079Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T16:50:35.079Z"
+  },
+  "__v": 0
+}]

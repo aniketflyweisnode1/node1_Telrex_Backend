@@ -1,0 +1,5682 @@
+[{
+  "_id": {
+    "$oid": "69608e6347b426c60e072956"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "695c13abf97404b3d6b1c6e0",
+      "productType": "medication",
+      "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 2,
+      "unitPrice": 122.89,
+      "totalPrice": 245.78,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69608e6347b426c60e072957"
+      }
+    },
+    {
+      "productId": "695c13abf97404b3d6b1c6e0",
+      "productType": "medication",
+      "medicationName": "Cetaphil Gentle Skin Cleanser 350ml",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 2,
+      "unitPrice": 122.89,
+      "totalPrice": 245.78,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69608e6347b426c60e072958"
+      }
+    },
+    {
+      "productId": "695c13abf97404b3d6b1c6e0",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 2,
+      "unitPrice": 122.89,
+      "totalPrice": 245.78,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69608e6347b426c60e072959"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69608e6347b426c60e072954"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 737.34,
+  "shippingCharges": 10,
+  "tax": 22.12,
+  "discount": 0,
+  "totalAmount": 769.46,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "notes": "Please deliver before 5 PM",
+  "createdAt": {
+    "$date": "2026-01-09T05:13:07.817Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-09T05:13:07.817Z"
+  },
+  "orderNumber": "ORD-1767935587817-2597",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6963690dc6a48e0df29db65c"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6963690dc6a48e0df29db65d"
+      }
+    },
+    {
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6963690dc6a48e0df29db65e"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 54.99,
+  "shippingCharges": 10,
+  "tax": 9.8982,
+  "discount": 0,
+  "totalAmount": 74.88820000000001,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-11T09:10:37.924Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-11T09:10:37.924Z"
+  },
+  "orderNumber": "ORD-1768122637952-8369",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69636a18c6a48e0df29db696"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69636a18c6a48e0df29db697"
+      }
+    },
+    {
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69636a18c6a48e0df29db698"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 54.99,
+  "shippingCharges": 10,
+  "tax": 9.8982,
+  "discount": 0,
+  "totalAmount": 74.88820000000001,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-11T09:15:04.720Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-11T09:15:04.720Z"
+  },
+  "orderNumber": "ORD-1768122904720-7465",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69636bacc6a48e0df29db6c7"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 3,
+      "unitPrice": 15.99,
+      "totalPrice": 47.97,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69636bacc6a48e0df29db6c8"
+      }
+    },
+    {
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69636bacc6a48e0df29db6c9"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 86.97,
+  "shippingCharges": 10,
+  "tax": 15.654599999999999,
+  "discount": 0,
+  "totalAmount": 112.6246,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-11T09:21:48.471Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-11T09:21:48.471Z"
+  },
+  "orderNumber": "ORD-1768123308471-3610",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69636badc6a48e0df29db6d0"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 3,
+      "unitPrice": 15.99,
+      "totalPrice": 47.97,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69636badc6a48e0df29db6d1"
+      }
+    },
+    {
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69636badc6a48e0df29db6d2"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 86.97,
+  "shippingCharges": 10,
+  "tax": 15.654599999999999,
+  "discount": 0,
+  "totalAmount": 112.6246,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-11T09:21:49.323Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-11T09:21:49.323Z"
+  },
+  "orderNumber": "ORD-1768123309323-4931",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69636ce7c6a48e0df29db764"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 3,
+      "unitPrice": 15.99,
+      "totalPrice": 47.97,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69636ce7c6a48e0df29db765"
+      }
+    },
+    {
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69636ce7c6a48e0df29db766"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 86.97,
+  "shippingCharges": 10,
+  "tax": 15.654599999999999,
+  "discount": 0,
+  "totalAmount": 112.6246,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-11T09:27:03.117Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-11T09:27:14.968Z"
+  },
+  "orderNumber": "ORD-1768123623117-1631",
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "69636f4fc6a48e0df29db7e8"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 3,
+      "unitPrice": 15.99,
+      "totalPrice": 47.97,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69636f4fc6a48e0df29db7e9"
+      }
+    },
+    {
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69636f4fc6a48e0df29db7ea"
+      }
+    },
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69636f4fc6a48e0df29db7eb"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 102.96,
+  "shippingCharges": 10,
+  "tax": 18.532799999999998,
+  "discount": 0,
+  "totalAmount": 131.4928,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-11T09:37:19.306Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-11T09:37:19.306Z"
+  },
+  "orderNumber": "ORD-1768124239306-8452",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6963718ec6a48e0df29db90b"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 3,
+      "unitPrice": 15.99,
+      "totalPrice": 47.97,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6963718ec6a48e0df29db90c"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 47.97,
+  "shippingCharges": 10,
+  "tax": 8.634599999999999,
+  "discount": 0,
+  "totalAmount": 66.6046,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-11T09:46:54.215Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-11T09:51:29.297Z"
+  },
+  "orderNumber": "ORD-1768124814215-2838",
+  "__v": 2
+},
+{
+  "_id": {
+    "$oid": "696372b6c6a48e0df29db963"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 3,
+      "unitPrice": 15.99,
+      "totalPrice": 47.97,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696372b6c6a48e0df29db964"
+      }
+    },
+    {
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696372b6c6a48e0df29db965"
+      }
+    },
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696372b6c6a48e0df29db966"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 118.95,
+  "shippingCharges": 10,
+  "tax": 21.411,
+  "discount": 0,
+  "totalAmount": 150.361,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-11T09:51:50.606Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-11T09:51:50.606Z"
+  },
+  "orderNumber": "ORD-1768125110606-8412",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696372f2c6a48e0df29db9a4"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 3,
+      "unitPrice": 15.99,
+      "totalPrice": 47.97,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696372f2c6a48e0df29db9a5"
+      }
+    },
+    {
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696372f2c6a48e0df29db9a6"
+      }
+    },
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696372f2c6a48e0df29db9a7"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 118.95,
+  "shippingCharges": 10,
+  "tax": 21.411,
+  "discount": 0,
+  "totalAmount": 150.361,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-11T09:52:50.971Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-11T09:52:50.971Z"
+  },
+  "orderNumber": "ORD-1768125170971-3309",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696375cec6a48e0df29dbb07"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 3,
+      "unitPrice": 15.99,
+      "totalPrice": 47.97,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696375cec6a48e0df29dbb08"
+      }
+    },
+    {
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696375cec6a48e0df29dbb09"
+      }
+    },
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696375cec6a48e0df29dbb0a"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 118.95,
+  "shippingCharges": 10,
+  "tax": 21.411,
+  "discount": 0,
+  "totalAmount": 150.361,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "notes": "Reordered from order ORD-1768125170971-3309",
+  "createdAt": {
+    "$date": "2026-01-11T10:05:02.162Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-11T10:05:02.162Z"
+  },
+  "orderNumber": "ORD-1768125902162-6567",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6963a44b7ae45da5433e3bb2"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 3,
+      "unitPrice": 15.99,
+      "totalPrice": 47.97,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6963a44b7ae45da5433e3bb3"
+      }
+    },
+    {
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6963a44b7ae45da5433e3bb4"
+      }
+    },
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6963a44b7ae45da5433e3bb5"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 118.95,
+  "shippingCharges": 10,
+  "tax": 21.411,
+  "discount": 0,
+  "totalAmount": 150.361,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "notes": "Reordered from order ORD-1768125902162-6567",
+  "createdAt": {
+    "$date": "2026-01-11T13:23:23.429Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-11T13:23:23.429Z"
+  },
+  "orderNumber": "ORD-1768137803429-5088",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6963a44b7ae45da5433e3bbb"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 3,
+      "unitPrice": 15.99,
+      "totalPrice": 47.97,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6963a44b7ae45da5433e3bbc"
+      }
+    },
+    {
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6963a44b7ae45da5433e3bbd"
+      }
+    },
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6963a44b7ae45da5433e3bbe"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 118.95,
+  "shippingCharges": 10,
+  "tax": 21.411,
+  "discount": 0,
+  "totalAmount": 150.361,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "notes": "Reordered from order ORD-1768125902162-6567",
+  "createdAt": {
+    "$date": "2026-01-11T13:23:23.977Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-11T13:23:23.977Z"
+  },
+  "orderNumber": "ORD-1768137803977-2929",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6963a48a7ae45da5433e3bcc"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 3,
+      "unitPrice": 15.99,
+      "totalPrice": 47.97,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6963a48a7ae45da5433e3bcd"
+      }
+    },
+    {
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6963a48a7ae45da5433e3bce"
+      }
+    },
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6963a48a7ae45da5433e3bcf"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 118.95,
+  "shippingCharges": 10,
+  "tax": 21.411,
+  "discount": 0,
+  "totalAmount": 150.361,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "notes": "Reordered from order ORD-1768125902162-6567",
+  "createdAt": {
+    "$date": "2026-01-11T13:24:26.284Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-11T13:24:26.284Z"
+  },
+  "orderNumber": "ORD-1768137866284-2220",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6963a4dd7ae45da5433e3bf2"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 3,
+      "unitPrice": 15.99,
+      "totalPrice": 47.97,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6963a4dd7ae45da5433e3bf3"
+      }
+    },
+    {
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6963a4dd7ae45da5433e3bf4"
+      }
+    },
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6963a4dd7ae45da5433e3bf5"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 118.95,
+  "shippingCharges": 10,
+  "tax": 21.411,
+  "discount": 0,
+  "totalAmount": 150.361,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-11T13:25:49.084Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-11T13:25:49.084Z"
+  },
+  "orderNumber": "ORD-1768137949084-8958",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696483a6c40a155136c921ea"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 3,
+      "unitPrice": 15.99,
+      "totalPrice": 47.97,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696483a6c40a155136c921eb"
+      }
+    },
+    {
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696483a6c40a155136c921ec"
+      }
+    },
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696483a6c40a155136c921ed"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 118.95,
+  "shippingCharges": 10,
+  "tax": 21.411,
+  "discount": 0,
+  "totalAmount": 150.361,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-12T05:16:22.154Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T05:16:22.154Z"
+  },
+  "orderNumber": "ORD-1768194982154-6075",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696483f2c40a155136c92232"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 3,
+      "unitPrice": 15.99,
+      "totalPrice": 47.97,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696483f2c40a155136c92233"
+      }
+    },
+    {
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696483f2c40a155136c92234"
+      }
+    },
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696483f2c40a155136c92235"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 118.95,
+  "shippingCharges": 10,
+  "tax": 21.411,
+  "discount": 0,
+  "totalAmount": 150.361,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-12T05:17:38.929Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T05:17:38.929Z"
+  },
+  "orderNumber": "ORD-1768195058929-1861",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69648646c40a155136c92277"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 3,
+      "unitPrice": 15.99,
+      "totalPrice": 47.97,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69648646c40a155136c92278"
+      }
+    },
+    {
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69648646c40a155136c92279"
+      }
+    },
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69648646c40a155136c9227a"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 118.95,
+  "shippingCharges": 10,
+  "tax": 21.411,
+  "discount": 0,
+  "totalAmount": 150.361,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-12T05:27:34.163Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T05:27:34.163Z"
+  },
+  "orderNumber": "ORD-1768195654163-7841",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964a11e6352842b1f67706f"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 3,
+      "unitPrice": 15.99,
+      "totalPrice": 47.97,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964a11e6352842b1f677070"
+      }
+    },
+    {
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964a11e6352842b1f677071"
+      }
+    },
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964a11e6352842b1f677072"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 118.95,
+  "shippingCharges": 10,
+  "tax": 21.411,
+  "discount": 0,
+  "totalAmount": 150.361,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-12T07:22:06.830Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T07:22:06.830Z"
+  },
+  "orderNumber": "ORD-1768202526830-8856",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964a9606352842b1f6773b4"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "productId": "69634bb4b2bb0e08fd23e217",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964a9606352842b1f6773b6"
+      }
+    },
+    {
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964a9606352842b1f6773b7"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 70.98,
+  "shippingCharges": 10,
+  "tax": 12.7764,
+  "discount": 0,
+  "totalAmount": 93.7564,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-12T07:57:20.324Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T08:09:24.704Z"
+  },
+  "orderNumber": "ORD-1768204640324-6176",
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "6964ac4a19f5baedf62e4849"
+  },
+  "patient": {
+    "$oid": "6964ac4919f5baedf62e4843"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "695c13abf97404b3d6b1c6e0",
+      "productType": "medication",
+      "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 2,
+      "unitPrice": 122.89,
+      "totalPrice": 245.78,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964ac4a19f5baedf62e484a"
+      }
+    },
+    {
+      "productId": "695c13abf97404b3d6b1c6e0",
+      "productType": "medication",
+      "medicationName": "Cetaphil Gentle Skin Cleanser 350ml",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 2,
+      "unitPrice": 122.89,
+      "totalPrice": 245.78,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964ac4a19f5baedf62e484b"
+      }
+    },
+    {
+      "productId": "695c13abf97404b3d6b1c6e0",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 2,
+      "unitPrice": 122.89,
+      "totalPrice": 245.78,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964ac4a19f5baedf62e484c"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6964ac4a19f5baedf62e4847"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 737.34,
+  "shippingCharges": 10,
+  "tax": 22.12,
+  "discount": 0,
+  "totalAmount": 769.46,
+  "status": "pending",
+  "paymentStatus": "failed",
+  "notes": "Please deliver before 5 PM",
+  "createdAt": {
+    "$date": "2026-01-12T08:09:46.156Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T08:19:32.461Z"
+  },
+  "orderNumber": "ORD-1768205386156-8818",
+  "__v": 0,
+  "payment": {
+    "$oid": "6964acda19f5baedf62e4859"
+  }
+},
+{
+  "_id": {
+    "$oid": "6964c6f7fc2841d44d2d4413"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964c6f7fc2841d44d2d4414"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 31.98,
+  "shippingCharges": 10,
+  "tax": 5.7564,
+  "discount": 0,
+  "totalAmount": 47.7364,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-12T10:03:35.610Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T10:03:35.610Z"
+  },
+  "orderNumber": "ORD-1768212215610-1054",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964c781fc2841d44d2d4458"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964c781fc2841d44d2d4459"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 31.98,
+  "shippingCharges": 10,
+  "tax": 5.7564,
+  "discount": 0,
+  "totalAmount": 47.7364,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-12T10:05:53.437Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T10:05:53.437Z"
+  },
+  "orderNumber": "ORD-1768212353437-1229",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964c7bafc2841d44d2d44ae"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964c7bafc2841d44d2d44af"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 31.98,
+  "shippingCharges": 10,
+  "tax": 5.7564,
+  "discount": 0,
+  "totalAmount": 47.7364,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-12T10:06:50.570Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T10:06:50.570Z"
+  },
+  "orderNumber": "ORD-1768212410570-6562",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964c7fffc2841d44d2d44f2"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964c7fffc2841d44d2d44f3"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 31.98,
+  "shippingCharges": 10,
+  "tax": 5.7564,
+  "discount": 0,
+  "totalAmount": 47.7364,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-12T10:07:59.904Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T10:07:59.904Z"
+  },
+  "orderNumber": "ORD-1768212479904-3977",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964ca05fc2841d44d2d4579"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964ca05fc2841d44d2d457a"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 31.98,
+  "shippingCharges": 10,
+  "tax": 5.7564,
+  "discount": 0,
+  "totalAmount": 47.7364,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-12T10:16:37.131Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T10:16:37.131Z"
+  },
+  "orderNumber": "ORD-1768212997131-5238",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964daa0b91fb90fb35ed73b"
+  },
+  "patient": {
+    "$oid": "6964d7bfb91fb90fb35ed5ff"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6964a30504786ad4c5d83cb8",
+      "productType": "medication",
+      "medicationName": "Amoxicillin",
+      "brand": "Cetaphill",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 10,
+      "unitPrice": 15.99,
+      "totalPrice": 159.9,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964daa0b91fb90fb35ed73c"
+      }
+    },
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6964daa0b91fb90fb35ed73d"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6964da98b91fb90fb35ed72a"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test2",
+    "email": "test2@test.com",
+    "phoneNumber": "8888888888",
+    "streetAddress": "new addresss",
+    "city": "Pune",
+    "state": "Wardha",
+    "zipCode": "442001"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 175.89000000000001,
+  "shippingCharges": 10,
+  "tax": 31.660200000000003,
+  "discount": 0,
+  "totalAmount": 217.55020000000002,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-12T11:27:28.705Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-12T11:27:28.705Z"
+  },
+  "orderNumber": "ORD-1768217248705-4745",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69689942c81fbf5b55cf2e12"
+  },
+  "patient": {
+    "$oid": "6964ac4919f5baedf62e4843"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "695c13abf97404b3d6b1c6e0",
+      "productType": "medication",
+      "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 2,
+      "unitPrice": 122.89,
+      "totalPrice": 245.78,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69689942c81fbf5b55cf2e13"
+      }
+    },
+    {
+      "productId": "695c13abf97404b3d6b1c6e0",
+      "productType": "medication",
+      "medicationName": "Cetaphil Gentle Skin Cleanser 350ml",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 2,
+      "unitPrice": 122.89,
+      "totalPrice": 245.78,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69689942c81fbf5b55cf2e14"
+      }
+    },
+    {
+      "productId": "695c13abf97404b3d6b1c6e0",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 2,
+      "unitPrice": 122.89,
+      "totalPrice": 245.78,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "69689942c81fbf5b55cf2e15"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69689941c81fbf5b55cf2e10"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 737.34,
+  "shippingCharges": 10,
+  "tax": 22.12,
+  "discount": 0,
+  "totalAmount": 769.46,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "notes": "Please deliver before 5 PM",
+  "createdAt": {
+    "$date": "2026-01-15T07:37:38.121Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T07:39:07.175Z"
+  },
+  "orderNumber": "ORD-1768462658122-7000",
+  "__v": 0,
+  "payment": {
+    "$oid": "69689998c81fbf5b55cf2e22"
+  }
+},
+{
+  "_id": {
+    "$oid": "6968a43ea945b98cb929b562"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6968a43ea945b98cb929b563"
+      }
+    },
+    {
+      "productId": "6964a30504786ad4c5d83cb8",
+      "productType": "medication",
+      "medicationName": "Amoxicillin",
+      "brand": "Cetaphill",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 4,
+      "unitPrice": 15.99,
+      "totalPrice": 63.96,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6968a43ea945b98cb929b564"
+      }
+    },
+    {
+      "productId": "696125ec4ab58e676257bc29",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 5,
+      "unitPrice": 15.99,
+      "totalPrice": 79.95,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6968a43ea945b98cb929b565"
+      }
+    },
+    {
+      "productId": "696125ec4ab58e676257bc29",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6968a43ea945b98cb929b566"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 191.88,
+  "shippingCharges": 10,
+  "tax": 34.538399999999996,
+  "discount": 0,
+  "totalAmount": 236.4184,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-15T08:24:30.140Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T08:24:30.140Z"
+  },
+  "orderNumber": "ORD-1768465470141-5242",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6968c65733a228f1c1edf88a"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6968c65733a228f1c1edf88b"
+      }
+    },
+    {
+      "productId": "6964a30504786ad4c5d83cb8",
+      "productType": "medication",
+      "medicationName": "Amoxicillin",
+      "brand": "Cetaphill",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 4,
+      "unitPrice": 15.99,
+      "totalPrice": 63.96,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6968c65733a228f1c1edf88c"
+      }
+    },
+    {
+      "productId": "696125ec4ab58e676257bc29",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 5,
+      "unitPrice": 15.99,
+      "totalPrice": 79.95,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6968c65733a228f1c1edf88d"
+      }
+    },
+    {
+      "productId": "696125ec4ab58e676257bc29",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6968c65733a228f1c1edf88e"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 191.88,
+  "shippingCharges": 10,
+  "tax": 34.538399999999996,
+  "discount": 0,
+  "totalAmount": 236.4184,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-15T10:49:59.598Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T10:49:59.598Z"
+  },
+  "orderNumber": "ORD-1768474199599-8977",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6968c6cc33a228f1c1edf8d3"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6968c6cc33a228f1c1edf8d4"
+      }
+    },
+    {
+      "productId": "6964a30504786ad4c5d83cb8",
+      "productType": "medication",
+      "medicationName": "Amoxicillin",
+      "brand": "Cetaphill",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 4,
+      "unitPrice": 15.99,
+      "totalPrice": 63.96,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6968c6cc33a228f1c1edf8d5"
+      }
+    },
+    {
+      "productId": "696125ec4ab58e676257bc29",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 5,
+      "unitPrice": 15.99,
+      "totalPrice": 79.95,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6968c6cc33a228f1c1edf8d6"
+      }
+    },
+    {
+      "productId": "696125ec4ab58e676257bc29",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6968c6cc33a228f1c1edf8d7"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "69609ab047b426c60e072ace"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "1212",
+    "city": "Pune",
+    "state": "1212",
+    "zipCode": "1212"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 191.88,
+  "shippingCharges": 10,
+  "tax": 34.538399999999996,
+  "discount": 0,
+  "totalAmount": 236.4184,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-15T10:51:56.531Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T10:57:16.452Z"
+  },
+  "orderNumber": "ORD-1768474316531-9833",
+  "__v": 0,
+  "payment": {
+    "$oid": "6968c80b33a228f1c1edf910"
+  }
+},
+{
+  "_id": {
+    "$oid": "6968c7b233a228f1c1edf8f3"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "695c13abf97404b3d6b1c6e0",
+      "productType": "medication",
+      "medicationName": "Cetaphil Gentle Skin Cleanser 250ml",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 2,
+      "unitPrice": 122.89,
+      "totalPrice": 245.78,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6968c7b233a228f1c1edf8f4"
+      }
+    },
+    {
+      "productId": "695c13abf97404b3d6b1c6e0",
+      "productType": "medication",
+      "medicationName": "Cetaphil Gentle Skin Cleanser 350ml",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 2,
+      "unitPrice": 122.89,
+      "totalPrice": 245.78,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6968c7b233a228f1c1edf8f5"
+      }
+    },
+    {
+      "productId": "695c13abf97404b3d6b1c6e0",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 2,
+      "unitPrice": 122.89,
+      "totalPrice": 245.78,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6968c7b233a228f1c1edf8f6"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 737.34,
+  "shippingCharges": 10,
+  "tax": 22.12,
+  "discount": 0,
+  "totalAmount": 769.46,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "notes": "Please deliver before 5 PM",
+  "createdAt": {
+    "$date": "2026-01-15T10:55:46.229Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T10:55:46.229Z"
+  },
+  "orderNumber": "ORD-1768474546229-3222",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a3335827f9749ddacf441"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "productId": "6961261e4ab58e676257bc37",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696a3335827f9749ddacf442"
+      }
+    },
+    {
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "productId": "696125ec4ab58e676257bc29",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 5,
+      "unitPrice": 15.99,
+      "totalPrice": 79.95,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696a3335827f9749ddacf444"
+      }
+    },
+    {
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "productId": "696125ec4ab58e676257bc29",
+      "productType": "medication",
+      "medicationName": "Testing prod",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696a3335827f9749ddacf445"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 127.92,
+  "shippingCharges": 10,
+  "tax": 23.0256,
+  "discount": 0,
+  "totalAmount": 160.9456,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-16T12:46:45.164Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T12:47:37.093Z"
+  },
+  "orderNumber": "ORD-1768567605164-9151",
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "696a391b827f9749ddacf6b7"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696a391b827f9749ddacf6b8"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 15.99,
+  "shippingCharges": 10,
+  "tax": 2.8782,
+  "discount": 0,
+  "totalAmount": 28.8682,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-16T13:11:55.990Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T13:11:55.990Z"
+  },
+  "orderNumber": "ORD-1768569115990-6490",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a39b5827f9749ddacf6e9"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696a39b5827f9749ddacf6ea"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 15.99,
+  "shippingCharges": 10,
+  "tax": 2.8782,
+  "discount": 0,
+  "totalAmount": 28.8682,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-16T13:14:29.690Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T13:19:39.146Z"
+  },
+  "orderNumber": "ORD-1768569269690-7692",
+  "__v": 0,
+  "payment": {
+    "$oid": "696a3aea827f9749ddacf6fa"
+  }
+},
+{
+  "_id": {
+    "$oid": "696a3c0a827f9749ddacf738"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696a3c0a827f9749ddacf739"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 15.99,
+  "shippingCharges": 10,
+  "tax": 2.8782,
+  "discount": 0,
+  "totalAmount": 28.8682,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-16T13:24:26.159Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T13:24:37.590Z"
+  },
+  "orderNumber": "ORD-1768569866159-7453",
+  "__v": 0,
+  "payment": {
+    "$oid": "696a3c14827f9749ddacf749"
+  }
+},
+{
+  "_id": {
+    "$oid": "696a3c66827f9749ddacf76d"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696a3c66827f9749ddacf76e"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 15.99,
+  "shippingCharges": 10,
+  "tax": 2.8782,
+  "discount": 0,
+  "totalAmount": 28.8682,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-16T13:25:58.804Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T13:26:05.495Z"
+  },
+  "orderNumber": "ORD-1768569958804-7500",
+  "__v": 0,
+  "payment": {
+    "$oid": "696a3c6c827f9749ddacf77e"
+  }
+},
+{
+  "_id": {
+    "$oid": "696a3f97827f9749ddacf7e4"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696a3f97827f9749ddacf7e5"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 15.99,
+  "shippingCharges": 10,
+  "tax": 2.8782,
+  "discount": 0,
+  "totalAmount": 28.8682,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-16T13:39:35.290Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T13:39:48.467Z"
+  },
+  "orderNumber": "ORD-1768570775290-4487",
+  "__v": 0,
+  "payment": {
+    "$oid": "696a3fa3827f9749ddacf7f5"
+  }
+},
+{
+  "_id": {
+    "$oid": "696a4045827f9749ddacf821"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696a4045827f9749ddacf822"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 15.99,
+  "shippingCharges": 10,
+  "tax": 2.8782,
+  "discount": 0,
+  "totalAmount": 28.8682,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-16T13:42:29.789Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T13:44:44.320Z"
+  },
+  "orderNumber": "ORD-1768570949789-1536",
+  "__v": 0,
+  "payment": {
+    "$oid": "696a40cb827f9749ddacf832"
+  }
+},
+{
+  "_id": {
+    "$oid": "696a41ed827f9749ddacf856"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696a41ed827f9749ddacf857"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 15.99,
+  "shippingCharges": 10,
+  "tax": 2.8782,
+  "discount": 0,
+  "totalAmount": 28.8682,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-16T13:49:33.728Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T13:49:44.681Z"
+  },
+  "orderNumber": "ORD-1768571373728-6570",
+  "__v": 0,
+  "payment": {
+    "$oid": "696a41f7827f9749ddacf867"
+  }
+},
+{
+  "_id": {
+    "$oid": "696a4221827f9749ddacf88b"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696a4221827f9749ddacf88c"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 15.99,
+  "shippingCharges": 10,
+  "tax": 2.8782,
+  "discount": 0,
+  "totalAmount": 28.8682,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-16T13:50:25.767Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T13:56:21.165Z"
+  },
+  "orderNumber": "ORD-1768571425767-7528",
+  "__v": 0,
+  "payment": {
+    "$oid": "696a4384827f9749ddacf89c"
+  }
+},
+{
+  "_id": {
+    "$oid": "696a4485827f9749ddacf8d2"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 2,
+      "unitPrice": 15.99,
+      "totalPrice": 31.98,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696a4485827f9749ddacf8d3"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 31.98,
+  "shippingCharges": 10,
+  "tax": 5.7564,
+  "discount": 0,
+  "totalAmount": 47.7364,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-16T14:00:37.185Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T14:00:37.185Z"
+  },
+  "orderNumber": "ORD-1768572037185-6943",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696a4563827f9749ddacf912"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 10,
+      "unitPrice": 15.99,
+      "totalPrice": 159.9,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696a4563827f9749ddacf913"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 159.9,
+  "shippingCharges": 10,
+  "tax": 28.782,
+  "discount": 0,
+  "totalAmount": 198.68200000000002,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-16T14:04:19.890Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T14:05:37.107Z"
+  },
+  "orderNumber": "ORD-1768572259890-4525",
+  "__v": 0,
+  "payment": {
+    "$oid": "696a45b0827f9749ddacf930"
+  }
+},
+{
+  "_id": {
+    "$oid": "696a494f827f9749ddacf984"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 10,
+      "unitPrice": 15.99,
+      "totalPrice": 159.9,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696a494f827f9749ddacf985"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 159.9,
+  "shippingCharges": 10,
+  "tax": 28.782,
+  "discount": 0,
+  "totalAmount": 198.68200000000002,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-16T14:21:03.717Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-16T14:21:10.034Z"
+  },
+  "orderNumber": "ORD-1768573263717-5151",
+  "__v": 0,
+  "payment": {
+    "$oid": "696a4955827f9749ddacf995"
+  }
+},
+{
+  "_id": {
+    "$oid": "696de2965a43be0bc9e64673"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696125894ab58e676257bbe5",
+      "productType": "medication",
+      "medicationName": "Testing Product two",
+      "brand": "Test",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 10,
+      "unitPrice": 15.99,
+      "totalPrice": 159.9,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696de2965a43be0bc9e64674"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 159.9,
+  "shippingCharges": 10,
+  "tax": 28.782,
+  "discount": 0,
+  "totalAmount": 198.68200000000002,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-19T07:51:50.805Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-19T07:52:00.839Z"
+  },
+  "orderNumber": "ORD-1768809110805-5637",
+  "__v": 0,
+  "payment": {
+    "$oid": "696de2a05a43be0bc9e64684"
+  }
+},
+{
+  "_id": {
+    "$oid": "696e111789cc328a86769003"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6964de97b91fb90fb35ed7da",
+      "productType": "medication",
+      "medicationName": "Amoxicillin",
+      "brand": "Cetaphill",
+      "originalPrice": 100,
+      "salePrice": 30,
+      "images": {
+        "thumbnail": "https://imgs.search.brave.com/RZ7bEFrg2-wsPFQHS2baTFyDfNt5dWDHaBB6m_7WKvo/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/c2h1dHRlcnN0b2Nr/LmNvbS9pbWFnZS1w/aG90by9jb2xvcmZ1/bC1waWxscy1tZWRp/Y2luZXMtaGFuZC0y/NjBudy02NzI2MzIw/NDcuanBn",
+        "gallery": [
+          "https://cdn.yoursite.com/medicines/amoxicillin-1.jpg",
+          "https://cdn.yoursite.com/medicines/amoxicillin-2.jpg",
+          "https://cdn.yoursite.com/medicines/amoxicillin-3.jpg"
+        ]
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 30,
+      "totalPrice": 30,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696e111789cc328a86769004"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 30,
+  "shippingCharges": 10,
+  "tax": 5.3999999999999995,
+  "discount": 0,
+  "totalAmount": 45.4,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-19T11:10:15.119Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-19T11:10:25.020Z"
+  },
+  "orderNumber": "ORD-1768821015119-7923",
+  "__v": 0,
+  "payment": {
+    "$oid": "696e112089cc328a86769014"
+  }
+},
+{
+  "_id": {
+    "$oid": "696e143489cc328a86769110"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6964de97b91fb90fb35ed7da",
+      "productType": "medication",
+      "medicationName": "Amoxicillin",
+      "brand": "Cetaphill",
+      "originalPrice": 100,
+      "salePrice": 30,
+      "images": {
+        "thumbnail": "https://imgs.search.brave.com/RZ7bEFrg2-wsPFQHS2baTFyDfNt5dWDHaBB6m_7WKvo/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/c2h1dHRlcnN0b2Nr/LmNvbS9pbWFnZS1w/aG90by9jb2xvcmZ1/bC1waWxscy1tZWRp/Y2luZXMtaGFuZC0y/NjBudy02NzI2MzIw/NDcuanBn",
+        "gallery": [
+          "https://cdn.yoursite.com/medicines/amoxicillin-1.jpg",
+          "https://cdn.yoursite.com/medicines/amoxicillin-2.jpg",
+          "https://cdn.yoursite.com/medicines/amoxicillin-3.jpg"
+        ]
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 30,
+      "totalPrice": 30,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696e143489cc328a86769111"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 30,
+  "shippingCharges": 10,
+  "tax": 5.3999999999999995,
+  "discount": 0,
+  "totalAmount": 45.4,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-19T11:23:32.385Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-19T11:23:41.254Z"
+  },
+  "orderNumber": "ORD-1768821812385-6095",
+  "__v": 0,
+  "payment": {
+    "$oid": "696e143c89cc328a86769121"
+  }
+},
+{
+  "_id": {
+    "$oid": "696e47ec21ce49259ec1083c"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6964de97b91fb90fb35ed7da",
+      "productType": "medication",
+      "medicationName": "Amoxicillin",
+      "brand": "Cetaphill",
+      "originalPrice": 100,
+      "salePrice": 30,
+      "images": {
+        "thumbnail": "https://imgs.search.brave.com/RZ7bEFrg2-wsPFQHS2baTFyDfNt5dWDHaBB6m_7WKvo/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/c2h1dHRlcnN0b2Nr/LmNvbS9pbWFnZS1w/aG90by9jb2xvcmZ1/bC1waWxscy1tZWRp/Y2luZXMtaGFuZC0y/NjBudy02NzI2MzIw/NDcuanBn",
+        "gallery": [
+          "https://cdn.yoursite.com/medicines/amoxicillin-1.jpg",
+          "https://cdn.yoursite.com/medicines/amoxicillin-2.jpg",
+          "https://cdn.yoursite.com/medicines/amoxicillin-3.jpg"
+        ]
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 30,
+      "totalPrice": 30,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696e47ec21ce49259ec1083d"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 30,
+  "shippingCharges": 10,
+  "tax": 5.3999999999999995,
+  "discount": 0,
+  "totalAmount": 45.4,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-19T15:04:12.552Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-19T15:04:12.552Z"
+  },
+  "orderNumber": "ORD-1768835052552-7375",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696e489f21ce49259ec108c6"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6964de97b91fb90fb35ed7da",
+      "productType": "medication",
+      "medicationName": "Amoxicillin",
+      "brand": "Cetaphill",
+      "originalPrice": 100,
+      "salePrice": 30,
+      "images": {
+        "thumbnail": "https://imgs.search.brave.com/RZ7bEFrg2-wsPFQHS2baTFyDfNt5dWDHaBB6m_7WKvo/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/c2h1dHRlcnN0b2Nr/LmNvbS9pbWFnZS1w/aG90by9jb2xvcmZ1/bC1waWxscy1tZWRp/Y2luZXMtaGFuZC0y/NjBudy02NzI2MzIw/NDcuanBn",
+        "gallery": [
+          "https://cdn.yoursite.com/medicines/amoxicillin-1.jpg",
+          "https://cdn.yoursite.com/medicines/amoxicillin-2.jpg",
+          "https://cdn.yoursite.com/medicines/amoxicillin-3.jpg"
+        ]
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 30,
+      "totalPrice": 30,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696e489f21ce49259ec108c7"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 30,
+  "shippingCharges": 10,
+  "tax": 5.3999999999999995,
+  "discount": 0,
+  "totalAmount": 45.4,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-19T15:07:11.149Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-19T15:07:11.149Z"
+  },
+  "orderNumber": "ORD-1768835231149-5095",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f77242ffa439d4c46c8c6"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696f637b710c369bf9ce32c3",
+      "productType": "medication",
+      "medicationName": "Amoxicillin",
+      "brand": "Cetaphill",
+      "originalPrice": 20.99,
+      "salePrice": 15.99,
+      "images": {
+        "thumbnail": "",
+        "gallery": []
+      },
+      "description": "Antibiotic medication used to treat various bacterial infections",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Amoxicillin Trihydrate",
+        "Amoxicillin Sodium"
+      ],
+      "quantity": 1,
+      "unitPrice": 15.99,
+      "totalPrice": 15.99,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "696f77242ffa439d4c46c8c7"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 15.99,
+  "shippingCharges": 10,
+  "tax": 2.8782,
+  "discount": 0,
+  "totalAmount": 28.8682,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-20T12:37:56.883Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T12:37:56.883Z"
+  },
+  "orderNumber": "ORD-1768912676883-1300",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "697083207d18b5eb824c7b3e"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696f6efe2ffa439d4c46c549",
+      "productType": "medication",
+      "medicationName": "Pred Forte - 1% Eye",
+      "brand": "unknown",
+      "originalPrice": 40,
+      "salePrice": 39,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768910486/c2rl5syw7ybhcqjtdvmw.webp",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768910486/c2rl5syw7ybhcqjtdvmw.webp"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "697083207d18b5eb824c7b3f"
+      }
+    },
+    {
+      "productId": "697082c87d18b5eb824c7af6",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "697083207d18b5eb824c7b40"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 78,
+  "shippingCharges": 10,
+  "tax": 14.04,
+  "discount": 0,
+  "totalAmount": 102.03999999999999,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-21T07:41:20.891Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T07:41:50.914Z"
+  },
+  "orderNumber": "ORD-1768981280891-8819",
+  "__v": 0,
+  "payment": {
+    "$oid": "6970833e7d18b5eb824c7b5d"
+  }
+},
+{
+  "_id": {
+    "$oid": "697084157d18b5eb824c7be0"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696f6efe2ffa439d4c46c549",
+      "productType": "medication",
+      "medicationName": "Pred Forte - 1% Eye",
+      "brand": "unknown",
+      "originalPrice": 40,
+      "salePrice": 39,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768910486/c2rl5syw7ybhcqjtdvmw.webp",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768910486/c2rl5syw7ybhcqjtdvmw.webp"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "697084157d18b5eb824c7be1"
+      }
+    },
+    {
+      "productId": "697082c87d18b5eb824c7af6",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "697084157d18b5eb824c7be2"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 78,
+  "shippingCharges": 10,
+  "tax": 14.04,
+  "discount": 0,
+  "totalAmount": 102.03999999999999,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-21T07:45:25.029Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T07:46:50.763Z"
+  },
+  "orderNumber": "ORD-1768981525029-1348",
+  "__v": 0,
+  "payment": {
+    "$oid": "6970846a7d18b5eb824c7c00"
+  }
+},
+{
+  "_id": {
+    "$oid": "697084f37d18b5eb824c7c57"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696f6efe2ffa439d4c46c549",
+      "productType": "medication",
+      "medicationName": "Pred Forte - 1% Eye",
+      "brand": "unknown",
+      "originalPrice": 40,
+      "salePrice": 39,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768910486/c2rl5syw7ybhcqjtdvmw.webp",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768910486/c2rl5syw7ybhcqjtdvmw.webp"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "697084f37d18b5eb824c7c58"
+      }
+    },
+    {
+      "productId": "697082c87d18b5eb824c7af6",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "697084f37d18b5eb824c7c59"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 78,
+  "shippingCharges": 10,
+  "tax": 14.04,
+  "discount": 0,
+  "totalAmount": 102.03999999999999,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-21T07:49:07.356Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T07:49:18.162Z"
+  },
+  "orderNumber": "ORD-1768981747356-4750",
+  "__v": 0,
+  "payment": {
+    "$oid": "697084fd7d18b5eb824c7c76"
+  }
+},
+{
+  "_id": {
+    "$oid": "697085437d18b5eb824c7cb2"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696f6efe2ffa439d4c46c549",
+      "productType": "medication",
+      "medicationName": "Pred Forte - 1% Eye",
+      "brand": "unknown",
+      "originalPrice": 40,
+      "salePrice": 39,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768910486/c2rl5syw7ybhcqjtdvmw.webp",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768910486/c2rl5syw7ybhcqjtdvmw.webp"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "697085437d18b5eb824c7cb3"
+      }
+    },
+    {
+      "productId": "697082c87d18b5eb824c7af6",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "697085437d18b5eb824c7cb4"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 78,
+  "shippingCharges": 10,
+  "tax": 14.04,
+  "discount": 0,
+  "totalAmount": 102.03999999999999,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-21T07:50:27.061Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T07:50:35.379Z"
+  },
+  "orderNumber": "ORD-1768981827061-9038",
+  "__v": 0,
+  "payment": {
+    "$oid": "6970854a7d18b5eb824c7cd1"
+  }
+},
+{
+  "_id": {
+    "$oid": "697086567d18b5eb824c7d3c"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696f6efe2ffa439d4c46c549",
+      "productType": "medication",
+      "medicationName": "Pred Forte - 1% Eye",
+      "brand": "unknown",
+      "originalPrice": 40,
+      "salePrice": 39,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768910486/c2rl5syw7ybhcqjtdvmw.webp",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768910486/c2rl5syw7ybhcqjtdvmw.webp"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "697086567d18b5eb824c7d3d"
+      }
+    },
+    {
+      "productId": "697082c87d18b5eb824c7af6",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "697086567d18b5eb824c7d3e"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 78,
+  "shippingCharges": 10,
+  "tax": 14.04,
+  "discount": 0,
+  "totalAmount": 102.03999999999999,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-21T07:55:02.858Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T07:55:11.386Z"
+  },
+  "orderNumber": "ORD-1768982102858-4766",
+  "__v": 0,
+  "payment": {
+    "$oid": "6970865e7d18b5eb824c7d60"
+  }
+},
+{
+  "_id": {
+    "$oid": "6970dcba4127f0ca8999a4f7"
+  },
+  "patient": {
+    "$oid": "6970d06e7a196725262b55cf"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6970ccfda1d7bfb46383d326",
+      "productType": "medication",
+      "medicationName": "Wegovy® - 2.4MG Injection",
+      "brand": "unknown",
+      "originalPrice": 39,
+      "salePrice": 29,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769000160/xokbggur3wsffpbra9ai.jpg",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769000160/xokbggur3wsffpbra9ai.jpg"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 2,
+      "unitPrice": 29,
+      "totalPrice": 58,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6970dcba4127f0ca8999a4f8"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6970dc9c4127f0ca8999a4b3"
+  },
+  "billingAddress": {
+    "firstName": "Ayesha",
+    "lastName": "Test1",
+    "email": "ayesha@flyweis.technology",
+    "phoneNumber": "9319682825",
+    "streetAddress": "No. 165, R.V. Road (Near Minerva Circle), Bangalore – 560004, India",
+    "city": "Mumbai",
+    "state": "Bangalore",
+    "zipCode": "442001"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 58,
+  "shippingCharges": 10,
+  "tax": 10.44,
+  "discount": 0,
+  "totalAmount": 78.44,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-21T14:03:38.300Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T14:03:38.300Z"
+  },
+  "orderNumber": "ORD-1769004218300-5850",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6970e7df4127f0ca8999a8b3"
+  },
+  "patient": {
+    "$oid": "6970d06e7a196725262b55cf"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6970ccfda1d7bfb46383d326",
+      "productType": "medication",
+      "medicationName": "Wegovy® - 2.4MG Injection",
+      "brand": "unknown",
+      "originalPrice": 39,
+      "salePrice": 29,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769000160/xokbggur3wsffpbra9ai.jpg",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769000160/xokbggur3wsffpbra9ai.jpg"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 29,
+      "totalPrice": 29,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6970e7df4127f0ca8999a8b4"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6970dc9c4127f0ca8999a4b3"
+  },
+  "billingAddress": {
+    "firstName": "Ayesha",
+    "lastName": "Test1",
+    "email": "ayesha@flyweis.technology",
+    "phoneNumber": "9319682825",
+    "streetAddress": "No. 165, R.V. Road (Near Minerva Circle), Bangalore – 560004, India",
+    "city": "Mumbai",
+    "state": "Bangalore",
+    "zipCode": "442001"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 29,
+  "shippingCharges": 10,
+  "tax": 5.22,
+  "discount": 0,
+  "totalAmount": 44.22,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-21T14:51:11.942Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T14:51:21.024Z"
+  },
+  "orderNumber": "ORD-1769007071942-7199",
+  "__v": 0,
+  "payment": {
+    "$oid": "6970e7e84127f0ca8999a8d0"
+  }
+},
+{
+  "_id": {
+    "$oid": "6970f84e4127f0ca8999ad60"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696f6efe2ffa439d4c46c549",
+      "productType": "medication",
+      "medicationName": "Pred Forte - 1% Eye",
+      "brand": "unknown",
+      "originalPrice": 40,
+      "salePrice": 39,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768910486/c2rl5syw7ybhcqjtdvmw.webp",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768910486/c2rl5syw7ybhcqjtdvmw.webp"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 3,
+      "unitPrice": 39,
+      "totalPrice": 117,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6970f84e4127f0ca8999ad61"
+      }
+    },
+    {
+      "productId": "6970f83e4127f0ca8999ad45",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6970f84e4127f0ca8999ad62"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 156,
+  "shippingCharges": 10,
+  "tax": 28.08,
+  "discount": 0,
+  "totalAmount": 194.07999999999998,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-21T16:01:18.230Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T16:02:18.494Z"
+  },
+  "orderNumber": "ORD-1769011278230-4767",
+  "__v": 0,
+  "payment": {
+    "$oid": "6970f8894127f0ca8999ad7d"
+  }
+},
+{
+  "_id": {
+    "$oid": "697144ff1654bdc1caa9dda7"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696f6efe2ffa439d4c46c549",
+      "productType": "medication",
+      "medicationName": "Pred Forte - 1% Eye",
+      "brand": "unknown",
+      "originalPrice": 40,
+      "salePrice": 39,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768910486/c2rl5syw7ybhcqjtdvmw.webp",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768910486/c2rl5syw7ybhcqjtdvmw.webp"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 3,
+      "unitPrice": 39,
+      "totalPrice": 117,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "697144ff1654bdc1caa9dda8"
+      }
+    },
+    {
+      "productId": "6970f83e4127f0ca8999ad45",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "697144ff1654bdc1caa9dda9"
+      }
+    },
+    {
+      "productId": "6971025d4127f0ca8999afc5",
+      "productType": "medication",
+      "medicationName": "Metformin Hydrochloride",
+      "brand": "\"Metformin Hydrochloride",
+      "originalPrice": 85,
+      "salePrice": 68,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769013624/x8eiqvjiqgibleti8qbl.webp",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769013624/x8eiqvjiqgibleti8qbl.webp"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Do not stop medication without consulting your healthcare provider"
+      ],
+      "quantity": 1,
+      "unitPrice": 68,
+      "totalPrice": 68,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "697144ff1654bdc1caa9ddaa"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 224,
+  "shippingCharges": 10,
+  "tax": 40.32,
+  "discount": 0,
+  "totalAmount": 274.32,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-21T21:28:31.859Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T21:28:42.082Z"
+  },
+  "orderNumber": "ORD-1769030911860-5786",
+  "__v": 0,
+  "payment": {
+    "$oid": "697145091654bdc1caa9ddc8"
+  }
+},
+{
+  "_id": {
+    "$oid": "6971ed3fc99da8b8eb7e82d5"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696f65f0899c704778730be4",
+      "productType": "medication",
+      "medicationName": "Uloric® - 40MG Tablet",
+      "brand": "unknown",
+      "originalPrice": 49.99,
+      "salePrice": 49,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768908242/g4yiqbw09j9mjjzfq2k4.jpg",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768908242/g4yiqbw09j9mjjzfq2k4.jpg"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 49,
+      "totalPrice": 49,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6971ed3fc99da8b8eb7e82d6"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 49,
+  "shippingCharges": 10,
+  "tax": 8.82,
+  "discount": 0,
+  "totalAmount": 67.82,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-22T09:26:23.764Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T09:26:23.764Z"
+  },
+  "orderNumber": "ORD-1769073983764-8235",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6971eeeec99da8b8eb7e834b"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "696f65f0899c704778730be4",
+      "productType": "medication",
+      "medicationName": "Uloric® - 40MG Tablet",
+      "brand": "unknown",
+      "originalPrice": 49.99,
+      "salePrice": 49,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768908242/g4yiqbw09j9mjjzfq2k4.jpg",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768908242/g4yiqbw09j9mjjzfq2k4.jpg"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 49,
+      "totalPrice": 49,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6971eeeec99da8b8eb7e834c"
+      }
+    },
+    {
+      "productId": "6970ccfda1d7bfb46383d326",
+      "productType": "medication",
+      "medicationName": "Wegovy® - 2.4MG Injection",
+      "brand": "unknown",
+      "originalPrice": 39,
+      "salePrice": 29,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769000160/xokbggur3wsffpbra9ai.jpg",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769000160/xokbggur3wsffpbra9ai.jpg"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 29,
+      "totalPrice": 29,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6971eeeec99da8b8eb7e834d"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 78,
+  "shippingCharges": 10,
+  "tax": 14.04,
+  "discount": 0,
+  "totalAmount": 102.03999999999999,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-22T09:33:34.662Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T09:34:42.372Z"
+  },
+  "orderNumber": "ORD-1769074414662-6941",
+  "__v": 0,
+  "payment": {
+    "$oid": "6971ef31c21f2c1257aa11dd"
+  }
+},
+{
+  "_id": {
+    "$oid": "6971f12bc21f2c1257aa1340"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6971025d4127f0ca8999afc5",
+      "productType": "medication",
+      "medicationName": "Metformin Hydrochloride",
+      "brand": "\"Metformin Hydrochloride",
+      "originalPrice": 85,
+      "salePrice": 68,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769013624/x8eiqvjiqgibleti8qbl.webp",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769013624/x8eiqvjiqgibleti8qbl.webp"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Do not stop medication without consulting your healthcare provider"
+      ],
+      "quantity": 1,
+      "unitPrice": 68,
+      "totalPrice": 68,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6971f12bc21f2c1257aa1341"
+      }
+    },
+    {
+      "productId": "6970ccfda1d7bfb46383d326",
+      "productType": "medication",
+      "medicationName": "Wegovy® - 2.4MG Injection",
+      "brand": "unknown",
+      "originalPrice": 39,
+      "salePrice": 29,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769000160/xokbggur3wsffpbra9ai.jpg",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769000160/xokbggur3wsffpbra9ai.jpg"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 29,
+      "totalPrice": 29,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6971f12bc21f2c1257aa1342"
+      }
+    },
+    {
+      "productId": "6970cba4a1d7bfb46383d199",
+      "productType": "medication",
+      "medicationName": "Cuff Syrup",
+      "brand": "unknown",
+      "originalPrice": 23,
+      "salePrice": 19,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768999789/oc05llmwvxleowhpdwfc.webp",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1768999789/oc05llmwvxleowhpdwfc.webp"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 19,
+      "totalPrice": 19,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6971f12bc21f2c1257aa1343"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "6968c7b133a228f1c1edf8f1"
+  },
+  "billingAddress": {
+    "firstName": "Alex",
+    "lastName": "Driver",
+    "email": "suresh@gmail.com",
+    "phoneNumber": "+123 987654321",
+    "streetAddress": "123 Main Street",
+    "city": "San Diego",
+    "state": "California",
+    "zipCode": "22434"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 116,
+  "shippingCharges": 10,
+  "tax": 20.88,
+  "discount": 0,
+  "totalAmount": 146.88,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-22T09:43:07.273Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T09:43:18.740Z"
+  },
+  "orderNumber": "ORD-1769074987273-8401",
+  "__v": 0,
+  "payment": {
+    "$oid": "6971f136c21f2c1257aa1363"
+  }
+},
+{
+  "_id": {
+    "$oid": "6972331d183082bfbb0a7ff1"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "prescription": null,
+  "items": [
+    {
+      "productId": "6971025d4127f0ca8999afc5",
+      "productType": "medication",
+      "medicationName": "Metformin Hydrochloride",
+      "brand": "\"Metformin Hydrochloride",
+      "originalPrice": 85,
+      "salePrice": 68,
+      "images": {
+        "thumbnail": "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769013624/x8eiqvjiqgibleti8qbl.webp",
+        "gallery": [
+          "https://res.cloudinary.com/dnkvlbwqk/image/upload/v1769013624/x8eiqvjiqgibleti8qbl.webp"
+        ]
+      },
+      "description": "",
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [
+        "Do not stop medication without consulting your healthcare provider"
+      ],
+      "quantity": 3,
+      "unitPrice": 68,
+      "totalPrice": 204,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6972331d183082bfbb0a7ff2"
+      }
+    },
+    {
+      "productId": "69723308183082bfbb0a7fc1",
+      "productType": "doctors_note",
+      "medicationName": "Doctor's Note - Excuse Note",
+      "images": {
+        "gallery": []
+      },
+      "dosageOption": null,
+      "quantityOption": null,
+      "generics": [],
+      "quantity": 1,
+      "unitPrice": 39,
+      "totalPrice": 39,
+      "status": "pending",
+      "isSaved": false,
+      "_id": {
+        "$oid": "6972331d183082bfbb0a7ff3"
+      }
+    }
+  ],
+  "shippingAddress": {
+    "$oid": "697213ffc21f2c1257aa2314"
+  },
+  "billingAddress": {
+    "firstName": "Vipin",
+    "lastName": "Test",
+    "email": "test@test.com",
+    "phoneNumber": "9999999999",
+    "streetAddress": "qq",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "zipCode": "442001"
+  },
+  "billingAddressSameAsShipping": true,
+  "subtotal": 243,
+  "shippingCharges": 10,
+  "tax": 43.739999999999995,
+  "discount": 0,
+  "totalAmount": 296.74,
+  "status": "pending",
+  "paymentStatus": "pending",
+  "createdAt": {
+    "$date": "2026-01-22T14:24:29.562Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-22T14:25:15.950Z"
+  },
+  "orderNumber": "ORD-1769091869562-2758",
+  "__v": 0,
+  "payment": {
+    "$oid": "6972334a183082bfbb0a800e"
+  }
+}]

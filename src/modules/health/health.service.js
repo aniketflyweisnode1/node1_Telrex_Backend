@@ -144,6 +144,55 @@ exports.createHealthCategory = async (data, userId) => {
 };
 
 /**
+ * Bulk create health categories from JSON payload
+ */
+exports.bulkCreateHealthCategories = async (categoriesPayload = [], userId) => {
+  if (!Array.isArray(categoriesPayload) || categoriesPayload.length === 0) {
+    throw new AppError('categories array is required and cannot be empty', 400);
+  }
+
+  const seenNames = new Set();
+  const seenSlugs = new Set();
+  const createdCategories = [];
+
+  for (const data of categoriesPayload) {
+    // In-payload duplicate guard
+    if (data.name) {
+      if (seenNames.has(data.name)) {
+        throw new AppError(`Duplicate category name in payload: ${data.name}`, 400);
+      }
+      seenNames.add(data.name);
+    }
+    if (data.slug) {
+      if (seenSlugs.has(data.slug)) {
+        throw new AppError(`Duplicate category slug in payload: ${data.slug}`, 400);
+      }
+      seenSlugs.add(data.slug);
+    }
+
+    // DB-level duplicate check
+    await checkDuplicateCategory(HealthCategory, data.name, data.slug);
+
+    const categoryData = {
+      ...data,
+      createdBy: userId,
+      updatedBy: userId
+    };
+
+    const category = await HealthCategory.create(categoryData);
+
+    const populatedCategory = await HealthCategory.findById(category._id)
+      .populate(CATEGORY_USER_POPULATE[0])
+      .populate(CATEGORY_USER_POPULATE[1])
+      .lean();
+
+    createdCategories.push(populatedCategory);
+  }
+
+  return createdCategories;
+};
+
+/**
  * Update health category
  */
 exports.updateHealthCategory = async (categoryId, data, userId) => {

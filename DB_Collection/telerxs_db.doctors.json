@@ -1,0 +1,697 @@
+[{
+  "_id": {
+    "$oid": "69611415b8c266a7835c0c1a"
+  },
+  "user": {
+    "$oid": "69611414b8c266a7835c0c18"
+  },
+  "specialty": {
+    "$oid": "6968b3ccc0c4644b10c0e2b6"
+  },
+  "licenseNumber": "Screenshot 2026-01-09 at 6.28.06 PM.png",
+  "licenseVerified": false,
+  "medicalLicense": {
+    "licenseNumber": "Screenshot 2026-01-09 at 6.28.06 PM.png",
+    "documentUrl": "/uploads/Screenshot 2026-01-09 at 6.28.06 PM.png",
+    "verified": false
+  },
+  "consultationFee": 150,
+  "status": "pending",
+  "rating": {
+    "average": 0,
+    "totalRatings": 0
+  },
+  "profileImage": {
+    "verified": false
+  },
+  "bio": "asdfghj",
+  "experience": 12,
+  "languages": [
+    "English",
+    "hindi",
+    "urdu"
+  ],
+  "availability": {
+    "days": [],
+    "timeSlots": []
+  },
+  "address": {
+    "clinicName": "asdfgh",
+    "city": "",
+    "state": "",
+    "country": "India",
+    "pincode": ""
+  },
+  "bankAccount": {
+    "accountType": "current",
+    "verified": false,
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "accountHolderName": "Aditya Jain",
+    "accountNumber": "1234567890",
+    "bankName": "Central Bank of India",
+    "ifscCode": "AAAA0XXXXXX",
+    "routingNumber": "123456790",
+    "swiftCode": "CHASUS33"
+  },
+  "isActive": true,
+  "createdBy": {
+    "$oid": "69611414b8c266a7835c0c18"
+  },
+  "education": [],
+  "certifications": [],
+  "createdAt": {
+    "$date": "2026-01-09T14:43:33.031Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T11:51:59.756Z"
+  },
+  "__v": 3,
+  "licenseVerifiedAt": null,
+  "licenseVerifiedBy": null
+},
+{
+  "_id": {
+    "$oid": "69649b9cc40a155136c925f0"
+  },
+  "user": {
+    "$oid": "69649b9bc40a155136c925ee"
+  },
+  "specialty": {
+    "$oid": "6968b3ccc0c4644b10c0e2b6"
+  },
+  "licenseNumber": "MD-123426",
+  "licenseVerified": false,
+  "medicalLicense": {
+    "licenseNumber": "MD-123426",
+    "documentUrl": "/uploads/medical-license.pdf",
+    "verified": false
+  },
+  "consultationFee": 500,
+  "status": "suspended",
+  "rating": {
+    "average": 0,
+    "totalRatings": 0
+  },
+  "profilePicture": "/uploads/profile-picture.jpg",
+  "profileImage": {
+    "url": "/uploads/profile-picture.jpg",
+    "verified": false
+  },
+  "bio": "Experienced general practitioner with 10 years of experience in treating various medical conditions.",
+  "experience": 5,
+  "languages": [
+    "English",
+    "Hindi"
+  ],
+  "availability": {
+    "days": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Friday"
+    ],
+    "timeSlots": [
+      {
+        "from": "10:00",
+        "to": "13:00",
+        "_id": {
+          "$oid": "6968bcad8994429433066d64"
+        }
+      },
+      {
+        "from": "17:00",
+        "to": "20:00",
+        "_id": {
+          "$oid": "6968bcad8994429433066d65"
+        }
+      }
+    ]
+  },
+  "address": {
+    "clinicName": "MediPrime Clinic",
+    "city": "Bhopal",
+    "state": "Madhya Pradesh",
+    "country": "India",
+    "pincode": "462001"
+  },
+  "bankAccount": {
+    "accountType": "checking",
+    "verified": false
+  },
+  "isActive": false,
+  "createdBy": {
+    "$oid": "69649b9bc40a155136c925ee"
+  },
+  "education": [
+    {
+      "degree": "MBBS",
+      "institution": "AIIMS Delhi",
+      "year": 2018,
+      "_id": {
+        "$oid": "6968bcad8994429433066d61"
+      }
+    },
+    {
+      "degree": "MD (General Medicine)",
+      "institution": "AIIMS Delhi",
+      "year": 2021,
+      "_id": {
+        "$oid": "6968bcad8994429433066d62"
+      }
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Advanced Cardiac Life Support (ACLS)",
+      "issuingOrganization": "American Heart Association",
+      "issuedBy": "American Heart Association",
+      "year": 2022,
+      "_id": {
+        "$oid": "6968bcad8994429433066d63"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-12T06:58:36.643Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T16:08:44.143Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "6968b2bfa945b98cb929b9bc"
+  },
+  "user": {
+    "$oid": "6968b2bea945b98cb929b9ba"
+  },
+  "specialty": {
+    "$oid": "6968c9cf33a228f1c1edf96b"
+  },
+  "licenseNumber": "localtionmodalicon.svg",
+  "licenseVerified": false,
+  "medicalLicense": {
+    "licenseNumber": "localtionmodalicon.svg",
+    "documentUrl": "/uploads/localtionmodalicon.svg",
+    "verified": false
+  },
+  "consultationFee": 456,
+  "status": "pending",
+  "rating": {
+    "average": 0,
+    "totalRatings": 0
+  },
+  "profilePicture": "/uploads/blob:http://localhost:5173/536dd518-a1ec-438e-87a5-fff250c55ea3",
+  "profileImage": {
+    "url": "/uploads/blob:http://localhost:5173/536dd518-a1ec-438e-87a5-fff250c55ea3",
+    "verified": false
+  },
+  "bio": "hgdfhqgxda dcdjwhgcgwdcw",
+  "experience": 12,
+  "languages": [
+    "hindi",
+    "english"
+  ],
+  "availability": {
+    "days": [],
+    "timeSlots": []
+  },
+  "address": {
+    "clinicName": "asdfgh",
+    "city": "",
+    "state": "",
+    "country": "India",
+    "pincode": ""
+  },
+  "bankAccount": {
+    "accountType": "checking",
+    "verified": false,
+    "verifiedAt": null,
+    "verifiedBy": null
+  },
+  "isActive": false,
+  "createdBy": {
+    "$oid": "6968b2bea945b98cb929b9ba"
+  },
+  "education": [],
+  "certifications": [],
+  "createdAt": {
+    "$date": "2026-01-15T09:26:23.470Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T11:06:51.990Z"
+  },
+  "__v": 0,
+  "licenseVerifiedAt": null,
+  "licenseVerifiedBy": null
+},
+{
+  "_id": {
+    "$oid": "6968b496c0c4644b10c0e2c3"
+  },
+  "user": {
+    "$oid": "6968b495c0c4644b10c0e2c1"
+  },
+  "specialty": {
+    "$oid": "6968b3ccc0c4644b10c0e2b6"
+  },
+  "licenseNumber": "#MD-849204",
+  "licenseVerified": true,
+  "medicalLicense": {
+    "verified": false
+  },
+  "consultationFee": 150,
+  "status": "active",
+  "rating": {
+    "average": 0,
+    "totalRatings": 0
+  },
+  "profileImage": {
+    "verified": false
+  },
+  "experience": 5,
+  "education": [
+    {
+      "degree": "MBBS",
+      "institution": "AIIMS Delhi",
+      "year": 2018,
+      "_id": {
+        "$oid": "6968b496c0c4644b10c0e2c4"
+      }
+    },
+    {
+      "degree": "MD (General Medicine)",
+      "institution": "AIIMS Delhi",
+      "year": 2021,
+      "_id": {
+        "$oid": "6968b496c0c4644b10c0e2c5"
+      }
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Advanced Cardiac Life Support (ACLS)",
+      "issuingOrganization": "American Heart Association",
+      "issuedBy": "American Heart Association",
+      "year": 2022,
+      "_id": {
+        "$oid": "6968b496c0c4644b10c0e2c6"
+      }
+    }
+  ],
+  "languages": [
+    "English",
+    "Hindi"
+  ],
+  "availability": {
+    "days": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Friday"
+    ],
+    "timeSlots": [
+      {
+        "from": "10:00",
+        "to": "13:00",
+        "_id": {
+          "$oid": "6968b496c0c4644b10c0e2c7"
+        }
+      },
+      {
+        "from": "17:00",
+        "to": "20:00",
+        "_id": {
+          "$oid": "6968b496c0c4644b10c0e2c8"
+        }
+      }
+    ]
+  },
+  "address": {
+    "clinicName": "MediPrime Clinic",
+    "city": "Bhopal",
+    "state": "Madhya Pradesh",
+    "country": "India",
+    "pincode": "462001"
+  },
+  "bankAccount": {
+    "accountType": "checking",
+    "verified": false
+  },
+  "isActive": true,
+  "createdBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "createdAt": {
+    "$date": "2026-01-15T09:34:14.350Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T09:34:14.635Z"
+  },
+  "__v": 0,
+  "licenseVerifiedAt": {
+    "$date": "2026-01-15T09:34:14.632Z"
+  },
+  "licenseVerifiedBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  }
+},
+{
+  "_id": {
+    "$oid": "6968fe0281dfab5ac49d9a09"
+  },
+  "user": {
+    "$oid": "6968fe0281dfab5ac49d9a07"
+  },
+  "specialty": {
+    "$oid": "6968b3ccc0c4644b10c0e2b6"
+  },
+  "licenseNumber": "LIC-234235",
+  "licenseVerified": false,
+  "medicalLicense": {
+    "verified": false
+  },
+  "consultationFee": 145,
+  "status": "active",
+  "rating": {
+    "average": 0,
+    "totalRatings": 0
+  },
+  "profileImage": {
+    "verified": false
+  },
+  "languages": [],
+  "availability": {
+    "days": [],
+    "timeSlots": []
+  },
+  "address": {
+    "country": "India"
+  },
+  "bankAccount": {
+    "accountType": "checking",
+    "verified": false
+  },
+  "isActive": true,
+  "createdBy": {
+    "$oid": "6960f30ce9fc16c719815b37"
+  },
+  "education": [],
+  "certifications": [],
+  "createdAt": {
+    "$date": "2026-01-15T14:47:31.000Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T14:47:31.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6969583394a6c8c1e9384e8d"
+  },
+  "user": {
+    "$oid": "6969583294a6c8c1e9384e8b"
+  },
+  "specialty": {
+    "$oid": "6968c9cf33a228f1c1edf96b"
+  },
+  "licenseNumber": "successmodalimg.svg",
+  "licenseVerified": false,
+  "medicalLicense": {
+    "licenseNumber": "successmodalimg.svg",
+    "documentUrl": "/uploads/successmodalimg.svg",
+    "verified": false
+  },
+  "consultationFee": 10,
+  "status": "pending",
+  "rating": {
+    "average": 0,
+    "totalRatings": 0
+  },
+  "profileImage": {
+    "verified": false
+  },
+  "bio": "test",
+  "experience": 10,
+  "languages": [
+    "hindi"
+  ],
+  "availability": {
+    "days": [],
+    "timeSlots": []
+  },
+  "address": {
+    "clinicName": "dsd",
+    "city": "",
+    "state": "",
+    "country": "India",
+    "pincode": ""
+  },
+  "bankAccount": {
+    "accountType": "checking",
+    "verified": false,
+    "verifiedAt": null,
+    "verifiedBy": null
+  },
+  "isActive": false,
+  "createdBy": {
+    "$oid": "6969583294a6c8c1e9384e8b"
+  },
+  "education": [],
+  "certifications": [],
+  "createdAt": {
+    "$date": "2026-01-15T21:12:19.604Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-15T21:13:14.214Z"
+  },
+  "__v": 1,
+  "licenseVerifiedAt": null,
+  "licenseVerifiedBy": null
+},
+{
+  "_id": {
+    "$oid": "6969597e94a6c8c1e9384ee6"
+  },
+  "user": {
+    "$oid": "6969597e94a6c8c1e9384ee4"
+  },
+  "specialty": {
+    "$oid": "6968c9cf33a228f1c1edf96b"
+  },
+  "licenseNumber": "banktabicon.svg",
+  "licenseVerified": true,
+  "medicalLicense": {
+    "licenseNumber": "banktabicon.svg",
+    "documentUrl": "/uploads/banktabicon.svg",
+    "verified": false
+  },
+  "consultationFee": 1,
+  "status": "active",
+  "rating": {
+    "average": 0,
+    "totalRatings": 0
+  },
+  "profilePicture": "/uploads/blob:http://localhost:5173/22ceef03-149a-464a-bc2b-9cc9d51eb7fb",
+  "profileImage": {
+    "url": "/uploads/blob:http://localhost:5173/22ceef03-149a-464a-bc2b-9cc9d51eb7fb",
+    "verified": false
+  },
+  "bio": "w",
+  "experience": 12,
+  "languages": [],
+  "availability": {
+    "days": [],
+    "timeSlots": []
+  },
+  "address": {
+    "clinicName": "w",
+    "country": "India"
+  },
+  "bankAccount": {
+    "accountType": "checking",
+    "verified": false
+  },
+  "isActive": false,
+  "createdBy": {
+    "$oid": "6969597e94a6c8c1e9384ee4"
+  },
+  "education": [],
+  "certifications": [],
+  "createdAt": {
+    "$date": "2026-01-15T21:17:50.995Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T04:06:32.422Z"
+  },
+  "__v": 0,
+  "licenseVerifiedAt": {
+    "$date": "2026-01-17T04:06:32.410Z"
+  },
+  "licenseVerifiedBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  }
+},
+{
+  "_id": {
+    "$oid": "696b08f5f4ce3614cee1e4d0"
+  },
+  "user": {
+    "$oid": "696b08f4f4ce3614cee1e4ce"
+  },
+  "specialty": {
+    "$oid": "6968b3ccc0c4644b10c0e2b6"
+  },
+  "licenseNumber": "#MD-849205",
+  "licenseVerified": true,
+  "medicalLicense": {
+    "verified": true,
+    "documentUrl": "https://example.com/license.pdf",
+    "licenseNumber": "#MD-849205"
+  },
+  "consultationFee": 200,
+  "status": "active",
+  "rating": {
+    "average": 0,
+    "totalRatings": 0
+  },
+  "profileImage": {
+    "url": "https://example.com/profile.jpg",
+    "verified": true
+  },
+  "experience": 7,
+  "education": [
+    {
+      "degree": "MBBS",
+      "institution": "AIIMS Delhi",
+      "year": 2015,
+      "_id": {
+        "$oid": "696b3766d2217d005ea3e29c"
+      }
+    },
+    {
+      "degree": "MD (Cardiology)",
+      "institution": "AIIMS Delhi",
+      "year": 2018,
+      "_id": {
+        "$oid": "696b3766d2217d005ea3e29d"
+      }
+    },
+    {
+      "degree": "DM (Cardiology)",
+      "institution": "AIIMS Delhi",
+      "year": 2021,
+      "_id": {
+        "$oid": "696b3766d2217d005ea3e29e"
+      }
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Advanced Cardiac Life Support (ACLS)",
+      "issuingOrganization": "American Heart Association",
+      "issuedBy": "American Heart Association",
+      "year": 2022,
+      "_id": {
+        "$oid": "696b5243e8b5e4c89d6a503f"
+      }
+    },
+    {
+      "name": "Board Certification in Cardiology",
+      "issuingOrganization": "Medical Council of India",
+      "issuedBy": "Medical Council of India",
+      "year": 2021,
+      "_id": {
+        "$oid": "696b5243e8b5e4c89d6a5040"
+      }
+    },
+    {
+      "name": "Echocardiography Certification",
+      "issuingOrganization": "Indian Society of Echocardiography",
+      "issuedBy": "Indian Society of Echocardiography",
+      "year": 2020,
+      "_id": {
+        "$oid": "696b5243e8b5e4c89d6a5041"
+      }
+    }
+  ],
+  "languages": [
+    "English",
+    "Hindi",
+    "Spanish",
+    "French"
+  ],
+  "availability": {
+    "days": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ],
+    "timeSlots": [
+      {
+        "from": "09:00",
+        "to": "12:00",
+        "_id": {
+          "$oid": "696b3766d2217d005ea3e2a2"
+        }
+      },
+      {
+        "from": "14:00",
+        "to": "17:00",
+        "_id": {
+          "$oid": "696b3766d2217d005ea3e2a3"
+        }
+      },
+      {
+        "from": "18:00",
+        "to": "20:00",
+        "_id": {
+          "$oid": "696b3766d2217d005ea3e2a4"
+        }
+      }
+    ]
+  },
+  "address": {
+    "clinicName": "MediPrime Heart Care Clinic",
+    "city": "Bhopal",
+    "state": "Madhya Pradesh",
+    "country": "India",
+    "pincode": "462001"
+  },
+  "bankAccount": {
+    "accountType": "current",
+    "verified": false,
+    "accountHolderName": "Dr. Sarah Smith",
+    "accountNumber": "1234567890123456",
+    "bankName": "State Bank of India",
+    "ifscCode": "SBIN0001234",
+    "routingNumber": "SBIN0001234",
+    "swiftCode": "SBININBB123",
+    "verifiedAt": null,
+    "verifiedBy": null
+  },
+  "isActive": true,
+  "createdBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "createdAt": {
+    "$date": "2026-01-17T03:58:45.384Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-17T09:11:31.865Z"
+  },
+  "__v": 4,
+  "licenseVerifiedAt": {
+    "$date": "2026-01-17T03:58:45.472Z"
+  },
+  "licenseVerifiedBy": {
+    "$oid": "6960f0eeed53ae9c2467d5c7"
+  },
+  "bio": "Experienced cardiologist with over 7 years of practice. Specialized in preventive cardiology and heart disease management. Committed to providing personalized care to all patient.",
+  "profilePicture": "https://example.com/profile.jpg"
+}]

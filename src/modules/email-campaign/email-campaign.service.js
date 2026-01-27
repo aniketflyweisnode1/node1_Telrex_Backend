@@ -3,6 +3,7 @@ const Patient = require('../../models/Patient.model');
 const User = require('../../models/User.model');
 const AppError = require('../../utils/AppError');
 const nodemailer = require('nodemailer');
+const NotificationCampaign = require('../../models/NotificationCampaign.model');
 
 // Create email transporter
 const createTransporter = () => {
@@ -187,7 +188,7 @@ exports.updateEmailCampaign = async (campaignId, data, files = []) => {
 
 // Send email campaign
 exports.sendEmailCampaign = async (campaignId) => {
-  const campaign = await EmailCampaign.findById(campaignId);
+  const campaign = await NotificationCampaign.findById(campaignId);
   
   if (!campaign) {
     throw new AppError('Email campaign not found', 404);

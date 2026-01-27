@@ -242,6 +242,80 @@ exports.createHealthCategoryValidation = [
     .withMessage('isActive must be a boolean')
 ];
 
+// Bulk create health categories validation
+exports.bulkCreateHealthCategoriesValidation = [
+  body('categories')
+    .if(body('data').not().exists())
+    .if(body('items').not().exists())
+    .exists()
+    .withMessage('categories field is required')
+    .bail()
+    .isArray({ min: 1 })
+    .withMessage('categories must be a non-empty array'),
+  body('categories.*.name')
+    .notEmpty()
+    .withMessage('Category name is required')
+    .trim()
+    .isLength({ min: 2, max: 100 })
+    .withMessage('Category name must be between 2 and 100 characters'),
+  body('categories.*.slug')
+    .optional()
+    .trim()
+    .isLength({ min: 2, max: 100 })
+    .matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+    .withMessage('Slug must be lowercase alphanumeric with hyphens'),
+  body('categories.*.description')
+    .optional()
+    .trim()
+    .isLength({ max: 500 })
+    .withMessage('Description must not exceed 500 characters'),
+  body('categories.*.icon')
+    .optional()
+    .trim()
+    .isString()
+    .withMessage('Icon must be a string'),
+  body('categories.*.types')
+    .optional()
+    .isArray()
+    .withMessage('Types must be an array'),
+  body('categories.*.types.*.name')
+    .optional()
+    .trim()
+    .isLength({ min: 2, max: 100 })
+    .withMessage('Type name must be between 2 and 100 characters'),
+  body('categories.*.types.*.slug')
+    .optional()
+    .trim()
+    .matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+    .withMessage('Type slug must be lowercase alphanumeric with hyphens'),
+  body('categories.*.types.*.description')
+    .optional()
+    .trim()
+    .isLength({ max: 500 })
+    .withMessage('Type description must not exceed 500 characters'),
+  body('categories.*.types.*.icon')
+    .optional()
+    .trim()
+    .isString()
+    .withMessage('Type icon must be a string'),
+  body('categories.*.types.*.order')
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage('Type order must be a non-negative integer'),
+  body('categories.*.types.*.isActive')
+    .optional()
+    .isBoolean()
+    .withMessage('Type isActive must be a boolean'),
+  body('categories.*.order')
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage('Order must be a non-negative integer'),
+  body('categories.*.isActive')
+    .optional()
+    .isBoolean()
+    .withMessage('isActive must be a boolean')
+];
+
 // Update health category validation
 exports.updateHealthCategoryValidation = [
   body('name')

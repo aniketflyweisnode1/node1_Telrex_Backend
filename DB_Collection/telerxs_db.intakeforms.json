@@ -1,0 +1,359 @@
+[{
+  "_id": {
+    "$oid": "695cf4e20f0c3e38ea079a5b"
+  },
+  "patient": {
+    "$oid": "695c6a639a68d7a23530f880"
+  },
+  "basicInformation": {
+    "isBasicInfoComplete": false
+  },
+  "emergencyContact": {
+    "isEmergencyContactComplete": false
+  },
+  "medicalQuestions": {
+    "pastMedicalHistory": [],
+    "currentMedications": [],
+    "medicationAllergies": [],
+    "isMedicalQuestionsComplete": false,
+    "preferredPharmacies": []
+  },
+  "status": "draft",
+  "createdAt": {
+    "$date": "2026-01-06T11:41:22.762Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-06T11:41:22.762Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "695f997a565985d4935687ba"
+  },
+  "patient": {
+    "$oid": "695f80653ca546737a217760"
+  },
+  "basicInformation": {
+    "firstName": "Vipin",
+    "middleName": "Dev",
+    "lastName": "Frontend",
+    "sex": "male",
+    "dateOfBirth": {
+      "$date": "1990-01-15T00:00:00.000Z"
+    },
+    "email": "vipin@gmail.com",
+    "phone": "6265987553",
+    "address": "123 Main Street",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "zip": "400001",
+    "maritalStatus": "single",
+    "govtIssuedCertificate": "aadhaar",
+    "certificateUpload": "https://res.cloudinary.com/dzfjosx9l/image/upload/v1768912168/profile-images/ysmdanck4rmiypiv0wh5.gif",
+    "profileImage": "https://res.cloudinary.com/dzfjosx9l/image/upload/v1768912143/profile-images/rtlut1nfmoz2ehkfikug.webp",
+    "isBasicInfoComplete": true
+  },
+  "emergencyContact": {
+    "relationship": "spouse",
+    "firstName": "Jane",
+    "middleName": "Marie",
+    "lastName": "Doe",
+    "email": "jane@example.com",
+    "phone": "9876543211",
+    "primaryPhone": "9876543211",
+    "workPhone": "9876543212",
+    "address": "123 Main Street",
+    "city": "Mumbai",
+    "zip": "400001",
+    "state": "Maharashtra",
+    "isEmergencyContactComplete": true
+  },
+  "medicalQuestions": {
+    "pastMedicalHistory": [
+      "Diabetes\nHypertension\nAsthma"
+    ],
+    "currentMedications": [
+      "Metformin 500mg twice daily\nAspirin 75mg once daily"
+    ],
+    "medicationAllergies": [
+      "Penicillin\nSulfa drugs"
+    ],
+    "preferredPharmacy": {
+      "addPharmacy": "",
+      "pharmacyName": "Pharmacy",
+      "address": "",
+      "city": "",
+      "state": "",
+      "zip": ""
+    },
+    "howDidYouHearAboutUs": "Website",
+    "isMedicalQuestionsComplete": true
+  },
+  "status": "submitted",
+  "createdAt": {
+    "$date": "2026-01-08T11:48:10.891Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-23T07:45:43.743Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6964c1ab214d6dfd2b607e84"
+  },
+  "patient": {
+    "$oid": "6964ac4919f5baedf62e4843"
+  },
+  "basicInformation": {
+    "firstName": "John",
+    "middleName": "Michael",
+    "lastName": "Doe",
+    "sex": "male",
+    "dateOfBirth": {
+      "$date": "1990-01-15T00:00:00.000Z"
+    },
+    "email": "patient@gmail.com",
+    "phone": "6265987559",
+    "address": "123 Main Street",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "zip": "400001",
+    "maritalStatus": "single",
+    "govtIssuedCertificate": "aadhaar",
+    "certificateUpload": "uploads/aadhaar.pdf",
+    "profileImage": "url of image",
+    "isBasicInfoComplete": true
+  },
+  "emergencyContact": {
+    "relationship": "spouse",
+    "firstName": "Jane",
+    "middleName": "Marie",
+    "lastName": "Doe",
+    "email": "jane@example.com",
+    "phone": "9876543211",
+    "primaryPhone": "9876543211",
+    "workPhone": "9876543212",
+    "address": "123 Main Street",
+    "city": "Mumbai",
+    "zip": "400001",
+    "state": "Maharashtra",
+    "isEmergencyContactComplete": true
+  },
+  "medicalQuestions": {
+    "pastMedicalHistory": [
+      "Diabetes",
+      "Hypertension"
+    ],
+    "currentMedications": [
+      "Metformin 500mg twice daily",
+      "Aspirin 75mg once daily"
+    ],
+    "medicationAllergies": [
+      "Penicillin",
+      "Sulfa drugs"
+    ],
+    "preferredPharmacies": [
+      {
+        "pharmacyName": "City Pharmacy",
+        "address": "456 Market Street",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "zip": "400002",
+        "_id": {
+          "$oid": "696b3571d2217d005ea3e235"
+        }
+      },
+      {
+        "pharmacyName": "Health Plus Pharmacy",
+        "address": "789 Health Avenue",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "zip": "400003",
+        "_id": {
+          "$oid": "696b3571d2217d005ea3e236"
+        }
+      }
+    ],
+    "howDidYouHearAboutUs": "Google Search",
+    "isMedicalQuestionsComplete": true
+  },
+  "status": "submitted",
+  "createdAt": {
+    "$date": "2026-01-12T09:40:59.565Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T09:11:05.697Z"
+  },
+  "__v": 0,
+  "doctor": {
+    "$oid": "6961068ebb2871297b25e798"
+  }
+},
+{
+  "_id": {
+    "$oid": "696e507e51a42e7abdf8ca87"
+  },
+  "patient": {
+    "$oid": "696b830a2c31ae24c97dc030"
+  },
+  "basicInformation": {
+    "isBasicInfoComplete": false
+  },
+  "emergencyContact": {
+    "relationship": "spouse",
+    "firstName": "Jane",
+    "middleName": "Marie",
+    "lastName": "Doe",
+    "email": "jane@example.com",
+    "phone": "9876543211",
+    "primaryPhone": "9876543211",
+    "workPhone": "9876543212",
+    "address": "123 Main Street",
+    "city": "Mumbai",
+    "zip": "400001",
+    "state": "Maharashtra",
+    "isEmergencyContactComplete": true
+  },
+  "medicalQuestions": {
+    "pastMedicalHistory": [
+      "Diabetes",
+      "Hypertension",
+      "Asthma"
+    ],
+    "currentMedications": [
+      "Metformin 500mg twice daily",
+      "Aspirin 75mg once daily"
+    ],
+    "medicationAllergies": [
+      "Penicillin",
+      "Sulfa drugs"
+    ],
+    "preferredPharmacy": {
+      "addPharmacy": "Pharmacy",
+      "pharmacyName": "Pharmacy",
+      "address": "Black Purl Society, Baner, Pune",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "zip": "412101"
+    },
+    "howDidYouHearAboutUs": "Website",
+    "isMedicalQuestionsComplete": true
+  },
+  "status": "draft",
+  "createdAt": {
+    "$date": "2026-01-19T15:40:46.338Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T08:40:48.718Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "696f47838c9217cda706379d"
+  },
+  "patient": {
+    "$oid": "696f47838c9217cda706379a"
+  },
+  "basicInformation": {
+    "firstName": "Vipin",
+    "middleName": "Dev",
+    "lastName": "Frontend",
+    "sex": "male",
+    "dateOfBirth": {
+      "$date": "1990-01-15T00:00:00.000Z"
+    },
+    "email": "vipin@gmail.com",
+    "phone": "6265987553",
+    "address": "123 Main Street",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "zip": "400001",
+    "maritalStatus": "single",
+    "govtIssuedCertificate": "aadhaar",
+    "certificateUpload": "uploads/aadhaar.pdf",
+    "profileImage": "url of image",
+    "isBasicInfoComplete": true
+  },
+  "emergencyContact": {
+    "relationship": "spouse",
+    "firstName": "Jane",
+    "middleName": "Marie",
+    "lastName": "Doe",
+    "email": "jane@example.com",
+    "phone": "9876543211",
+    "primaryPhone": "9876543211",
+    "workPhone": "9876543212",
+    "address": "123 Main Street",
+    "city": "Mumbai",
+    "zip": "400001",
+    "state": "Maharashtra",
+    "isEmergencyContactComplete": true
+  },
+  "medicalQuestions": {
+    "pastMedicalHistory": [
+      "Diabetes",
+      "Hypertension",
+      "Asthma"
+    ],
+    "currentMedications": [
+      "Metformin 500mg twice daily",
+      "Aspirin 75mg once daily"
+    ],
+    "medicationAllergies": [
+      "Penicillin",
+      "Sulfa drugs"
+    ],
+    "preferredPharmacy": {
+      "addPharmacy": "Pharmacy",
+      "pharmacyName": "Pharmacy",
+      "address": "Black Purl Society, Baner, Pune",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "zip": "412101"
+    },
+    "howDidYouHearAboutUs": "Website",
+    "isMedicalQuestionsComplete": true
+  },
+  "status": "submitted",
+  "createdAt": {
+    "$date": "2026-01-20T09:14:43.821Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-20T09:18:39.326Z"
+  },
+  "__v": 0,
+  "doctor": {
+    "$oid": "696b08f5f4ce3614cee1e4d0"
+  }
+},
+{
+  "_id": {
+    "$oid": "697077f8e388aaaedbdeab26"
+  },
+  "patient": {
+    "$oid": "697077e7e388aaaedbdeab17"
+  },
+  "basicInformation": {
+    "isBasicInfoComplete": false
+  },
+  "emergencyContact": {
+    "isEmergencyContactComplete": false
+  },
+  "medicalQuestions": {
+    "pastMedicalHistory": [],
+    "currentMedications": [],
+    "medicationAllergies": [],
+    "isMedicalQuestionsComplete": false
+  },
+  "status": "draft",
+  "createdAt": {
+    "$date": "2026-01-21T06:53:44.650Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-21T06:53:44.650Z"
+  },
+  "__v": 0
+}]
