@@ -3,6 +3,7 @@ const Patient = require('../../models/Patient.model');
 const User = require('../../models/User.model');
 const Notification = require('../../models/Notification.model');
 const AppError = require('../../utils/AppError');
+const smsService = require('../../utils/sms.service');
 const nodemailer = require('nodemailer');
 
 // Create email transporter
@@ -289,8 +290,7 @@ exports.sendNotificationCampaign = async (campaignId) => {
       // Send SMS
       for (const patient of recipients) {
         try {
-          // TODO: Integrate with SMS service (Twilio, AWS SNS, etc.)
-          console.log(`📱 SMS to ${patient.user.phoneNumber}: ${campaign.message}`);
+          await smsService.sendSMS(patient.user.phoneNumber, campaign.message);
           sentCount++;
         } catch (error) {
           console.error(`Failed to send SMS to ${patient.user.phoneNumber}:`, error);

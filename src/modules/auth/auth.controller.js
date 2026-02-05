@@ -18,20 +18,26 @@ const { isEmail, generateTokens, verifyAndActivateUser, deactivateUser } = requi
 exports.register = async (req, res, next) => {
   try {
     const { firstName, lastName, phoneNumber, countryCode, email, agreeConfirmation, password } = req.body;
-    
-    // Run registration and OTP send in parallel
-    const [user, otp] = await Promise.all([
-      authService.register({
-        firstName, lastName, phoneNumber, countryCode, email, agreeConfirmation,
-        password: password || phoneNumber.slice(-6)
-      }),
-      otpService.sendOtp(phoneNumber, countryCode).catch(() => null) // Don't fail if OTP fails
-    ]);
 
-    res.status(201).json({ 
-      success: true, 
-      message: 'Registered successfully. OTP sent.', 
-      data: { userId: user._id, otp } 
+    // Register user first
+    const user = await authService.register({
+      firstName, lastName, phoneNumber, countryCode, email, agreeConfirmation,
+      password: password || phoneNumber.slice(-6)
+    });
+
+    // Then send OTP
+    let otp = null;
+    try {
+      otp = await otpService.sendOtp(phoneNumber, countryCode);
+    } catch (err) {
+      console.error('OTP send failed during registration:', err.message);
+      // Don't fail registration, but log the error
+    }
+
+    res.status(201).json({
+      success: true,
+      message: 'Registered successfully. OTP sent.',
+      data: { userId: user._id } // otp commented out for security
     });
   } catch (err) { next(err); }
 };
@@ -70,7 +76,7 @@ exports.resendOtp = async (req, res, next) => {
   try {
     const { phoneNumber, countryCode } = req.body;
     const otp = await otpService.resendOtp(phoneNumber, countryCode);
-    res.status(200).json({ success: true, message: 'OTP resent successfully', data: { otp } });
+    res.status(200).json({ success: true, message: 'OTP resent successfully', data: {} }); // otp commented out for security
   } catch (err) { next(err); }
 };
 
@@ -149,10 +155,10 @@ exports.loginWithOtp = async (req, res, next) => {
     // Step 1: If OTP not provided, send OTP
     if (!otp) {
       const otpCode = await otpService.sendLoginOtp(identifier, countryCode || '+91');
-      return res.status(200).json({ 
-        success: true, 
+      return res.status(200).json({
+        success: true,
         message: `OTP sent to ${identifier}`,
-        data: { identifier, method: isEmail(identifier) ? 'email' : 'phone', otp: otpCode }
+        data: { identifier, method: isEmail(identifier) ? 'email' : 'phone' } // otp commented out for security
       });
     }
 
@@ -249,10 +255,10 @@ exports.forgotPassword = async (req, res, next) => {
     }
     
     const result = await authService.forgotPassword(identifier, countryCode || '+91');
-    res.status(200).json({ 
-      success: true, 
+    res.status(200).json({
+      success: true,
       message: result.message,
-      data: { otp: result.otp }
+      data: {} // otp commented out for security
     });
   } catch (err) { next(err); }
 };

@@ -16,6 +16,51 @@ const {
   buildPaginationResponse 
 } = require('../../helpers');
 
+/**
+ * Finalize order after payment success:
+ * - record coupon usage (idempotent)
+ * - clear active cart items (only if order was created from cart)
+ */
+exports.finalizePaidOrder = async (orderId) => {
+  const Cart = require('../../models/Cart.model');
+  const Coupon = require('../../models/Coupon.model');
+
+  const order = await Order.findById(orderId).select('couponCode couponUsageRecorded createdFromCart patient').lean();
+  if (!order) throw new AppError('Order not found', 404);
+
+  // Record coupon usage ONCE (idempotent across webhook/verify/confirm calls)
+  if (order.couponCode) {
+    const flagUpdate = await Order.updateOne(
+      { _id: orderId, couponUsageRecorded: false },
+      { $set: { couponUsageRecorded: true } }
+    );
+
+    if (flagUpdate.modifiedCount === 1) {
+      await Coupon.updateOne(
+        { code: order.couponCode.toUpperCase() },
+        { $inc: { usedCount: 1 } }
+      );
+    }
+  }
+
+  // Clear cart items ONLY for orders created from cart (avoid wiping unrelated cart changes)
+  if (order.createdFromCart) {
+    const cart = await Cart.findOne({ patient: order.patient });
+    if (cart) {
+      cart.items = (cart.items || []).filter(item => item.isSaved); // Keep saved items
+      cart.couponCode = undefined;
+      cart.discount = 0;
+      cart.subtotal = 0;
+      cart.tax = 0;
+      cart.shippingCharges = 0;
+      cart.totalAmount = 0;
+      await cart.save();
+    }
+  }
+
+  return { success: true };
+};
+
 // Get all orders - Using shared helpers
 exports.getOrders = async (userId, query = {}) => {
   const patient = await getPatient(userId);
@@ -776,7 +821,9 @@ exports.createOrder = async (userId, data) => {
     shippingCharges,
     tax,
     discount,
+    couponCode: couponCode || undefined,
     totalAmount,
+    createdFromCart: !!data.createFromCart,
     status: 'pending',
     notes: data.orderComment || data.notes
   });

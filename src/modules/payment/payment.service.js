@@ -4,6 +4,7 @@ const Patient = require('../../models/Patient.model');
 const AppError = require('../../utils/AppError');
 const stripeService = require('../../services/stripe.service');
 const logger = require('../../utils/logger');
+const orderService = require('../order/order.service');
 
 // Get patient from userId
 const getPatient = async (userId) => {
@@ -173,6 +174,9 @@ exports.createPaymentIntent = async (userId, data) => {
     order.paymentStatus = 'paid';
     order.status = 'confirmed';
     await order.save();
+
+    // Finalize order (coupon usage + cart clear if needed)
+    await orderService.finalizePaidOrder(order._id);
     
     logger.info('Payment completed successfully during intent creation', {
       paymentId: payment.paymentId,
@@ -342,6 +346,7 @@ exports.verifyPayment = async (userId, paymentIntentId) => {
       payment.order.paymentStatus = 'paid';
       payment.order.status = 'confirmed';
       await payment.order.save();
+      await orderService.finalizePaidOrder(payment.order._id);
     }
   } else if (paymentIntent.status === 'processing') {
     payment.paymentStatus = 'processing';
@@ -481,6 +486,8 @@ exports.handleStripeWebhook = async (event) => {
         payment.order.paymentStatus = 'paid';
         payment.order.status = 'confirmed';
         await payment.order.save();
+      await orderService.finalizePaidOrder(payment.order._id);
+        await orderService.finalizePaidOrder(payment.order._id);
       }
       
       logger.info('Payment succeeded via webhook', {

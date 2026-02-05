@@ -2,6 +2,7 @@ const SMSCampaign = require('../../models/SMSCampaign.model');
 const Patient = require('../../models/Patient.model');
 const User = require('../../models/User.model');
 const AppError = require('../../utils/AppError');
+const smsService = require('../../utils/sms.service');
 
 // Get recipients based on audience
 const getRecipients = async (audience, customRecipients = []) => {
@@ -172,12 +173,9 @@ exports.sendSMSCampaign = async (campaignId) => {
 
   try {
     // Send SMS to each recipient
-    // Note: This is a placeholder - integrate with actual SMS service (Twilio, AWS SNS, etc.)
     for (const patient of recipients) {
       try {
-        // TODO: Integrate with SMS service
-        // Example: await smsService.sendSMS(patient.user.phoneNumber, campaign.message);
-        console.log(`📱 SMS to ${patient.user.phoneNumber}: ${campaign.message}`);
+        await smsService.sendSMS(patient.user.phoneNumber, campaign.message);
         sentCount++;
       } catch (error) {
         console.error(`Failed to send SMS to ${patient.user.phoneNumber}:`, error);

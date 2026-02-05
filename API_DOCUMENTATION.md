@@ -9850,18 +9850,23 @@ Complete the purchase process with billing and payment.
       "tax": 42.12,
       "shippingCharges": 10.00,
       "totalAmount": 1395.97,
-      "status": "confirmed",
-      "paymentStatus": "paid",
+      "status": "pending",
+      "paymentStatus": "pending",
       "notes": "Please deliver before 5 PM"
     },
     "payment": {
-      "_id": "payment_id",
-      "paymentId": "PAY202501151234567890",
-      "transactionId": "TXN202501151234567890",
-      "amount": 1395.97,
-      "paymentMethod": "card",
-      "paymentStatus": "success",
-      "paidAt": "2025-01-15T10:30:00.000Z"
+      "payment": {
+        "_id": "payment_id",
+        "paymentId": "PAY-1736940000000-1234",
+        "amount": 1395.97,
+        "currency": "INR",
+        "paymentMethod": "card",
+        "paymentStatus": "processing",
+        "stripePaymentIntentId": "pi_3Qxxx",
+        "stripeClientSecret": "pi_3Qxxx_secret_yyy"
+      },
+      "clientSecret": "pi_3Qxxx_secret_yyy",
+      "paymentIntentId": "pi_3Qxxx"
     }
   }
 }
@@ -9869,12 +9874,10 @@ Complete the purchase process with billing and payment.
 
 **Notes:**
 - Creates order from cart items
-- Processes payment immediately
+- Creates Stripe payment intent and returns `clientSecret` for frontend confirmation
 - Links doctor's notes to order if present
 - Clears cart (keeps saved items)
-- Updates coupon usage count
-- Order status set to `confirmed`
-- Payment status set to `paid`
+- Coupon usage count is recorded after payment success (via `/payments/verify` or Stripe webhook)
 - Billing address saved with order (same as shipping if checkbox checked)
 - Order comment saved in `notes` field
 

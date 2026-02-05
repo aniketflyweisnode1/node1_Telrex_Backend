@@ -164,6 +164,22 @@ const orderSchema = new mongoose.Schema(
       default: 0
     },
 
+    couponCode: {
+      type: String,
+      trim: true,
+      uppercase: true
+    },
+
+    createdFromCart: {
+      type: Boolean,
+      default: false
+    },
+
+    couponUsageRecorded: {
+      type: Boolean,
+      default: false
+    },
+
     totalAmount: {
       type: Number,
       required: true,
