@@ -25,19 +25,18 @@ exports.register = async (req, res, next) => {
       password: password || phoneNumber.slice(-6)
     });
 
-    // Then send OTP
-    let otp = null;
-    try {
-      otp = await otpService.sendOtp(phoneNumber, countryCode);
-    } catch (err) {
+    // Send OTP asynchronously (non-blocking)
+    // Don't await this - let it happen in the background
+    otpService.sendOtp(phoneNumber, countryCode).catch(err => {
       console.error('OTP send failed during registration:', err.message);
-      // Don't fail registration, but log the error
-    }
+      // Log but don't fail registration
+    });
 
+    // Respond immediately without waiting for OTP
     res.status(201).json({
       success: true,
       message: 'Registered successfully. OTP sent.',
-      data: { userId: user._id, otp }
+      data: { userId: user._id }
     });
   } catch (err) { next(err); }
 };
@@ -75,8 +74,13 @@ exports.verifyOtp = async (req, res, next) => {
 exports.resendOtp = async (req, res, next) => {
   try {
     const { phoneNumber, countryCode } = req.body;
-    const otp = await otpService.resendOtp(phoneNumber, countryCode);
-    res.status(200).json({ success: true, message: 'OTP resent successfully', data: { otp } });
+    
+    // Send OTP asynchronously (non-blocking)
+    otpService.resendOtp(phoneNumber, countryCode).catch(err => {
+      console.error('OTP resend failed:', err.message);
+    });
+
+    res.status(200).json({ success: true, message: 'OTP resent successfully' });
   } catch (err) { next(err); }
 };
 
@@ -152,13 +156,17 @@ exports.loginWithOtp = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Email or phone number is required' });
     }
 
-    // Step 1: If OTP not provided, send OTP
+    // Step 1: If OTP not provided, send OTP (asynchronously)
     if (!otp) {
-      const otpCode = await otpService.sendLoginOtp(identifier, countryCode || '+91');
+      // Send OTP asynchronously (non-blocking)
+      otpService.sendLoginOtp(identifier, countryCode || '+91').catch(err => {
+        console.error('Login OTP send failed:', err.message);
+      });
+
       return res.status(200).json({
         success: true,
         message: `OTP sent to ${identifier}`,
-        data: { identifier, method: isEmail(identifier) ? 'email' : 'phone', otp: otpCode }
+        data: { identifier, method: isEmail(identifier) ? 'email' : 'phone' }
       });
     }
 
@@ -239,8 +247,12 @@ exports.sendOtp = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Phone number required' });
     }
     
-    const otp = await otpService.sendOtp(phoneNumber, countryCode || '+91');
-    res.status(200).json({ success: true, message: 'OTP sent successfully', data: { otp } });
+    // Send OTP asynchronously (non-blocking)
+    otpService.sendOtp(phoneNumber, countryCode || '+91').catch(err => {
+      console.error('OTP send failed:', err.message);
+    });
+
+    res.status(200).json({ success: true, message: 'OTP sent successfully' });
   } catch (err) { next(err); }
 };
 
@@ -254,11 +266,14 @@ exports.forgotPassword = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Email or phone number is required' });
     }
     
-    const result = await authService.forgotPassword(identifier, countryCode || '+91');
+    // Send OTP asynchronously (non-blocking)
+    authService.forgotPassword(identifier, countryCode || '+91').catch(err => {
+      console.error('Forgot password OTP send failed:', err.message);
+    });
+
     res.status(200).json({
       success: true,
-      message: result.message,
-      data: { otp: result.otp }
+      message: 'If an account exists with this identifier, you will receive an OTP'
     });
   } catch (err) { next(err); }
 };
