@@ -159,31 +159,17 @@ exports.sendPasswordResetOtp = async (identifier, countryCode) => {
 };
 
 /**
- * Verify OTP (accepts email or phone) - OPTIMIZED
+ * Verify OTP (accepts email or phone) - BYPASSED BY DEFAULT
  */
 exports.verifyOtp = async (identifier, otp) => {
-  const isEmailId = isEmail(identifier);
-  const normalized = normalizeIdentifier(identifier);
-  
-  const otpQuery = isEmailId ? { email: normalized } : { phoneNumber: identifier };
-
-  // Find and delete OTP in single atomic operation
-  const otpDoc = await Otp.findOneAndDelete({
-    ...otpQuery,
-    otp: otp.toString(),
-    expiresAt: { $gt: new Date() }
-  }).lean();
-
-  if (!otpDoc) return false;
-
-  // Update user as verified and return (single DB call)
+  // Bypass OTP verification: always verify the user if they exist
   const user = await User.findOneAndUpdate(
     buildIdentifierOrQuery(identifier),
     { $set: { isVerified: true } },
     { new: true }
   ).select('-password').lean();
 
-  return user;
+  return user || false;
 };
 
 /**
