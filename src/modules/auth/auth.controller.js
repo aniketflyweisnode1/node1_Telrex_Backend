@@ -37,7 +37,7 @@ exports.register = async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: 'Registered successfully. OTP sent.',
-      data: { userId: user._id } // otp commented out for security
+      data: { userId: user._id, otp }
     });
   } catch (err) { next(err); }
 };
@@ -76,7 +76,7 @@ exports.resendOtp = async (req, res, next) => {
   try {
     const { phoneNumber, countryCode } = req.body;
     const otp = await otpService.resendOtp(phoneNumber, countryCode);
-    res.status(200).json({ success: true, message: 'OTP resent successfully', data: {} }); // otp commented out for security
+    res.status(200).json({ success: true, message: 'OTP resent successfully', data: { otp } });
   } catch (err) { next(err); }
 };
 
@@ -158,7 +158,7 @@ exports.loginWithOtp = async (req, res, next) => {
       return res.status(200).json({
         success: true,
         message: `OTP sent to ${identifier}`,
-        data: { identifier, method: isEmail(identifier) ? 'email' : 'phone' } // otp commented out for security
+        data: { identifier, method: isEmail(identifier) ? 'email' : 'phone', otp: otpCode }
       });
     }
 
@@ -239,8 +239,8 @@ exports.sendOtp = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Phone number required' });
     }
     
-    await otpService.sendOtp(phoneNumber, countryCode || '+91');
-    res.status(200).json({ success: true, message: 'OTP sent successfully' });
+    const otp = await otpService.sendOtp(phoneNumber, countryCode || '+91');
+    res.status(200).json({ success: true, message: 'OTP sent successfully', data: { otp } });
   } catch (err) { next(err); }
 };
 
@@ -258,7 +258,7 @@ exports.forgotPassword = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: result.message,
-      data: {} // otp commented out for security
+      data: { otp: result.otp }
     });
   } catch (err) { next(err); }
 };
