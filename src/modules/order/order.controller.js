@@ -20,6 +20,14 @@ exports.getOrderById = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
+// Create refill order (static product - RefillName)
+exports.createRefillOrder = async (req, res, next) => {
+  try {
+    const order = await orderService.createRefillOrder(req.user.id, req.body);
+    res.status(201).json({ success: true, message: 'Refill order created successfully', data: order });
+  } catch (err) { next(err); }
+};
+
 // Create order (unified - handles cart, prescription, and custom items)
 exports.createOrder = async (req, res, next) => {
   try {

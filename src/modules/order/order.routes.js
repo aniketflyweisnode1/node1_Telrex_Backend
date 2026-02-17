@@ -23,6 +23,9 @@ router.get('/orders/summary', controller.getOrdersSummary);
 // Get single order by ID
 router.get('/orders/:id', controller.getOrderById);
 
+// Create refill order (static product - RefillName)
+router.post('/orders/refill', auth, controller.createRefillOrder);
+
 // Create order (unified - handles cart, prescription, and custom items)
 router.post('/orders', auth, createOrderValidation, validate, controller.createOrder);
 

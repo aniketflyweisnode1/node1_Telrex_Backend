@@ -499,6 +499,151 @@ exports.updateOrderNotes = async (userId, orderId, notes) => {
   return enrichedOrder;
 };
 
+// Create refill order (static product - RefillName)
+exports.createRefillOrder = async (userId, data) => {
+  const patient = await getPatient(userId);
+  const Address = require('../../models/Address.model');
+  
+  // Static product details for RefillName
+  const refillProduct = {
+    productId: 'REFILL_STATIC_' + Date.now(), // Generate unique ID
+    productType: 'medication',
+    medicationName: 'RefillName',
+    quantity: data.quantity || 1,
+    unitPrice: data.unitPrice || 100, // Default price, can be overridden
+    totalPrice: (data.quantity || 1) * (data.unitPrice || 100),
+    status: 'pending',
+    brand: 'Refill',
+    originalPrice: data.unitPrice || 100,
+    salePrice: data.unitPrice || 100,
+    images: {},
+    description: data.description || 'Refill Order',
+    dosage: data.dosage || null,
+    dosageOption: null,
+    quantityOption: null,
+    generics: []
+  };
+  
+const items = [refillProduct];
+const subtotal = refillProduct.totalPrice;
+
+const shippingCharges = data.shippingCharges ?? 0;
+const tax = data.tax ?? 0;
+const discount = data.discount ?? 0;
+
+const totalAmount = subtotal + shippingCharges + tax - discount;
+
+  // Handle shipping address
+  let address = null;
+  if (data.shippingAddress && typeof data.shippingAddress === 'object') {
+    const firstName = data.shippingAddress.firstName || '';
+    const lastName = data.shippingAddress.lastName || '';
+    const fullName = data.shippingAddress.fullName || `${firstName} ${lastName}`.trim() || 'Unknown';
+    
+    address = await Address.create({
+      patient: patient._id,
+      type: data.shippingAddress.type || 'home',
+      firstName: firstName || fullName.split(' ')[0] || 'Unknown',
+      lastName: lastName || fullName.split(' ').slice(1).join(' ') || '',
+      email: data.shippingAddress.email || '',
+      fullName: fullName,
+      phoneNumber: data.shippingAddress.phoneNumber || data.shippingAddress.phone || '',
+      countryCode: data.shippingAddress.countryCode || '+91',
+      addressLine1: data.shippingAddress.addressLine1 || data.shippingAddress.streetAddress || data.shippingAddress.streetAddress1 || '',
+      addressLine2: data.shippingAddress.addressLine2 || data.shippingAddress.streetAddress2 || '',
+      city: data.shippingAddress.city || '',
+      state: data.shippingAddress.state || data.shippingAddress.stateProvince || '',
+      postalCode: data.shippingAddress.postalCode || data.shippingAddress.zipCode || '',
+      country: data.shippingAddress.country || 'India',
+      isDefault: data.shippingAddress.isDefault || false
+    });
+    logger.info('Shipping address created for refill order', { addressId: address._id, patientId: patient._id });
+  } else if (data.shippingAddressId) {
+    address = await Address.findOne({
+      _id: data.shippingAddressId,
+      patient: patient._id
+    });
+    if (!address) throw new AppError('Shipping address not found', 404);
+  } else {
+    throw new AppError('Shipping address is required (provide shippingAddress object or shippingAddressId)', 400);
+  }
+  
+  // Prepare billing address
+  let billingAddress = null;
+  let billingAddressSameAsShipping = data.billingAddressSameAsShipping !== false;
+  
+  if (data.billingAddressSameAsShipping === false && data.billingAddress) {
+    billingAddress = {
+      firstName: data.billingAddress.firstName || '',
+      lastName: data.billingAddress.lastName || '',
+      email: data.billingAddress.email || '',
+      phoneNumber: data.billingAddress.phoneNumber || data.billingAddress.phone || '',
+      streetAddress: data.billingAddress.streetAddress || data.billingAddress.addressLine1 || '',
+      streetAddress2: data.billingAddress.streetAddress2 || data.billingAddress.addressLine2 || '',
+      city: data.billingAddress.city || '',
+      state: data.billingAddress.state || data.billingAddress.stateProvince || '',
+      zipCode: data.billingAddress.zipCode || data.billingAddress.postalCode || ''
+    };
+    billingAddressSameAsShipping = false;
+  } else {
+    billingAddressSameAsShipping = true;
+    if (address) {
+      billingAddress = {
+        firstName: address.firstName || address.fullName?.split(' ')[0] || '',
+        lastName: address.lastName || address.fullName?.split(' ').slice(1).join(' ') || '',
+        email: address.email || '',
+        phoneNumber: address.phoneNumber || '',
+        streetAddress: address.addressLine1 || '',
+        streetAddress2: address.addressLine2 || '',
+        city: address.city || '',
+        state: address.state || '',
+        zipCode: address.postalCode || ''
+      };
+    }
+  }
+  
+  const order = await Order.create({
+    patient: patient._id,
+    prescription: null,
+    items,
+    shippingAddress: address._id,
+    billingAddress: billingAddress,
+    billingAddressSameAsShipping: billingAddressSameAsShipping,
+    subtotal,
+    shippingCharges,
+    tax,
+    discount,
+    couponCode: undefined,
+    totalAmount,
+    createdFromCart: false,
+    status: 'pending',
+    notes: data.orderComment || data.notes || 'Refill Order'
+  });
+  
+  logger.info('Refill order created', {
+    orderId: order._id,
+    orderNumber: order.orderNumber,
+    patientId: patient._id,
+    totalAmount: order.totalAmount,
+    itemCount: order.items.length,
+    productName: 'RefillName'
+  });
+  
+  const savedOrder = await Order.findById(order._id)
+    .populate({
+      path: 'shippingAddress',
+      select: 'type firstName lastName email fullName phoneNumber countryCode addressLine1 addressLine2 city state postalCode country isDefault'
+    })
+    .populate('prescription')
+    .lean();
+  
+  return {
+    ...savedOrder,
+    billingAddress: savedOrder.billingAddress || null,
+    billingAddressSameAsShipping: savedOrder.billingAddressSameAsShipping !== false
+  };
+};
+
 // Create order (unified - handles cart, prescription, and custom items)
 exports.createOrder = async (userId, data) => {
   const patient = await getPatient(userId);
